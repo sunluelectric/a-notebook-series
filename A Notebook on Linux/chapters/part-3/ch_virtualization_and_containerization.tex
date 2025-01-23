@@ -668,6 +668,8 @@ EXPOSE 8080
 CMD ["node", "index.js"]
 \end{lstlisting}
 
+\subsection{Build an Image}
+
 With the Dockerfile ready, use \verb|docker build| to build an image. An example is given as follows.
 \begin{lstlisting}
 $ docker build <path/url> -t <image name>
@@ -681,6 +683,44 @@ where \verb|<path/url>| is the path or URL to the directory where the Dockerfile
 It is worth mentioning that \verb|docker build| builds the images by layers in the Dockerfile, and it will not re-build the same layer to which point no changes are made. This feature suggests that we should put the common and static layers in the early part of Dockerfile, and customized and user-defined layers in the late part, thus making the building (and also sharing, as will be introduced later) of the images more efficient.
 
 Use \verb|.dockerignore| to exclude any files that should not be built into the image. Such files may include caches, the Dockerfile itself, etc.
+
+Dockerfile supports multi-stage image build. An example is given below.
+\begin{lstlisting}
+# Stage 1: Build
+FROM node:18 AS builder
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install
+COPY . .
+RUN yarn build
+
+# Stage 2: Runtime
+FROM node:18-slim
+WORKDIR /app
+COPY --from=builder /app/dist /app/dist
+CMD ["node", "dist/index.js"]
+\end{lstlisting}
+
+The idea is like the following.
+\begin{itemize}
+  \item The earlier stages prepare files. The later stages use \verb|COPY --from| to copy the results of earlier stages to the current stage.
+  \item Only the last stage is included in the final image.
+\end{itemize}
+
+A benefit of using multi-stage build is to reduce the image size. As introduced earlier, the intermediate results of the earlier stages will not be included in the final image unless they are \verb|COPY --from| by the last stage. For example, the user may want to compile his source code in an earlier stage, and only copy the compiled binary file into the last stage. In this way, the user avoids including the source code in the final stage which he needs to share with others.
+
+The \verb|COPY --from| syntax is given below.
+\begin{lstlisting}
+COPY --from=<stage-name-or-index> <source-path> <destination-path>
+\end{lstlisting}
+
+
+
+
+
+
+
+
 
 \subsection{Docker Image Management}
 

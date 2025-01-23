@@ -1,28 +1,41 @@
 %\chapterauthor{Author Name}{Author Affiliation}
 %\chapterauthor{Second Author}{Second Author Affiliation}
 \chapter{User Management} \label{ch:usermanagement}
-...
 
-\section{Introduction to Linux Administration}
-...
+This chapter discusses the management of user accounts such as assigning roles and enabling access controls to them for certain resources.
 
-
-\section{Root Account Management}
+\section{Root User Management}
 
 Managing and protecting the root user account is a key portion in Linux administration. It is worth mentioning that the root user is different from a sudoer, i.e., a user that can use \verb|sudo| command, although they both have elevated privileges when comes to system administration. A more detailed explanation is given below.
 
-The root user refers to the user that is created by the system upon first installation of the OS. Its username is by default ``root'', with a UID of 0, and a GID of 0. Its home directory is by default \verb|/root| instead of \verb|/home/<user name>|. The default prompt for the root user is often \verb|#| instead of \verb|$| for other users. The root user has administrative privileges and can do almost anything without being denied or questioned by the system. As a commonly used safety practice, the password for the root user is usually disabled, thus nobody can login to the system as the root user using username and password authentication.
+The root user refers to the user that is created by the system upon first installation of the OS. Its username is by default ``root'', with a UID of 0, and a GID of 0. Its home directory is by default \verb|/root| instead of \verb|/home/<user name>|. The default prompt for the root user is often \verb|#| instead of \verb|$| for other users. The root user has administrative privileges and can do almost anything without being denied or questioned by the system. 
 
-Notice that in theory the root user does not necessarily need to use the username ``root'', although it is a default convention. The administrative  comes with the UID of 0, not the username. Thus, it is possible to assign the administrative account a different username. It is also possible to create multiple accounts with administrative privileges by assigning UID of 0 to multiple accounts, although it is not recommended to share the same UID among different users.
+As a commonly used safety practice, the password for the root user is usually disabled, and hence nobody can login to the system as the root user using username and password authentication. In the case when administrative tasks need to be carried out by the root user account, a sudoer can temporarily switch to the root user using \verb|sudo su|.
 
-Although the administrative privilege of root user does not come with its username, in some systems, the username ``root'' is given elevated privilege anyway. More details about this is introduced later.
+Notice that the root user does not necessarily need to use the username ``root'', although it is a default convention. The root user privilege comes from the UID of 0, not the username. From the technical perspective, it is even possible to create multiple accounts with root user privilege by letting them share the same UID of 0, thought it is very rare and highly not recommended to do so.
 
-Check the root user information as follows.
+To check the root user information, use
 \begin{lstlisting}
 $ cat /etc/passwd | grep ^root
 root:x:0:0:root:/root:/bin/bash
 \end{lstlisting}
-where the third and fourth column of above give the UID and GID of the root user, respectively.
+File \verb|/etc/passwd| contains the basic user information. There are 7 columns in the file seperated by \verb|:|. Detailed explanations to these columns are given in Table. \ref{tab:etcpasswd}.
+\begin{table}[!htb]
+  \centering \caption{The columns in \texttt{/etc/passwd}.}\label{tab:etcpasswd}
+  \begin{tabularx}{\textwidth}{llX}
+    \hline
+    Index & Name & Comments \\ \hline
+    1 & Username & \\ 
+    2 & Password & The \verb|x| signifies that the password stored in the file is encrypted. \\ 
+    3 & UID & \\
+    4 & GID & \\
+    5 & GECOS & A comment field that stores additional information of the user, such as its full name, address, telephone, etc. \\
+    6 & Home Directory & \\
+    7 & Login Shell & \\
+    \hline
+  \end{tabularx}
+\end{table}
+It can be seen that the UID and GID of the root user are both 0.
 
 For comparison, a regular user would have far different UID and GID as shown below.
 \begin{lstlisting}
@@ -30,7 +43,11 @@ $ cat /etc/passwd | grep ^sunlu
 sunlu:x:1000:1000:Sun Lu,,,:/home/sunlu:/bin/bash
 \end{lstlisting}
 
-A sudoer refers to the regular users who can temporarily elevate its privileges and execute administration commands using \verb|sudo <privileged-command>|. A sudoer can also switch to root user prompt using \verb|sudo su| (and quit root user prompt using \verb|exit|). Their sudo privilege comes from the fact that they are included in the ``sudo group''.
+A sudoer refers to the regular users who can temporarily elevate its privileges and execute administration commands using 
+\begin{lstlisting}
+$ sudo <privileged command>
+\end{lstlisting}
+A sudoer can switch to root user prompt using \verb|sudo su| and quit root user prompt using \verb|exit|. Their sudo privilege comes from the fact that they are included in the sudo group.
 
 Use \verb|groups| to check existing defined groups in the system, and \verb|groups <user name>| the groups a user is engaged. An example is given below.
 \begin{lstlisting}
@@ -40,29 +57,77 @@ $ groups sunlu
 sunlu : sunlu adm cdrom sudo dip plugdev lpadmin lxd sambashare docker
 \end{lstlisting}
 
-The elevated privilege of the sudoer group is defined in \verb|/etc/sudoers|. A section of the file is given below, where \verb|%| appeared in front of \verb|admin| and \verb|sudo| is used to indicate group name.
+A sudoer file, usually \verb|/etc/sudoers|, records all the sudoers and their privileges. Notice that all the sudoers can run \verb|sudo <command>|, but the supported commands for each sudoer can be different according to \verb|/etc/sudoers|. The syntax is
+\begin{lstlisting}
+<username> <host>=(<execute as user>:<execute as group>) <allowed commands>
+%<group name> <host>=(<execute as user>:<execute as group>) <allowed commands>
+\end{lstlisting}
+In \verb|/etc/sudoers|, the following can be found
 \begin{lstlisting}
 # User privilege specification
-root	ALL=(ALL:ALL) ALL
+root ALL=(ALL:ALL) ALL
 
 # Members of the admin group may gain root privileges
 %admin ALL=(ALL) ALL
 
 # Allow members of group sudo to execute any command
-%sudo	ALL=(ALL:ALL) ALL
+%sudo ALL=(ALL:ALL) ALL
 \end{lstlisting}
+which gives privileges to group ``sudoer'' to execute on all hosts, on behalf of all users and groups to execute all commands.
 
-It is possible to give the root account a password, thus enabling root authentication. This approach is sometimes used for troubleshooting and recovering purposes, but it is not a good practice in routine operations.
+Notice that the root user's privilege comes from its UID as explained earlier. It is not necessary to include its corresponding line in \verb|/etc/sudoers|. The line is only for clarity and consistency.
 
-\section{User Management}
+\section{Regular User Management}
 
 xxx
 
+\section{Remote Login}
 
+This section discusses remote operations of a Linux server.
 
+\subsection{Remote Control}
 
+\mync{Secure Shell Protocol}[SSH] is the commonly used protocol to remote login to a Linux server. For that, SSH remote login must be enabled in the server side. Use
+\begin{lstlisting}
+ssh <user name>@<server ip / name>
+\end{lstlisting} 
+to remote login to the server. Usually a prompt for password will pop up for authentication purpose.
 
+One can use SSH key pairs to login to the system without password authentication. In the client, use
+\begin{lstlisting}
+ssh-keygen
+ssh-copy-id <user name>@<server ip / name>
+\end{lstlisting}
+to generate a SSH key pair and copy the public key to the Linux server. To do that for the first time, password authentication is required.
 
+\subsection{Remote File Transfer}
+
+\mync{Secure File Transfer Protocol}[SFTP] can be used to quickly transfer files between the client machine and the remote Linux server. For that, SFTP must be enabled in the server side. Use
+\begin{lstlisting}
+sftp <user name>@<server ip / name>
+\end{lstlisting}
+to connect to the remote Linux server. A prompt
+\begin{lstlisting}
+sftp>
+\end{lstlisting}
+shall pop up after the connection has been built.
+
+The SFTP prompt is similar with the BASH shell prompt in terms of many supported commands, such as \verb|pwd|, \verb|cd| and \verb|ls| and \verb|help|. With these commands, the user can navigate through the server.
+
+To fetch files from the server to the client, use
+\begin{lstlisting}
+sftp> get <file1> <file2>
+\end{lstlisting}
+To fetch a directory, use
+\begin{lstlisting}
+sftp> get -r <directory>
+\end{lstlisting}
+To upload files from the client to the server, replace \verb|get| with \verb|put| in the above commands.
+
+In any case the file transfer fails due to internet interruption, use \verb|reget|, \verb|reput| to resume file transfer.
+
+The SFTP prompt supports \verb|df| to check disk usage, \verb|mkdir| to create directory, \verb|rm| to remove files, \verb|rmdir| to remove directory, \verb|rename| to rename files, and \verb|chmod| to change permission and \verb|chown| to change group of a file.
+ 
 
 
 

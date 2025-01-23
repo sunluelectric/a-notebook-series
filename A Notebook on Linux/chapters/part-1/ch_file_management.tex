@@ -65,6 +65,44 @@ Linux file hierarchy standard differs from MS-DOS and Windows in several ways. F
 
 Magic numbers of a file refer to the first few bytes of a file that are unique to a particular file type, for example, PNG file is hex \verb|89 50 4e 47|. Linux compare the magic numbers of a file with an internal database to decide the file types and features. Distinguishing file types using magic numbers can be more reliable than using suffixes, though a bit less intuitive.
 
+\section{Hard and Soft Links}
+
+The files are stored in the physical disk, and the name (including path) of the file is nothing but a ``link'' to that storage. The user and the OS can reach and manipulate the storage using the file name. 
+
+In addition to the original file name, Linux allows the user to create additional \mync{hard link} or \mync{soft link} (also known as \mync{symbolic link}) to refer a file. A demonstrative plot is given in Fig. \ref{fig:hardsoftlink}. More details are introduced in the rest of the section.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=250pt]{chapters/part-1/figures/hardsoftlink.png}
+	\caption{Original file name, hard link and soft link.} \label{fig:hardsoftlink}
+\end{figure} 
+
+\subsection{Hard Link}
+
+As shown in Fig. \ref{fig:hardsoftlink}, a hard link is an alternative to the file name that directly points to the stored data. Both the original file name and the hard link share the same \mync{inode number}. The inode number is a unique identifier of a file that Linux uses to map a file name to the stored data. From this sense, a hard link is equivalent to the original file name, and the original file name can be taken as the ``default hard link''.
+
+If a file is associated with additional hard links, removing the original file does not erase the data, and the data is still accessible via the remaining hard links. Only when all the hard links are removed, should the OS mark the storage as ``free'' and the data might be erased in the future when new data comes in. This is because the OS traces the link account of an inode number (the number of hard links to an inode number, the original file name included), and will consider the data removable only if it drops to 0.
+
+Hard links can be used as a back up of the original file just in case it is removed by accident. Notice that a hard link does not create a duplication of the data referred by the original file name. 
+
+Use
+\begin{lstlisting}
+$ ln <file> <hard link>
+\end{lstlisting}
+to create a hard link for a file.
+
+\subsection{Soft Link}
+
+As shown in Fig. \ref{fig:hardsoftlink}, a soft link or a symbolic link is a second-layer point of the data. The soft link does not point to the data in the physical storage directly, but points to another link and forms a chain. If any links in the chain is broken, the soft link becomes a dangling link and loses the reference to the data. Notice that there is a limit to the length of the chain which effectively avoids looped chain. A larger overhead of processing time expected as the chain becomes longer.
+
+Soft links are useful to create shortcuts or cross-file system links.
+
+Use
+\begin{lstlisting}
+$ ln -s <file> <soft link>
+\end{lstlisting}
+to create a soft link for a file.
+
 \section{Commonly Used File Exploring Commands} \label{ch:fm:sec:filemanagement}
 
 Some of the most widely used file exploring and managing commands are summarized in Table \ref{ch:fm:tab:commonfilecommands}. Notice that \verb|chmod| and \verb|chown| are administration related commands that change the accessibility of a directory or a file, and will be introduced in a later sections together with the Linux permission system. The rest commands are categorized and introduced in the following subsections.
@@ -132,6 +170,11 @@ More information can be found in the \verb|ls| command manual which is accessibl
 \end{table}
 
 Notice that some Linux distributions may come by default an alias about \verb|ls|, which usually helps to displays the information in a clearer manner. For example, when \verb|ls='ls --color-auto'| is used, the displayed content will be colored based on the type of the files and subdirectories.
+
+Use \verb|tree| to check the subdirectories structures of a directory as follows.
+\begin{lstlisting}
+$ tree <directory>
+\end{lstlisting}
 
 \subsection{Create Files and Directories}
 
@@ -239,6 +282,17 @@ When performing actions such as listing, moving, copying, removing, wildcard cha
   \end{tabularx}
 \end{table}
 
+\subsection{Query Text Files with Keywords}
+
+Use \verb|cat| to display the content of a text file in the console. When the text files are long, the relevant information can be difficult to find. It is recommended to use \verb|grep| or \verb|egrep| to query or filter the text files as follows.
+\begin{lstlisting}
+$ cat <file / wildcards> | grep "<keyword>"
+\end{lstlisting}
+or
+\begin{lstlisting}
+$ grep "<keyword>" <file / wildcards>
+\end{lstlisting}
+
 \section{Access Control List} \label{ch:fm:sec:accesscontrollist}
 
 Each file or directory in the Linux OS is assigned with an owner and a permission list known as the \mync{Access Control List}[ACL]. ACL prevents unauthorized entities to access an item. The ACL of a file can be viewed using \verb|ls -l|. An example has been given in Fig. \ref{ch:fm:fig:lscommandexample} in the earlier section.
@@ -306,7 +360,7 @@ $ umask <new value>
 
 The value of \verb|umask|, after converting to binary, represents the bits in the 9-bit permission system that is disabled. For example, a \verb|umask| value of \verb|002| represents \verb|rwxrwxr-x| in the 9-bit permission system, because the binary form of \verb|002|, \verb|000000010|, blocks the $8$-th bit in the permission.
 
-To permanently change the value of \verb|umask|, configure it in \verb|.bashrc| as introduced in Section \ref{ch:sb:subsec:customizeshell}.
+The default \verb|umask| values for the root and the regular users in RHEL are \verb|002| and \verb|022| respectively. This is defined in \verb|/etc/bashrc|. A user can permanently change the default value of \verb|umask| by overwriting its value in \verb|.bashrc| as introduced in Section \ref{ch:sb:subsec:customizeshell}.
 
 \section{Search through the System}
 
@@ -463,7 +517,7 @@ where \verb|-atime|, \verb|-ctime| and \verb|-mtime| search based on the number 
 
 The \verb|tar|, \verb|gzip| and \verb|zip| commands can all be used in files archive, but with different features, as given in Table \ref{ch:fm:tab:filearchivetools}.
 
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{Commonly used file archive tools.}\label{ch:fm:tab:filearchivetools}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline

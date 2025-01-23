@@ -1,33 +1,42 @@
 \chapter{Git}
 
-Git is a distributed version-control system for tracking changes during the software development, and it can be used on cross platforms including Windows, Unix/Linux and MacOS. 
+Git is a distributed version control system for tracking changes during the software development, and it can be used on cross platforms including Windows, Unix/Linux and MacOS. This chapter introduces the basic use of Git on a local Linux machine and with a remote repository host server such as GitHub. 
 
-This chapter introduces the basic use of Git on a local Linux machine and with a remote repository host server such as GitHub. \myabb{Continuous Integration and Continuous Deployment}{CI/CD}, an important concept in nowadays software development and operation, is also briefly covered. For CI/CD, GitHub Action is introduced.
+Git-based version control is widely used in association with \myabb{Continuous Integration and Continuous Deployment}{CI/CD}. CI/CD is an important concept in nowadays software development and deployment. GitHub Actions is the tool that GitHub manages its CI/CD workflow, and its basics are also introduced.
 
 \section{Introduction}
 
-\mync{Git}, created by Linus Trovalds in 2005, is a distributed version-control system for tracking changes in source code and files. It is helpful with maintaining data integrity during the collaborative development of a software in distributed non-linear work flows. Git is free and open-source software under GNU general public license.
+\mync{Git}, created by Linus Trovalds in 2005, is a distributed version control system for tracking changes in source code and files. It is helpful with maintaining data integrity during the collaborative development of software in distributed non-linear workflows. Git is free and open-source under GNU general public license.
 
-With Git, all computers participating in the software development store a copy of the full-fledged repository locally with complete history, and it can synchronize with a centralized remote server. It introduces the concept of ``\mync{branch}'', to be more precise ``master'' and ``slave'' branches to manage the concurrent development of different features of the project, where the master branch is the stable and shared repository among everyone, and the slave branches are copies of the master branch where individual features can be developed. For a slave branch, once its developed feature is approved, it can be merged back to the master branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
+Git introduces \mync{Git repository}, which refers to the ``ecosystem'' Git uses to manage a project. To be more specific, it refers to the \verb|.git| file associated with each Git-managed project, using which Git traces the development of the project. 
+
+With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and it can synchronize with a centralized remote server. It introduces \mync{branch}, to be more precise ``master'' and ``slave'' branches, to manage the concurrent development of different features of the project, where the master branch is the stable and shared repository among everyone, and the slave branches are copies of the master branch where individual features can be developed. For a slave branch, once its developed feature is approved, it can be merged back to the master branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-3/figures/gitflow.png}
 	\caption{Git for software development management.} \label{ch:sma:fig:gitflow}
 \end{figure}
 
-CLI is often used to manage a Git repository. Some commonly used commands are shown in Fig. \ref{ch:sma:fig:gitflow} and more to be introduced later. Notice that a graphical user interface is also available to interact with \verb|git|. However, in the scope of this notebook, command line is mostly used.
+CLI is often used to manage a Git repository. Some commonly used commands are shown in Fig. \ref{ch:sma:fig:gitflow} with more to be introduced later. Notice that a graphical user interface is also available. However, in the scope of this notebook, command line is mostly used.
 
-\section{Setup}
+\section{Git Installation and Configuration}
 
-To use Git, follow the instructions to install and configure the software.
+Git can be installed and configured as follows.
 
 \subsection{Installation}
 
-Git and its relevant documents can be obtained from its official website \textit{https://git-scm.com/}. In many Linux distributions, Git is pre-installed. If Git is missing in the machine, follow the instructions on the official website to install it on the computer. Notice that the installation procedure may differ with different OS.
+Git and its relevant documents can be obtained from its official website \textit{https://git-scm.com/}. In many Linux distributions, Git is pre-installed. If Git is missing, follow the instructions on the official website to install it. Notice that the installation procedure may differ with different OS.
+
+To install Git on RHEL, simply use
+\begin{lstlisting}
+$ sudo dnf install git-all
+\end{lstlisting}
 
 \subsection{Configuration}
 
-Upon successful installation, it is recommended to use \verb|git config| for some basic configurations. Notice that there are two types of configurations, namely the global configurations (apply to the machine and the user), and the repository configurations (apply to a particular Git repository). By default, the global level configurations are stored under \verb|~/.gitconfig| and the repository level configurations \verb|./.git/config| in the repository. A good practice to edit these configurations is to use Git commands rather than editing the files directly.
+Upon successful installation, it is recommended to use \verb|git config| for the necessary basic configurations such as the username and user email. Without these configurations, Git cannot run normally.
+
+Notice that there are two types of configurations, namely the global configurations which apply to the machine and the user, and the repository configurations which apply to a particular Git repository. By default, the global level configurations are stored under \verb|~/.gitconfig| and the repository configurations \verb|./.git/config| of the repository, respectively. It is recommended to use Git CLI to setup the configurations, rather than modifying the files directly.
 
 To add user name and email to the global configuration, use
 \begin{lstlisting}
@@ -48,13 +57,11 @@ $ git config --global --unset user.name
 \end{lstlisting}
 removes the user name.
 
-More details about \verb|git config| can be found at \textit{https://git-scm.com/docs/git-config}. Usually, the user name and email configurations are mandatory, as they are very useful information in developing collaborative projects.
+More details about \verb|git config| can be found at \cite{git2025reference}.
 
 \section{Local Repository Management}
 
-A \mync{Git repository} refers to the ``ecosystem'' Git uses to manage a project. To be more specific, it refers to the \verb|.git| file associated with each Git-managed project, using which Git tracse the development of the project. 
-
-Git manages the repositories locally, and it can also synchronize them with remote upstreams if they have one. This section considers local repository management.
+Git CLI can manage both local and remote repositories, and can synchronize them bidirectionally. This section studies local repository management.
 
 \subsection{Initialization of a Repository}
 
@@ -62,7 +69,7 @@ Navigate to the project directory. Use the following command to create a new Git
 \begin{lstlisting}
 $ git init
 \end{lstlisting}
-From this point forward, Git monitors everything that happens inside this directory and its subdirectories and tries to track any change to the files, unless otherwise configured specifically. Many Git-relavent CLI commands, for example \verb|git status| to check the status of the repository, become available. More details are introduced later.
+From this point forward, Git monitors everything that happens inside this directory and its subdirectories and tries to track any change to the files, unless otherwise configured specifically. Many Git commands such as \verb|git status| becomes available. More details are introduced in the remaining of the section.
 
 \subsection{Version Tracking}
 
@@ -261,36 +268,36 @@ After the rebase operation, the history of branch $A$ appears as if it was devel
 
 \section{Remote Repository Management} \label{ch:sma:sec:rrm}
 
-In collaborative projects, the repository and branches are stored and shared in one or more cloud servers. Each developer can interact with the repository on the cloud by pulling changes or pushing updates. The developer does not directly make changes to the repository or branches on the cloud. Instead, he clone the repository to his local machine and manipulate branches locally. The local repository and branches are then synchronized with the cloud repository and branches using Git commands. This is known as remote repository management and it is introduced in this section.
-
-Depending on the cloud servers that host the remote repository, different services might be available. In the scope of this notebook, GitHub is considered as the remote repository host. GitHub is an internet hosting service for software development and sharing using Git. A user can create, manage, share and co-develop remote repositories on GitHub. Notice that GitHub is not the only place to host remote repositories. Some alternatives include \textit{GitLab} and \textit{Gitee}. Using Git, it is even possible to build a repository hosting server on premises using a regular computer. In this notebook, only GitHub is studied.
+Git hosting servers provide platforms for the developers to share their Git repositories and collaboratively develop projects. There are many cloud-based public Git hosting service providers such as GitHub, GitLab and Gitee. In this section, GitHub is studied. Notice that under the scope of this section, only basic functions are introduced and they should apply similarly to other Git hoisting service providers.   
 
 An \textit{https} URL is associated with each remote repository on GitHub, for example \textit{https://github.com/torvalds/linux.git} for Linux kernel. This URL can be used to download the remote repository to a local machine, or to link (synchronize) a local repository with that remote repository.
 
-Consider the case where there is already a remote repository, either under the user's GitHub account or from the community. To download a clone of an existing repository to the local machine, use
+\subsection{Clone Remote Repositories}
+
+Consider the case where there is already a remote repository, either under the user's GitHub account or from the community. The user can clone the repository, i.e., make a local copy of the repository, as follows.
+
+Use
 \begin{lstlisting}
 $ git clone <repository URL> [<local directory>]
 \end{lstlisting}
-and to maintain the local repository up-to-date with the remote repository, regularly use
+where \verb|repository URL| can be the HTTPS URL of the repository. To maintain the local repository up-to-date with the remote repository, regularly use
 \begin{lstlisting}
 $ git remote update
 $ git pull
 \end{lstlisting}
-to synchronize the local repository with the remote one.
+to pull the latest update.
 
 \begin{shortbox}
-\Boxhead{Should I use \texttt{git pull}?}
+\Boxhead{Should I use \texttt{git pull} or \texttt{git fetch}?}
 
 One may argue whether it is a good idea to use \verb|git pull|. Although convenient, \verb|git pull| is an integration of two commands, \verb|git fetch| and \verb|git merge| (or \verb|git rebase|) executed sequentially. It may be ``safer'' to manually run the two commands separately.
+
+With that being said, if the user simply wants to keep a well-maintained community project up to date, \verb|git pull| should work just alright.
 \end{shortbox}
 
-The local commits can also be pushed to the remote repository using
-\begin{lstlisting}
-$ git push
-\end{lstlisting}
-if the remote repository is under the user's account, or if the owner of the remote repository gives the user the permission. Notice that when pushing updates to the remote repository, GitHub may require login credentials, for example username and password pair or SSH key, for permission checks.
+\subsection{Publish Local Repositories}
 
-Consider another case where there is already a well developed local repository. An empty remote repository has just been created on GitHub which is to be setup to mirror the local repository. To link the remote and local repositories, navigate to the local repository and use
+Consider a case where there is already a well developed local repository. An empty remote repository has just been created on GitHub which is to be setup to mirror the local repository. To link the remote and local repositories, navigate to the local repository and use
 \begin{lstlisting}
 $ git remote add <remote repository name> <repository URL>
 \end{lstlisting}
@@ -300,9 +307,23 @@ $ git branch --set-upstream-to <remote repository name> <remote repository branc
 \end{lstlisting}
 Notice that this step is not required if the project is cloned from a remote repository using \verb|git clone| introduced earlier, as it will automatically setup the upstream using the source of the clone.
 
+The local commits can also be pushed to the remote repository using
+\begin{lstlisting}
+$ git push
+\end{lstlisting}
+if the remote repository is under the user's account, or if the owner of the remote repository gives the user the permission. Notice that when pushing updates to the remote repository, GitHub may require login credentials, for example username and password pair or SSH key, for permission checks.
+
 From there on, use \verb|git push| and \verb|git pull| normally.
 
 By assigning upstream branch to a local branch and \verb|git push| the local branch to the upstream, Git will update or create the remote branch accordingly. A remote branch can be deleted with a \verb|-d| flag while using \verb|git push|.
+
+
+
+
+\subsection{Git-Based Collaborative Applications Development}
+
+xxx
+
 
 \section{GitHub Actions}
 
