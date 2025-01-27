@@ -69,38 +69,37 @@ Navigate to the project directory. Use the following command to create a new Git
 \begin{lstlisting}
 $ git init
 \end{lstlisting}
-From this point forward, Git monitors everything that happens inside this directory and its subdirectories and tries to track any change to the files, unless otherwise configured specifically. Many Git commands such as \verb|git status| becomes available. More details are introduced in the remaining of the section.
+From this point forward, Git monitors everything that happens inside this directory and its sub-directories and tries to track any change to the files, unless otherwise configured specifically. Many Git commands such as \verb|git status| become available. More details are introduced in the remaining of the section.
 
 \subsection{Version Tracking}
 
-For simplicity, assume that there is only one branch in the repository, namely the master branch. Notice that when there are multiple branches, the version-tracking works the same for each and every branch in a separate and independent manner.
-
-The mechanism behind version tracking is briefly introduced as follows. This helps the user to better understand how Git works and how the CLI commands are designed.
+For simplicity, assume that there is only one branch in the repository, namely the master branch. Notice that when there are multiple branches, the version-tracking works the same for each and every branch in a separate and independent manner. The mechanism behind version tracking is briefly introduced as follows.
 
 The project directory is split into two parts, outside \verb|./.git/| the workspace, and inside \verb|./.git/| the Git repository. The workspace has the up-to-date project contents and it is directly managed by the user, while Git repository is managed by Git. The user should not manage the repository directly unless using the Git interface.
 
 Inside the Git repository are metadata of the workspace files such as which files have been changed since the last deployment, etc. It also stores a full back up of every historical versions of the project (with powerful compressing mechanisms, of course). It is worth mentioning that instead of recording the changes of a file from version to version, Git records the snapshot of the file in every version, unless it is left untouched between two consecutive versions.
 
-Figure \ref{ch:sma:fig:gitbasics} gives a demonstration of how Git manages the project directory. Git classifies files in the workspace into different status, as shown in Fig. \ref{ch:sma:fig:gitbasics}. A brief explanation of each types is given in Table \ref{ch:sma:tab:gitbasics}. Detail explanations of ``stage'' and ``commit'' are given later.
+Figure \ref{ch:sma:fig:gitbasics} gives a demonstration of how Git manages the project directory. Git categorizes files in the workspace into the following states: untracked, modified (unstaged), staged, and unmodified. This is shown by Fig. \ref{ch:sma:fig:gitbasics}. A brief explanation of each state is given in Table \ref{ch:sma:tab:gitbasics}. More details are given later.
+
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-3/figures/gitbasics.png}
 	\caption{The project directory managed by Git.} \label{ch:sma:fig:gitbasics}
 \end{figure}
 
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{Different file status in a Git managed project.}\label{ch:sma:tab:gitbasics}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
 		Status & Description \\ \hline
 		Untracked & Newly added or renamed items in the project directory.  \\ 
-		Modified (Unstaged) & Modified items from the last version that has not been registered in the staged area.  \\ 
-		Modified (Staged) & Modified items from the last version that has been registered in the staged area. Notice that an untracked item can be staged directly, skipping ``modified (unstaged)'' step. Use \verb|git add| to stage items. \\ 
-		Unmodified & Unmodified items from the last version. Use \verb|git commit| to update a new version, which would change all the staged items into unmodified items. \\ \hline
+		Modified (Unstaged) & Modified items from the last version that has not been registered in the staging area.  \\ 
+		Modified (Staged) & Modified items from the last version that has been registered in the staging area. Notice that an untracked item can be staged directly, skipping ``modified (unstaged)'' step. Use \verb|git add| to stage items. \\ 
+		Unmodified & Unmodified items from the last commit. \\ \hline
 	\end{tabularx}
 \end{table}
 
-Use \verb|git status| to check the file status in the project. An example is given below.
+Use \verb|git status| to check the file states in the project. An example is given below.
 \begin{lstlisting}
 $ git status
 On branch master
@@ -119,7 +118,7 @@ Untracked files:
   (use "git add <file>..." to include in what will be committed)
 	chapters/ch-software-management-advanced/figures/
 \end{lstlisting}
-where \verb|ch.tex| is a modified (staged) item; \verb|ap.tex| and \verb|main.pdf| modified (unstaged) items, and \verb|figures/| an untracked item.
+where \verb|ch.tex| is a modified (staged) item; \verb|ap.tex| and \verb|main.pdf| modified (unstaged) items, and \verb|figures/| an untracked item. Notice that unmodified files are not shown.
 
 It takes a two-step procedure to back up the project in the Git repository. In the first step, the user flags the changed items (either newly added, renamed, or modified) to be backed up in the next version. In the second step, the user actually backs up the items. The first and second steps are called ``stage'' and ``commit'' respectively. Notice that it is possible to run a single line of command to execute both steps, but logically it still takes two steps.
 
@@ -185,25 +184,29 @@ Date:   Sun Aug 28 21:38:48 2022 +0800
 
     add docker sections
 \end{lstlisting}
-where notice that \verb|HEAD| is a reference that points to the latest commit in a branch. Filters can be added as optional arguments for the \verb|git log| command. More details are given at \textit{https://git-scm.com/docs/git-log}.
+where notice that \verb|HEAD| is a reference that points to the latest commit in a branch. Filters can be added as optional arguments for the \verb|git log| command. More details are given at \cite{git2025reference}.
 
-And finally, to restore to a previous commit version, use \verb|git reset| or \verb|git revert|. Notice that \verb|git reset| and \verb|git revert| can both be used to restore the workspace to a previous stage, but they differ significantly. In general, \verb|git reset| ``erases'' the past commits, and it is often used in the case where the changes and commits to be reset have not been uploaded to the upstream or shared distributively. Command \verb|git revert| on the other hand create a new commit that undoes all the changes, and it is often used when the changes and commits to revert are already distributed.
+And finally, to restore to a previous commit version, use \verb|git reset| or \verb|git revert|. Notice that \verb|git reset| and \verb|git revert| can both be used to restore the workspace to a previous stage, but they differ significantly. Their differences are introduced below.
+
+Command \verb|git reset| erases the past commits in the local branch. This should not pose any problem if the erased commits have not spread everywhere else. Therefore, \verb|git reset| is helpful for local repositories without upstreams, or for modifications that have not been pushed to the upstreams. 
 
 The command \verb|git reset| is often used as follows.
 \begin{lstlisting}
-$ git reset <option> <commit ID>
+	$ git reset <option> <commit ID>
 \end{lstlisting}
-where \verb|<option>| is often \verb|--hard|, \verb|--mixed| or \verb|--soft|, and \verb|<commit ID>| can be the ID of any commit in the git log, or for shorcut \verb|HEAD| the latest commit, \verb|HEAD^| or \verb|HEAD~1| the second latest commit, \verb|HEAD~2| the third latest commit, and so on.
+where \verb|<option>| is often \verb|--hard|, \verb|--mixed| or \verb|--soft|, and \verb|<commit ID>| can be the ID of any commit in the git log, or for shortcut \verb|HEAD| the current position of the HEAD (commit pointer), usually the latest commit.
 
-The options \verb|--hard|, \verb|--mixed| and \verb|--soft| work differently. All these options move \verb|HEAD| to the specified commit, and remove all commits afterwards from the repository. The \verb|--hard| option reverts the workspace back to when the specified commit happened (meaning that there would be no way to undo the reset command). Both \verb|--mixed| and \verb|--soft| do not change the workspace. The \verb|--mixed| option leaves all the changes from the specified commit to today as unstaged, while \verb|--soft| leaves them as staged. If no \verb|--hard|, \verb|--mixed| or \verb|--soft| is given, \verb|--mixed| will be used as the default option.
+The options \verb|--hard|, \verb|--mixed| and \verb|--soft| work differently. All these options move HEAD to the specified commit, and remove all commits afterwards from the repository. The \verb|--hard| option reverts the workspace back to when the specified commit happened (meaning that there would be no way to undo the reset command). Both \verb|--mixed| and \verb|--soft| do not change the workspace. The \verb|--mixed| option leaves all the changes from the specified commit to today as unstaged, while \verb|--soft| leaves them as staged. If no \verb|--hard|, \verb|--mixed| or \verb|--soft| is given, \verb|--mixed| will be used as the default option.
 
-Notice that \verb|git reset| does not help if the unwilling changes and commits to be reverted have already been pushed and synchronized to a remote server or to other collaborators. This is because \verb|git reset| erases the history, and as a result \textit{git} would think that the reset repository is ``left behind'' when it synchronizes with other repositories. Consequently, it will simply synchronizes the changes and commits back.
+Notice that \verb|git reset| may pose an issue if the commits to be erased have already spread to the upstreams. This is because the erased commits in the local repository by \verb|git reset| will be reverted back the next time the local repository synchronizes with its upstream, where the commits in the upstream will be considered more up to the date, hence pulled to the local repository.
 
 In such cases, consider using \verb|git revert| instead. Syntax wise they work similarly. Instead of erase the history, \verb|git revert| creates a new commit whose content is copied and pasted from a past commit.
 
 \subsection{Branch Management}
 
-``Branch'' is one of the core features of Git, and it plays an important role in collaborative development of a project. There are two types of branches, namely the local branch and the remote branch. The remote branch is often the upstream mirror of the local branch used for sharing and synchronizing the project development with others. The details will be introduced in Section \ref{ch:sma:sec:rrm}. Only local branches are considered in this section.
+\mync{Git branch} is a core concept and feature of Git, and it plays an important role in collaborative development of a project. 
+
+There are two types of branches, namely the local branch and the remote branch. Remote branch is often associated with local branches, and play as the upstream mirror of the later for sharing and synchronizing the project development across machines. This section focuses on local branches. Remote branches will be introduced in Section \ref{ch:sma:sec:rrm}.
 
 To list down all the local branches, use
 \begin{lstlisting}
@@ -235,7 +238,11 @@ To merge a branch back to the current branch, use
 \begin{lstlisting}
 $ git merge <branch name>
 \end{lstlisting}
-and fill in the comments accordingly. For example, checkout to master branch, and use \verb|git merge <slave branch name>| to merge the features in the slave branch to the master branch. This often happens when the slave branch has finished developing and testing a new feature and is prepared to add the feature to the stable master branch. By default, Git automatically deletes the merged branch. This behavior can be changed in the configuration.
+and fill in the comments accordingly. A use case of the command is to merge the features developed in a slave branch to the master branch, after a \mync{pull request} is raised by the slave branch. To do that, checkout to the master branch, and use
+\begin{lstlisting}
+$ git merge <slave branch name>
+\end{lstlisting}
+By default, Git automatically deletes the merged branch. This behavior can be changed in the configuration.
 
 \begin{shortbox}
 \Boxhead{Pull Request}
@@ -254,7 +261,7 @@ A demonstrative Fig. \ref{ch:sma:fig:gitrebase} explains the differences between
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-3/figures/gitrebase.png}
-	\caption{Two approaches of integrating branches, \texttt{git merge} VS \texttt{git rebase}.} \label{ch:sma:fig:gitrebase}
+	\caption{Two approaches of integrating branches, \texttt{git merge} VS \texttt{git rebase}. In the \texttt{git rebase} example, two rebase commands are executed consecutively, the first on the feature branch and second the master branch.} \label{ch:sma:fig:gitrebase}
 \end{figure}
 
 An intuitive way to understand \verb|git rebase| is given as follows. Imagine two branches $A$ and $B$ that have diverged from the same commit $O$. On branch $A$, execute \verb|git rebase B|. Here is a step-by-step breakdown of what happens:
@@ -262,7 +269,7 @@ An intuitive way to understand \verb|git rebase| is given as follows. Imagine tw
 	\item Identify common ancestor of the current branch $A$ and the rebase branch $B$, which is commit $O$ in this example.
 	\item Back up commits happened on branch $A$ since commit $O$. Assume they are commits $A_1$, $A_2$, ..., $A_n$.
 	\item Reset branch $A$ to Branch $B$ and $A$ now starts from the tip of $B$.
-	\item Reapply commits $A_1$, $A_2$, ..., $A_n$ on the reset $A$ in a sequential manner, potentially leading to conflicts that need to be resolved manually.
+	\item Reapply commits $A_1$, $A_2$, ..., $A_n$ on the reset $A$ in a sequential manner. In the case where there are conflicts when reapplying $A_1$, $A_2$, ..., $A_n$, the user needs to jump in and resolve them manually.
 \end{enumerate}
 After the rebase operation, the history of branch $A$ appears as if it was developed sequentially from the end of branch $B$, effectively integrating the changes of $B$ into $A$ in a linear history.
 
@@ -317,13 +324,29 @@ From there on, use \verb|git push| and \verb|git pull| normally.
 
 By assigning upstream branch to a local branch and \verb|git push| the local branch to the upstream, Git will update or create the remote branch accordingly. A remote branch can be deleted with a \verb|-d| flag while using \verb|git push|.
 
+\subsection{Collaborative Applications Development}
 
+This section introduces the common procedures an individual contributor follows to make improvements to a community project. We assume that an individual contributor has found a community project that interests him and believes he can update the code to improve it.
 
+As a first step, the contributor forks the project into his own GitHub account. This creates a copy of the community project under the contributor’s account, giving him full control over the forked repository. He is free to make or test any modifications without affecting the original project.
 
-\subsection{Git-Based Collaborative Applications Development}
+Although a fork is treated as a separate repository in many ways, GitHub tracks the relationship between the fork and the original project. This allows the contributor to later request that his modifications be merged back into the original community repository. Using the fork approach also acknowledges the contributions of the original authors, making it a more respectful and transparent process compared to simply downloading the project and uploading it as a new repository under the contributor's account.
 
-xxx
+After forking, the contributor can clone the project from his GitHub account to the local computer. He can then modify and test the code locally. Once the changes are made, he can upload the updated code to their forked repository using
+\begin{lstlisting}
+$ git push
+\end{lstlisting}
 
+When the forked repository has been updated with improvements, the contributor can create a pull request in the original community repository. The maintainers of the community project will review the pull request, evaluate the modifications, and either reject it, provide feedback, or approve it for merging.
+
+It is possible that while the contributor is working on their changes, new features or updates are introduced in the original community project. To keep their fork up-to-date, the contributor can add the original repository as a second remote, commonly named ``upstream''. The forked repository under their account is typically referred to as ``origin''. To synchronize with the original repository, the contributor can execute the following commands.
+\begin{lstlisting}
+$ git fetch upstream
+$ git checkout master
+$ git rebase upstream/master
+\end{lstlisting}
+
+By following this procedure, the contributor ensures that his work remains aligned with the latest developments in the community project, reducing the chances of conflicts and making their contributions easier to integrate.
 
 \section{GitHub Actions}
 
