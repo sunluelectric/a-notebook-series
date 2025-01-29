@@ -350,4 +350,111 @@ By following this procedure, the contributor ensures that his work remains align
 
 \section{GitHub Actions}
 
-\mync{GitHub Actions} is a tool that allows the user to define a pipeline of actions when something changed in the GitHub remote repository, for example a pull request is raised, a new commit is pushed, etc. GitHub Actions is useful as part of CI/CD. More details are given in Appendix \ref{ch:cicd}.
+\mync{GitHub Actions} is a tool that allows the user to define a pipeline of actions that can be triggered by events (such as a pull request, etc.) or timers. The actions are executed on containers or VMs with different operating systems, thus may induce additional cost. The user is able to configure the infrastructure and the actions using YAML-based configuration files.
+
+GitHub Actions has naturally become the standard solution to CI/CD. CI/CD is not the focus of this notebook. A brief introduction is given in Appendix \ref{ch:cicd}. GitHub Actions goes beyond just CI/CD and lets the user run workflows when other events happen in his repository, such as addling labels when a new issue is created \cite{git2025reference}.
+
+This section gives a brief introduction to GitHub Actions. More details are given in \cite{git2025reference}.
+
+\subsection{General Introduction to GitHub Actions Workflow}
+
+The user needs to define GitHub Actions workflows using the YAML files and the syntax GitHub requires. A visualization of such a workflow looks like Fig. \ref{fig:actions_workflow}.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=250pt]{chapters/part-3/figures/actions_workflow.png}
+	\caption{A demonstration of GitHub Actions workflow.} \label{fig:actions_workflow}
+\end{figure}
+
+The basic component of GitHub Actions is \mync{GitHub Actions jobs}. A job consists of multiple steps executed sequentially. Each job is deployed in a dedicated VM or a container with specified OS and environment by the user. The VM or container is known as a runner, and it corresponds with a job.
+
+By default all jobs run in parallel. In the case where jobs are dependent, the user can configure them such that they can be executed sequentially, just like ``job 1'' and ``job 2'' given in the demonstrative Fig. \ref{fig:actions_workflow}.
+
+The user defines a workflows using a YAML file. Multiple workflows can be defined for a project, in which case there will be multiple YAML files. The YAML files should follow the syntax required by GitHub and be saved under \verb|.github/workflows/|. GitHub is able to recognize the workflow YAML files and execute them accordingly.
+
+A full list of GitHub events that can trigger GitHub Actions is provided in \cite{git2025reference}, such as when someone forks the repository, creates an issue, removes a label, raises a pull request, etc.
+
+\subsection{Workflow YAML Files}
+
+An official demonstrative example of a GitHub workflow YAML file is given below \cite{git2025reference}. 
+
+\begin{lstlisting}
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+	steps:
+	  - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+	  - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+	  - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+	  - name: Check out repository code
+		uses: actions/checkout@v4
+	  - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+	  - run: echo "The workflow is now ready to test your code on the runner."
+	  - name: List files in the repository
+	    run: |
+		ls ${{ github.workspace }}
+	  - run: echo "This job's status is ${{ job.status }}."
+\end{lstlisting}
+
+Save the above YAML file under \verb|.github/workflows/| and GitHub would recognize the workflow. Click ``Actions'' on GitHub dashboard to check the details of the workflow.
+
+A brief introduction to YAML file syntax for GitHub Actions is given below.
+
+In the workflow of the demonstrative example only one job, namely ``Explore-GitHub-Actions'', is defined. In practice, multiple jobs can be defined in a workflow. An example is given below \cite{git2025reference}, where 3 jobs are defined.
+\begin{lstlisting}
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - run: ./setup_server.sh
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - run: ./build_server.sh
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: ./test_server.sh
+\end{lstlisting}
+Jobs are by default independent and can run in parallel unless \verb|needs| field is used just like in the above example, where ``build'' depends on ``setup'', and ``test'' on ``build''.
+
+Commonly seen configurations in a workflow YAML file are given in Table \ref{tab:githubactions_workflow_fields}.
+
+\begin{table}[!htb]
+	\centering \caption{Commonly seen configurations in GitHub Actions workflow.}\label{tab:githubactions_workflow_fields}
+	\begin{tabularx}{\textwidth}{lX}
+		\hline
+		Field & Description \\ \hline
+		\texttt{name} & The static name of the workflow.  \\ 
+		\texttt{run-name} & The name of an instance of run generated by the workflow.  \\ 
+		\texttt{on} & The event(s) that triggers the workflow. A full list of supported events are given in \cite{git2025reference}. Multiple triggers are supported. The trigger can be configured very flexibly. \\ 
+		\texttt{permissions} & Allowed r/w/x permissions for the workflow or for different triggers defined by the workflow. \\ 
+		\texttt{env} & Environmental variables to be used in the jobs descriptions. \\
+		\texttt{defaults} & Default settings for all jobs. \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
