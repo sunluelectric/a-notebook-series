@@ -1,4 +1,4 @@
-\chapter{Git}
+\chapter{Git} \label{ch:git}
 
 Git is a distributed version control system for tracking changes during the software development, and it can be used on cross platforms including Windows, Unix/Linux and MacOS. This chapter introduces the basic use of Git on a local Linux machine and with a remote repository host server such as GitHub. 
 
@@ -10,7 +10,7 @@ Git-based version control is widely used in association with \myabb{Continuous I
 
 Git introduces \mync{Git repository}, which refers to the ``ecosystem'' Git uses to manage a project. To be more specific, it refers to the \verb|.git| file associated with each Git-managed project, using which Git traces the development of the project. 
 
-With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and it can synchronize with a centralized remote server. It introduces \mync{branch}, to be more precise ``master'' and ``slave'' branches, to manage the concurrent development of different features of the project, where the master branch is the stable and shared repository among everyone, and the slave branches are copies of the master branch where individual features can be developed. For a slave branch, once its developed feature is approved, it can be merged back to the master branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
+With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and it can synchronize with a centralized remote server. It introduces \mync{branch}, to be more precise ``master'' and ``slave'' branches, to manage the concurrent development of different features of the project, where the master branch is the stable and shared repository among everyone, and the feature branches are copies of the master branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the master branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-3/figures/gitflow.png}
@@ -238,27 +238,18 @@ To merge a branch back to the current branch, use
 \begin{lstlisting}
 $ git merge <branch name>
 \end{lstlisting}
-and fill in the comments accordingly. A use case of the command is to merge the features developed in a slave branch to the master branch, after a \mync{pull request} is raised by the slave branch. To do that, checkout to the master branch, and use
+and fill in the comments accordingly. A use case of the command is to merge the features developed in a feature branch to the master branch, after a pull request is raised by the feature branch. To do that, checkout to the master branch, and use
 \begin{lstlisting}
-$ git merge <slave branch name>
+$ git merge <feature branch name>
 \end{lstlisting}
-By default, Git automatically deletes the merged branch. This behavior can be changed in the configuration.
-
-\begin{shortbox}
-\Boxhead{Pull Request}
-
-In a collaborative project, the master branch is managed very carefully because everything on that branch will affect the project deeply. There is often a group of senior developers who manage the master branch. Any code to be added to the master branch must be checked by one or a few of them.
-
-When a slave branch wants the features developed on that branch to be merged to the master branch, the owner of the slave branch needs to raise a ``pull request''. As its name suggests, it requests the master branch to pull the updates from the slave branch. The master branch managers will then view and check the slave branch, making sure that everything is correct before they approve the merging.
-
-\end{shortbox}
+By default, Git automatically deletes the merged branch. This behavior can be changed in the configuration. More about pull request are introduced in Section \ref{sec:pull_request}.
 
 An alternative way of integrating two branches is \verb|git rebase|, which ``rewires'' the two branches into a linear single branch. Use \verb|git rebase| as follows.
 \begin{lstlisting}
 $ git rebase <branch name>
 \end{lstlisting}
 A demonstrative Fig. \ref{ch:sma:fig:gitrebase} explains the differences between \verb|git merge| and \verb|git rebase|. It is clear from Fig. \ref{ch:sma:fig:gitrebase} that by using \verb|git rebase|, all feature commits are integrated into the master repositories to form a single repository tracking line, which differs largely from \verb|git merge|.
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-3/figures/gitrebase.png}
 	\caption{Two approaches of integrating branches, \texttt{git merge} VS \texttt{git rebase}. In the \texttt{git rebase} example, two rebase commands are executed consecutively, the first on the feature branch and second the master branch.} \label{ch:sma:fig:gitrebase}
@@ -277,9 +268,9 @@ After the rebase operation, the history of branch $A$ appears as if it was devel
 
 Git hosting servers provide platforms for the developers to share their Git repositories and collaboratively develop projects. There are many cloud-based public Git hosting service providers such as GitHub, GitLab and Gitee. In this section, GitHub is studied. Notice that under the scope of this section, only basic functions are introduced and they should apply similarly to other Git hoisting service providers.   
 
-An \textit{https} URL is associated with each remote repository on GitHub, for example \textit{https://github.com/torvalds/linux.git} for Linux kernel. This URL can be used to download the remote repository to a local machine, or to link (synchronize) a local repository with that remote repository.
+An HTTPS URL is associated with each remote repository on GitHub, for example \textit{https://github.com/torvalds/linux.git} for Linux kernel. This URL can be used to download the remote repository to a local machine, or to link (synchronize) a local repository with that remote repository.
 
-\subsection{Clone Remote Repositories}
+\subsection{Clone and Pull: from Remote to Local}
 
 Consider the case where there is already a remote repository, either under the user's GitHub account or from the community. The user can clone the repository, i.e., make a local copy of the repository, as follows.
 
@@ -287,7 +278,9 @@ Use
 \begin{lstlisting}
 $ git clone <repository URL> [<local directory>]
 \end{lstlisting}
-where \verb|repository URL| can be the HTTPS URL of the repository. To maintain the local repository up-to-date with the remote repository, regularly use
+where \verb|repository URL| can be the HTTPS URL of the repository. 
+
+Git is able to trace the URL from which a local repository is cloned. To maintain the local repository up-to-date with the remote repository, regularly use
 \begin{lstlisting}
 $ git remote update
 $ git pull
@@ -302,31 +295,80 @@ One may argue whether it is a good idea to use \verb|git pull|. Although conveni
 With that being said, if the user simply wants to keep a well-maintained community project up to date, \verb|git pull| should work just alright.
 \end{shortbox}
 
-\subsection{Publish Local Repositories}
+However, this does not guarantee that the user can perform a \verb|git push| command to push changes made in the local repository back to the remote source. For that, additional authentication is often required. More about \verb|git push| and remote repository authentication methods are introduced in later sections.
 
-Consider a case where there is already a well developed local repository. An empty remote repository has just been created on GitHub which is to be setup to mirror the local repository. To link the remote and local repositories, navigate to the local repository and use
-\begin{lstlisting}
-$ git remote add <remote repository name> <repository URL>
-\end{lstlisting}
-which will register the remote repository URL in the local configuration file. A commonly used remote repository name is ``origin''. The next step is to map the local current working branch with a branch in the remote repository, which would be used as the default source/target branch when running \verb|git pull| and \verb|git push|. This can be done as follows.
-\begin{lstlisting}
-$ git branch --set-upstream-to <remote repository name> <remote repository branch>
-\end{lstlisting}
-Notice that this step is not required if the project is cloned from a remote repository using \verb|git clone| introduced earlier, as it will automatically setup the upstream using the source of the clone.
+\subsection{Push: from Local to Remote}
 
-The local commits can also be pushed to the remote repository using
+Consider a scenario where you have a well-developed local Git repository, and you have just created an empty remote repository on GitHub. The goal is to link the remote repository with the local repository so that changes can be synchronized.
+
+To establish a connection between the local and remote repositories, navigate to the local repository and run
+\begin{lstlisting}
+$ git remote add <remote-name> <remote-repository-URL>
+\end{lstlisting}
+This command registers the remote repository's URL in the local Git configuration. A commonly used remote name is ``origin''.
+
+Note that if the local repository was originally created by cloning an existing remote repository, then ``origin'' is likely already set to the source of the clone. Use \verb|git remote -v| to check the registered remote source.
+
+The next step is to associate the current working branch with a branch in the remote repository. This ensures that git pull and git push operate on the correct branch by default. This can be done as follows.
+\begin{lstlisting}
+$ git branch --set-upstream-to=<remote-name>/<branch-name>
+\end{lstlisting}
+Alternatively, the upstream branch can be set when pushing it for the first time using
+\begin{lstlisting}
+$ git push --set-upstream <remote-name> <branch-name>
+\end{lstlisting}
+
+Once the upstream is configured, the user can use 
 \begin{lstlisting}
 $ git push
 \end{lstlisting}
-if the remote repository is under the user's account, or if the owner of the remote repository gives the user the permission. Notice that when pushing updates to the remote repository, GitHub may require login credentials, for example username and password pair or SSH key, for permission checks.
+to push the changes in the local remository to the remote upstream. If there is no remote branch with the same branch name as the local repository, a remote branch with that name will be created when the local branch is pushed.
 
-From there on, use \verb|git push| and \verb|git pull| normally.
+\begin{shortbox}
+\Boxhead{The Names of Corresponding Local and Remote Branches}
 
-By assigning upstream branch to a local branch and \verb|git push| the local branch to the upstream, Git will update or create the remote branch accordingly. A remote branch can be deleted with a \verb|-d| flag while using \verb|git push|.
+A local branch and its corresponding remote branch usually have the same name by default, but this is not necessarily always the case. To set an upstream with a different name, use
+\begin{lstlisting}
+$ git branch --set-upstream-to=\
+<remote-name>/<remote-branch-name> <local-branch-name>
+\end{lstlisting}
+or
+\begin{lstlisting}
+$ git push <remote-name> <local-branch-name>:<remote-branch-name>
+\end{lstlisting}
 
-\subsection{Collaborative Applications Development}
+\end{shortbox}
 
-This section introduces the common procedures an individual contributor follows to make improvements to a community project. We assume that an individual contributor has found a community project that interests him and believes he can update the code to improve it.
+When performing \texttt{git push} for the first time, authentication is required. This allows GitHub or another hosting service to verify the identity of the user before accepting changes. Common authentication methods include
+\begin{itemize}
+    \item Username and password authentication. Notice that this has been deprecated by GitHub in favor of token authentication.
+    \item Personal access tokens.
+    \item SSH key authentication.
+\end{itemize}
+
+\section{Pull Request} \label{sec:pull_request}
+
+In a collaborative project, the master branch is managed very carefully because everything on that branch will affect the project in the production environment. There is often a group of senior developers maintaining the master branch. Any code to be added to the master branch must be reviewed by one or a few of them.
+
+When a feature branch wants the features developed on that branch to be merged to the master branch, it does not push the changes to the master branch directly. Instead, the owner of the feature branch needs to raise a ``pull request'' from the GitHub dashboard. As its name suggests, it requests the master branch to pull the updates from the feature branch. The master branch maintenance team will then view and check the feature branch, making sure that everything is correct before they approve the merging.
+
+If the pull request is approved, GitHub will perform the merge in the cloud. Neither the owner of the feature branch nor the maintenance team needs to run the merge manually.
+
+\section{Collaborative Development in Practice}
+
+This section introduces the common procedures an individual contributor follows to make improvements to a community project. We assume that an individual contributor has found a community project hosted on GitHub that interests him and believes he can update the code to improve it.
+
+The following is a general flow where an individual contributor helps with improving an open-source project.
+\begin{enumerate}
+	\item The contributor forks the project to his own GitHub account.
+	\item The contributor clones a copy of the project from his own GitHub account to his own machine.
+	\item The contributor creates a new branch about the feature he wants to add or improve.
+	\item The contributor develops the feature on the branch.
+	\item The contributor commits the development and pushes the commit to the forked repository.
+	\item The contributor submits a pull request to the maintenance team of the community project.
+	\item The maintenance team receives the pull request and reviews the changes made to the code in the developer's forked repository.
+	\item The maintenance team either sends feedback to the contributor for further clarification, or pulls the changes from the developer's forked repository and merge the new feature branch with the existing branches.
+\end{enumerate}
 
 As a first step, the contributor forks the project into his own GitHub account. This creates a copy of the community project under the contributor’s account, giving him full control over the forked repository. He is free to make or test any modifications without affecting the original project.
 
@@ -336,6 +378,15 @@ After forking, the contributor can clone the project from his GitHub account to 
 \begin{lstlisting}
 $ git push
 \end{lstlisting}
+
+\begin{shortbox}
+\Boxhead{Is it possible to push to the original repository directly?}
+
+It is worth mentioning that if \verb|git fork| were not used to fork the repository to the contributor's GitHub account, this \verb|git push| will run into a permission issue. This is because the contributor does not possess ownership to the original repository, hence prevented from modifying it.
+
+It is not recommended, but possible, that the contributor can contact the owner of the repository and ask for permission. The owner of the original repository can invite the contributor as a collaborator of the project. In that case, the contributor will be able to create and push branches to the original repository. Notice that likely the contributor cannot merge his branch to the master branch and still needs pull request to do so.
+
+\end{shortbox}
 
 When the forked repository has been updated with improvements, the contributor can create a pull request in the original community repository. The maintainers of the community project will review the pull request, evaluate the modifications, and either reject it, provide feedback, or approve it for merging.
 
@@ -347,114 +398,3 @@ $ git rebase upstream/master
 \end{lstlisting}
 
 By following this procedure, the contributor ensures that his work remains aligned with the latest developments in the community project, reducing the chances of conflicts and making their contributions easier to integrate.
-
-\section{GitHub Actions}
-
-\mync{GitHub Actions} is a tool that allows the user to define a pipeline of actions that can be triggered by events (such as a pull request, etc.) or timers. The actions are executed on containers or VMs with different operating systems, thus may induce additional cost. The user is able to configure the infrastructure and the actions using YAML-based configuration files.
-
-GitHub Actions has naturally become the standard solution to CI/CD. CI/CD is not the focus of this notebook. A brief introduction is given in Appendix \ref{ch:cicd}. GitHub Actions goes beyond just CI/CD and lets the user run workflows when other events happen in his repository, such as addling labels when a new issue is created \cite{git2025reference}.
-
-This section gives a brief introduction to GitHub Actions. More details are given in \cite{git2025reference}.
-
-\subsection{General Introduction to GitHub Actions Workflow}
-
-The user needs to define GitHub Actions workflows using the YAML files and the syntax GitHub requires. A visualization of such a workflow looks like Fig. \ref{fig:actions_workflow}.
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=250pt]{chapters/part-3/figures/actions_workflow.png}
-	\caption{A demonstration of GitHub Actions workflow.} \label{fig:actions_workflow}
-\end{figure}
-
-The basic component of GitHub Actions is \mync{GitHub Actions jobs}. A job consists of multiple steps executed sequentially. Each job is deployed in a dedicated VM or a container with specified OS and environment by the user. The VM or container is known as a runner, and it corresponds with a job.
-
-By default all jobs run in parallel. In the case where jobs are dependent, the user can configure them such that they can be executed sequentially, just like ``job 1'' and ``job 2'' given in the demonstrative Fig. \ref{fig:actions_workflow}.
-
-The user defines a workflows using a YAML file. Multiple workflows can be defined for a project, in which case there will be multiple YAML files. The YAML files should follow the syntax required by GitHub and be saved under \verb|.github/workflows/|. GitHub is able to recognize the workflow YAML files and execute them accordingly.
-
-A full list of GitHub events that can trigger GitHub Actions is provided in \cite{git2025reference}, such as when someone forks the repository, creates an issue, removes a label, raises a pull request, etc.
-
-\subsection{Workflow YAML Files}
-
-An official demonstrative example of a GitHub workflow YAML file is given below \cite{git2025reference}. 
-
-\begin{lstlisting}
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions
-on: [push]
-jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
-	steps:
-	  - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
-	  - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-	  - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-	  - name: Check out repository code
-		uses: actions/checkout@v4
-	  - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
-	  - run: echo "The workflow is now ready to test your code on the runner."
-	  - name: List files in the repository
-	    run: |
-		ls ${{ github.workspace }}
-	  - run: echo "This job's status is ${{ job.status }}."
-\end{lstlisting}
-
-Save the above YAML file under \verb|.github/workflows/| and GitHub would recognize the workflow. Click ``Actions'' on GitHub dashboard to check the details of the workflow.
-
-A brief introduction to YAML file syntax for GitHub Actions is given below.
-
-In the workflow of the demonstrative example only one job, namely ``Explore-GitHub-Actions'', is defined. In practice, multiple jobs can be defined in a workflow. An example is given below \cite{git2025reference}, where 3 jobs are defined.
-\begin{lstlisting}
-jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - run: ./setup_server.sh
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - run: ./build_server.sh
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - run: ./test_server.sh
-\end{lstlisting}
-Jobs are by default independent and can run in parallel unless \verb|needs| field is used just like in the above example, where ``build'' depends on ``setup'', and ``test'' on ``build''.
-
-Commonly seen configurations in a workflow YAML file are given in Table \ref{tab:githubactions_workflow_fields}.
-
-\begin{table}[!htb]
-	\centering \caption{Commonly seen configurations in GitHub Actions workflow.}\label{tab:githubactions_workflow_fields}
-	\begin{tabularx}{\textwidth}{lX}
-		\hline
-		Field & Description \\ \hline
-		\texttt{name} & The static name of the workflow.  \\ 
-		\texttt{run-name} & The name of an instance of run generated by the workflow.  \\ 
-		\texttt{on} & The event(s) that triggers the workflow. A full list of supported events are given in \cite{git2025reference}. Multiple triggers are supported. The trigger can be configured very flexibly. \\ 
-		\texttt{permissions} & Allowed r/w/x permissions for the workflow or for different triggers defined by the workflow. \\ 
-		\texttt{env} & Environmental variables to be used in the jobs descriptions. \\
-		\texttt{defaults} & Default settings for all jobs. \\
-		\hline
-	\end{tabularx}
-\end{table}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
