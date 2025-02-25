@@ -182,11 +182,11 @@ A workflow consists of jobs to be executed when a trigger happens. The jobs are 
 
 The user needs to formulate the pipelines to be executed automatically into GitHub Actions workflows.
 
-\subsection{Triggers}
+\subsection{Supported Triggers}
 
-It is worth mentioning that GitHub Actions can be triggered not only by repository-related events, but also external events, schedules, etc. Commonly seen triggers include
+It is worth mentioning that GitHub Actions can be triggered not only by repository-related events. Commonly seen triggers include
 \begin{itemize}
-	\item Repository-related events, such as push, pull request, etc. (Most common.)
+	\item Repository-related events, such as push, pull request (most commonly seen).
 	\item External events.
 	\item Schedulers or timers.
 	\item The user who triggers the workflow manually.
@@ -207,9 +207,9 @@ GitHub Actions provides workflow templates of different task types. There are at
 	\item Hugo
 \end{itemize}
 
-A full list of GitHub events that can trigger GitHub Actions is provided in \cite{git2025reference}.
+A full list of GitHub events that can trigger GitHub Actions is given in \cite{git2025reference}.
 
-\subsection{Workflow Configuration Files}
+\subsection{Jobs and Steps}
 
 The workflows configuration files are YAML files that the user can either prepare from scratch or modify from existing templates on GitHub Marketplace, a platform where commonly used workflows are shared.
 
@@ -310,7 +310,7 @@ Commonly seen fields defined under \texttt{jobs.<id>} are summarized in Table \r
 		\hline
 		Field & Description \\ \hline
         \texttt{name} & Name of the job. \\
-        \texttt{needs} & Dependencies of the job. \\
+        \texttt{needs} & Dependencies of the job. The job executes only if its dependencies finish successfully.\\
         \texttt{if} & Prerequisite of the job. \\
         \texttt{runs-on} & The type of machine to host the job, such as \texttt{ubuntu-latest}, \texttt{windows-latest}, \texttt{macos-latest}. \\
         \texttt{environment} & Environment that the job references. \\
@@ -334,7 +334,7 @@ A specific action is defined under \texttt{jobs.<id>.steps[*]}. Notice that fiel
 		Field & Description \\ \hline
 		\texttt{name} & The name of the step. \\ 
         \texttt{run} & The command to executed. \\
-        \texttt{uses} & Alternative to \texttt{run}. A reusable pre-stored piece of code to be executed. \\
+        \texttt{uses} & Alternative to \texttt{run}. A reusable application (known as ``action'') to be executed. \\
         \texttt{working-directory} & Working directory to run the command. \\
         \texttt{shell} & Shell to run the command. If not specified, \texttt{bash} is used on a Linux machine. \\
         \texttt{with} & A map of input variables which will be used as environment variables in the step. \\
@@ -344,6 +344,76 @@ A specific action is defined under \texttt{jobs.<id>.steps[*]}. Notice that fiel
 		\hline
 	\end{tabularx}
 \end{table}
+
+\subsection{Actions}
+
+From earlier examples, we have seen \verb|run| used in a step to execute a command. There is a limitation to the complexity of what a command can achieve. Therefore, action is introduced. In short, action is a user-defined application that performs a complex and frequently repeated task, and it is well appreciated in GitHub Actions.
+
+It is worth mentioning that since actions are essentially applications, they can be shared in the community. The user can build his own actions, and he can also look for official and unofficial actions developed by other developers. For example, a collection of actions can be found at \cite{git2025actions}.
+
+An example of an action that downloads the codes in the repository to the runner is given below. The action used in the example is provided by GitHub officials.
+\begin{lstlisting}
+name:
+on:
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v4
+        with:
+          repository:
+          ref:
+          token:
+          ssh-key:
+          ssh-known-hosts:
+          ssh-strict:
+          ssh-user:
+          persist-credentials:
+          path:
+          clean:
+          filter:
+          sparse-checkout:
+          sparse-checkout-cone-mode:
+          fetch-depth:
+          fetch-tags:
+          show-progress:
+          lfs:
+          submodules:
+          set-safe-directory:
+          github-server-url:
+\end{lstlisting}
+where \verb|uses| is used to indicate an action, and \verb|actions/checkout@v4| is the identifier (including version) of the action. The \verb|with| is then used to configure the action. The content of the configuration depends on the specific action in use. The details of the configurations about \verb|checkout@v4| can be found at \cite{git2025actions} and are not covered in this notebook. 
+
+There are many tasks that can be done via actions. To just name a few,
+\begin{itemize}
+  \item Retrieve code, such as \verb|checkout|.
+  \item Upload or download artifact, such as \verb|upload-artifact|, \verb|dowload-artifact|.
+  \item Install software, such as \verb|setup-node|, \verb|setup-python|, \verb|setup-dotnet|.
+\end{itemize}
+There are many more wonderful actions on the market, many of which can be used free-of-charge.
+
+\subsection{Contexts}
+
+The following syntax 
+\begin{lstlisting}
+${{ <context>.<information> }}
+\end{lstlisting}
+can be used to access GitHub Actions contexts in the workflow configuration files. Examples have been given in earlier sections. \mync{GitHub Actions contexts} are collections of read-only information available to the workflow configuration. There are many contexts defined and they cover a large range of topics regarding the workflow, the job, the runner, the step, environment variables, secrets, and many more.
+
+As a recap, in the earlier example the following information is retrieved.
+\begin{itemize}
+  \item \verb|${{ github.event_name }}|: the trigger of the event.
+  \item \verb|${{ runner.os }}|: the OS of the runner.
+  \item \verb|${{ github.ref }}|: branch name.
+  \item \verb|${{ github.repository }}|: repository name.
+\end{itemize}
+
+The information from contexts can be used in if-else statements to direct the workflow. Another common practice is to use an expression, such as
+\begin{lstlisting}
+${{ toJSON(github) }}
+\end{lstlisting}
+to convert contexts into JSON strings, cache them in environment variables, and use them in the commands.
 
 
 

@@ -82,7 +82,7 @@ The above command can be executed without loading \verb|pacman| in advance since
 RStudio provides a graphical interface to manage packages as shown in Fig. \ref{ch:r1:fig:rstudio_package_management}. A package can be loaded or unloaded simply by checking and unchecking the package.
 \begin{figure}
 \centering
-\includegraphics[width=350pt]{chapters/ch-r/figures/rstudio_package_management.png}
+\includegraphics[width=350pt]{chapters/part-3/figures/rstudio_package_management.png}
 \caption{RStudio's graphical interface for package management.} \label{ch:r1:fig:rstudio_package_management}
 \end{figure}
 
@@ -559,7 +559,7 @@ Similar with vector, all elements in a matrix must have the consistent type. A d
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/r_table_demo.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/r_table_demo.png}
 	\caption{A demonstration of a matrix in R.} \label{ch:r1:fig:r_table_demo}
 \end{figure}
 
@@ -674,7 +674,7 @@ legend("bottomright", inset = 0.01, legend = rownames(citation.ratio), pch = 15:
 where \verb|t()| used inside \verb|matplot()| calculates the transpose of a matrix. Save the above in a script and execute the code, to get the following Fig. \ref{ch:r1:fig:matplot_demo}.
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/matplot_demo.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/matplot_demo.png}
 	\caption{A demonstration of using \texttt{matplot} to plot trends.} \label{ch:r1:fig:matplot_demo}
 \end{figure}
 
@@ -721,13 +721,13 @@ The results of the above codes are given in Figs. \ref{ch:r1:fig:basket_exp1} an
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/basket_exp1.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/basket_exp1.png}
 	\caption{Plot of penalty success rate of the 3 players in 10 matches.} \label{ch:r1:fig:basket_exp1}
 \end{figure}
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/basket_exp2.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/basket_exp2.png}
 	\caption{Plot of average point gained per throw attempt for the 3 players in 10 matches.} \label{ch:r1:fig:basket_exp2}
 \end{figure}
 
@@ -1004,7 +1004,7 @@ qplot(
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/qplot_demo.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/qplot_demo.png}
 	\caption{A demonstration of \texttt{qplot}.} \label{ch:r1:fig:qplot_demo}
 \end{figure}
 
@@ -1033,13 +1033,13 @@ qplot(data=mortgage_price, x=Region, y=Price.Unit, geom="boxplot")
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/mortgage_demo1.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/mortgage_demo1.png}
 	\caption{A demonstration of \texttt{qplot} on mortgage price data frame.} \label{ch:r1:fig:mortgage_demo1}
 \end{figure}
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/mortgage_demo2.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/mortgage_demo2.png}
 	\caption{A second demonstration of \texttt{qplot} on mortgage price data frame.} \label{ch:r1:fig:mortgage_demo2}
 \end{figure}
 
@@ -1063,7 +1063,7 @@ A demonstrative Fig. \ref{ch:r1:fig:chart_layer} is given to illustrate the diff
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/chart_layer.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/chart_layer.png}
 	\caption{Multiple layers in chart design.} \label{ch:r1:fig:chart_layer}
 \end{figure}
 
@@ -1134,7 +1134,7 @@ p + geom_boxplot() + geom_jitter(aes(size=Size, color=Region), alpha=0.25)
 and the result is shown in Fig. \ref{ch:r1:fig:mortgage_barplot_demo}.
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/mortgage_barplot_demo.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/mortgage_barplot_demo.png}
 	\caption{An example of box plot of the mortgage price data frame using \texttt{ggplot()} and \texttt{geom_boxplot()}.} \label{ch:r1:fig:mortgage_barplot_demo}
 \end{figure}
 Notice that \verb|ggtitle()|, \verb|xlab()|, \verb|ylab()|, \verb|alpha| are used in the plot. They are self-explanatory. A new geometry \verb|geom_jitter()| is used, which works similarly with \verb|geom_point()| except the additional vibration in the horizontal axis which makes the points clearer to see.
@@ -1161,7 +1161,7 @@ p
 Do note that aesthetics needs to be given to \verb|geom_smooth()| in the above example. This is because aesthetics is not given in the base \verb|ggolot()|. Notice that \verb|geom_smooth()| can inherit aesthetics from the previous \verb|ggplot()|, but not from the previous \verb|geom_point()|. The plot is given by Fig. \ref{ch:r1:fig:geom_smooth_demo}.
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/geom_smooth_demo.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/geom_smooth_demo.png}
 	\caption{An example of using \texttt{geom_smooth()} for scatter point fitting.} \label{ch:r1:fig:geom_smooth_demo}
 \end{figure}
 
@@ -1207,7 +1207,7 @@ p + geom_histogram(aes(fill=Region), bins=50, color="black", alpha=0.5, position
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/mortgage_histogram_demo.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/mortgage_histogram_demo.png}
 	\caption{An example of histogram plot of house price per unit area in different regions in a single plot.} \label{ch:r1:fig:mortgage_histogram_demo}
 \end{figure}
 
@@ -1242,13 +1242,13 @@ The results are given in Figs. \ref{ch:r1:fig:mortgage_histogram_demo_f1} and \r
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/mortgage_histogram_demo_f1.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/mortgage_histogram_demo_f1.png}
 	\caption{Use facets to plot the histogram of price per unit are of the house in different regions (subplots in rows).} \label{ch:r1:fig:mortgage_histogram_demo_f1}
 \end{figure}
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/mortgage_histogram_demo_f2.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/mortgage_histogram_demo_f2.png}
 	\caption{Use facets to plot the histogram of price per unit are of the house in different regions (subplots in columns).} \label{ch:r1:fig:mortgage_histogram_demo_f2}
 \end{figure}
 
@@ -1280,13 +1280,13 @@ where notice that two charts are generated. The first chart using \verb|xlim()|,
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/coordinate_demo1.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/coordinate_demo1.png}
 	\caption{Add coordinates layer using \texttt{xlim()} and \texttt{ylim()}.} \label{ch:r1:fig:coordinate_demo1}
 \end{figure}
 
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/coordinate_demo2.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/coordinate_demo2.png}
 	\caption{Add coordinates layer using \texttt{coord_cartesian()}.} \label{ch:r1:fig:coordinate_demo2}
 \end{figure}
 
@@ -1329,7 +1329,7 @@ p + ggtitle("Mortgage price per unit area in different regions.") +
 The resulted chart is given in Fig. \ref{ch:r1:fig:mortgage_histogram_theme}. Compare it with Fig. \ref{ch:r1:fig:mortgage_histogram_demo} to see the differences by applying \verb|theme()| in the themes layer.
 \begin{figure}
 	\centering
-	\includegraphics[width=250pt]{chapters/ch-r/figures/mortgage_histogram_theme.png}
+	\includegraphics[width=250pt]{chapters/part-3/figures/mortgage_histogram_theme.png}
 	\caption{Mortgage price chart with theme.} \label{ch:r1:fig:mortgage_histogram_theme}
 \end{figure}
 

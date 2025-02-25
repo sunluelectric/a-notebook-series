@@ -7,7 +7,7 @@ Semantic web uses URI to identify an existing interpretation, RDF/RDFS and OWL t
 Human use symbols to represent objects in reality. The concept associated with a symbol is used to help define and interpret objects. An example of interpreting ``Apple'' is given in Fig. \ref{fig:semiotictriangle}.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=\textwidth]{./chapters/ch-semanticwebarchitecture/figures/semiotic_triangle.png}
+	\includegraphics[width=\textwidth]{chapters/part-4/figures/semiotic_triangle.png}
 	\caption{Semiotic triangle of Apple.}
 	\label{fig:semiotictriangle}
 \end{figure}
@@ -52,7 +52,7 @@ RDF uses ``subject-predicate(property)-object'' triple to represent knowledge. A
 For example, consider ``Einstein was born in Ulm''. In RDF, ``Einstein'' is the subject, and ``Ulm'' the object. The predicate is ``has birthPlace'', where ``birthPlace'' is a property assigned to ``Einstein''. The graph representation is given by Fig. \ref{fig:einsteinexp}.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{./chapters/ch-semanticwebarchitecture/figures/einsteinexp.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-4/figures/einsteinexp.png}
 	\caption{Graph representation of triple for knowledge ``Einstein was born in Ulm''.}
 	\label{fig:einsteinexp}
 \end{figure}
@@ -87,14 +87,14 @@ to assign multiple predicates to a subject to avoid repeating the same object in
 It is possible to use multi-valued relations and blank nodes to enforce combining of information. Consider an example given in Fig. \ref{fig:lectureexp}, where the graph is used to demonstrate a lecture taking place at a specific room at given time slot. What if the lecture takes place twice a week, each time at a different location? With the help of multi-valued relations and blank nodes, this can be demonstrated clearly as shown in Fig. \ref{fig:lectureexp2}.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{./chapters/ch-semanticwebarchitecture/figures/lectureexp.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-4/figures/lectureexp.png}
 	\caption{An example that demonstrate when and where a lecture takes place.}
 	\label{fig:lectureexp}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{./chapters/ch-semanticwebarchitecture/figures/lectureexp2.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-4/figures/lectureexp2.png}
 	\caption{An example that demonstrate a lecture taking place at multiple locations and time slots using multi-valued relations and blank nodes.}
 	\label{fig:lectureexp2}
 \end{figure}
@@ -119,7 +119,7 @@ where \verb|_:<blank-node-name>| is used to declare a blank node and assign it a
 Lists help to make the code clean and readable. There are two types of lists, the container (open list, extendable) and the collections (closed list, fixed). Container is helpful to handle the situation given in Fig.  \ref{fig:lectureexp3}.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{./chapters/ch-semanticwebarchitecture/figures/lectureexp3.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-4/figures/lectureexp3.png}
 	\caption{An example of a container.}
 	\label{fig:lectureexp3}
 \end{figure}
@@ -128,7 +128,7 @@ Notice that the blank node has a type \verb|rdf:Seq|. This tells that the items 
 The collection, on the other hand, defines a closed list as shown by Fig. \ref{fig:lectureexp4}. In Turtle, this can be done by using nested \verb|[]| iteratively.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{./chapters/ch-semanticwebarchitecture/figures/lectureexp4.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-4/figures/lectureexp4.png}
 	\caption{An example of a collection.}
 	\label{fig:lectureexp4}
 \end{figure}
@@ -142,7 +142,7 @@ A short cut is to use \verb|()|, with the items in the collection listed down in
 RDF permits interleaving of statements, i.e., to make a statement about another statement. For example, consider ``Alice says that Bob ate the cake''. This example contains nested statement, where ``Bob ate the cake'' is a statement, and ``Alice says \ldots'' is a statement on that statement. RDF reification follows Fig. \ref{fig:reificationexp}.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{./chapters/ch-semanticwebarchitecture/figures/reificationexp.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-4/figures/reificationexp.png}
 	\caption{An example of RDF reification.}
 	\label{fig:reificationexp}
 \end{figure}
@@ -152,7 +152,7 @@ RDF permits interleaving of statements, i.e., to make a statement about another 
 For small-scale relational database, it is possible to convert it to semantic web RDF manually. For example, consider an RDB for all the books in a study. There are three tables in the database, books, authors and publishers, respectively. Each table contains a few dozens of entries. The RDB can be converted to RDF as shown in Fig. \ref{fig:bookexp}. It can be realized very easily, simply by defining everything as nodes and stack triples for all relationships.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./chapters/ch-semanticwebarchitecture/figures/bookexp.png}
+	\includegraphics[width=0.8\textwidth]{chapters/part-4/figures/bookexp.png}
 	\caption{Semantic web of a few books, and their authors and publishers.}
 	\label{fig:bookexp}
 \end{figure}
@@ -182,7 +182,7 @@ In the deeper insights, RDFS helps to add ``ontology'' to the RDF model by intro
 The following example compares RDF and RDF/RDFS implementations on the same context. Consider statement ``banana is yellow, apple is red, and orange is orange color''. In a RDF implementation, this would look like the green-colored elements in Fig. \ref{fig:fruitexp}. It is a disconnected graph. The semantic web failed to bridge the triples together and realize that all of them are discussing colors of fruits.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./chapters/ch-semanticwebarchitecture/figures/fruitexp.png}
+	\includegraphics[width=0.8\textwidth]{chapters/part-4/figures/fruitexp.png}
 	\caption{Semantic web of fruits and their colors, with RDF implementation in green RDF/RDFS in red.}
 	\label{fig:fruitexp}
 \end{figure}
@@ -580,7 +580,7 @@ INSERT DATA {
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.8\textwidth]{./chapters/ch-semanticwebarchitecture/figures/coweatgrass.png}
+	\includegraphics[width=0.8\textwidth]{chapters/part-4/figures/coweatgrass.png}
 	\caption{An RDF model that demonstrates ``animal eats food''.}
 	\label{fig:coweatgrass}
 \end{figure}
