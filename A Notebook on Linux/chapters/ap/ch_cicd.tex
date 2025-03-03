@@ -347,11 +347,18 @@ A specific action is defined under \texttt{jobs.<id>.steps[*]}. Notice that fiel
 
 \subsection{Actions}
 
-From earlier examples, we have seen \verb|run| used in a step to execute a command. There is a limitation to the complexity of what a command can achieve. Therefore, action is introduced. In short, action is a user-defined application that performs a complex and frequently repeated task, and it is well appreciated in GitHub Actions.
+From earlier examples, we have seen \verb|run| used in a step to execute a command. There is a limitation to the complexity of what a command can achieve. Therefore, action is introduced. In short, action is a user-defined application that performs a complex and frequently repeated task, and it is well appreciated in GitHub Actions. The basic syntax of calling an action in a step is given below.
+\begin{lstlisting}
+steps:
+  - uses: <action id and version>
+    with:
+      <configurations>    
+\end{lstlisting}
+where \verb|with| is usually an optional argument that states the configuration of the action. Its contents differ from action to action.
 
-It is worth mentioning that since actions are essentially applications, they can be shared in the community. The user can build his own actions, and he can also look for official and unofficial actions developed by other developers. For example, a collection of actions can be found at \cite{git2025actions}.
+It is worth mentioning that since actions are essentially applications, they can be packaged and shared in the community. The user can build his own actions, and he can also look for official and unofficial actions developed by other developers. For example, a collection of actions can be found at \cite{git2025actions}.
 
-An example of an action that downloads the codes in the repository to the runner is given below. The action used in the example is provided by GitHub officials.
+An example of an action, \verb|checkout|, is given below. It downloads the source codes in the repository to the runner. The action used in the example is provided by GitHub officials.
 \begin{lstlisting}
 name:
 on:
@@ -383,7 +390,7 @@ jobs:
           set-safe-directory:
           github-server-url:
 \end{lstlisting}
-where \verb|uses| is used to indicate an action, and \verb|actions/checkout@v4| is the identifier (including version) of the action. The \verb|with| is then used to configure the action. The content of the configuration depends on the specific action in use. The details of the configurations about \verb|checkout@v4| can be found at \cite{git2025actions} and are not covered in this notebook. 
+where \verb|uses| is used to indicate an action, and \verb|actions/checkout@v4| is the identifier and version of the action. The \verb|with| field (optional) is then used to configure the action if needed. The content of the configuration depends on the specific action in use. The details of the configurations about \verb|checkout@v4| can be found at \cite{git2025actions} and are not covered in this notebook. 
 
 There are many tasks that can be done via actions. To just name a few,
 \begin{itemize}

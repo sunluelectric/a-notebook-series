@@ -6,15 +6,15 @@ This chapter focuses on the fundamental setup and basic operations such as the i
 
 \section{R and RStudio Installation} \label{ch:r1:sec:rinstallation}
 
-\textit{R} is a programming language for statistical computing and visualization. It is widely used among statisticians and data miners for developing statistical software and carrying out data analysis. R is free and can be downloaded from \cite{r}, from which more details about R can also be found.
+\mync{R language} is a programming language for statistical computing and visualization. It is widely used among statisticians and data miners for developing statistical software and carrying out data analysis. R is free and can be downloaded from \cite{r}, from which more details about R can also be found.
 
-\textit{RStudio}, also known as \textit{Posit}, is an IDE widely used for R programming and testing. RStudio IDE is open-source and free of charge for personal use. It can be downloaded from \cite{rstudio}.
+\mync{RStudio}, also known as \mync{Posit}, is an IDE widely used for R programming and testing. RStudio IDE has an open-source and free-of-charge community version for personal use. It can be downloaded from \cite{rstudio}.
 
-Download R and RStudio from the aforementioned web sites, and install them following the instructions.
+Download R and RStudio from the aforementioned web sites, and install them following the instructions on their official websites. It is required to install R before installing RStudio.
 
 \section{R Packages Management} \label{ch:r1:sec:rpackage}
 
-R uses packages (sometimes known as libraries) to boost its capability. R packages, both built-in and third-party, provide powerful features for data analysis and visualization. Some packages may also come with demonstrative sample data frames. The packages can be published and shared online. CRAN is by far the most popular platform to store and share R packages.
+R uses packages, also known as libraries, to expand its capability. R packages, both built-in and third-party, provide powerful features for data analysis and visualization. Some packages may also come with demonstrative sample data frames. The packages can be published and shared online. CRAN is by far the most popular platform to store and share R packages.
 
 \subsection{Manage Packages with Built-in Functions}
 
@@ -36,7 +36,9 @@ For example
 \begin{lstlisting}
 library(pacman)
 \end{lstlisting}
-After loading a package, the data frames and functions defined in that package can be used normally. Alternatively, use prefix \verb|<package>::<function>|, \verb|<package>::<dataframe>| to call the functions and data frames defined in a package without loading it. The later approach can become inconvenient when the function or data frame is used frequently. 
+After loading a package, the data frames and functions defined in that package can be used normally. 
+
+One can also use the functions and data frames in a package without loading it. In that scenario, use prefix \verb|<package>::<function>|, \verb|<package>::<dataframe>| to call the functions and data frames. This is inconvenient if the functions or data frames are to be used frequently.
 
 To unload a package, use
 \begin{lstlisting}
@@ -118,7 +120,7 @@ write.table(x, 'generate_sgt_data.csv', sep=",", row.names = FALSE, col.names=FA
 \subsection{Data Types}
 
 R supports many data types. Commonly used data types are summarized in Table \ref{ch:r1:tab:datatype}, where notice that \verb|<-| is used to assign a value to a variable. Use \verb|typeof()| to check the type of a variable. Alternatively, use \verb|is.numeric()|, \verb|is.integer()|, \verb|is.double()|, \verb|is.character()|, etc., to check whether a variable belongs to a particular data type.
-\begin{table}
+\begin{table}[!htb]
   \centering \caption{Commonly used data types.}\label{ch:r1:tab:datatype}
   \begin{tabularx}{\textwidth}{llX}
     \hline
@@ -215,7 +217,7 @@ R supports arithmetic calculations of variables, including \verb|+|, \verb|-|, \
 
 R uses built-in and third-party functions which extend its capability. There is a rich set of functions for numerical calculations, string operations, probability calculations and statistics analysis. Some of them are summarized in Tables \ref{ch:r1:tab:numericalcalculation}, \ref{ch:r1:tab:logicalcomparison}, \ref{ch:r1:tab:stringoperation}, \ref{ch:r1:tab:probabilityfunction} and \ref{ch:r1:tab:statisticsfunction}.
 
-\begin{table}
+\begin{table}[!htb]
   \centering \caption{Numerical calculations.}\label{ch:r1:tab:numericalcalculation}
   \begin{tabularx}{\textwidth}{lX}
     \hline
@@ -236,7 +238,7 @@ R uses built-in and third-party functions which extend its capability. There is 
   \end{tabularx}
 \end{table}
 
-\begin{table}
+\begin{table}[!htb]
   \centering \caption{Logical comparisons.}\label{ch:r1:tab:logicalcomparison}
   \begin{tabularx}{\textwidth}{lX}
     \hline
@@ -253,7 +255,7 @@ R uses built-in and third-party functions which extend its capability. There is 
   \end{tabularx}
 \end{table}
 
-\begin{table}
+\begin{table}[!htb]
   \centering \caption{String operations.}\label{ch:r1:tab:stringoperation}
   \begin{tabularx}{\textwidth}{lX}
     \hline
@@ -269,7 +271,7 @@ R uses built-in and third-party functions which extend its capability. There is 
   \end{tabularx}
 \end{table}
 
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{Probability related operations.}\label{ch:r1:tab:probabilityfunction}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
@@ -294,18 +296,18 @@ R uses built-in and third-party functions which extend its capability. There is 
 	\end{tabularx}
 \end{table}
 
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{Statistics related functions.}\label{ch:r1:tab:statisticsfunction}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
 		Syntax & Description \\ \hline
-		\verb|mean(l)| & Mean. \\
-		\verb|sd(l)| & Standard deviation. \\
-		\verb|median(l)| & Median. \\
-		\verb|range(l)| & Minimum and maximum. \\
-		\verb|min(l)| & Minimum. \\
-		\verb|max(l)| & Maximum. \\
-		\verb|sum(l)| & Sum \\
+		\verb|mean()| & Mean. \\
+		\verb|sd()| & Standard deviation. \\
+		\verb|median()| & Median. \\
+		\verb|range()| & Minimum and maximum. \\
+		\verb|min()| & Minimum. \\
+		\verb|max()| & Maximum. \\
+		\verb|sum()| & Sum \\
 		\hline
 	\end{tabularx}
 \end{table}
@@ -410,9 +412,9 @@ Define a simple function as follows. Run the codes where the function is describ
 }
 \end{lstlisting}
 
-\section{Vector and Matrix}
+\section{Vector, Matrix and List}
 
-Vector and matrix are the fundamental forms using which R stores and processes data.
+Vector and matrix are the fundamental forms using which R stores and processes data. List is similar with vector to some extend, and it is also introduced in this section.
 
 \subsection{Vector}
 
@@ -553,11 +555,13 @@ When the sizes of the vectors are not consistent, the shorter vector will repeat
 
 A vector can also be used as an input argument or output return of a function.
 
+To retrieve the elements in a vector, use either \verb|<vector>[<index>]| which returns a sub-vector that contains the element, or \verb|<vector>[[<index>]]| which returns the element itself. If the elements have names, \verb|<vector>[<name>]| or \verb|<vector>[[<name>]]| respectively as alternative approaches.
+
 \subsection{Matrix}
 
 Similar with vector, all elements in a matrix must have the consistent type. A demonstration of matrix indexing in R is shown in Fig. \ref{ch:r1:fig:r_table_demo}. Let the matrix be named \verb|A|. The elements in the matrix can be accessed by the name of the table followed by the index coordinates. For example, in the figure, \verb|A[1,1]| refers to the first element and \verb|A[4,6]| the last element. It is also possible to index an entire row or column. For example, use \verb|A[1,]| to represent the first row of the matrix.
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/r_table_demo.png}
 	\caption{A demonstration of a matrix in R.} \label{ch:r1:fig:r_table_demo}
@@ -595,7 +599,7 @@ There are alternative ways, other than \verb|rbind()|, to create a matrix. For e
 [3,]    3    6    9
 \end{lstlisting}
 
-As illustrated earlier that \verb|names(<vector>)| can be used to view and assign names to elements in a vector, likewise \verb|rownames(<matrix>)| and \verb|colnames(<matrix>)| can be used to view and assign names to the rows and columns of a matrix. Examples are given below.
+Similar with \verb|names(<vector>)| that can be used to view and assign names to elements in a vector, \verb|rownames(<matrix>)| and \verb|colnames(<matrix>)| can be used to view and assign names to the rows and columns of a matrix. Examples are given below.
 \begin{lstlisting}
 > A <- matrix(1:9, 3, 3)
 > colnames(A) <- c("col1", "col2", "col3")
@@ -622,7 +626,7 @@ To remove the names, simply assign \verb|NULL| to the name.
 
 Vectorization operators are defined for matrix level as well. For example, for two matrices with the same shape, numerical operations such as  \verb|+|, \verb|-|, \verb|*|, \verb|/|, \verb|%/%|, \verb|%%| and \verb|^| can be used.
 
-As introduced earlier, a matrix or a vector can be split and segmented to form a smaller matrix or vector. It is worth mentioning that when a single column or row is selected, R will automatically treated the return as a vector instead of a matrix. An example is given below. When a matrix downgrades to a vector, the row name (if it has only one row), or the column name (if it has only one column) will be removed.
+By default, a single row or column of a matrix is treated as a vector. An example is given below. When a matrix downgrades to a vector, the row name (if it has only one row), or the column name (if it has only one column) will be removed.
 \begin{lstlisting}
 	> A <- matrix(1:9, 3, 3)
 	> is.matrix(A)
@@ -634,8 +638,7 @@ As introduced earlier, a matrix or a vector can be split and segmented to form a
 	> is.vector(A[1,])
 	[1] TRUE
 \end{lstlisting}
-
-To get consistent results, when segmenting matrix to get a single row or column vector, deliberately ask R to not drop the matrix dimensions. This can be done as follows. By doing this, the names assigned to columns and rows preserve.
+It is possible to deliberately ask R to not drop the matrix dimensions. This can be done as follows. By doing this, the names assigned to columns and rows preserve.
 \begin{lstlisting}
 	> A <- matrix(1:9, 3, 3)
 	> is.matrix(A[1,,drop=F]) # select a row/column
@@ -644,9 +647,7 @@ To get consistent results, when segmenting matrix to get a single row or column 
 	[1] TRUE
 \end{lstlisting}
 
-\subsection{Matrix Visualization Using \texttt{matplot()}}
-
-R provides flexible and powerful data visualization tools, many of which more advanced than what is to be introduced in this section. This section introduces a simple matrix visualization function called \verb|matplot()|, which plots the columns of a matrix against each other.
+R provides flexible and powerful data visualization tools, many of which more advanced than the ones to be introduced in this section. This section introduces a simple matrix visualization function called \verb|matplot()|, which plots the columns of a matrix against each other.
 
 To demonstrate \verb|matplot()|, consider the following example.
 \begin{lstlisting}
@@ -672,7 +673,7 @@ matplot(
 legend("bottomright", inset = 0.01, legend = rownames(citation.ratio), pch = 15:16, col = 1:2, horiz = F)
 \end{lstlisting}
 where \verb|t()| used inside \verb|matplot()| calculates the transpose of a matrix. Save the above in a script and execute the code, to get the following Fig. \ref{ch:r1:fig:matplot_demo}.
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/matplot_demo.png}
 	\caption{A demonstration of using \texttt{matplot} to plot trends.} \label{ch:r1:fig:matplot_demo}
@@ -719,19 +720,61 @@ myplot((total_point - penalty_point) / throw_attempt, "match", "average gained p
 
 The results of the above codes are given in Figs. \ref{ch:r1:fig:basket_exp1} and \ref{ch:r1:fig:basket_exp2}.
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/basket_exp1.png}
 	\caption{Plot of penalty success rate of the 3 players in 10 matches.} \label{ch:r1:fig:basket_exp1}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/basket_exp2.png}
 	\caption{Plot of average point gained per throw attempt for the 3 players in 10 matches.} \label{ch:r1:fig:basket_exp2}
 \end{figure}
 
 Notice that \verb|matplot()| is not widely used in practice comparing with the other visualization tools to be introduced in later sections.
+
+\subsection{List}
+
+List is similar with vector in the sense that it is also an indexed 1-D storage. However, the elements in a list does not need to share the same data type, and hence list can be used flexibly, such as to save nested ``list of lists'', ``list of data frames'' of different data structures. By assigning names to the values in a list, it can be used as a dictionary.
+
+Examples are given below.
+\begin{lstlisting}
+> list1 <- list(24, "abc", 5.4, list(17, "def"))
+> print(list1[[1]])
+[1] 24
+
+> print(list1[[4]])
+[[1]]
+[1] 17
+
+[[2]]
+[1] "def"
+\end{lstlisting} 
+
+For elements with names, the list looks very much like a dictionary. The content of the list can be accessed via both index and key.
+\begin{lstlisting}
+> list2 = list(
++   "name" = "lu",
++   "age" = 33,
++   "number of pc" = 3
++   )
+
+> print(list2[[1]])
+[1] "lu"
+
+> print(list2[["age"]])
+[1] 33
+\end{lstlisting}
+
+Alternatively, use \verb|<list>$<name>| to access the content. Following the above example,
+\begin{lstlisting}
+> print(list2$name)
+[1] "lu"
+
+> print(list2$`number of pc`)
+[1] 3
+\end{lstlisting}
 
 \section{Data Frames} \label{ch:r1:sec:df}
 
@@ -741,7 +784,7 @@ Data frame, just like vector and matrix, is another data structure defined in R.
 
 Data frame can be created from scratch by concatenating columns just like matrix. However, in practice it is more common that a data frame is obtained by importing data from other data sources. Hence, data importing is introduced first and data concatenating will be introduced in a later section.
 
-One of the most common sources of data is CSV files. R provides convenient functions to read data from CSV files into data frames. Use the following commands to import data from a CSV file into a data frame.
+One of the most common sources of data is a CSV file. R provides convenient functions to read data from CSV files into data frames. Use the following commands to import data from a CSV file into a data frame.
 
 The following command pops up a separate window that allows the user to choose a CSV file manually.
 \begin{lstlisting}
@@ -782,7 +825,7 @@ Table \ref{ch:r1:tab:dataframeexplore} summarizes the commonly used functions on
     \verb|tail(df, n=6L)| & Display the last few columns. \\
     \verb|str(df)| & A summary of the data frame, including the structure of each column. \\
     \verb|summary(df)| & A summary of the data frame, including some of its statistics features. \\
-    \verb|levels(df$<column>)| & The level of the column. \\
+    \verb|levels(df$<column>)| & The level of the column; only works for descrete-value columns. \\
     \hline
   \end{tabularx}
 \end{table}
@@ -1002,7 +1045,7 @@ qplot(
 )
 \end{lstlisting}
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/qplot_demo.png}
 	\caption{A demonstration of \texttt{qplot}.} \label{ch:r1:fig:qplot_demo}
@@ -1031,13 +1074,13 @@ qplot(data=mortgage_price, x=Size, y=Price, color=Region, geom=c("point", "smoot
 qplot(data=mortgage_price, x=Region, y=Price.Unit, geom="boxplot")
 \end{lstlisting}
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/mortgage_demo1.png}
 	\caption{A demonstration of \texttt{qplot} on mortgage price data frame.} \label{ch:r1:fig:mortgage_demo1}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/mortgage_demo2.png}
 	\caption{A second demonstration of \texttt{qplot} on mortgage price data frame.} \label{ch:r1:fig:mortgage_demo2}
@@ -1061,7 +1104,7 @@ As proposed by Leland Wilkinson's Grammar of Graphics, a chart shall contain mul
 \end{itemize}
 A demonstrative Fig. \ref{ch:r1:fig:chart_layer} is given to illustrate the different layers in a chart.
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/chart_layer.png}
 	\caption{Multiple layers in chart design.} \label{ch:r1:fig:chart_layer}
@@ -1071,13 +1114,15 @@ A demonstrative Fig. \ref{ch:r1:fig:chart_layer} is given to illustrate the diff
 
 Function \verb|ggplot()| is a very good practice of implementing the above chart design and plotting philosophy. A simple example for \verb|ggplot()|, just for quick demonstration purpose, is given below.
 \begin{lstlisting}
-p <- ggplot(data=<df>, aes(x=<column>, y=<column>, color=<column>, size=<column>))
+p <- ggplot(data=<df>, 
+            aes(x=<column>, y=<column>, color=<column>, size=<column>)
+     )
 p <- p + geom_point()
 p
 \end{lstlisting}
 where \verb|aes()| is used to build mappings in the aesthetics.
 
-An interesting fact when using \verb|ggplot()| is that, when adding a layer to the chat, the layer is literally added to \verb|ggplot()|. In the program, this step by step build up an object, where \verb|ggplot()| provides the most basic layers. Therefore, the above simple example is equivalent to
+An interesting fact when using \verb|ggplot()| is that, when adding a layer to the chat, the layer is literally added to \verb|ggplot()|. For example, in
 \begin{lstlisting}
 p <- ggplot(data=<df>, aes(x=<column>, y=<column>, color=<column>, size=<column>))
 p + geom_point()
@@ -1085,10 +1130,10 @@ p + geom_line() # another selection of geometries choice
 p + geom_line() + geom_point() # overlying both geometries choices
 p + geom_point(aes(size=<another-column>)) # overwrite aesthetics settings.
 \end{lstlisting}
-and the added layers are able to inherit the aesthetics settings, if it is not overwritten. And speaking of overwriting, even the x and y axis can be overwritten. The displaying name of the labels can be overwritten by stack \verb|xlab("")| and \verb|ylab("")| into the chart.
+the added layers are able to inherit the aesthetics settings, if they are not overwritten. And speaking of overwriting, even the x and y axis can be overwritten. The displaying name of the labels can be overwritten by stack \verb|xlab("")| and \verb|ylab("")| into the chart.
 
 Function \verb|ggplot()| provides many choices for geometries. The most commonly used ones are summarized in Table \ref{ch:r1:tab:geoms}.
-\begin{table}
+\begin{table}[!htb]
   \centering \caption{Commonly used commands for data frame exploration.}\label{ch:r1:tab:geoms}
   \begin{tabularx}{\textwidth}{lX}
     \hline
