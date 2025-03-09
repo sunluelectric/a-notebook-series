@@ -1,26 +1,24 @@
 \chapter{R (Part I: Basics)} \label{ch:r1}
 
-This and the next chapters introduce R language, a widely used programming language for data mining and visualization. 
+This and the next chapter introduce R language, a widely used programming language for data mining and visualization. This chapter focuses on the fundamental setup such as the installation of R and RStudio, basic data types, basic operations such as vector, list, table and data frame manipulations, and basic visualization methods. The next Chapter \ref{ch:r2} introduces advanced data analysis tools and skills with R.
 
-This chapter focuses on the fundamental setup and basic operations such as the installation of R and RStudio, basic data types, vector and data frame manipulation, and basic visualization methods. Chapter \ref{ch:r2} introduces advanced data analysis skills and tools.
+When comes to statistics calculation and data visualization, R is often considered simpler and more efficient with large size datasets compared with other programming languages such as Python.
 
-Comparing with other programming languages such as Python, R is simpler when comes to data visualization for statistics purposes and more efficient when performing statistics operations on large datasets.
+\section{Brief Introduction} \label{ch:r1:sec:rinstallation}
 
-\section{R and RStudio Installation} \label{ch:r1:sec:rinstallation}
+\mync{R language} is a programming language for statistical computing and visualization. It is widely used among statisticians and data miners for developing statistical software and carrying out data analysis. R is free and can be downloaded from \cite{r} where more details about R can also be found.
 
-\mync{R language} is a programming language for statistical computing and visualization. It is widely used among statisticians and data miners for developing statistical software and carrying out data analysis. R is free and can be downloaded from \cite{r}, from which more details about R can also be found.
+\mync{RStudio}, also known as \mync{Posit}, is an IDE widely used for R programming and testing. RStudio IDE has an open-source and free-of-charge community version for personal use. It can be downloaded from \cite{rstudio}. Notice that RStudio is not compulsory and there are other IDEs that supports R script programming such as VSCode and Vim. With that been said, most of the R scripts in this notebook are programmed and tested with RStudio.
 
-\mync{RStudio}, also known as \mync{Posit}, is an IDE widely used for R programming and testing. RStudio IDE has an open-source and free-of-charge community version for personal use. It can be downloaded from \cite{rstudio}.
+\subsection{Installation}
 
 Download R and RStudio from the aforementioned web sites, and install them following the instructions on their official websites. It is required to install R before installing RStudio.
 
-\section{R Packages Management} \label{ch:r1:sec:rpackage}
+\subsection{R Packages Management} \label{ch:r1:sec:rpackage}
 
-R uses packages, also known as libraries, to expand its capability. R packages, both built-in and third-party, provide powerful features for data analysis and visualization. Some packages may also come with demonstrative sample data frames. The packages can be published and shared online. CRAN is by far the most popular platform to store and share R packages.
+R uses packages, also known as libraries, to expand its capability. R packages, both built-in and third-party, provide powerful features for data analysis and visualization. Some packages may come with demonstrative sample data frames. Packages can be published and shared online. CRAN is by far the most popular platform to store and share R packages.
 
-\subsection{Manage Packages with Built-in Functions}
-
-There are a number of default packages that come along with R and they do not need separate installation. Only third-party packages need additional installation. To install or remove a package, use
+There are a number of default built-in packages that come along with R installation. Only third-party packages need separate installation, and it can be done using the R console. To install or remove a package, use
 \begin{lstlisting}
 install.packages("<package>")
 remove.packages("<package>")
@@ -30,7 +28,7 @@ respectively. For example,
 install.packages("pacman")
 \end{lstlisting}
 
-To load a package, both default and third-party, use
+It is a good practice to load a package before using its functions and datasets. To load a package, both default and third-party, use
 \begin{lstlisting}
 library(<package>)
 \end{lstlisting}
@@ -38,9 +36,7 @@ For example
 \begin{lstlisting}
 library(pacman)
 \end{lstlisting}
-After loading a package, the data frames and functions defined in that package can be used normally. 
-
-One can also use the functions and data frames in a package without loading it. In that scenario, use prefix \verb|<package>::<function>|, \verb|<package>::<dataframe>| to call the functions and data frames. This is inconvenient if the functions or data frames are to be used frequently.
+After loading a package, the data frames and functions defined in that package can be used normally. It is possible to use the functions and data frames in a package without loading it, in which case use prefix \verb|<package>::<function>|, \verb|<package>::<dataframe>|. This is inconvenient if the functions or data frames are to be used frequently.
 
 To unload a package, use
 \begin{lstlisting}
@@ -50,8 +46,6 @@ For example,
 \begin{lstlisting}
 detach("package:pacman", unload = TRUE)
 \end{lstlisting}
-
-\subsection{Manage Packages with Third-Party Packages}
 
 There are third-party packages that provide package management functions, for example \verb|pacman|. With \verb|pacman| installed and loaded, use the following commands to install, load and unload packages respectively.
 \begin{lstlisting}
@@ -63,27 +57,25 @@ p_unload(all) # unload all
 Assume that \verb|pacman| is already installed. An example of using \verb|pacman| to load packages are given as follows.
 \begin{lstlisting}
 pacman::p_load(
-	pacman, # package management
-	dplyr, # data manipulation
-	GGally, # data visualization
-	ggplot2, # data visualization
-	ggthemes, # data visualization
-	ggvis, # data visualization
-	httr, # url and http
-	lubridate, # date and time manipulation
-	plotly, # data visualization
-	rio, # io
-	rmarkdown, # documentation
-	shiny, # web apps development
-	stringr, # string operation
-	tidyr # data tidying
+	pacman,       # package management
+	dplyr,        # data manipulation
+	GGally,       # data visualization
+	ggplot2,      # data visualization
+	ggthemes,     # data visualization
+	ggvis,        # data visualization
+	httr,         # url and http
+	lubridate,    # date and time manipulation
+	plotly,       # data visualization
+	rio,          # io
+	rmarkdown,    # documentation
+	shiny,        # web apps development
+	stringr,      # string operation
+	tidyr         # data tidying
 )
 \end{lstlisting}
-The above command can be executed without loading \verb|pacman| in advance since \verb|pacman::p_load()| prefix is used. The listed packages are commonly used in R projects, and a brief explanation to them is given as comments in the above demo. 
+The above command can be executed without loading \verb|pacman| in advance since \verb|pacman::p_load()| prefix is used. The listed packages are commonly used in R projects, and a brief explanation to each of them is given as comments in the above code. 
 
-\subsection{Manage Packages with RStudio IDE}
-
-RStudio provides a graphical interface to manage packages as shown in Fig. \ref{ch:r1:fig:rstudio_package_management}. A package can be loaded or unloaded simply by checking and unchecking the package.
+RStudio provides a graphical interface to manage packages as shown in Fig. \ref{ch:r1:fig:rstudio_package_management}. A package can be loaded or unloaded simply by select and deselect the package.
 \begin{figure}
 \centering
 \includegraphics[width=350pt]{chapters/part-3/figures/rstudio_package_management.png}
@@ -92,7 +84,7 @@ RStudio provides a graphical interface to manage packages as shown in Fig. \ref{
 
 \section{Basic Syntax} \label{ch:r1:sec:rprogramming}
 
-This section introduces the basic syntax and commonly used data types of R programming.
+This section introduces the basic syntax and commonly used data types of R.
 
 It is worth mentioning in the beginning that R is case sensitive. Use \verb|#| to lead a comment. In the console, use \verb|print(<variable>)| or simply type the name of the variable to print the value of a variable to the console. Use \verb|?<function>|, \verb|?<dataframe>| to access the manual for a function or data frame.
 
@@ -128,7 +120,7 @@ R supports many data types. Commonly used data types are summarized in Table \re
     \hline
     Data Type & Syntax (Example) & Description \\ \hline
     integer & \verb|n <- 2L| & An integer. Define an integer by a value followed by \verb|L|. \\
-    double & \verb|x <- 2| & An double float value. \\
+    double & \verb|x <- 2| & A double float value. \\
     complex & \verb|z <- 3+2i| & A complex value. \\
     character & \verb|a <- "a"| & A character or a string. \\
     logical & \verb|q <- T| & A boolean value. Use \verb|T|, \verb|TRUE| and \verb|F|, \verb|FALSE| to represent true and false respectively. \\
@@ -422,7 +414,7 @@ Vector and matrix are the fundamental forms using which R stores and processes d
 
 There are different types of vectors in R depending on the data type of the elements it stores. The commonly used vector types include numeric vector and character vector. All elements in a vector must have the same data type. When different data type values are stored in a vector, they will be transferred to the most general data type.
 
-Notice that the index of a vector in R starts from 1 instead of 0. This is different from many other computer languages such as C/C++, JavaScript and Python.
+Notice that the index of a vector in R starts from 1 instead of 0. This is similar with MATLAB and different from many other computer languages such as C/C++, JavaScript and Python.
 
 Use the following syntax to create a vector.
 \begin{lstlisting}
@@ -442,13 +434,20 @@ where \verb|<value>| can be single element or a vector. Nested vector is expande
 > typeof(z)
 [1] "double"
 \end{lstlisting}
-It is possible to assign names to each element as shown below.
+
+To append to a vector, or to add vectors to form a longer vector, or to insert a vector in the middle of a vector, use \verb|append()| as follows.
 \begin{lstlisting}
-> v <- c(1, 2, 3, 4, 5)
-> names(v) <- c("e1", "e2", "e3", "e4", "e5") 	
-> print(v)
-e1 e2 e3 e4 e5
-1  2  3  4  5
+> a <- c(1, 2, 3)
+> a <- append(a, 4)
+> print(a)
+[1] 1 2 3 4
+> b <- c(5, 6)
+> c <- append(a, b)
+> print(c)
+[1] 1 2 3 4 5 6
+> d <- append(c, c(100, 200, 300), 1) # insert a vector after the Xth element
+> print(d)
+[1]   1 100 200 300   2   3   4   5   6
 \end{lstlisting}
 
 Alternative ways to create a vector are given as follows. Use sequence to create a vector as follows.
@@ -456,7 +455,6 @@ Alternative ways to create a vector are given as follows. Use sequence to create
 <vector> <- seq(<from>, <to>, <by=1>)
 <vector> <- <from>:<to> # equivalent to seq() with by=1
 \end{lstlisting}
-
 Use replica to create a vector as follows.
 \begin{lstlisting}
 <vector> <- rep(<value>, <repeat>)
@@ -478,7 +476,7 @@ A character vector can also be created by splitting strings using \verb|strsplit
 [1] "H" "e" "l" "l" "o" " " "W" "o" "r" "l" "d" "!"
 \end{lstlisting}
 
-To access the element in a vector, use \verb|<vector>[<index>]| or \verb|<vector>["<name>"]|. Notice that the first element in a vector has the index of 1 instead of 0. The index can be an integer, or an integer vector. Examples are given below.
+To access the element in a vector, use \verb|<vector>[<index>]|, where \verb|<index>| can be an integer or a vector of integers. Examples are given below.
 \begin{lstlisting}
 > s <- c("a", "b", "c", "d", "e", "f", "g")
 > s[1]
@@ -490,7 +488,9 @@ To access the element in a vector, use \verb|<vector>[<index>]| or \verb|<vector
 > s[c(1, 3, 5)]
 [1] "a" "c" "e"
 \end{lstlisting}
-It is also possible to address an element by its name
+Notice that as mentioned earlier, the first element in a vector is indexed 1 instead of 0.
+
+Unlike vectors in MATLAB or lists in Python, in R the elements in a vector can have corresponding names, and they can be referenced not only by index but also by names. An example is given below.
 \begin{lstlisting}
 > v <- c(1, 2, 3, 4, 5)
 > names(v) <- c("e1", "e2", "e3", "e4", "e5") 	
@@ -505,7 +505,17 @@ e3
 3
 \end{lstlisting}
 
-Vectorization operation significantly speeds up the calculation comparing with looping over elements, hence is quite commonly seen in high-layer languages such as R and Python. Most numerical calculations, including \verb|+|, \verb|-|, \verb|*|, \verb|/|, \verb|%/%|, \verb|%%|, \verb|^|, support vectorization operation. Examples are given below.
+Notice that \verb|NA| will be returned if the index used to access the element in a vector exceeds its length, or if the name used to access the element in a vector is not found. This is different from most programming languages that will return an error.
+
+To remove the name of a vector, simply assign \verb|NULL| to \verb|names(<vector>)|. To loop over an vector, simply use
+\begin{lstlisting}
+for (<element> in <vector>){
+	<do something>
+}
+\end{lstlisting}
+And finally to return the length of a vector, use \verb|length(<vector>)|.
+
+Vectorization operations significantly speed up the calculation comparing with looping over elements. Most numerical calculations, including \verb|+|, \verb|-|, \verb|*|, \verb|/|, \verb|%/%|, \verb|%%|, \verb|^|, support vectorization operations. Examples are given below.
 \begin{lstlisting}
 > a <- c(1,2,3,4,5)
 > b <- c(5,4,3,2,1)
@@ -535,6 +545,7 @@ It is also possible to apply logic operations using vectors. Examples are given 
 > a == b
 [1] FALSE FALSE  TRUE FALSE FALSE
 \end{lstlisting}
+
 When the sizes of the vectors are not consistent, the shorter vector will repeat and populate to align with the longer vector. Examples are given below.
 \begin{lstlisting}
 > a <- c(1,10)
@@ -557,11 +568,53 @@ When the sizes of the vectors are not consistent, the shorter vector will repeat
 
 A vector can also be used as an input argument or output return of a function.
 
-To retrieve the elements in a vector, use either \verb|<vector>[<index>]| which returns a sub-vector that contains the element, or \verb|<vector>[[<index>]]| which returns the element itself. If the elements have names, \verb|<vector>[<name>]| or \verb|<vector>[[<name>]]| respectively as alternative approaches.
+\begin{mdframed}[frametitle={Two indexes methods: \texttt{[]} versus \texttt{[[]]}}]
+
+So far we have been using \verb|<vector>[<index>]| to access elements in a vector, and it works alright. The \verb|<index>| can be a vector of indexes, in which case the return is also a vector. There is an alternative way of accessing elements, and that is \verb|<vector>[[<index>]]|. An example is given below.
+
+\begin{lstlisting}
+> a <- c(1, 2, 3, 4, 5)
+> print(a[1])
+[1] 1
+> print(a[[1]])
+[1] 1
+> names(a) <- c("first", "second", "third", "fourth", "fifth")
+> print(a["first"])
+first 
+1 
+> print(a[["first"]])
+[1] 1
+\end{lstlisting}
+
+From the above example, one may notice that for unnamed vectors \verb|[]| and \verb|[[]]| behave similarly when accessing a single element. For named vectors, \verb|[]| and \verb|[[]]| behave slightly differently. 
+
+As introduced earlier, \verb|<index>| can be a vector in  \verb|<vector>[<index>]|. However this is not true for \verb|<vector>[[<index>]]|. An example is given below.
+\begin{lstlisting}
+> print(a[1:3])
+first second  third 
+1      2      3 
+> print(a[c(1, 3, 5)])
+first third fifth 
+1     3     5 
+> print(a[c("first", "third", "fifth")])
+first third fifth 
+1     3     5 
+> print(a[[1:3]])
+Error in a[[1:3]] : 
+attempt to select more than one element in vectorIndex
+\end{lstlisting}
+
+There are some semantic differences when using \verb|[]| and \verb|[[]]|. In short, \verb|[]| returns a sub-vector of the original vector (the length of the sub-vector can be 1), while \verb|[[]]| returns the element in the vector. This explains why it triggers an error when selecting multiple elements using \verb|[[]]|. 
+
+Notice that numeric values are atomic in R, meaning that they behave the same whether they are extracted as a single-element vector or a number. That is why \verb|print(a[1])| shows the same result as \verb|print(a[[1]])| in the earlier example, except that \verb|[]| preserves the name of an element.
+
+In the context of unnamed numeric vectors and matrices, \verb|[[]]| is rarely used, and \verb|[]| works almost all the time. However, when comes to other data structures like list, etc., it is important to distinguish \verb|[]| and \verb|[[]]|, and choose the correct one depending on the purpose.
+
+\end{mdframed}
 
 \subsection{Matrix}
 
-Similar with vector, all elements in a matrix must have the consistent type. A demonstration of matrix indexing in R is shown in Fig. \ref{ch:r1:fig:r_table_demo}. Let the matrix be named \verb|A|. The elements in the matrix can be accessed by the name of the table followed by the index coordinates. For example, in the figure, \verb|A[1,1]| refers to the first element and \verb|A[4,6]| the last element. It is also possible to index an entire row or column. For example, use \verb|A[1,]| to represent the first row of the matrix.
+Similar with vector, all elements in a matrix must have the consistent datatype. A demonstration is shown in Fig. \ref{ch:r1:fig:r_table_demo} with elements indexes. Let the matrix be named \verb|A|. The elements in the matrix can be accessed by the name of the table followed by the index coordinates. For example, in the figure, \verb|A[1,1]| refers to the first element and \verb|A[4,6]| the last element. It is also possible to index an entire row or column. For example, use \verb|A[1,]| to represent the first row of the matrix.
 
 \begin{figure}[!htb]
 	\centering
@@ -569,7 +622,7 @@ Similar with vector, all elements in a matrix must have the consistent type. A d
 	\caption{A demonstration of a matrix in R.} \label{ch:r1:fig:r_table_demo}
 \end{figure}
 
-A matrix can be created from scratch by stacking rows as follows. First, create rows in the matrix. Then, use \verb|rbind()| to bind rows.
+A matrix can be created from scratch by stacking row vectors using \verb|rbind()| as follows.
 \begin{lstlisting}
 # build rows
 <row1> <- c(<value11>, ..., <value1n>)
@@ -630,23 +683,23 @@ Vectorization operators are defined for matrix level as well. For example, for t
 
 By default, a single row or column of a matrix is treated as a vector. An example is given below. When a matrix downgrades to a vector, the row name (if it has only one row), or the column name (if it has only one column) will be removed.
 \begin{lstlisting}
-	> A <- matrix(1:9, 3, 3)
-	> is.matrix(A)
-	[1] TRUE
-	> is.vector(A)
-	[1] FALSE
-	> is.matrix(A[1,])
-	[1] FALSE
-	> is.vector(A[1,])
-	[1] TRUE
+> A <- matrix(1:9, 3, 3)
+> is.matrix(A)
+[1] TRUE
+> is.vector(A)
+[1] FALSE
+> is.matrix(A[1,])
+[1] FALSE
+> is.vector(A[1,])
+[1] TRUE
 \end{lstlisting}
 It is possible to deliberately ask R to not drop the matrix dimensions. This can be done as follows. By doing this, the names assigned to columns and rows preserve.
 \begin{lstlisting}
-	> A <- matrix(1:9, 3, 3)
-	> is.matrix(A[1,,drop=F]) # select a row/column
-	[1] TRUE
-	> is.matrix(A[2,3,drop=F]) # select an element
-	[1] TRUE
+> A <- matrix(1:9, 3, 3)
+> is.matrix(A[1,,drop=F]) # select a row/column
+[1] TRUE
+> is.matrix(A[2,3,drop=F]) # select an element
+[1] TRUE
 \end{lstlisting}
 
 R provides flexible and powerful data visualization tools, many of which more advanced than the ones to be introduced in this section. This section introduces a simple matrix visualization function called \verb|matplot()|, which plots the columns of a matrix against each other.
@@ -738,7 +791,7 @@ Notice that \verb|matplot()| is not widely used in practice comparing with the o
 
 \subsection{List}
 
-List is similar with vector in the sense that it is also an indexed 1-D storage. However, the elements in a list does not need to share the same data type, and hence list can be used flexibly, such as to save nested ``list of lists'', ``list of data frames'' of different data structures. By assigning names to the values in a list, it can be used as a dictionary.
+List is similar with vector in the sense that it is also an indexed 1-D storage. However, the elements in a list does not need to share the same data type, and hence list can be used flexibly, such as to save nested ``list of lists'', ``list of data frames'', or list of other items. Just like vector where each element can have its own name, elements in a list can also be associated with names. From this perspective, list can be used almost like an ``indexed dictionary'' of Python.
 
 Examples are given below.
 \begin{lstlisting}
@@ -769,7 +822,7 @@ For elements with names, the list looks very much like a dictionary. The content
 [1] 33
 \end{lstlisting}
 
-Alternatively, use \verb|<list>$<name>| to access the content. Following the above example,
+As introduced earlier, there are two ways to index elements in a vector, matrix or list, namely \verb|[]| and \verb|[[]]|. While in the context of vectors and matrices \verb|[]| is almost always used, in the context of list \verb|[]| and \verb|[[]]| both have purposes and they can make a big difference. And finally, \verb|<list>$<name>| is simply a shorthand for \verb|<list>[[<name>]]|. Examples are given below.Alternatively, use \verb|<list>$<name>| to access the content. Following the above example,
 \begin{lstlisting}
 > print(list2$name)
 [1] "lu"
