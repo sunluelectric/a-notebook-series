@@ -8,10 +8,10 @@ A random variable may be discrete or continuous depending on the sample space of
 
 \subsection{Discrete Random Variables}
 
-If a random variable $X$ takes only discrete values $x_1, x_2, ...$, it is called a \textit{discrete random variable}.
-The probability of $X$ taking a particular value $x$ is denoted by $P(X=x)$ or simply $f(x)=P(X)$ if no ambiguity. In this case, $P(X=x)$ and $f(x)$ are called the \textit{probability function} (also known as \textit{probability mass function}) of $X$.
+If a random variable $X$ takes only discrete values $x_1, x_2, ...$, it is called a \mync{discrete random variable}.
+The probability of $X$ taking a particular value $x$ is denoted by $P(X=x)$ or simply $f(x)=P(X)$ if no ambiguity. In this case, $P(X=x)$ and $f(x)$ are the probability function (also known as probability mass function) of $X$.
 
-Furthermore, define $P(X\leq x)$ or $F(x)$ as the \textit{cumulative distribution function} of $x$. It is easy to prove that $F(x)$ is nondecreasing, and $\lim_{x\rightarrow -\infty}F(x)=0$, $\lim_{x\rightarrow \infty}F(x)=1$. Also, $F(x)$ ``jumps'' at each $P(X=x_k)>0$ and it is continuous from the right.
+Furthermore, define $P(X\leq x)$ or $F(x)$ as the \mync{cumulative distribution function} of $x$. It is easy to prove that $F(x)$ is nondecreasing, and $\lim_{x\rightarrow -\infty}F(x)=0$, $\lim_{x\rightarrow \infty}F(x)=1$. Also, $F(x)$ ``jumps'' at each $P(X=x_k)>0$ and it is continuous from the right.
 
 \subsection{Continuous Random Variables}
 
@@ -19,7 +19,7 @@ A random variable $X$ may also take continuous values in many applications. For 
 
 In this case, the chance for $X$ to take a precise value, say for the student to finish his homework using precisely 25 minutes 13 seconds and 750 milliseconds, is very small (in fact, zero). The probability function $P(X=x)$ becomes pointless. The cumulative distribution function $F(x) = P(X\leq x)$ still makes sense, as it calculates the probability of $X$ given by not a precise value but within a range.
 
-Inspired by this, define \textit{probability density function (PDF)} or $f(x)$ for continuous random variable as follows. The probability density function $f(x)$ is such that
+Inspired by this, define \mync{probability density function}[PDF] or $f(x)$ for continuous random variable as follows. The probability density function $f(x)$ is such that
 \begin{eqnarray}
   P(a < X < b) &=& \int_{a}^{b}f(x)dx \nonumber
 \end{eqnarray}
@@ -34,7 +34,7 @@ In science and engineering problems, continuous random variables are more common
 
 \section{Joint Distributions}
 
-The joint distribution refers to the distribution of multiple random variables. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. For example, in a system identification problem the unknown system parameters are correlated with the measurements and their correlations are described by their joint PDF, and the filter uses the joint PDF and the measurements to estimate the unknown parameters.
+The \mync{joint distribution} describes the distribution of multiple random variables combination. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. For example, in a system identification problem the unknown system parameters are correlated with the measurements and their correlations are described by their joint PDF, and the filter uses the joint PDF and the measurements to estimate the unknown parameters.
 
 \subsection{Joint Probability}
 
@@ -53,7 +53,7 @@ Integrate \eqref{eq:jointpdf} w.r.t. one variable from $-\infty$ to $\infty$ giv
 \begin{eqnarray}
   f_X(x) &=& \int_{y=-\infty}^{\infty} f(x, y) \label{eq:jointpdfdowngrade}
 \end{eqnarray}
-gives the PDF of $X$ alone.
+gives the PDF of $X$ alone. In other words, if $(X_i, Y_i)$ samples are generated from $f(x, y)$ in \eqref{eq:jointpdf}, and we only look at the distribution of $X_i$, it should follow \eqref{eq:jointpdfdowngrade}.
 
 We can define cumulative distribution function for joint distribution likewise as follows.
 \begin{eqnarray}
@@ -65,7 +65,7 @@ We can define cumulative distribution function for joint distribution likewise a
 
 \subsection{Conditional Distributions}
 
-Equation \eqref{eq:jointpdfdowngrade} gives the distribution of $X$ when there is no measurement of $Y$. Conditional distribution, on the other hand, tries to find the distribution of $X$ when $Y$ is measured. For example, in \eqref{eq:jointpdf}, calculate $f_{X|Y}(x |Y=y)$, i.e., the PDF of $X$ given $Y=y$. In many literatures, $f_{X|Y}(x |Y=y)$ is denoted by $f_{X|Y}(x|y)$ for simplicity.
+Equation \eqref{eq:jointpdfdowngrade} gives the distribution of $X$ regardless of the value of its corresponding $Y$. Conditional distribution, on the other hand, tries to find the distribution of $X$ when $Y$ is measured. For example, in \eqref{eq:jointpdf}, calculate $f_{X|Y}(x |Y=y)$, i.e., the PDF of $X$ given $Y=y$. In many literatures, $f_{X|Y}(x |Y=y)$ is denoted by $f_{X|Y}(x|y)$ for simplicity.
 
 The conditional PDF $f_{X|Y}(x|y)$ can be obtained as follows. It is essentially Bayes' rule applied on continuous variables.
 \begin{eqnarray}
@@ -94,31 +94,51 @@ Without measurement $x$, the estimate of $\theta$ is given by
 \begin{eqnarray}
 	\hat{\theta} &=& \int_{-\infty}^{\infty} f_\theta(\theta) d\theta \nonumber
 \end{eqnarray}
-where $f_\theta(\theta)$ is obtained using \eqref{eq:jointpdfdowngrade}. This is known as the \textit{priori estimation} of $\theta$. 
+where $f_\theta(\theta)$ is obtained using \eqref{eq:jointpdfdowngrade}. This is known as the \mync{priori estimation} of $\theta$. 
 
-Given measurement $x$, the \textit{posteriori estimation} of $\theta$ can be obtained as follows. From \eqref{eq:conditionalpdf1},
+Given measurement $x$, the \mync{posteriori estimation} of $\theta$ can be obtained as follows. From \eqref{eq:conditionalpdf1},
 \begin{eqnarray}
   f_{\theta|X}(\theta|x) &=& \dfrac{f_{X|\theta}(x|\theta)f_\theta(\theta)}{f_X(x)} \label{eq:conditionalpdf2} \\
-  \hat{\theta} &=& \int_{-\infty}^{\infty} f_{\theta|X}(\theta|x) d\theta \nonumber
+  \hat{\theta} &=& \int_{-\infty}^{\infty} f_{\theta|X}(\theta|x) d\theta \label{eq:posterioriestimation}
 \end{eqnarray}
-where $f_{X|\theta}(x|\theta)$ is known as the \textit{likelihood function} that describes the likelihood of measuring $x$ if the actual parameter(s) is $\theta$. The PDF $f_\theta(\theta)$ is from the priori estimation of $\theta$. Finally, $f_X(x)$ is known as the \textit{evidence}. With fixed $x$, $f_X(x)$ becomes a constant.
+where $f_{X|\theta}(x|\theta)$ is known as the \mync{likelihood function} that describes the likelihood of measuring $x$ if the actual parameter(s) is $\theta$. The PDF $f_\theta(\theta)$ is from the priori estimation of $\theta$. Finally, $f_X(x)$ is known as the \mync{evidence}. With fixed $x$, $f_X(x)$ becomes a constant.
 
 Equation \eqref{eq:conditionalpdf2} is essentially
 \begin{eqnarray}
   \textup{posteriori} &=& \dfrac{\textup{likelihood}\times\textup{priori}}{\textup{evidence}} \label{eq:posteriorimemo}
-\end{eqnarray}
+\end{eqnarray} 
 
 Terms \textit{priori} and \textit{prior} can be used interchangeably, and so are \textit{posteriori} and \textit{posterior}.
 
+\begin{shortbox}
+\Boxhead{Other Parameter Estimation Methods}
+
+Alternative to \eqref{eq:posterioriestimation}, there are at least two other types of commonly seen estimations, namely \mync{Maximum Likelihood Estimation}[MLE] and \mync{Maximum A Posteriori}[MAP].
+
+MLE is given by
+\begin{eqnarray}
+  \hat{\theta} &=& \argmax_\theta f_{X|\theta}(x|\theta) \nonumber
+\end{eqnarray}
+whereas MAP is given by
+\begin{eqnarray}
+  \hat{\theta} &=& \argmax_\theta f_{\theta|X}(\theta|x) \nonumber
+\end{eqnarray}
+
+MLE, MAP and \eqref{eq:posterioriestimation} have their advantages and disadvantages, and all of them are widely used in different engineering problems. 
+
+\end{shortbox}
+
 \section{Distributions of Functions of Random Variables}
 
-Let $X$ be a random variable with PDF $f_X(x)$. Let $U$ be another random variable which is a function of $X$ via $U=\phi(X)$. The PDF of $U$ can be calculated as follows. For simplicity, assume that $U=\phi(X)$ is a injective function (one-to-one function), and $X=\phi^{-1}(U)=\psi(U)$. In that case, the PDF of $U$, $g(u)$, can be obtained as follows.
+Let $X$ be a random variable with PDF $f_X(x)$. Let $U$ be another random variable which is a function of $X$, $U=\phi(X)$. The PDF of $U$ can be calculated from $f_X$ and $\phi$. Details are given below.
+
+For simplicity, assume that $U=\phi(X)$ is a injective function (one-to-one function), and $X=\phi^{-1}(U)=\psi(U)$. In that case, the PDF of $U$, $g(u)$, can be obtained as follows.
 \begin{eqnarray}
   g(u) &=& \left|\psi\textprime(u)\right|f\left(\psi(u)\right) \nonumber
 \end{eqnarray}
 For example, let $U=aX$, $X=\frac{U}{a}$.
 \begin{eqnarray}
-  g(u) &=& \dfrac{1}{a}f\left(\dfrac{u}{a}\right) \nonumber
+  g(u) &=& \left|\dfrac{1}{a}\right|f\left(\dfrac{u}{a}\right) \nonumber
 \end{eqnarray}
 
 Let $X$, $Y$ be two random variables with joint distribution $f(x, y)$. Let $U=X+Y$. The PDF of $U$ can be obtained as follows.
@@ -134,11 +154,11 @@ where $*$ denotes the convolution operator.
 
 \section{Measures of Distributions}
 
-Given the probability function or PDF of a random variable, a lot of insights can be extracted. Commonly seen measures of a random variable are introduced in this chapter. Usually, they can be calculated from their associated probability functions or PDFs.
+Given the probability function of a discrete random variable or the PDF of a continuous random variable, a lot of insights can be extracted. Commonly seen measures of a random variable are introduced in this section. Usually, they can be calculated from their associated probability functions or PDFs.
 
 \subsection{Expectation}
 
-In probability and statistics sense, \textit{expectation} (also known as \textit{mean}) describes the average value of a random variable, if the variable is generated many times. For discrete random variable $X$, the expectation is given below.
+In probability and statistics sense, \mync{expectation} (also known as \mync{mean}) describes the average value of a random variable, if the variable is generated many times. For discrete random variable $X$, the expectation is given below.
 \begin{eqnarray}
 	\textup{E}(X) &=& \sum_{i=1}^{n}x_iP(x_i) \label{eq:expectationdiscrete}
 \end{eqnarray}
@@ -162,7 +182,7 @@ where $c$ is a constant and $X$, $Y$ are two random variables. These features ca
 
 \subsection{Variance and Standard Deviation}
 
-Variance and standard deviation describe how spread samples are from its expectation. It is defined as follows.
+\mync{Variance} and \mync{standard deviation} describe how spread samples are from its expectation. It is defined as follows.
 \begin{eqnarray}
 	\textup{Var}(X) &=& \textup{E}\left(\left(X-\textup{E}(X)\right)^2\right) \label{eq:vardef} \\
 	&=& \textup{E}\left(X^2-2X\textup{E}(X)+\textup{E}(X)^2\right) \nonumber \\
@@ -194,25 +214,25 @@ where $\mu$, $\sigma$ are the mean and standard deviation of random variable $X$
 
 \subsection{Moments} \label{sec:moments}
 
-In mathematics, the $r$-th moment of a continuous function $f(x)$ about $c$ is defined as follows.
+In mathematics, the \mync{$r$-th moment} of a continuous function $f(x)$ about $c$ is defined as follows.
 \begin{eqnarray}
 	\mu_n &=& \int_{-\infty}^{\infty}(x-c)^nf(x)dx \nonumber
 \end{eqnarray}
 
-By simply saying \textit{moment} without specifying $c$, it is by default that $c=0$. Let $f(x)$ be a PDF. In this sense, the $0$-th order and the $1$st order moment of a probability density function can be calculated as follows.
+By simply saying ``moment'' without specifying $c$, it is by default that $c=0$. Let $f(x)$ be a PDF. In this sense, the $0$-th order and the $1$st order moment of a probability density function can be calculated as follows.
 \begin{eqnarray}
 	&& \mu_0 = \int_{-\infty}^{\infty}f(x)dx = 1 \nonumber \\
 	&& \mu_1 = \int_{-\infty}^{\infty}xf(x)dx = \textup{E}(X) \nonumber
 \end{eqnarray}
 where it can be seen that the $0$th and $1$st moments of a PDF are 1 and its mean, respectively.
 
-Further more, let $c=\mu_1$ be the mean of the random variable to calculate the $2$nd order \textit{central moment} $\mu_2$ as follows.
+Further more, let $c=\mu_1$ be the mean of the random variable to calculate the \mync{$2$nd order central moment} $\mu_2$ as follows.
 \begin{eqnarray}
 	\mu_2 = \int_{-\infty}^{\infty}(x-\mu_1)^2f(x)dx = \textup{Var}(X) \nonumber
 \end{eqnarray}
 which is the variance of the random variable.
 
-Using mean and variance to further define \textit{standardized moments} as shown below. Define $\bar{\mu}_k$ for $k\geq 3$ as follows.
+Using mean and variance to further define \mync{standardized moments} as shown below. Define $\bar{\mu}_k$ for $k\geq 3$ as follows.
 \begin{eqnarray}
 	&& \bar{\mu}_k = \dfrac{\mu_k}{\sigma^k} \nonumber
 \end{eqnarray}
@@ -223,17 +243,17 @@ where
 \end{eqnarray}
 with $\mu_1$ and $\mu_2$ the mean ($1$st order moment) and variance ($2$nd order central moment) of the random variable respectively.
 
-The $3$-rd and $4$-th order standardized moments are known as the \textit{skewness} and \textit{kurtosis} of the PDF respectively. In some literatures, skewness is denoted by $\gamma_1 = \bar{\mu}_3$, and kurtosis $\gamma_2 = \bar{\mu}_4$.
+The $3$-rd and $4$-th order standardized moments are known as the \mync{skewness} and \mync{kurtosis} of the PDF respectively. In some literatures, skewness is denoted by $\gamma_1 = \bar{\mu}_3$, and kurtosis $\gamma_2 = \bar{\mu}_4$.
 
 The skewness $\gamma_1$ is a measure of asymmetry of the PDF. When $\gamma_1 > 0$ or positive skew, the distribution has a long tail on the right side of the PDF. When $\gamma_1 <0$ or negative skew, the distribution has a long tail on the left side. When $\gamma_1 = 0$, the PDF might be symmetric (but not necessarily so). Examples are given in Fig. \ref{fig:skewness_demo}.
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-1/figures/skewness_demo.eps}
 	\caption{Demonstration of PDF with different skewness.} \label{fig:skewness_demo}
 \end{figure}
 
 The kurtosis $\gamma_2$ measures the ``tailedness'' of a probability distribution, i.e., whether the PDF has heavy tail or thin tail. The normal distribution, which has $\gamma_2=3$, is often used as a benchmark. Excess kurtosis is kurtosis subtracting $3$, making the normal distribution having the excess kurtosis of $0$. A positive excess kurtosis would mean a ``heavier'' tail than the normal distribution. Examples are given in Fig. \ref{fig:kurtosis_demo}.
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-1/figures/kurtosis_demo.eps}
 	\caption{Demonstration of PDF with different excess kurtosis.} \label{fig:kurtosis_demo}
@@ -251,7 +271,7 @@ The PDF of one variable can be derived from the joint distribution using \eqref{
 
 \subsection{Covariance}
 
-The \textit{covariance} of two variables is defined and calculated as follows.
+The \mync{covariance} of two variables is defined and calculated as follows.
 \begin{eqnarray}
 	\textup{Cov}(X, Y) &=& \textup{E}\left((x - \textup{E}(X))(y - \textup{E}(Y))\right) \label{eq:covariance1} \\
 	&=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}(x - \textup{E}(X))(y - \textup{E}(Y))f(x, y)dxdy \label{eq:covariance2}
@@ -261,13 +281,13 @@ where $\textup{Cov}(X, Y)$ is sometimes denoted by $\sigma_{XY}$. Notice that un
 	\textup{Cov}(X, Y) &=& \int_{-\infty}^{\infty}(x - \textup{E}(X))f_X(x)dx \times \int_{-\infty}^{\infty}(y - \textup{E}(Y))f_Y(y)dy \nonumber \\
 	&=& 0 \nonumber
 \end{eqnarray}
-If the covariance of the two variables is zero, the two variables are called \textit{uncorrelated}. Independent variables are always uncorrelated. However, uncorrelated variables are not necessarily independent.
+If the covariance of the two variables is zero, the two variables are called \mync{uncorrelated}. Independent variables are always uncorrelated. However, uncorrelated variables are not necessarily independent.
 
 Furthermore,
 \begin{eqnarray}
 	\textup{Cov}(X, Y)^2 &\leq& \textup{Var}(X)\textup{Var}(Y) \nonumber
 \end{eqnarray}
-The proof is as follows. Notice that lemma \eqref{eq:explemma} is used in the proof.
+The proof is given below. Notice that lemma \eqref{eq:explemma} is used in the proof.
 \begin{mdframed}[frametitle={Lemma}]
 	
 	For two random variables $X$ and $Y$,
@@ -303,12 +323,12 @@ Noticing that while $\sigma_X$, $\sigma_Y$ are always nonnegative, $\sigma_{XY}$
 	-\sigma_X\sigma_Y \leq \sigma_{XY} \leq \sigma_X\sigma_Y \label{eq:covlemma}
 \end{eqnarray}
 
-The \textit{correlation} of two variables is defined and calculated as follows.
+The \mync{correlation} of two variables is defined and calculated as follows.
 \begin{eqnarray}
 	\rho &=& \dfrac{\textup{Cov}(X, Y)}{\sqrt{\textup{Var}(X)}\sqrt{\textup{Var}(Y)}} \nonumber \\
 	&=& \dfrac{\sigma_{XY}}{\sigma_X\sigma_Y} \nonumber
 \end{eqnarray}
-From \eqref{eq:covlemma}, apparently $-1\leq \rho \leq 1$. When two variables are uncorrelated or independent, $\rho=0$. If $\rho=1$, it is called \textit{perfect positive correlation}. This happens usually because the two variables are positively linearly depended, for example, $X=2Y$ or $X=Y+1$. If $\rho=-1$, it is called \textit{perfect negative correlation}, and the similar idea applies.
+From \eqref{eq:covlemma}, apparently $-1\leq \rho \leq 1$. When two variables are uncorrelated or independent, $\rho=0$. If $\rho=1$, the two variables $X$ and $Y$ are said to be \mync{perfect positive correlated}. This happens usually because the two variables are positively linearly depended, for example, $X=2Y$ or $X=Y+1$. If $\rho=-1$, they are said to be \mync{perfect negative correlated}, and the similar idea applies.
 
 \section{Important Theorems}
 
@@ -316,7 +336,7 @@ There are a few important theorems frequently used in the study of probability a
 
 \subsection{Law of Large Numbers}
 
-The \textit{Law of Large Numbers (LLN)} is a theorem that basically says if performing the same experiment a large number of times, the average of the outcomes of the experiments should eventually converge to a certain value which is the empirical expectation of the experiment. The larger number of trails, the closer the average to the empirical expectation.
+The \mync{Law of Large Numbers}[LLN] is a theorem that basically says if performing the same experiment a large number of times, the average of the outcomes of the experiments should eventually converge to a certain value which is the empirical expectation of the experiment. The larger number of trails, the closer the average to the empirical expectation.
 
 In mathematical expression, let $X$ be a random variable which represents the outcome of an experiment. Let $X_i$ be a sample of the outcome. According to LLN,
 \begin{eqnarray}
@@ -325,7 +345,7 @@ In mathematical expression, let $X$ be a random variable which represents the ou
 
 \subsection{Central Limit Theorem}
 
-\textit{Central Limit Theorem (CLT)} states the following observation. For independent and identically distributed (i.i.d) random variables not necessarily following normal distribution, the empirical mean of the samples taken from these distributions tends towards normal distribution when the number of samples is large.
+\mync{Central Limit Theorem}[CLT] states the following observation. For independent and identically distributed (i.i.d) random variables not necessarily following normal distribution, the empirical mean of the samples taken from these distributions tends towards normal distribution when the number of samples is large.
 
 Let $X$ be a random variable not necessarily following normal distribution, and it has mean and variance of $\mu$ and $\sigma^2<\infty$ respectively. Let $X_i$ be samples of the random variable. The empirical mean of the samples is calculated by
 \begin{eqnarray}

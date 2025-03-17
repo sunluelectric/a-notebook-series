@@ -1,21 +1,21 @@
 \chapter{Special Distributions} \label{ch:commondistribution}
 
-Commonly seen special distributions, both discrete and continuous, are introduced here. Some of them are very useful in statistics analysis and are introduced in more details in later part of the notebook.
+Commonly seen special distributions are introduced here. Some of them are very useful in statistics analysis and are introduced in more details in later part of the notebook. Both discrete and continuous distributions are considered.
 
 \section{Bernoulli and Binomial}
 
-\textit{Bernoulli distribution} is a discrete probability distribution of random variable $X$ that can take only 2 values, $0$ or $1$. The probability of $X$ taking $1$ is denoted by $p$, while $0$ is $q=1-p$ as shown below.
+\mync{Bernoulli distribution} is a discrete probability distribution of random variable $X$ that can take only 2 values, $0$ or $1$. The probability of $X$ taking $1$ is denoted by $p$, while $0$ is $q=1-p$ as shown below.
 \begin{eqnarray}
   && f(x) = P(X=x) = \left\{\begin{array}{cc}
                            p & x=1 \\
                            q & x=0
                          \end{array}\right. \nonumber
 \end{eqnarray}
-subject to $0\leq p \leq 1$, $0\leq q \leq 1$ and $p+q=1$. Each test is also called a Bernoulli trail.
+subject to $0\leq p \leq 1$, $0\leq q \leq 1$ and $p+q=1$. Each test is also called a \mync{Bernoulli trail}.
 
 The expectation, variance, skewness and excess kurtosis of the distribution are $p$, $pq$, $\dfrac{q-p}{\sqrt{pq}}$ and $\dfrac{1-6pq}{pq}$, respectively.
 
-Run Bernoulli trails repeatedly. Each bernoulli trail has a probability of $p$ to take value $1$, and $q=1-p$ to take value $0$. The test is carried out $n$ times. The number of the tests with outcome $1$ is a discrete random variable $0\leq X \leq n$. In this case, $X$ follows \textit{binomial distribution}, whose probability function is given by
+Run Bernoulli trails repeatedly. Each bernoulli trail has a probability of $p$ to take value $1$, and $q=1-p$ to take value $0$. The test is carried out $n$ times. The number of the tests with outcome $1$ is a discrete random variable $0\leq X \leq n$. In this case, $X$ follows \mync{binomial distribution}, whose probability function is given by
 \begin{eqnarray}
   f(x) &=& P(X=x) \nonumber \\
   &=& \left(\begin{array}{c}
@@ -27,15 +27,15 @@ Run Bernoulli trails repeatedly. Each bernoulli trail has a probability of $p$ t
 
 Bernoulli distribution can be taken as a special case of binomial distribution with $n=1$, $x=1$. The expectation, variance, skewness and excess kurtosis of the distribution are $np$, $npq$, $\dfrac{q-p}{\sqrt{npq}}$ and $\dfrac{1-6pq}{npq}$, respectively.
 
-Binomial distribution is naturally a verification of CLT on Bernoulli trail. According CLT, when $n$ is large, binomial distribution should approach normal distribution.
+If $n$ is large, Binomial distribution becomes a verification of CLT on Bernoulli trail. Indeed, when $n$ is large, binomial distribution approaches normal distribution.
 
-Binomial distribution can be extended to \textit{multinomial distribution}, where instead of a single event $A$ happening with probability $p$ or not happening with probability $q$, s.t. $p+q=1$, consider multiple events $A_1$, $A_2$, ..., each with probability $p_1$, $p_2$, ..., respectively, s.t. $p_1+p_2+\ldots+p_m=1$. Consider a total of $n$ tests. The number of $A_1$ occurring is a random variable $X_1$, event $A_2$, $X_2$, and so on. Multinomial distribution studies the probability of
+Binomial distribution can be extended to \mync{multinomial distribution}, where instead of a single event $A$ happening with probability $p$ or not happening with probability $q$, s.t. $p+q=1$, consider multiple events $A_1$, $A_2$, ..., $A_m$, each with probability $p_1$, $p_2$, ..., $p_m$, respectively, s.t. $p_1+p_2+\ldots+p_m=1$. Consider a total of $n$ tests. The number of $A_1$ occurring is a random variable $X_1$, event $A_2$, $X_2$, and so on. Multinomial distribution studies the probability of
 \begin{eqnarray}
   P(X_1=x_1, X_2=x_2,\ldots, X_m = x_m) &=& \dfrac{n!}{x_1!x_2!\ldots x_m!}p_1^{x_1}p_2^{x_2}\ldots p_m^{x_m} \nonumber \\
   \textup{s.t.} && \sum x_i = n \nonumber
 \end{eqnarray}
 
-Do distinguish binomial distribution with \textit{hypergeometric distribution}. Binomial distribution is used to model ``sampling with replacement'' process: each Bernoulli trail backing up the binomial distribution is i.i.d. and one's result is not affected by its previous trails. Consider picking up a marbles from a bag containing mixture of red and blue marbles whose numbers are given by $r$ and $b$ respectively. Repeat the test $n$ times. After each test, put the marble back to the bag. The number of blue marbles collected is a random variable $X$ that follows binomial distribution
+Do distinguish binomial distribution with \mync{hypergeometric distribution}. Binomial distribution is used to model ``sampling with replacement'' process: each Bernoulli trail backing up the binomial distribution is i.i.d. and one's result is not affected by its previous trails. Consider picking up a marbles from a bag containing mixture of red and blue marbles whose numbers are given by $r$ and $b$ respectively. Repeat the test $n$ times. After each test, put the marble back to the bag. The number of blue marbles collected is a random variable $X$ that follows binomial distribution
 \begin{eqnarray}
 f(x) &=& \left(\begin{array}{c}
                         n \\
@@ -62,7 +62,7 @@ When $b$, $r$ are far larger than $n$, the hypergeometric distribution can be ap
 
 \section{Normal Distribution}
 
-Normal distribution, also known as Gaussian distribution, is a continuous distribution. It is one of the most widely used assumption of random noise. One of the explanations is given as follows. Many measurements such as sensor readings are in fact aggregated values. For example, consider a sensor whose reading refreshes at $1Hz$. Behind the screen, it might be sampling the signal at $1000Hz$, and the reading is the average of every $1000$ samples. According to CLT, the reading shall follow normal distribution.
+\mync{Normal distribution}, also known as \mync{Gaussian distribution}, is a continuous distribution. It is one of the most widely used assumption of random noise. One of the explanations is given as follows. Many measurements such as sensor readings are in fact aggregated values. For example, consider a sensor whose reading refreshes at $1Hz$. Behind the screen, it might be sampling the signal at $1000Hz$, and the reading is the average of every $1000$ samples. According to CLT, the reading shall follow normal distribution.
 
 We will discuss single normal distribution first, followed by joint multivariate normal distribution.
 
@@ -88,41 +88,38 @@ where $\mu \in \mathbb{R}^m$ is the mean of $x$ and $\Sigma \in \mathbb{R}^{m\ti
 
 \section{Poisson Distribution}
 
-Poisson distribution is a discrete probability distribution that takes non-negative integer values $0$, $1$, $2$, $\ldots$.
-
-The probability function of poisson distribution is given by
+\mync{Poisson distribution} is a discrete probability distribution that takes non-negative integer values $0$, $1$, $2$, $\ldots$. The probability function of poisson distribution is given by
 \begin{eqnarray}
   f(x) = P(X=x) = \dfrac{\lambda^xe^{-\lambda}}{x!} \nonumber
 \end{eqnarray}
 where $\lambda >0$ is the shape parameter as shown in Fig. \ref{fig:poisson_pmf}.
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-1/figures/poisson_pmf.eps}
 	\caption{Poisson distribution with different $\lambda$.} \label{fig:poisson_pmf}
 \end{figure}
+Notice that the sum of two Poisson distribution with shape parameters $\lambda_1$ and $\lambda_2$ is also Poisson distribution with $\lambda = \lambda_1 + \lambda_2$.
 
-Notice that The sum of two Poisson distribution with shape parameters $\lambda_1$ and $\lambda_2$ is also Poisson distribution with $\lambda = \lambda_1 + \lambda_2$.
-
-Poisson distribution is often used to describe the probability of an event happening a particular number of times in a given window, assuming each occurrence of the event is independent. For example, it can model the number of times a machine fails in a year, assuming each failure is independent from another (the failures are completely random and independent). 
+Poisson distribution is often used to describe the probability of an event happening a particular number of times in a given window, assuming each occurrence of the event is independent. The parameter $\lambda$ reflects the average number of occurrence. For example, it can model the number of times a machine fails in a year, assuming each failure is independent from another (the failures are completely random and independent). 
 
 Binomial distribution is closely connected with Poisson distribution. Poisson distribution can be taken a limiting case of binomial distribution when $n\rightarrow\infty$, $p\rightarrow 0$ is small, and $\lambda = np$ a decent value. A demonstration is given in Fig. \ref{fig:poisson_vs_b}.
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-1/figures/poisson_vs_b.eps}
 	\caption{Poisson distribution approximation using binomial distribution.} \label{fig:poisson_vs_b}
 \end{figure}
 
-An intuitive explanation is given using the following example. Consider studying the number of failure of a machine in one year. In each second, the machine has a failure rate of $p$, which of course is very small. The total number of seconds in a year is $31,536,000$, which is associated with the number of trails. Therefore, the number of failure of the machine in a year can be approximately described by binomial distribution with $x=31536000$. The underlying assumption is that the machine can either pass or fail every second, and it can fail only once per second.
+An intuitive explanation is given using the following example. Consider studying the number of failure of a machine in one year. In each second, the machine has a failure rate of $p$, which of course is very small. The total number of seconds in a year is $31,536,000$, which is a large number and it is associated with the number of trails. The number of failure of the machine in a year can be approximately described by binomial distribution with $n=31536000$. The underlying assumption is that the machine can either fail or survive every second with the probability of $p$ and $1-p$ respectively, and its status in each second are independent, ignoring the downtime of the machine.
 
-Another example of Poisson distribution is the number of visitors of a website in a given period of time. Each internet user has a small probability $p$ to visit the shopping site. The total number of internet users is $n$ which is a large number. The number of visitors to the website follows Poisson distribution with $\lambda=np$ being the expected visitor number.
+Another example of Poisson distribution is the number of visitors of a website in a given period of time. Each internet user has a small probability $p$ to visit the website. The total number of internet users is $n$ which is a large number. The number of visitors to the website follows Poisson distribution with $\lambda=np$ being the expected visitor number.
 
 The expectation, variance, skewness and excess kurtosis of the distribution are $\lambda$, $\lambda$, $\dfrac{1}{\sqrt{\lambda}}$ and $\dfrac{1}{\lambda}$, respectively.
 
 \section{Exponential Distribution} \label{sec:exponential_distribution}
 
-Exponential distribution can be used to model the duration of time between two events in a Poisson distribution. For example, it can model the operating time of a machine between two failures, assuming that the failures are independent and random.
+\mync{Exponential distribution} can be used to model the duration of time between two events in a Poisson distribution. For example, it can model the operating time of a machine between two failures, assuming that the failures are independent and random.
 
-Exponential distribution is a special case of the gamma distribution which will be introduced in more details later. Since it is an important widely used distribution, exponential distribution is introduced here, right after the normal and the Poisson distributions.
+Exponential distribution is an important special case of the $\Gamma$ distribution. More about $\Gamma$ distribution will be introduced in more details later.
 
 The PDF is the exponential distribution is given by
 \begin{eqnarray}
@@ -131,8 +128,8 @@ The PDF is the exponential distribution is given by
 		0 & \textup{otherwise}
 	\end{array}\right. \label{eq:exponential_pdf}
 \end{eqnarray}
-where $\lambda$ is the shape parameter. Exponential distributions with different choice of $\lambda$ is plotted in Fig. \ref{fig:exponential}.
-\begin{figure}
+where $\lambda$ is the shape parameter that reflects the average occurrence rate of the event within a unit time window. Exponential distributions with different choice of $\lambda$ is plotted in Fig. \ref{fig:exponential}.
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-1/figures/exponential_pdf.eps}
 	\caption{Exponential distributions with different $\lambda$.} \label{fig:exponential}
@@ -162,7 +159,7 @@ Cauchy distribution, named after Augustin Cauchy, is a continuous distribution. 
 \end{eqnarray}
 and it is plotted in Fig. \ref{fig:cauchy_pdf}.
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-1/figures/cauchy_pdf.eps}
 	\caption{Cauchy Distribution.} \label{fig:cauchy_pdf}
@@ -170,16 +167,16 @@ and it is plotted in Fig. \ref{fig:cauchy_pdf}.
 
 From mathematics perspective, Cauchy distribution describes the ratio of two independent normal distributed random variables with mean zero. It is a useful distribution in physics.
 
-\section{Gamma, Chi-Squared and Beta Distributions}
+\section{$\Gamma$, $\chi^2$ and $\beta$ Distributions}
 
-The $\Gamma$, $\chi^2$ and $\beta$ distributions are introduced as follows.
+The \mync{$\Gamma$}[gamma], \mync{$\chi^2$}[chi-square] and \mync{$\beta$}[beta] distributions are introduced as follows.
 
 \subsection{The $\Gamma$ Distribution}
 
-Gamma distribution is a continuous distribution with the following PDF
+The $\Gamma$ distribution is a continuous distribution with the following PDF
 \begin{eqnarray}
   f(x) &=& \left\{\begin{array}{cc}
-                    \dfrac{\beta^\alpha}{\Gamma(\alpha)}x^{k-1}e^{-\beta x} & x > 0 \\
+                    \dfrac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x} & x > 0 \\
                     0 & \textup{otherwise}
                   \end{array}\right. \label{eq:gammapdf}
 \end{eqnarray}
@@ -187,7 +184,7 @@ where $\alpha>0$ and $\beta>0$ are the shape parameters (some literatures uses s
 \begin{eqnarray}
   \Gamma(\alpha) &=& \int_{0}^{\infty}t^{\alpha-1}e^{-t}dt \nonumber
 \end{eqnarray}
-for $\alpha > 0$. Gamma distribution is often used to model the interval of two events in the Poisson process.
+for $\alpha > 0$. $\Gamma$ distribution is the superset of many distributions. For example, the exponential distribution introduced in the earlier section is a special case of $\Gamma$ distribution with $\alpha=1$, and it is used to model the time interval between two events in the Poisson distribution.
 
 The plot of the PDF of Gamma distribution is given in Fig. \ref{fig:gamma_pdf}.
 \begin{figure}
@@ -204,11 +201,11 @@ Gamma function is given by
   \Gamma(\alpha) &=& \int_{0}^{\infty}t^{\alpha-1}e^{-t}dt \nonumber
 \end{eqnarray}
 
-It is clear that $\Gamma(1)=1$. If $\alpha > 1$, an integration by parts shows that
+It is obvious that $\Gamma(1)=1$. If $\alpha > 1$, an integration by parts shows that
 \begin{eqnarray}
   \Gamma(\alpha) &=& (\alpha-1)\Gamma(\alpha-1) \nonumber
 \end{eqnarray}
-Therefore, $\Gamma(n)=\Gamma(n-1)\Gamma(n-2)\ldots \times 3 \times 2 \times 1 \times \Gamma(1) = (\alpha-1)!$ for $\alpha \in \mathbb{N}^+$, with $0!=1$.
+Therefore, $\Gamma(\alpha)=(\alpha-1)(\alpha-2)\ldots \times 3 \times 2 \times 1 \times \Gamma(1) = (\alpha-1)!$ for $\alpha \in \mathbb{N}^+$, with $0!=1$.
 
 \end{shortbox}
 
@@ -249,13 +246,13 @@ In some literatures, notation $(a, b)$ or $(\alpha, \beta)$ are used to denote $
 
 
 
-The zero-mean $t$-distribution PDF is given by
+The zero-mean \mync{Student's $t$-distribution} (also referred as $t$-distribution for simplicity) PDF is given by
 \begin{eqnarray}
 	f(x) &=& \dfrac{\Gamma\left(\dfrac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\sigma\Gamma\left(\dfrac{\nu}{2}\right)}\left(1+\dfrac{x^2}{\nu\sigma^2}\right)^{-\dfrac{\nu+1}{2}} \label{eq:tpdf}
 \end{eqnarray}
 where $\nu$ and $\sigma$ are known as the shape and scale parameters respectively. When $\nu\rightarrow\infty$, \eqref{eq:tpdf} reduces to normal distribution. 
 
-Student's $t$-distribution can also be derived from normal and $\chi^2$ distributions as follows. Let $X_1$ and $X_2$ be two random variables following standard normal distribution and $\chi^2$ distribution with degree of freedom $\nu$. Let
+The $t$-distribution can also be derived from normal and $\chi^2$ distributions as follows. Let $X_1$ and $X_2$ be two random variables following standard normal distribution and $\chi^2$ distribution with degree of freedom $\nu$. Let
 \begin{eqnarray}
 	X &=& \dfrac{X_1}{\sqrt{\dfrac{X_2}{\nu}}} \nonumber
 \end{eqnarray}

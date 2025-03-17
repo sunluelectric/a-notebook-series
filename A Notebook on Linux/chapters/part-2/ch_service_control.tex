@@ -1,5 +1,44 @@
-\chapter{Service Control}
-...
+\chapter{Services}
+
+This chapter discusses the booting options and services control.
+
+\section{Booting Process Management}
+
+When booting Linux OS during the systems start up, the following services are started sequentially.
+
+\begin{enumerate}
+  \item \myabb{Basic Input/Output System}{BIOS} or \myabb{Unified Extensible Firmware Interface}{UEFI} \\
+  The BIOS or UEFI is the firmware stored on the motherboard. It is the first software executed when a computer is powered on. It checks hardware integrity and initializes system components such as the CPU, RAM, and disk controllers.
+  
+  \item Bootloader (including MBR for BIOS or EFI partition for UEFI) \\
+  The bootloader is responsible for loading the operating system kernel into memory.
+  
+  \item OS kernel and drivers. \\
+  Once the bootloader executes, it loads the Linux kernel into memory. The following steps then occur:
+  \begin{itemize}
+      \item The kernel initializes and detects hardware components.
+      \item If necessary, an initial RAM filesystem is loaded to provide essential drivers before mounting the root filesystem.
+      \item The root filesystem is mounted, and the kernel executes the first user-space process.
+  \end{itemize}
+  
+  \item \texttt{systemd} \\
+  After the kernel completes its initialization, it starts the first user-space process, which is traditionally called \texttt{init}. On modern Linux distributions, this is typically \texttt{systemd}, which is responsible for managing system services, mounting filesystems, and configuring the runtime environment.
+  
+  \item User-space services and \texttt{default.target}. \\
+  The final stage of the boot process involves bringing up user-space services and reaching the desired system state, known as \verb|targets| in \verb|systemd|. Some common \texttt{systemd} targets include:
+  \begin{itemize}
+      \item \texttt{multi-user.target} – A multi-user command-line environment.
+      \item \texttt{graphical.target} – Starts the graphical user interface (GUI).
+      \item \texttt{rescue.target} – A minimal rescue shell for troubleshooting.
+  \end{itemize}
+\end{enumerate}
+
+To check or change the target, use the following commands respectively.
+\begin{lstlisting}
+$ systemctl get-default
+$ sudo systemctl set-default <target>
+\end{lstlisting}
+
 \section{Service Control} \label{ch:sa:sec:sc}
 
 There are many services running in the background of the OS, some of which started by the OS while the other by the user. For example, Apache service might be used when the system is hosting a webpage. Other commonly used services include keyboard related services, bluetooth services, etc.
@@ -51,3 +90,29 @@ $ sudo service <service name> start
 $ sudo service <service name> stop
 $ sudo service <service name> restart
 \end{lstlisting}
+
+\section{Logs}
+
+System logs are critical in troubleshooting and auditing. By default, the system stores logs under \verb|/var/log/|, and they can be managed just like managing any other text files.
+
+Modern Linux systems also use \verb|journalctl| utility to manage system journals. Examples include
+\begin{lstlisting}
+$ journalctl -b # check jounals from the latest reboot
+$ journalctl --since <time> --until <time> # check journals in interval
+$ journalctl -u <unit> # check journals of a particular service
+\end{lstlisting}
+The behavour of \verb|journalctl| can be configured from \texttt{/etc/systemd/journald.conf}. The default location of journals is \texttt{run/log/journal/}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

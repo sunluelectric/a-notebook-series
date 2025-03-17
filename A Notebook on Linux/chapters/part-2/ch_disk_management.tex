@@ -2,27 +2,31 @@
 %\chapterauthor{Second Author}{Second Author Affiliation}
 \chapter{Storage Management}
 
-Upon installation of the system, the OS shall scan the machine, look for hard drives, and either automatically or manually partition it into partitions and mount the partitions to different locations in the OS such as \verb|/| (root directory), \verb|/home/|, swap space, etc.
+Upon installation of the system, the OS shall scan the machine, look for hard drives, partition them, and mount the partitions to different locations in the OS such as \verb|/| (root directory), \verb|/home/|, swap space, etc.
 
-It is often not necessary for a casual user to manage the partitions and mountings by himself as there is the option to let Linux installation handle them automatically. However, when comes to Linux servers where hardware and storage is scaled up and down frequently, it is recommended that the administrator shall understand how hard drive can be managed. Linux provides flexible tools to monitor and manage the storage of the machine, including manipulating partition table, format partition, and managing its mounting point.
+It is often not necessary for a casual user to manage the partitions and mountings by himself as there is the option to let Linux installation handle them automatically. However, when comes to Linux servers where hardware is scaled up and down frequently, it is recommended that the administrator shall understand how the storage can be managed. Linux provides flexible tools to monitor and manage the storage of the machine, including manipulating partition table, format partition, and managing its mounting point.
 
 \section{Partitions and Filesystems}
 
-A partition is a logical slice of the hard drive managed by the OS via partition table which is introduced in more details in a later stage. A filesystem, on the other hand, reflects how OS formats data in the partition and where it is mounted in the OS filesystem hierarchy. This is demonstrated by Fig. \ref{ch:dm:fig:partition}.
+A \mync{partition} is a logical slice of the hard drive managed by the OS via partition table. A \mync{filesystem}, on the other hand, describes how OS formats data in the partition and where the partitions are mounted in the directory hierarchy. This is demonstrated by Fig. \ref{ch:dm:fig:partition}.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=300pt]{chapters/part-2/figures/partition.png}
+	\includegraphics[width=250pt]{chapters/part-2/figures/partition.png}
 	\caption{A demonstration of how a hard drive is used in the OS.} \label{ch:dm:fig:partition}
 \end{figure}
 
-Usually, each filesystem is associated with a partition. The partition focuses more on the logical separation of the hard drive, while the filesystem focuses more on how the operating system manages the data within that partition. Ideally they are consistent and there should be a clear correspondence. However, it is possible that when the filesystem is not sized correctly, the filesystem is smaller than its associated partition, and a part of the storage becomes unused. A filesystem is only meaningful on a partition because it describes how that partition is formatted and managed. Therefore, a filesystem cannot exist without a partition. However, a partition can exist without a filesystem. It will be an unused storage space that is not useful to the operating system until it is formatted with a filesystem.
+Usually, each filesystem is associated with a partition. The partition focuses on the logical separation of the hard drive, while the filesystem focuses on how the operating system manages the data within that partition. Ideally there should be a clear correspondence between a partition and a filesystem. However, it is possible that 
+\begin{itemize}
+  \item A filesystem is sized smaller than its corresponding partition, in which case the remaining space in the partition is wasted.
+  \item A partition does not have its corresponding filesystem, in which case the space is wasted and cannot be used by the OS.
+\end{itemize}
+A filesystem must always have its corresponding partition. This is because a filesystem essentially describes how a partition is used by the OS, hence only meaningful with the partition.
 
 A demonstration of partitions versus filesystems is given in Fig. \ref{ch:dm:fig:partitionvsfilesystem}.
-
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=300pt]{chapters/part-2/figures/partitionvsfilesystem.png}
+	\includegraphics[width=250pt]{chapters/part-2/figures/partitionvsfilesystem.png}
 	\caption{A demonstration of how partitions and filesystems relate to each other.} \label{ch:dm:fig:partitionvsfilesystem}
 \end{figure}
 
@@ -38,7 +42,7 @@ tmpfs           5.0M  4.0K  5.0M   1% /run/lock
 /dev/sda2       512M  5.3M  507M   2% /boot/efi
 tmpfs           1.2G  120K  1.2G   1% /run/user/1000
 \end{lstlisting}
-from where it can be seen that the most of the storage of the system, in this case $818G$, is mounted on the root directory.
+from where it can be seen that the most of the storage of the system, in this case $916G$, is mounted on the root directory. Of this filesystem $818G$ is empty and available to use.
 
 Use \verb|lsblk| to list information about block devices in the OS. Block devices refer to nonvolatile mass storage devices whose information can be accessed in any order, such as hard disks and CD-ROMs. An example is given below.
 \begin{lstlisting}
