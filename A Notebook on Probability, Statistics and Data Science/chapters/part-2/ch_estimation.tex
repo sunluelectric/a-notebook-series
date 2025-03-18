@@ -1,9 +1,79 @@
-\chapter{Estimation of Population Statistics} \label{ch:estimation}
+\chapter{Sampling and Estimation} \label{ch:estimation}
 
-The statistics of the population, such as its mean, variance, etc., can be estimated using the samples. For more insights, we can assume a distribution for the population, and consequently using the samples to estimate the 
-parameters in the distribution. Commonly seen methods are introduced in this section.
+Statistics is very widely used in science, engineering and social science. From a broad view, any attempt trying to estimate an unknown value (for example, a parameter of a system, a property of the population) using its direct or indirect measurements samples (for example, outputs of the system, surveys conducted on randomly selected samples from the population) can be counted as an application of statistics.
 
-\section{Method of Moments}
+This chapter studies the basic use of statistics with sampling and estimation.
+
+\section{Problem Formulation} \label{sec:statisticsproblemformulation}
+
+Due to the measurement error, limitation of sample size, etc., we might not be able to get the accurate value of the unknown. Unavoidably, there is error between the estimates and the true value of the parameter. Statistics studies the methodologies to find the most probable estimate of the parameter by efficiently using the measurements and samples. It also quantitatively calculate the confidence level to the conclusions it draws.
+
+Statistics starts from obtaining the measurements and samples, and using them to model the unknown parameter or population. Different sampling and modeling methods are introduced in this chapter. 
+
+Consider the following two problems.
+\begin{enumerate}
+	\item There is an unknown parameter in the system. The parameter can be measured either directly or indirectly, subject to measurement noise. The problem is to estimate the most probable value or range of the parameter.
+	\item There is the population, and it is impossible to interview each element to get an aggregated feature of the population. However, it is possible to survey a small part of the population. The problem is to select samples from the population, conduct the survey, and using the survey results to estimate the interested aggregated feature or a probable range for that feature.
+\end{enumerate}
+These two problems seem to differ largely, but they are closely related in the mathematical insights, and can be formulated as the same (or very similar) problem. 
+
+Let ``measurements'' and ``samples'' be used interchangeably. Denote the samples as $x_i$, $i=1,\ldots,m$, where $m$ is the total number of samples. Denote the parameter to be estimated by $\theta$. In both problems, the objective is to obtain an estimation of $\theta$, $\hat{\theta}$, using the samples $x_i$. 
+
+\section{Sampling}
+
+Sampling methods can be a concern of Problem 2 introduced earlier in Section \ref{sec:statisticsproblemformulation}. 
+When selecting samples from the population, it is critical to ensure that the selection is done randomly, and all elements in the population have a equal probability to be selected. 
+
+Depending on whether an element can be selected multiple times, we have
+\begin{itemize}
+  \item Sampling with replacement: a member can be chosen more than once.
+  \item Sampling without replacement: a member can be chosen no more than once.
+\end{itemize}
+Sometimes it is interesting to compare the differences of the two methods, especially when the population is finite. An obvious difference is that by using sampling with replacement all the samples can be considered as ``independent'': the previously selected samples would not affect the aggregated feature of the future samples. From this point of view, using sampling with replacement is equivalent of sampling from infinite population by thinking that the population is duplicated infinite times and each sample is done in an independent duplication.
+
+While by using sampling without replacement, previous samples may change the distributions in the elements in the population, thus making the samples relevant. 
+
+When the population size is much larger than the sample size, the choice of the two sampling methods may not make any visible difference in the conclusion.
+
+For further demonstration of the differences between sampling with and without replacement, consider the following example. A set of $N$ random variables are generated from a Gaussian distribution as the population. Sample the population $M$ times using sampling with/without replacement. Calculate the sampled mean and compare it with the mean of the entire population.
+
+In the first example, let $N=100$ and $M=500$. Figures \ref{ch:sampling:fig:sample-wr-n100} and \ref{ch:sampling:fig:sample-nwr-n100} gives the cumulative mean and variance of sampling with and without replacement, respectively. The mean and variance are given by red and blue curves, respectively. The statistics obtained from the cumulative samples and from the population are given by the solid and dashed curves, respectively. Notice that in Fig. \ref{ch:sampling:fig:sample-nwr-n100}, after number of samples exceeding $100$, the entire population has been sampled, and thus the sampling stops. This explains why its mean and variance stop fluctuating and converge to the population mean and variance respectively.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=250pt]{chapters/part-2/figures/sample-wr-n100.eps}
+	\caption{Sample with replacement, population size $N=100$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-wr-n100}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=250pt]{chapters/part-2/figures/sample-nwr-n100.eps}
+	\caption{Sample without replacement, population size $N=100$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-nwr-n100}
+\end{figure}
+
+In practice, however, the population size is often orders of magnitudes larger than the number of samples. In the second example, let $N=10000$ and $M=500$. The corresponding figures are given in Figs. \ref{ch:sampling:fig:sample-wr-n10000} and \ref{ch:sampling:fig:sample-nwr-n10000}. There is no obvious differences of the two figures.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=250pt]{chapters/part-2/figures/sample-wr-n10000.eps}
+	\caption{Sample with replacement, population size $N=10000$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-wr-n10000}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=250pt]{chapters/part-2/figures/sample-nwr-n10000.eps}
+	\caption{Sample without replacement,population size $N=10000$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-nwr-n10000}
+\end{figure}
+
+The features of the population is often unknown, or at least not known precisely. It is common to make some preliminary assumptions to the distribution of the population using past experience.
+
+For example, let $X$ be a feature of the population. It could be, for example, the heights of all teenagers in a city. We can make an assumption that $X$ follows Gaussian distribution with mean $\mu$ and standard deviation $\sigma$, and each element in the population, $X_i$, can be taken as a random variable generated from $f(x)$.
+
+The preliminary assumptions of the population can be helpful in using the samples to model the population more efficiently. Of course, if the samples deny the assumption in the hypothesis test, the assumptions can be rejected and new models can be proposed.
+
+The statistics of the population, such as its mean, variance, etc., can be estimated using the samples. For more insights, we can assume a distribution for the population, and consequently using the samples to estimate the parameters in the distribution. Commonly seen methods are introduced in this section.
+
+\section{Moments Estimation}
 
 The statistics of the samples can in some extent reflect the system. The most intuitive assumption that one may make is that the samples share the same statistical features with the population. The larger size of the sample set, the more likely this statement is true. This statement can be proved correct for some of the statistical properties such as the mean.
 
@@ -44,11 +114,29 @@ Recall from Section \ref{sec:moments} that the mean and the variance are the $1$
 
 Commonly used moments and central of moments are $4$th order or lower. Notice that bias might be introduced when using central of moments and the central is obtained from the samples, just like illustrated earlier for the sample variance.
 
-\section{Maximum Likelihood and Maximum a Posteriori Estimations}
+\section{Parameter Estimation} \label{sec:mlemap}
 
 Assume that the distribution of the population follows PDF $f(x;\theta)$ where $\theta$ is the collection of parameters in the distribution. For example, if $f(x)$ follows normal distribution, $\theta=[\mu, \sigma^2]$ is the collection of the mean and variance of the normal distribution.  In the case where the population is discrete and finite, it is assumed that the population are populated from $f(x)$
 
 The objective is to estimate $\theta$ given samples $X_1, \ldots, X_m$.
+
+\subsection{Unbiased Estimation}
+
+Recall that we use samples to estimate the statistics parameters of the population. When distributions are used to model the population, the samples are used to estimate the parameters in the distributions. We have been taken it as granted that:
+\begin{itemize}
+	\item The estimation can have error;
+	\item The expectation of the estimation error should be zero.
+\end{itemize}
+The above implies that if we repeat the estimation many times (each time using new samples) and aggregate the results, the positive and negative error would cancel out, eventually giving us the estimates very close to the true parameters values. So long as we have enough samples, the error can be reduced to be as small as we need. When the sample size approaches infinity, the estimation error should approach zero.
+
+When the expectation of the estimation error is zero, the estimation is said to be \textit{unbiased}. This is often considered a good feature of the estimation. However, this is not always the case. It is difficult to make the estimation unbiased in reality. For those estimators claimed to be unbiased, rigorous mathematical proof is often required.
+
+There are several factors that may contribute to the bias:
+\begin{itemize}
+	\item Samples are not selected randomly. This is often not as much of a concern in science and engineering as compared with social science.
+	\item Measurement noise is skewed. We often assume normal distribution for the measurement noise of sensors, which is non-skewed. However, normal distribution is only an approximation to the reality. The actual measurement noise may be skewed and not zero-mean.
+	\item The estimator is biased. Depending on the configurations of an estimator such as the noise assumption in the MLE, the estimator itself can be biased.
+\end{itemize}
 
 \subsection{Maximum Likelihood Estimation}
 
@@ -92,31 +180,11 @@ When $f_{\theta}(\theta)$ is unknown, MLE is the preferred choice. MLE can also 
 
 In some literatures, $f_{\theta}(\theta)$ is considered as part of the MLE cost function as given by \eqref{eq:mapcostfunc}. Though it is called an MLE in those literatures, it is effectively an MAP estimator.
 
-\section{Comparison of Different Estimation Methods}
-
 With the same set of samples, different methods (methods of moments, MLE and MAP with different likelihood functions, etc.) will give different results. There is no universally best way to estimate the statistical features of the population. It is important to choose the appropriate estimation method case by case depending on the problem.
 
 With that been said, there are benchmarks to evaluate the performance of an estimation method. One of them is bias, which has been briefly mentioned in the previous section. Other benchmarks include efficiency, robustness, etc. Commonly seen ones are introduced in this section.
 
-\subsection{Unbiased Estimation}
-
-Recall that we use samples to estimate the statistics parameters of the population. When distributions are used to model the population, the samples are used to estimate the parameters in the distributions. We have been taken it as granted that:
-\begin{itemize}
-	\item The estimation can have error;
-	\item The expectation of the estimation error should be zero.
-\end{itemize}
-The above implies that if we repeat the estimation many times (each time using new samples) and aggregate the results, the positive and negative error would cancel out, eventually giving us the estimates very close to the true parameters values. So long as we have enough samples, the error can be reduced to be as small as we need. When the sample size approaches infinity, the estimation error should approach zero.
-
-When the expectation of the estimation error is zero, the estimation is said to be \textit{unbiased}. This is often considered a good feature of the estimation. However, this is not always the case. It is difficult to make the estimation unbiased in reality. For those estimators claimed to be unbiased, rigorous mathematical proof is often required.
-
-There are several factors that may contribute to the bias:
-\begin{itemize}
-	\item Samples are not selected randomly. This is often not as much of a concern in science and engineering as compared with social science.
-	\item Measurement noise is skewed. We often assume normal distribution for the measurement noise of sensors, which is non-skewed. However, normal distribution is only an approximation to the reality. The actual measurement noise may be skewed and not zero-mean.
-	\item The estimator is biased. Depending on the configurations of an estimator such as the noise assumption in the MLE, the estimator itself can be biased.
-\end{itemize}
-
-\subsection{Mean Squared Error}
+\subsection{Parameter Estimation Benchmarks}
 
 Consider unbiased estimation. The magnitude of the estimation error can be evaluated using MSE and RMSE as defined below. 
 
@@ -143,15 +211,13 @@ It is possible (although in many cases difficult) to check and prove whether an 
 
 A more general CRLB for biased estimator can also be derived. The detailed derivations of Fisher Information Matrix and general CRLB are not given in this notebook.
 
-\section{Interval Estimation}
+\section{Confidence Interval Estimation}
 
 The estimation obtained from empirical data may bias from its true value due to the randomness introduced by the samples. From CLT, we know that the more samples, the more confident we are that the true value is close to the estimate. 
 
 To put it into perspective, we can derive the probability of the true value $\theta$ actually lying with a given interval $\left[\hat{\theta}_{\textup{min}},\hat{\theta}_{\textup{max}}\right]$, $P\left(\hat{\theta}_{\textup{min}} \leq \theta \leq \hat{\theta}_{\textup{max}}\right)$, as a function of estimation algorithm, measurement noise and samples number. The interval is known as the Confidence Interval (CI). Each CI is corresponding with a probability.
 
 The purpose of interval estimation is to obtain the probability of a CI or find the CI for a specific probability given the samples.
-
-\subsection{Estimate the Mean of a Normal Distribution}
 
 As an example, consider estimating the CI of a normal distribution using samples taken from that distribution. Notice that this is only one of the many scenarios of interval estimation.
 
@@ -207,9 +273,6 @@ or equivalently
 	\textup{erf}\left(\dfrac{u_\alpha}{\sqrt{2}}\right) &=& P \nonumber
 \end{eqnarray}
 where $F(\cdot)$ is the CDF of the standard normal distribution and $\textup{erf}(\cdot)$ the error function.
-
-
-\subsection{General Interval Estimation}
 
 In the previous example, the problem is to estimate the CI of the mean of a normal distribution. In practice, there are many other problems. 
 
