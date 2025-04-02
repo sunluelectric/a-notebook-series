@@ -4,17 +4,17 @@ Statistics is very widely used in science, engineering and social science. From 
 
 This chapter studies the basic use of statistics with sampling and estimation.
 
-\section{Problem Formulation} \label{sec:statisticsproblemformulation}
+\section{Problem Statement} \label{sec:statisticsproblemformulation}
 
 Due to the measurement error, limitation of sample size, etc., we might not be able to get the accurate value of the unknown. Unavoidably, there is error between the estimates and the true value of the parameter. Statistics studies the methodologies to find the most probable estimate of the parameter by efficiently using the measurements and samples. It also quantitatively calculate the confidence level to the conclusions it draws.
 
 Statistics starts from obtaining the measurements and samples, and using them to model the unknown parameter or population. Different sampling and modeling methods are introduced in this chapter. 
 
 Consider the following two problems.
-\begin{enumerate}
+\begin{itemize}
 	\item There is an unknown parameter in the system. The parameter can be measured either directly or indirectly, subject to measurement noise. The problem is to estimate the most probable value or range of the parameter.
 	\item There is the population, and it is impossible to interview each element to get an aggregated feature of the population. However, it is possible to survey a small part of the population. The problem is to select samples from the population, conduct the survey, and using the survey results to estimate the interested aggregated feature or a probable range for that feature.
-\end{enumerate}
+\end{itemize}
 These two problems seem to differ largely, but they are closely related in the mathematical insights, and can be formulated as the same (or very similar) problem. 
 
 Let ``measurements'' and ``samples'' be used interchangeably. Denote the samples as $x_i$, $i=1,\ldots,m$, where $m$ is the total number of samples. Denote the parameter to be estimated by $\theta$. In both problems, the objective is to obtain an estimation of $\theta$, $\hat{\theta}$, using the samples $x_i$. 
