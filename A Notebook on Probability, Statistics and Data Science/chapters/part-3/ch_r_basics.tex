@@ -82,7 +82,7 @@ RStudio provides a graphical interface to manage packages as shown in Fig. \ref{
 \caption{RStudio's graphical interface for package management.} \label{ch:r1:fig:rstudio_package_management}
 \end{figure}
 
-\section{Basic Syntax} \label{ch:r1:sec:rprogramming}
+\section{Basic Syntax and Data Types} \label{ch:r1:sec:rprogramming}
 
 This section introduces the basic syntax and commonly used data types of R.
 
@@ -111,7 +111,7 @@ x = rsgt(n = sgt_n, mu = sgt_mu, sigma = sgt_sigma, lambda = sgt_lambda, p = sgt
 write.table(x, 'generate_sgt_data.csv', sep=",", row.names = FALSE, col.names=FALSE)
 \end{lstlisting}
 
-\subsection{Data Types}
+\subsection{Different Types of Scalars}
 
 R supports many data types. Commonly used data types are summarized in Table \ref{ch:r1:tab:datatype}, where notice that \verb|<-| is used to assign a value to a variable. Use \verb|typeof()| to check the type of a variable. Alternatively, use \verb|is.numeric()|, \verb|is.integer()|, \verb|is.double()|, \verb|is.character()|, etc., to check whether a variable belongs to a particular data type.
 \begin{table}[!htb]
@@ -406,11 +406,9 @@ Define a simple function as follows. Run the codes where the function is describ
 }
 \end{lstlisting}
 
-\section{Vector, Matrix and List}
+\subsection{Vectors}
 
 Vector and matrix are the fundamental forms using which R stores and processes data. List is similar with vector to some extend, and it is also introduced in this section.
-
-\subsection{Vector}
 
 There are different types of vectors in R depending on the data type of the elements it stores. The commonly used vector types include numeric vector and character vector. All elements in a vector must have the same data type. When different data type values are stored in a vector, they will be transferred to the most general data type.
 
@@ -612,7 +610,7 @@ In the context of unnamed numeric vectors and matrices, \verb|[[]]| is rarely us
 
 \end{mdframed}
 
-\subsection{Matrix}
+\subsection{Matrices}
 
 Similar with vector, all elements in a matrix must have the consistent datatype. A demonstration is shown in Fig. \ref{ch:r1:fig:r_table_demo} with elements indexes. Let the matrix be named \verb|A|. The elements in the matrix can be accessed by the name of the table followed by the index coordinates. For example, in the figure, \verb|A[1,1]| refers to the first element and \verb|A[4,6]| the last element. It is also possible to index an entire row or column. For example, use \verb|A[1,]| to represent the first row of the matrix.
 
@@ -789,7 +787,7 @@ The results of the above codes are given in Figs. \ref{ch:r1:fig:basket_exp1} an
 
 Notice that \verb|matplot()| is not widely used in practice comparing with the other visualization tools to be introduced in later sections.
 
-\subsection{List}
+\subsection{Lists}
 
 List is similar with vector in the sense that it is also an indexed 1-D storage. However, the elements in a list does not need to share the same data type, and hence list can be used flexibly, such as to save nested ``list of lists'', ``list of data frames'', or list of other items. Just like vector where each element can have its own name, elements in a list can also be associated with names. From this perspective, list can be used almost like an ``indexed dictionary'' of Python.
 

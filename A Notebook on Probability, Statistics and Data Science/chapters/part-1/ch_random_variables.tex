@@ -15,15 +15,19 @@ Furthermore, define $P(X\leq x)$ or $F(x)$ as the \mync{cumulative distribution 
 
 \subsection{Continuous Random Variables}
 
-A random variable $X$ may also take continuous values in many applications. For example, let $X$ denote the time consumption to finish a task. In this case, $x$ is a random variable whose value can be any positive number.
+A random variable $X$ may also take continuous values in many applications. For example, let $X$ denote the time consumption to finish a task, in which case $X$ is a random variable whose value can be any positive number.
 
 In this case, the chance for $X$ to take a precise value, say for the student to finish his homework using precisely 25 minutes 13 seconds and 750 milliseconds, is very small (in fact, zero). The probability function $P(X=x)$ becomes pointless. The cumulative distribution function $F(x) = P(X\leq x)$ still makes sense, as it calculates the probability of $X$ given by not a precise value but within a range.
 
-Inspired by this, define \mync{probability density function}[PDF] or $f(x)$ for continuous random variable as follows. The probability density function $f(x)$ is such that
+Inspired by this, define \mync{probability density function}[PDF] or $f(x)$ for continuous random variable as follows. 
+\begin{eqnarray}
+f(x) &=& \dfrac{d}{dx}F(x) \nonumber
+\end{eqnarray}
+Therefore, $f(x)$ is such that
 \begin{eqnarray}
   P(a < X < b) &=& \int_{a}^{b}f(x)dx \nonumber
 \end{eqnarray}
-Therefore,
+and
 \begin{eqnarray}
   F(x) &=& P(X\leq x) \nonumber \\
   &=& \int_{-\infty}^{x} f(\epsilon)d\epsilon \nonumber
@@ -86,7 +90,7 @@ If $X$ and $Y$ are independent variables, $f(x,y) = f_X(x)f_Y(y)$. In this case,
 \end{eqnarray}
 which implies that the information of $Y=y$ does not affect our understanding of $X$, just as if the information is absent.
 
-\subsection{Parameter Estimation with Conditional Distribution}
+\subsection{Parameter Estimation with Conditional Distributions}
 
 Equation \eqref{eq:conditionalpdf1} is widely used in parameter estimation. Let $\theta$ be the parameter to be estimated, and $x$ the measurement that reflects $\theta$ via measurement model $f(\theta, x)$ which is given in the form of joint PDF. Both $\theta$ and $x$ can be vectors.
 
@@ -128,7 +132,7 @@ MLE, MAP and \eqref{eq:posterioriestimation} have their advantages and disadvant
 
 \end{shortbox}
 
-\section{Distributions of Functions of Random Variables}
+\section{Distributions of Derived Variables}
 
 Let $X$ be a random variable with PDF $f_X(x)$. Let $U$ be another random variable which is a function of $X$, $U=\phi(X)$. The PDF of $U$ can be calculated from $f_X$ and $\phi$. Details are given below.
 
@@ -269,8 +273,6 @@ The PDF of one variable can be derived from the joint distribution using \eqref{
 	\textup{Var}(X) &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}\left(x-\textup{E}(X)\right)^2f(x, y)dxdy \nonumber
 \end{eqnarray}
 
-\subsection{Covariance}
-
 The \mync{covariance} of two variables is defined and calculated as follows.
 \begin{eqnarray}
 	\textup{Cov}(X, Y) &=& \textup{E}\left((x - \textup{E}(X))(y - \textup{E}(Y))\right) \label{eq:covariance1} \\
@@ -334,7 +336,7 @@ From \eqref{eq:covlemma}, apparently $-1\leq \rho \leq 1$. When two variables ar
 
 There are a few important theorems frequently used in the study of probability and statistics. They are introduced here.
 
-\subsection{Law of Large Numbers}
+\subsection{Law of Large Numbers} \label{subsec:largenumbers}
 
 The \mync{Law of Large Numbers}[LLN] is a theorem that basically says if performing the same experiment a large number of times, the average of the outcomes of the experiments should eventually converge to a certain value which is the empirical expectation of the experiment. The larger number of trails, the closer the average to the empirical expectation.
 
