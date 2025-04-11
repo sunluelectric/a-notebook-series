@@ -1,17 +1,25 @@
-\chapter{Basic Statistics and Sampling} \label{ch:statisticsandsampling}
+\chapter{Basic Statistics} \label{ch:statisticsandsampling}
 
-Statistics is very widely used in science and engineering. From a broad view, any attempt trying to estimate an unknown value using its direct or indirect measurements samples can be counted as an application of statistics. Due to the measurement error, the limited sample size, etc., we might not be able to get the accurate value of the unknown. Statistics studies the methodologies to find the most probable estimate of the unknown efficiently subjecting to the limitations. It also quantifies the estimation error and confidence level of the estimate.
+Statistics is widely used in science and engineering. Broadly speaking, any attempt to estimate an unknown property of a system using direct or indirect measurements can be considered an application of statistics. Due to factors such as measurement errors and limited sample sizes, we cannot determine the exact value of the unknown property. Instead, statistics provides methodologies for efficiently estimating the most probable value of the unknown, given the available data and its limitations. It also offers tools to quantify the estimation error and the confidence level of the result.
 
-This chapter studies different sampling methods, and the use of the samples to solve basic statistics problems.
+This chapter introduces various sampling methods and demonstrates how to use samples to solve basic statistical problems.
 
-Consider the following two problems.
-\begin{itemize}
-	\item There is an unknown parameter in the system. The parameter can be measured either directly or indirectly, subject to measurement noise. The problem is to estimate the most probable value or range of the parameter.
-	\item There is the population, and it is impossible to interview each element to get an aggregated feature of the population. However, it is possible to survey a small part of the population. The problem is to select samples from the population, conduct the survey, and using the survey results to estimate the interested aggregated feature or a probable range for that feature.
-\end{itemize}
-These two problems seem to differ largely, but they are closely related in the mathematical insights, and can be formulated as the same (or very similar) problem. 
+\section{Two Types of Statistical Problems}
 
-Let ``measurements'' and ``samples'' be used interchangeably. Denote the samples as $x_i$, $i=1,\ldots,m$, where $m$ is the total number of samples. Denote the parameter to be estimated by $\theta$. In both problems, the objective is to obtain an estimation of $\theta$, $\hat{\theta}$, using the samples $x_i$. 
+There are at least two common types of problems in science and engineering where statistics is widely used.
+
+\begin{enumerate}
+	\item There is a property of the system whose true value exists but is unknown. We have either direct or indirect measurements of this value, subject to measurement noise. The goal is to estimate the true value from the measurements, while minimizing the effect of noise.
+	\item There is a large population of items whose properties follow some underlying distribution. It is impractical to examine every item due to the size of the population. Hence, we collect some samples and record their properties. The goal is to estimate the distribution of the entire population using only the samples.
+\end{enumerate}
+
+Examples are given below.
+
+Type 1. Consider a power system with many buses, each having a voltage phasor. The objective is to estimate the voltage phasors using various sensor measurements deployed across the system.
+
+Type 2. Suppose a factory produces a large number of light bulbs. The objective is to estimate the average lifespan of the bulbs by randomly selecting a few and testing their durability.
+
+Many introductory statistics textbooks primarily focus on problems of type 2. However, statistics is just as essential in problems of type 1 which are common in control systems and signal processing. Although these problems are not always labeled as ``statistics'' in traditional textbooks, they rely heavily on statistical reasoning and tools. Following that convention, the majority of this notebook focuses on problems of type 2. Type 1 problems are discussed elsewhere in notebooks related to system identification.
 
 \section{Sampling}
 
@@ -19,26 +27,22 @@ When selecting samples from the population, it is critical to ensure that the se
 
 Depending on whether an element can be selected multiple times, we have
 \begin{itemize}
-  \item Sampling with replacement: a member can be chosen more than once.
-  \item Sampling without replacement: a member can be chosen no more than once.
+  \item Sampling with replacement. In this scenario, a member can be chosen more than once, and the samples are i.i.d.
+  \item Sampling without replacement. In this scenario, a member can be chosen no more than once, and the samples distribution is slightly affected by earlier samples.
 \end{itemize}
-Sometimes it is interesting to compare the differences of the two methods, especially when the population is finite. An obvious difference is that by using sampling with replacement all the samples can be considered as ``independent'': the previously selected samples would not affect the aggregated feature of the future samples. From this point of view, using sampling with replacement is equivalent of sampling from infinite population by thinking that the population is duplicated infinite times and each sample is done in an independent duplication.
+Sampling with replacement is applicable in many engineering problems, such as measuring a physical property of a system. Sampling without replacement is applicable in many social science problems, such as conducting a survey to estimate the average income of the population. They do have some subtle differences and they are explained using the following example.
 
-While by using sampling without replacement, previous samples may change the distributions in the elements in the population, thus making the samples relevant. 
+Let a set of $N$ random variables be generated from a Gaussian distribution as the population. Sample the population $M$ times using sampling with/without replacement. Calculate the sampled mean and compare it with the mean of the entire population.
 
-When the population size is much larger than the sample size, the choice of the two sampling methods may not make any visible difference in the conclusion.
+Let $N=100$ and $M=500$. Figures \ref{ch:sampling:fig:sample-wr-n100} and \ref{ch:sampling:fig:sample-nwr-n100} gives the cumulative mean and variance of sampling with and without replacement, respectively. The mean and variance are given by red and blue curves, respectively. The statistics obtained from the cumulative samples and from the population are given by the solid and dashed curves, respectively. Notice that in Fig. \ref{ch:sampling:fig:sample-nwr-n100}, after number of samples exceeding $100$, the entire population has been sampled, and thus the sampling stops. This explains why its mean and variance stop fluctuating and converge to the population mean and variance respectively.
 
-For further demonstration of the differences between sampling with and without replacement, consider the following example. A set of $N$ random variables are generated from a Gaussian distribution as the population. Sample the population $M$ times using sampling with/without replacement. Calculate the sampled mean and compare it with the mean of the entire population.
-
-In the first example, let $N=100$ and $M=500$. Figures \ref{ch:sampling:fig:sample-wr-n100} and \ref{ch:sampling:fig:sample-nwr-n100} gives the cumulative mean and variance of sampling with and without replacement, respectively. The mean and variance are given by red and blue curves, respectively. The statistics obtained from the cumulative samples and from the population are given by the solid and dashed curves, respectively. Notice that in Fig. \ref{ch:sampling:fig:sample-nwr-n100}, after number of samples exceeding $100$, the entire population has been sampled, and thus the sampling stops. This explains why its mean and variance stop fluctuating and converge to the population mean and variance respectively.
-
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-2/figures/sample-wr-n100.eps}
 	\caption{Sample with replacement, population size $N=100$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-wr-n100}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-2/figures/sample-nwr-n100.eps}
 	\caption{Sample without replacement, population size $N=100$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-nwr-n100}
@@ -46,60 +50,68 @@ In the first example, let $N=100$ and $M=500$. Figures \ref{ch:sampling:fig:samp
 
 In practice, however, the population size is often orders of magnitudes larger than the number of samples. In the second example, let $N=10000$ and $M=500$. The corresponding figures are given in Figs. \ref{ch:sampling:fig:sample-wr-n10000} and \ref{ch:sampling:fig:sample-nwr-n10000}. There is no obvious differences of the two figures.
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-2/figures/sample-wr-n10000.eps}
 	\caption{Sample with replacement, population size $N=10000$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-wr-n10000}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-2/figures/sample-nwr-n10000.eps}
 	\caption{Sample without replacement,population size $N=10000$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-nwr-n10000}
 \end{figure}
 
-The features of the population is often unknown, or at least not known precisely. It is common to make some preliminary assumptions to the distribution of the population using past experience.
-
-For example, let $X$ be a feature of the population. It could be, for example, the heights of all teenagers in a city. We can make an assumption that $X$ follows Gaussian distribution with mean $\mu$ and standard deviation $\sigma$, and each element in the population, $X_i$, can be taken as a random variable generated from $f(x)$.
-
-The preliminary assumptions of the population can be helpful in using the samples to model the population more efficiently. Of course, if the samples deny the assumption in the hypothesis test, the assumptions can be rejected and new models can be proposed.
-
-The statistics of the population, such as its mean, variance, etc., can be estimated using the samples. For more insights, we can assume a distribution for the population, and consequently using the samples to estimate the parameters in the distribution. Commonly seen methods are introduced in this section.
-
 \section{Moments Estimation}
 
-The statistics of the samples can in some extent reflect the system. The most intuitive assumption that one may make is that the samples share the same statistical features with the population. The larger size of the sample set, the more likely this statement is true. This statement can be proved correct for some of the statistical properties such as the mean.
+It is fair to assume that the samples statistical properties are connected with those of the population. The statistics of the population can be estimated using the samples. The larger size of the sample set, the more likely this statement is true.
+
+In practice, we often assume certain types of distributions of the population based on priori knowledge or common sense, for example, Gaussian distribution for the salaries of people living in a city. Samples are taken from the population and used to estimate the properties of the distribution, such as its mean and variance.
+
+More details are given below.
 
 \subsection{Mean and Variance}
 
-The sample mean and variance are calculated as follows. Let $X_1, \ldots, X_m$ be the samples. For sampling number $m\geq 2$,
+The \mync{sample mean} and \mync{sample variance} are calculated as follows. Let $X_1, \ldots, X_m$ be the samples. For sampling size $m\geq 2$,
 \begin{eqnarray}
 	\bar{X} &=& \dfrac{1}{m}\sum_{i=1}^{m}X_i \label{eq:sample_mean} \\
 	S^2 &=& \dfrac{1}{m-1}\sum_{i=1}^{m}\left(X_i - \bar{X}\right)^2 \label{eq:sample_variance}
 \end{eqnarray}
 
-Equations \eqref{eq:sample_mean} and \eqref{eq:sample_variance} are often used to estimate the mean and variance of the population, respectively. Note the denominator $m-1$ instead of $m$ in \eqref{eq:sample_variance}. This is to ensure that there is no static bias in the estimation of the population variance using the sample variance when the samples are chosen without replacement (this is often the case when the population size is extremely large).
+Do not confuse the sample mean in \eqref{eq:sample_mean} and sample variance in \eqref{eq:sample_variance} with the true population mean and variance, typically denoted by $\mu$ and $\sigma^2$. Although they are closely related, they are not the same.
 
-The proof that \eqref{eq:sample_variance} is an unbiased estimation of the population variance is given as follows. Let the true mean and variance (not the sample mean and variance) of $X_i$ be denoted by $E[X_i] = \mu$ and $\textup{Var}(X_i)=\sigma^2$ respectively. The objective is to prove $E\left[S^2\right]=\sigma^2$.
+According to LLN, the sample mean $\bar{X}$ converges to the population mean $\mu$ as the number of samples $m$ increases. Similarly, we can show that the sample variance $S^2$ converges to the population variance $\sigma^2$ by proving that $E[S^2] = \sigma^2$. The proof is given below.
 
 From \eqref{eq:sample_variance},
 \begin{eqnarray}
 	E\left[S^2\right] &=& E\left[\dfrac{1}{m-1}\sum_{i=1}^{m}\left(X_i - \bar{X}\right)^2\right] \nonumber \\
-	&=& \dfrac{1}{m-1} E\left[\sum_{i=1}^{m}\left(X_i^2 - 2X_i\bar{X} + \bar{X}^2\right)\right] \label{eq:proof_samplevar_1} \\
-	&=& \dfrac{1}{m-1} E\left[\sum_{i=1}^{m}\left(X_i^2 - \bar{X}^2\right)\right] \nonumber \\
+	&=& \dfrac{1}{m-1} E\left[\sum_{i=1}^{m}\left(X_i^2 - 2X_i\bar{X} + \bar{X}^2\right)\right]  \nonumber \\
+	&=& \dfrac{1}{m-1} E\left[\sum_{i=1}^{m}X_i^2 - 2\bar{X}\sum_{i=1}^{m}X_i + m\bar{X}^2\right] \label{eq:proof_samplevar_1} \\
+	&=& \dfrac{1}{m-1} E\left[\sum_{i=1}^{m}X_i^2 - m\bar{X}^2\right] \nonumber \\
+	&=& \dfrac{1}{m-1}\sum_{i=1}^{m} E\left[X_i^2\right] - \dfrac{m}{m-1}E\left[\left(\dfrac{1}{m}\sum_{i=1}^{m}X_i\right)^2\right] \nonumber \\
 	&=& \dfrac{1}{m-1}\sum_{i=1}^{m} E\left[X_i^2\right] - \dfrac{1}{m(m-1)}E\left[\left(\sum_{i=1}^{m}X_i\right)^2\right] \label{eq:proof_samplevar_2} \\
 	&=& \dfrac{1}{m-1}\sum_{i=1}^{m} \left(\textup{Var}(X_i) + E[X_i]^2\right) \nonumber \\ && -  \dfrac{1}{m(m-1)}\left(\textup{Var}\left(\sum_{i=1}^{m}X_i\right) + E\left[\sum_{i=1}^{m}X_i\right]^2\right) \nonumber \\
 	&=& \dfrac{m}{m-1}\left(\sigma^2 + \mu^2\right) - \dfrac{1}{m(m-1)}\left(m\sigma^2 + m^2\mu^2\right) \nonumber \\
 	&=& \dfrac{1}{m-1}\left(m\sigma^2 + m\mu^2 - \sigma^2 - m\mu^2\right) \nonumber \\
 	&=& \sigma^2 \nonumber
 \end{eqnarray}
-where notice that in \eqref{eq:proof_samplevar_1} $\sum_{i=1}^{m}X_i = \sum_{i=1}^{m}\bar{X}$ and in \eqref{eq:proof_samplevar_2} $E\left[X^2\right] = \textup{Var}(X) + E[X]^2$ for any random variable $X$ from \eqref{eq:varderived}.
+where notice that in \eqref{eq:proof_samplevar_1} 
+\begin{eqnarray}
+	\sum_{i=1}^{m}X_i &=& m\bar{X} \nonumber
+\end{eqnarray}
+which is from \eqref{eq:sample_mean}, and in \eqref{eq:proof_samplevar_2}
+\begin{eqnarray}
+	E\left[X^2\right] &=& \textup{Var}(X) + E[X]^2 \nonumber
+\end{eqnarray}
+for any random variable $X$ as given in \eqref{eq:varderived}.
 
-This use of $m-1$ in \eqref{eq:sample_variance} is essentially due to the fact that $\bar{X}$ is also obtained from the samples. Imagine a scenario where the mean of the population $\mu$ is known beforehand. In that case, we could have used
+The reason for dividing by $m-1$ in \eqref{eq:sample_variance}, rather than $m$, is that the sample mean $\bar{X}$ is also estimated from the data. This adjustment ensures that $S^2$ is an unbiased estimation of the population variance $\sigma^2$.
+
+Imagine a scenario where the population mean $\mu$ is known in advance. In that case, we could have calculated sample variance alternatively as follows
 \begin{eqnarray}
 	{S^*}^2 &=& \dfrac{1}{m}\sum_{i=1}^{m}\left(X_i - \mu\right)^2 \nonumber
 \end{eqnarray}
-as the sample variance to estimate the population variance $\sigma^2$, which also gives a non-biased estimation.
+This estimator would also be unbiased for $\sigma^2$, and does not require the $m-1$ correction, since $\mu$ is not estimated from the data.
 
 \subsection{Other Moments}
 

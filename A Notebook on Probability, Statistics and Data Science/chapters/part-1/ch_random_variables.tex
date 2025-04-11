@@ -38,34 +38,48 @@ In science and engineering problems, continuous random variables are more common
 
 \section{Joint Distributions}
 
-The \mync{joint distribution} describes the distribution of multiple random variables combination. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. For example, in a system identification problem the unknown system parameters are correlated with the measurements and their correlations are described by their joint PDF, and the filter uses the joint PDF and the measurements to estimate the unknown parameters.
+\mync{joint distribution} describes the distribution of multiple random variables combination. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. 
+
+For example, in a system identification problem the unknown system parameters are correlated with the measurements and their correlations are described by their joint PDF. System identification tries to estimate the unknown system parameters given the measurements.
 
 \subsection{Joint Probability}
 
-Consider two random variables $X$ and $Y$. In the case of discrete variables, define joint probability function and joint cumulative distribution function as follows.
+Joint probability considers two or more random variables. For simplicity, consider only two random variables $X$ and $Y$. The same idea can be expanded to more variables.
+
+In the case of discrete variables, define joint probability function and joint cumulative distribution function as follows.
 \begin{eqnarray}
   f(x, y) &=& P\left(X=x, Y=y\right) \nonumber \\
   F(x, y) &=& P\left(X\leq x, Y\leq y\right) \nonumber \\
   &=& \sum_{u\leq x}\sum_{v\leq y}f(u, v) \nonumber
 \end{eqnarray}
 
-In the case of continuous random variables, joint PDF of $X$ and $Y$ is defined such that
+In the case of continuous random variables, let
 \begin{eqnarray}
-  \int_{x=a}^{b}\int_{y=c}^{d} f(x, y) dxdy &=& P\left(a < X < b, c < y < d \right) \label{eq:jointpdf}
+  F(x, y) &=& P(X \leq x, Y \leq y) \nonumber
 \end{eqnarray}
-Integrate \eqref{eq:jointpdf} w.r.t. one variable from $-\infty$ to $\infty$ gives the PDF of the other variable. For example,
+be the cumulative distribution function, and joint PDF of $X$ and $Y$ is defined by
 \begin{eqnarray}
-  f_X(x) &=& \int_{y=-\infty}^{\infty} f(x, y) \label{eq:jointpdfdowngrade}
+	f(x, y) &=& \dfrac{d^2}{dxdy}F(x, y) \nonumber
 \end{eqnarray}
-gives the PDF of $X$ alone. In other words, if $(X_i, Y_i)$ samples are generated from $f(x, y)$ in \eqref{eq:jointpdf}, and we only look at the distribution of $X_i$, it should follow \eqref{eq:jointpdfdowngrade}.
+Therefore,
+\begin{eqnarray}
+  \int_{x=a}^{b}\int_{y=c}^{d} f(x, y) dxdy &=& P\left(a < X < b, c < y < d \right) \label{eq:jointpdf} \\
+  F(x, y) &=& \int_{u=-\infty}^{x}\int_{v=-\infty}^{y}f(u, v)dudv \nonumber
+\end{eqnarray}
 
-We can define cumulative distribution function for joint distribution likewise as follows.
+The cumulative distribution function and PDF of one of the variables, for example $X$, can be derived from the joint PDF as follows. By definition, 
 \begin{eqnarray}
-  F(x, y) &=& P(X \leq x, Y \leq y) \nonumber \\
-  &=& \int_{u=-\infty}^{x}\int_{v=-\infty}^{y}f(u, v)dudv \nonumber \\
-  F_X(x) &=& P(X \leq x) \nonumber \\
-  &=& \int_{u=-\infty}^{x}\int_{v=-\infty}^{\infty}f(u, v)dudv \nonumber
+	F_X(x) &=& P(X \leq x) \nonumber \\
+	&=& \int_{u=-\infty}^{x}\int_{v=-\infty}^{\infty}f(u, v)dudv \nonumber
 \end{eqnarray}
+Thus,
+\begin{eqnarray}
+	f_X(x) &=& \dfrac{d}{dx}F_X(x) \nonumber \\
+	&=& \int_{y=-\infty}^{\infty} f(x, y) \label{eq:jointpdfdowngrade}
+\end{eqnarray}
+which is the integration of \eqref{eq:jointpdf} w.r.t. all other variables from $-\infty$ to $\infty$. 
+
+Equation \eqref{eq:jointpdfdowngrade} can be interpreted as follows. If $(X_i, Y_i)$ samples are generated from $f(x, y)$ in \eqref{eq:jointpdf}, and we only look at the $X_i$ of these samples, they should follow \eqref{eq:jointpdfdowngrade}.
 
 \subsection{Conditional Distributions}
 
@@ -90,9 +104,14 @@ If $X$ and $Y$ are independent variables, $f(x,y) = f_X(x)f_Y(y)$. In this case,
 \end{eqnarray}
 which implies that the information of $Y=y$ does not affect our understanding of $X$, just as if the information is absent.
 
+Equation \eqref{eq:conditionalpdf1} can be recurrently re-written as
+\begin{eqnarray}
+f_{X|Y}(x|y) &=& \dfrac{f_{Y|X}(y|x)f_X(x)}{f_Y(y)} \label{eq:conditionalpdf1a}
+\end{eqnarray}
+
 \subsection{Parameter Estimation with Conditional Distributions}
 
-Equation \eqref{eq:conditionalpdf1} is widely used in parameter estimation. Let $\theta$ be the parameter to be estimated, and $x$ the measurement that reflects $\theta$ via measurement model $f(\theta, x)$ which is given in the form of joint PDF. Both $\theta$ and $x$ can be vectors.
+Equations \eqref{eq:conditionalpdf1} and \eqref{eq:conditionalpdf1a} are widely used in parameter estimation. Let $\theta$ be the parameter to be estimated, and $x$ the measurement that reflects $\theta$ via measurement model $f(\theta, x)$ which is given in the form of joint PDF. Both $\theta$ and $x$ can be vectors.
 
 Without measurement $x$, the estimate of $\theta$ is given by
 \begin{eqnarray}
@@ -100,7 +119,7 @@ Without measurement $x$, the estimate of $\theta$ is given by
 \end{eqnarray}
 where $f_\theta(\theta)$ is obtained using \eqref{eq:jointpdfdowngrade}. This is known as the \mync{priori estimation} of $\theta$. 
 
-Given measurement $x$, the \mync{posteriori estimation} of $\theta$ can be obtained as follows. From \eqref{eq:conditionalpdf1},
+Given measurement $x$, the \mync{posteriori estimation} of $\theta$ can be obtained as follows. From \eqref{eq:conditionalpdf1a},
 \begin{eqnarray}
   f_{\theta|X}(\theta|x) &=& \dfrac{f_{X|\theta}(x|\theta)f_\theta(\theta)}{f_X(x)} \label{eq:conditionalpdf2} \\
   \hat{\theta} &=& \int_{-\infty}^{\infty} f_{\theta|X}(\theta|x) d\theta \label{eq:posterioriestimation}
@@ -136,7 +155,7 @@ MLE, MAP and \eqref{eq:posterioriestimation} have their advantages and disadvant
 
 Let $X$ be a random variable with PDF $f_X(x)$. Let $U$ be another random variable which is a function of $X$, $U=\phi(X)$. The PDF of $U$ can be calculated from $f_X$ and $\phi$. Details are given below.
 
-For simplicity, assume that $U=\phi(X)$ is a injective function (one-to-one function), and $X=\phi^{-1}(U)=\psi(U)$. In that case, the PDF of $U$, $g(u)$, can be obtained as follows.
+For simplicity, assume that $U=\phi(X)$ is an injective function (one-to-one function), and $X=\phi^{-1}(U)=\psi(U)$. In that case, the PDF of $U$, $g(u)$, can be obtained as follows.
 \begin{eqnarray}
   g(u) &=& \left|\psi\textprime(u)\right|f\left(\psi(u)\right) \nonumber
 \end{eqnarray}
@@ -199,7 +218,7 @@ For continuous random variables, from \eqref{eq:varderived} the variance is
 \begin{eqnarray}
 	\textup{Var}(X) &=& \int_{-\infty}^{\infty} (x-\textup{E}(X))^2f(x)dx \nonumber
 \end{eqnarray}
-Think of $X$ as an estimation of a parameter $\theta$. If the estimation is non biased, $E(X)=\theta$. Therefore, from the above equation, for a non-biased estimation, the variance of the estimates (left) equals to the MSE of the estimate (right) with sample numbers approaching infinity.
+Think of $X$ as an estimation of a parameter $\theta$. If the estimation is non-biased, $E(X)=\theta$, and the variance of the estimates (left) equals to the MSE of the estimate (right) with sample numbers approaching infinity.
 
 Some features of variance calculation are given below.
 \begin{eqnarray}
@@ -376,7 +395,7 @@ subject to $0\leq p \leq 1$, $0\leq q \leq 1$ and $p+q=1$. Each test is also cal
 
 The expectation, variance, skewness and excess kurtosis of the distribution are $p$, $pq$, $\dfrac{q-p}{\sqrt{pq}}$ and $\dfrac{1-6pq}{pq}$, respectively.
 
-Run Bernoulli trails repeatedly. Each bernoulli trail has a probability of $p$ to take value $1$, and $q=1-p$ to take value $0$. The test is carried out $n$ times. The number of the tests with outcome $1$ is a discrete random variable $0\leq X \leq n$. In this case, $X$ follows \mync{binomial distribution}, whose probability function is given by
+Run Bernoulli trails repeatedly. Each Bernoulli trail has a probability of $p$ to take value $1$, and $q=1-p$ to take value $0$. The test is carried out $n$ times. The number of the tests with outcome $1$ is a discrete random variable $0\leq X \leq n$. In this case, $X$ follows \mync{binomial distribution}, whose probability function is given by
 \begin{eqnarray}
   f(x) &=& P(X=x) \nonumber \\
   &=& \left(\begin{array}{c}
@@ -386,7 +405,7 @@ Run Bernoulli trails repeatedly. Each bernoulli trail has a probability of $p$ t
   &=& \dfrac{n!}{x!(n-x)!}p^x(1-p)^{n-x}
 \end{eqnarray}
 
-Bernoulli distribution can be taken as a special case of binomial distribution with $n=1$, $x=1$. The expectation, variance, skewness and excess kurtosis of the distribution are $np$, $npq$, $\dfrac{q-p}{\sqrt{npq}}$ and $\dfrac{1-6pq}{npq}$, respectively.
+Bernoulli distribution can be taken as a special case of binomial distribution with $n=1$, $x=1$. The expectation, variance, skewness and excess kurtosis of the binomial distribution are $np$, $npq$, $\dfrac{q-p}{\sqrt{npq}}$ and $\dfrac{1-6pq}{npq}$, respectively.
 
 If $n$ is large, Binomial distribution becomes a verification of CLT on Bernoulli trail. Indeed, when $n$ is large, binomial distribution approaches normal distribution.
 
@@ -396,7 +415,7 @@ Binomial distribution can be extended to \mync{multinomial distribution}, where 
   \textup{s.t.} && \sum x_i = n \nonumber
 \end{eqnarray}
 
-Do distinguish binomial distribution with \mync{hypergeometric distribution}. Binomial distribution is used to model ``sampling with replacement'' process: each Bernoulli trail backing up the binomial distribution is i.i.d. and one's result is not affected by its previous trails. Consider picking up a marbles from a bag containing mixture of red and blue marbles whose numbers are given by $r$ and $b$ respectively. Repeat the test $n$ times. After each test, put the marble back to the bag. The number of blue marbles collected is a random variable $X$ that follows binomial distribution
+Binomial distribution is different from \mync{hypergeometric distribution}. Binomial distribution is used to model ``sampling with replacement'' process: each Bernoulli trail backing up the binomial distribution is i.i.d. and one's result is not affected by its previous trails. Consider picking up a marbles from a bag containing mixture of red and blue marbles whose numbers are given by $r$ and $b$ respectively. Repeat the test $n$ times. After each test, put the marble back to the bag. The number of blue marbles collected is a random variable $X$ that follows binomial distribution
 \begin{eqnarray}
 f(x) &=& \left(\begin{array}{c}
                         n \\
@@ -423,7 +442,7 @@ When $b$, $r$ are far larger than $n$, the hypergeometric distribution can be ap
 
 \subsection{Normal Distribution}
 
-\mync{Normal distribution}, also known as \mync{Gaussian distribution}, is a continuous distribution. It is one of the most widely used assumption of random noise. One of the explanations is given as follows. Many measurements such as sensor readings are in fact aggregated values. For example, consider a sensor whose reading refreshes at $1Hz$. Behind the screen, it might be sampling the signal at $1000Hz$, and the reading is the average of every $1000$ samples. According to CLT, the reading shall follow normal distribution.
+\mync{Normal distribution}, also known as \mync{Gaussian distribution}, is a continuous distribution. It is one of the most widely used distributions to model random noise. One of the explanations is given as follows. Many measurements such as sensor readings are in fact aggregated values. For example, consider a sensor whose reading refreshes at $1Hz$. Behind the screen, it might be sampling the signal at $1000Hz$, and the reading is the average of every $1000$ samples. According to CLT, the reading shall follow normal distribution.
 
 We will discuss single normal distribution first, followed by joint multivariate normal distribution.
 
