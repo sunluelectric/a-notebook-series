@@ -1,0 +1,247 @@
+\chapter{Large Language Model (Part 2: Practice)}
+
+This chapter studies the selection, deployment and use of LLMs in production environment for different tasks.
+
+\section{Quick Local Deployment}
+
+Ollama and Langflow are introduced. Ollama allows fast deployment of an open-source LLM on a PC, while Langflow is a low-code tool that allows a developer to easily integrate their applications with both open-source and commercialized LLMs.
+
+\subsection{LLM Deployment with Ollama}
+
+Nowadays it is convenient to quickly deploy an open-source LLM on a PC with necessary hardware. One of the simplest way of doing that is to leverage \mync{Ollama}, an open-source tool that allows the deployment of commonly seen open-source LLMs such as LLaMA, DeepSeek, etc., on a local machine computer. During the installation of Ollama, it detects and configures the GPU of the machine and configure it accordingly, saving the user's time.
+
+Once Ollama is installed, use
+\begin{lstlisting}
+ollama run <model name>
+\end{lstlisting}
+to download and start a model. A screenshot is given in Fig. \ref{fig:ollama_llama32} as an example that runs LLaMA 3.2 with Ollama on a PC using the above command.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=\textwidth]{./chapters/part-7/figures/ollama_llama32.png}
+	\caption{An example of running Ollama with LLaMA 3.2.}
+	\label{fig:ollama_llama32}
+\end{figure}
+
+The deployed LLM does not come with any fancy graphical interface, but instead with the basic CLI. The user has the freedom to further deploy interfaces for applications on top of the basic interface. 
+
+A list of Ollama supported LLMs are given in \cite{ollama2025library}. As of this writing, famous ones include \verb|deepseek-r1| (1.5B to 671B), \verb|llama3.3| (70B), \verb|llama3.2| (1B, 3B), \verb|gemma3| (1B to 27B), and a lot more. 
+
+\subsection{LLM Application Integration with Langflow}
+
+TBA
+
+\section{Python Setup for LLM}
+
+Most of today's LLM development and deployment are done using Python. In this section, a Python environment is setup for that. Anaconda, an open-source Python and R languages distribution, is used to setup the environment.
+
+\subsection{Environment Creation and Packages Installation}
+
+It is recommended to collect all the necessary libraries in a file, such as \texttt{environment.yml}, and use
+\begin{lstlisting}
+conda env create -f environment.yml --name <environment name>
+\end{lstlisting}
+to create an environment and install the packages all together. Anaconda shall figure out the dependencies and compatibility of the packages, and have everything installed correctly.
+
+An example of such YAML file is given below. This example is taken from \cite{eddonner2025llm}.
+\begin{lstlisting}
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - python-dotenv
+  - requests
+  - numpy
+  - pandas
+  - scipy
+  - pytorch
+  - jupyterlab
+  - ipywidgets
+  - matplotlib
+  - scikit-learn
+  - chromadb
+  - jupyter-dash
+  - sentencepiece
+  - pyarrow
+  - faiss-cpu
+  - pip:
+    - beautifulsoup4
+    - plotly
+    - bitsandbytes
+    - transformers
+    - sentence-transformers
+    - datasets
+    - accelerate
+    - openai
+    - anthropic
+    - google-generativeai
+    - gradio
+    - gensim
+    - modal
+    - ollama
+    - psutil
+    - setuptools
+    - speedtest-cli
+    - langchain
+    - langchain-core
+    - langchain-text-splitters
+    - langchain-openai
+    - langchain-chroma
+    - langchain-community
+    - faiss-cpu
+    - feedparser
+    - twilio
+    - pydub
+\end{lstlisting}
+
+Among the libraries shown above, some are commonly used across all Python and machine learning projects such as \verb|numpy|, \verb|pandas| and \verb|scikit-learn|, while others are LLM specific packages such as \verb|transformer|, \verb|ollama| and \verb|langchain|.
+
+
+\begin{shortbox}
+\Boxhead{Environment Solutions of Anaconda Versus PyPA}
+
+Anaconda is a Python distribution developed and maintained by Anaconda Inc. It provides \verb|conda|, a useful tool, to manage packages and environments. Anaconda provides reliable services to professional data scientists, cooperations as well as the free-of-charge services to the community. Python also has its native packages and environments management tools known as \verb|pip| and \verb|venv| developed and maintained by \myabb{Python Packaging Authority}{PyPA}.
+
+Both \verb|conda| and \verb|pip| allow users to create an environment and install packages from a file. The commands are
+\begin{lstlisting}
+conda env create -f <filename> --name <environment name>
+\end{lstlisting}
+and
+\begin{lstlisting}
+python -m venv <environment name>
+pip install -r <filename>
+\end{lstlisting}
+respectively.
+
+It is of the user's choice whether to use Anaconda (or its light version, Miniconda) or Pip to manage the packages. As long as this notebook goes, both of them should fulfill the needs. As of this writing, it is recommended that data scientists, researchers and lectures shall use Anaconda (non-commercial) and Miniconda (commercial), while software engineers, Pip.
+\end{shortbox}
+
+\subsection{OpenAI API Powered LLM}
+
+If the user has decided to use a commercialized LLM model via its API key, he needs to register an account with the LLM provider, such as OpenAI, and create a new API key, and added it to the project as an environmental variable. Notice that the use of the API key often introduces costs to be paid to the LLM provider. The details about the registration of the account and the creation of the API key are not included in this notebook.
+
+This section gives a brief demo of how to connect to OpenAI using its API. The model to be used is \verb|gpt-4o-mini|. It is assumed that API key has been created and stored under \verb|.env| file in the project folder as follows.
+\begin{lstlisting}
+OPENAI_API_KEY=sk-proj-<content>
+\end{lstlisting}
+
+The following code demonstrates the connection of the local Python plant to the OpenAI LLM model. The ``completions'' API is used, which asks the LLM to complete a conversation.
+\begin{lstlisting}
+import os
+from openai import OpenAI
+
+api_key = os.getenv('OPENAI_API_KEY')
+
+openai = OpenAI()
+
+message = "Hello, GPT! I am connecting you via your API. Let's see how it works."
+response = openai.chat.completions.create(model="gpt-4o-mini", messages=[{"role":"user", "content":message}])
+print(response.choices[0].message.content)
+\end{lstlisting}
+
+A response similar to the following can be obtained.
+\begin{lstlisting}
+Hello! It's great to hear that you're connecting via the API. How can I assist you today?
+\end{lstlisting}
+
+A typical \verb|messages| that is passed to OpenAI often looks like the following
+\begin{lstlisting}
+messages = [
+    {"role": "system", "content": "<system prompt>"},
+    {"role": "user", "content": "<user prompt>"}
+]
+\end{lstlisting}
+where \verb|<system prompt>| tells LLM the basic setup, such as what role the LLM shall play and what it should do, whereas \verb|user prompt| gives the user specific data that the LLM needs to process.
+
+\subsection{Open-Source Model Powered LLM}
+
+In earlier sections it has been introduced that Ollama can be used to conveniently deploy an open-source LLM on the local machine, and it also provides a CLI where the user can chat with the LLM. It is possible to connect a Python program to that LLM using the interface that Ollama provides.
+
+Make sure that the model is running in the backend. Start the model and check the model status using \verb|ollma run| and \verb|ollama ps| respectively.
+
+The python program can connect to the model either via HTTP calls, or with Python \verb|ollama| package. For the sake of convenience, only the latter is introduced.
+
+\begin{lstlisting}
+import ollama
+
+MODEL = "llama3.2"
+messages = [
+    {"role": "user", "content": "Describe some of the business applications of Generative AI"}
+]
+
+response = ollama.chat(model=MODEL, messages=messages)
+print(response['message']['content'])
+\end{lstlisting}
+
+OpenAI's Python package also provides tools to connect to local LLMs like what has been deployed via Ollama.
+
+\begin{lstlisting}
+from openai import OpenAI
+ollama_via_openai = OpenAI(base_url='http://localhost:11434/v1', api_key='ollama')
+
+response = ollama_via_openai.chat.completions.create(
+    model=MODEL,
+    messages=messages
+)
+
+print(response.choices[0].message.content)
+\end{lstlisting}
+
+\section{Commonly Seen Frontier LLM Models}
+
+This section introduces commonly seen frontier LLM models as of this writing. Some of the most famous ones are listed below.
+
+\begin{itemize}
+  \item Open-source
+  \begin{itemize}
+    \item LLaMA, and its variations (Meta)
+    \item Gemma (Google)
+    \item Qwen (Alibaba Cloud)
+    \item Deepseek-R1 (Deepseek)
+    \item Phi (Microsoft)
+  \end{itemize}
+  \item Closed-source
+  \begin{itemize}
+    \item GPT (OpenAI)
+    \item Gemini (Google)
+    \item Claude (Anthropic)
+  \end{itemize}
+\end{itemize}
+
+There are a couple of ways to use these models. Examples are given below.
+
+Use LLM with companies. Companies such as OpenAI, Google, Microsoft and Deepseek provide web-based chatbot interface where a user can directly chat with the model. Many of these companies also provide APIs that allow user program to connect to models running on the cloud.
+
+Use LLM with cloud service providers. Nowadays many cloud providers including AWS, Microsoft Azure, Google Cloud Service, etc., that allow the user to deploy LLM models on their servers. For example, AWS provides Amazon Bedrock which is its frontier model that can be easily deployed on AWS. Similar applies to other major cloud service providers.
+
+Use LLM on premises. Users can train their own models, or download the weights of existing models and deploy them locally. Many open-source models are downloadable from websites such as Hugging Face. Tools such as Ollama can help with quickly deployment of these models locally.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

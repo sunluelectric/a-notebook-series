@@ -1,6 +1,6 @@
 \chapter{Basic Statistics} \label{ch:statisticsandsampling}
 
-Statistics is widely used in science and engineering. Broadly speaking, any attempt to estimate an unknown property of a system using direct or indirect measurements can be considered an application of statistics. Due to factors such as measurement errors and limited sample sizes, we cannot determine the exact value of the unknown property. Instead, statistics provides methodologies for efficiently estimating the most probable value of the unknown, given the available data and its limitations. It also offers tools to quantify the estimation error and the confidence level of the result.
+Statistics is widely used in science and engineering. Broadly speaking, any attempt to estimate an unknown property of a system using direct or indirect measurements can be considered as an application of statistics. Due to factors such as measurement errors and limited sample sizes, we cannot determine the exact value of the unknown property. Instead, statistics provides methodologies for efficiently estimating the most probable value of the unknown, given the available data and its limitations. It also offers tools to quantify the estimation error and the confidence level of the result.
 
 This chapter introduces various sampling methods and demonstrates how to use samples to solve basic statistical problems.
 
@@ -10,20 +10,22 @@ There are at least two common types of problems in science and engineering where
 
 \begin{enumerate}
 	\item There is a property of the system whose true value exists but is unknown. We have either direct or indirect measurements of this value, subject to measurement noise. The goal is to estimate the true value from the measurements, while minimizing the effect of noise.
-	\item There is a large population of items whose properties follow some underlying distribution. It is impractical to examine every item due to the size of the population. Hence, we collect some samples and record their properties. The goal is to estimate the distribution of the entire population using only the samples.
+
+Example: Consider a power system with many buses, each having a voltage phasor. The objective is to estimate the voltage phasors using various sensor measurements deployed across the system.
+
+	\item There is a large population of items whose properties follow an unknown underlying distribution. It is impractical to examine every item due to the size of the population. Hence, we collect some samples and record their properties. The goal is to estimate the distribution of the entire population using only the samples.
+
+Example: Suppose a factory produces a large number of light bulbs. The objective is to estimate the average lifespan of the bulbs by randomly selecting a few and testing their durability.
+
 \end{enumerate}
 
-Examples are given below.
+Many introductory statistics textbooks primarily focus on problems of type 2. However, statistics is just as essential in problems of type 1 which are common in control systems and signal processing. Although these problems are not always labeled as ``statistics'' in traditional textbooks, they rely heavily on statistical reasoning and tools. 
 
-Type 1. Consider a power system with many buses, each having a voltage phasor. The objective is to estimate the voltage phasors using various sensor measurements deployed across the system.
-
-Type 2. Suppose a factory produces a large number of light bulbs. The objective is to estimate the average lifespan of the bulbs by randomly selecting a few and testing their durability.
-
-Many introductory statistics textbooks primarily focus on problems of type 2. However, statistics is just as essential in problems of type 1 which are common in control systems and signal processing. Although these problems are not always labeled as ``statistics'' in traditional textbooks, they rely heavily on statistical reasoning and tools. Following that convention, the majority of this notebook focuses on problems of type 2. Type 1 problems are discussed elsewhere in notebooks related to system identification.
+Following that convention, the majority of this notebook focuses on problems of type 2. Type 1 problems are discussed elsewhere in notebooks related to system identification.
 
 \section{Sampling}
 
-When selecting samples from the population, it is critical to ensure that the selection is done randomly, and all elements in the population have a equal probability to be selected. 
+When selecting samples from the population, it is critical to ensure that the selection is done randomly, and all elements in the population have an equal probability to be selected. 
 
 Depending on whether an element can be selected multiple times, we have
 \begin{itemize}
@@ -32,9 +34,9 @@ Depending on whether an element can be selected multiple times, we have
 \end{itemize}
 Sampling with replacement is applicable in many engineering problems, such as measuring a physical property of a system. Sampling without replacement is applicable in many social science problems, such as conducting a survey to estimate the average income of the population. They do have some subtle differences and they are explained using the following example.
 
-Let a set of $N$ random variables be generated from a Gaussian distribution as the population. Sample the population $M$ times using sampling with/without replacement. Calculate the sampled mean and compare it with the mean of the entire population.
+Let a set of $N$ random variables be the population. Sample the population $M$ times using sampling with/without replacement. Calculate the mean and variance of the samples, and compare them with their counterparties of the population.
 
-Let $N=100$ and $M=500$. Figures \ref{ch:sampling:fig:sample-wr-n100} and \ref{ch:sampling:fig:sample-nwr-n100} gives the cumulative mean and variance of sampling with and without replacement, respectively. The mean and variance are given by red and blue curves, respectively. The statistics obtained from the cumulative samples and from the population are given by the solid and dashed curves, respectively. Notice that in Fig. \ref{ch:sampling:fig:sample-nwr-n100}, after number of samples exceeding $100$, the entire population has been sampled, and thus the sampling stops. This explains why its mean and variance stop fluctuating and converge to the population mean and variance respectively.
+Let $N=100$ and $M=500$. Figures \ref{ch:sampling:fig:sample-wr-n100} and \ref{ch:sampling:fig:sample-nwr-n100} give the cumulative mean and variance of sampling with and without replacement, respectively. The mean and variance are given by red and blue curves, respectively. The statistics obtained from the cumulative samples and from the population are given by the solid and dashed curves, respectively. Notice that in Fig. \ref{ch:sampling:fig:sample-nwr-n100}, after number of samples exceeding $100$, the entire population has been sampled, and thus the sampling stops. This explains why its mean and variance stop fluctuating and converge to the population mean and variance respectively.
 
 \begin{figure}[!htb]
 	\centering
@@ -111,36 +113,31 @@ Imagine a scenario where the population mean $\mu$ is known in advance. In that 
 \begin{eqnarray}
 	{S^*}^2 &=& \dfrac{1}{m}\sum_{i=1}^{m}\left(X_i - \mu\right)^2 \nonumber
 \end{eqnarray}
-This estimator would also be unbiased for $\sigma^2$, and does not require the $m-1$ correction, since $\mu$ is not estimated from the data.
+This estimator would also be unbiased for $\sigma^2$, and does not require the $m-1$ correction.
 
 \subsection{Other Moments}
 
-Recall from Section \ref{sec:moments} that the mean and the variance are the $1$st order moment and the $2$nd order central moment respectively. The mean and variance obtained from the samples are closely related their correspondents in the population. It is natural to expand the idea to other moments. This is known as the \textit{method of moments} in population estimation.
+Recall from Section \ref{sec:moments} that the mean and the variance are the $1$st order moment and the $2$nd order central moment respectively. The mean and variance obtained from the samples are closely related their correspondents in the population. It is natural to expand the idea to other moments. This is known as the \mync{method of moments} in population estimation.
 
 Commonly used moments and central of moments are $4$th order or lower. Notice that bias might be introduced when using central of moments and the central is obtained from the samples, just like illustrated earlier for the sample variance.
 
 \section{Parameter Estimation} \label{sec:mlemap}
 
-Assume that the distribution of the population follows PDF $f(x;\theta)$ where $\theta$ is the collection of parameters in the distribution. For example, if $f(x)$ follows normal distribution, $\theta=[\mu, \sigma^2]$ is the collection of the mean and variance of the normal distribution.  In the case where the population is discrete and finite, it is assumed that the population are populated from $f(x)$
+Assume that the distribution of the population follows PDF $f(x;\theta)$ where $\theta$ is the collection of parameters in the distribution. For example, if $f(x)$ follows normal distribution, $\theta=[\mu, \sigma^2]$ is the collection of the mean and variance of the normal distribution.  In the case where the population is discrete and finite, it is assumed that the population are populated from $f(x)$.
 
 The objective is to estimate $\theta$ given samples $X_1, \ldots, X_m$.
 
 \subsection{Unbiased Estimation}
 
-Recall that we use samples to estimate the statistics parameters of the population. When distributions are used to model the population, the samples are used to estimate the parameters in the distributions. We have been taken it as granted that:
-\begin{itemize}
-	\item The estimation can have error;
-	\item The expectation of the estimation error should be zero.
-\end{itemize}
-The above implies that if we repeat the estimation many times (each time using new samples) and aggregate the results, the positive and negative error would cancel out, eventually giving us the estimates very close to the true parameters values. So long as we have enough samples, the error can be reduced to be as small as we need. When the sample size approaches infinity, the estimation error should approach zero.
+The samples are used to estimate the statistics properties of the population. Estimation error is almost always unavoidable due to the limited size of the samples. However, we would wish that with appropriate estimation method, the estimates are unbiased from the true value of the population, i.e., the expectation of the estimates shall equal to the corresponding values of the population. In that case, the estimation is known as \mync{unbiased estimation}. 
 
-When the expectation of the estimation error is zero, the estimation is said to be \textit{unbiased}. This is often considered a good feature of the estimation. However, this is not always the case. It is difficult to make the estimation unbiased in reality. For those estimators claimed to be unbiased, rigorous mathematical proof is often required.
+Examples of unbiased estimation include \eqref{eq:sample_mean} and \eqref{eq:sample_variance} for the estimation of the mean and variance of the population respectively, and the proof has been given in the earlier section.
 
-There are several factors that may contribute to the bias:
+Unbiased estimation is often considered a good feature of the estimation. However, it is difficult to make the estimation unbiased in reality. For those estimators claimed to be unbiased, rigorous mathematical proof is often required. There are several factors that may contribute to the bias:
 \begin{itemize}
 	\item Samples are not selected randomly. This is often not as much of a concern in science and engineering as compared with social science.
 	\item Measurement noise is skewed. We often assume normal distribution for the measurement noise of sensors, which is non-skewed. However, normal distribution is only an approximation to the reality. The actual measurement noise may be skewed and not zero-mean.
-	\item The estimator is biased. Depending on the configurations of an estimator such as the noise assumption in the MLE, the estimator itself can be biased.
+	\item The estimator is biased.
 \end{itemize}
 
 \subsection{Maximum Likelihood Estimation}
@@ -157,7 +154,7 @@ and the solution is given by
 \begin{eqnarray}
 	\hat{\theta} &=& \arg\min_{x} J \nonumber
 \end{eqnarray}
-which can be solved using commonly used optimization algorithms such as Newton Raphson Method.
+which can be solved using commonly used optimization algorithms such as Newton-Raphson Method.
 
 \subsection{Maximum a Posteriori Estimation}
 
@@ -191,7 +188,7 @@ With that been said, there are benchmarks to evaluate the performance of an esti
 
 \subsection{Parameter Estimation Benchmarks}
 
-Consider unbiased estimation. The magnitude of the estimation error can be evaluated using MSE and RMSE as defined below. 
+Consider unbiased estimation. The magnitude of the estimation error can be evaluated using \mync{Mean Squared Error}[MSE] and \mync{Root Mean Squared Error}[RMSE] as defined below. 
 
 Let $\theta$ be a parameter and $\hat{\theta}_i$ its estimation in the $i$th Monte-Carlo run. Let $n$ be the total number of Monte-Carlo runs. Define MSE and RMSE over the $n$ Monte-Carlo runs as follows.
 \begin{eqnarray}
@@ -202,7 +199,7 @@ Notice that in practice, MSE and RMSE are meaningful only when $n$ is large enou
 \begin{eqnarray}
 	\textup{Var}(\hat{\theta}) = E\left[\left(\hat{\theta}-E\left[\hat{\theta}\right]\right)^2\right] = E\left[\left(\hat{\theta}-\theta\right)^2\right] = \textup{MSE} \nonumber
 \end{eqnarray}
-for unbiased estimator because $E\left[\hat{\theta}\right]=\theta$, and the MSE approaches the variance of the estimate. From this point of view, we can use the variance of the estimate, $\textup{Var}(\hat{\theta})$, interchangeably with MSE as an evaluation of the performance of the estimation. In most literatures, $\textup{Var}(\hat{\theta})$ is used, implying that the result is theoretical and derived under the assumption of ``infinite runs''.
+for unbiased estimation because $E\left[\hat{\theta}\right]=\theta$, and the MSE approaches the variance of the estimate. From this point of view, we can use the variance of the estimate, $\textup{Var}(\hat{\theta})$, interchangeably with MSE as an evaluation of the performance of the estimation. In most literatures, $\textup{Var}(\hat{\theta})$ is used, implying that the result is theoretical and derived under the assumption of ``infinite runs''.
 
 The smaller $\textup{Var}(\hat{\theta})$, the more precise the estimation. There is a limitation to how small $\textup{Var}(\hat{\theta})$ can be regardless of the design of the estimator. This is intuitive because there is only so much information contained in the samples, given limited sample size and measurement error. So long as the estimation is done using those samples, its precision is limited. 
 

@@ -6,14 +6,14 @@ The definition of random variable has been introduced in the previous chapter. T
 
 A random variable may be discrete or continuous depending on the sample space of the variable.
 
-\subsection{Discrete Random Variables}
+\subsection{Discrete Random Variable}
 
 If a random variable $X$ takes only discrete values $x_1, x_2, ...$, it is called a \mync{discrete random variable}.
 The probability of $X$ taking a particular value $x$ is denoted by $P(X=x)$ or simply $f(x)=P(X)$ if no ambiguity. In this case, $P(X=x)$ and $f(x)$ are the probability function (also known as probability mass function) of $X$.
 
 Furthermore, define $P(X\leq x)$ or $F(x)$ as the \mync{cumulative distribution function} of $x$. It is easy to prove that $F(x)$ is nondecreasing, and $\lim_{x\rightarrow -\infty}F(x)=0$, $\lim_{x\rightarrow \infty}F(x)=1$. Also, $F(x)$ ``jumps'' at each $P(X=x_k)>0$ and it is continuous from the right.
 
-\subsection{Continuous Random Variables}
+\subsection{Continuous Random Variable}
 
 A random variable $X$ may also take continuous values in many applications. For example, let $X$ denote the time consumption to finish a task, in which case $X$ is a random variable whose value can be any positive number.
 
@@ -36,7 +36,7 @@ Notice that $f(x)$ itself is not probability. It is $f(x)dx$ accumulating in ran
 
 In science and engineering problems, continuous random variables are more common than discrete random variables. In engineering, discrete random variables can sometimes be described by impulse PDF.
 
-\section{Joint Distributions}
+\section{Joint Distribution}
 
 \mync{joint distribution} describes the distribution of multiple random variables combination. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. 
 
@@ -81,7 +81,7 @@ which is the integration of \eqref{eq:jointpdf} w.r.t. all other variables from 
 
 Equation \eqref{eq:jointpdfdowngrade} can be interpreted as follows. If $(X_i, Y_i)$ samples are generated from $f(x, y)$ in \eqref{eq:jointpdf}, and we only look at the $X_i$ of these samples, they should follow \eqref{eq:jointpdfdowngrade}.
 
-\subsection{Conditional Distributions}
+\subsection{Conditional Distribution}
 
 Equation \eqref{eq:jointpdfdowngrade} gives the distribution of $X$ regardless of the value of its corresponding $Y$. Conditional distribution, on the other hand, tries to find the distribution of $X$ when $Y$ is measured. For example, in \eqref{eq:jointpdf}, calculate $f_{X|Y}(x |Y=y)$, i.e., the PDF of $X$ given $Y=y$. In many literatures, $f_{X|Y}(x |Y=y)$ is denoted by $f_{X|Y}(x|y)$ for simplicity.
 
@@ -109,7 +109,7 @@ Equation \eqref{eq:conditionalpdf1} can be recurrently re-written as
 f_{X|Y}(x|y) &=& \dfrac{f_{Y|X}(y|x)f_X(x)}{f_Y(y)} \label{eq:conditionalpdf1a}
 \end{eqnarray}
 
-\subsection{Parameter Estimation with Conditional Distributions}
+\subsection{Parameter Estimation with Conditional Distribution}
 
 Equations \eqref{eq:conditionalpdf1} and \eqref{eq:conditionalpdf1a} are widely used in parameter estimation. Let $\theta$ be the parameter to be estimated, and $x$ the measurement that reflects $\theta$ via measurement model $f(\theta, x)$ which is given in the form of joint PDF. Both $\theta$ and $x$ can be vectors.
 
@@ -151,7 +151,7 @@ MLE, MAP and \eqref{eq:posterioriestimation} have their advantages and disadvant
 
 \end{shortbox}
 
-\section{Distributions of Derived Variables}
+\section{Distribution of Derived Variable}
 
 Let $X$ be a random variable with PDF $f_X(x)$. Let $U$ be another random variable which is a function of $X$, $U=\phi(X)$. The PDF of $U$ can be calculated from $f_X$ and $\phi$. Details are given below.
 
@@ -175,7 +175,7 @@ In the special case where $X$ and $Y$ are independent, $f(x, y) = f_X(x)f_Y(y)$,
 \end{eqnarray}
 where $*$ denotes the convolution operator.
 
-\section{Measures of Distributions}
+\section{Measure of Distribution}
 
 Given the probability function of a discrete random variable or the PDF of a continuous random variable, a lot of insights can be extracted. Commonly seen measures of a random variable are introduced in this section. Usually, they can be calculated from their associated probability functions or PDFs.
 
@@ -218,7 +218,6 @@ For continuous random variables, from \eqref{eq:varderived} the variance is
 \begin{eqnarray}
 	\textup{Var}(X) &=& \int_{-\infty}^{\infty} (x-\textup{E}(X))^2f(x)dx \nonumber
 \end{eqnarray}
-Think of $X$ as an estimation of a parameter $\theta$. If the estimation is non-biased, $E(X)=\theta$, and the variance of the estimates (left) equals to the MSE of the estimate (right) with sample numbers approaching infinity.
 
 Some features of variance calculation are given below.
 \begin{eqnarray}
@@ -235,7 +234,7 @@ Mean and standard deviation can be used to standardize a random variable as foll
 \end{eqnarray}
 where $\mu$, $\sigma$ are the mean and standard deviation of random variable $X$ respectively. The standardized random variable, $X^*$, has a mean of $0$ and standard deviation of $1$.
 
-\subsection{Moments} \label{sec:moments}
+\subsection{Moment} \label{sec:moments}
 
 In mathematics, the \mync{$r$-th moment} of a continuous function $f(x)$ about $c$ is defined as follows.
 \begin{eqnarray}
@@ -366,7 +365,7 @@ In mathematical expression, let $X$ be a random variable which represents the ou
 
 \subsection{Central Limit Theorem}
 
-\mync{Central Limit Theorem}[CLT] states the following observation. For independent and identically distributed (i.i.d) random variables not necessarily following normal distribution, the empirical mean of the samples taken from these distributions tends towards normal distribution when the number of samples is large.
+\mync{Central Limit Theorem}[CLT] states the following observation. For \myabb{independent and identically distributed}{i.i.d.} random variables not necessarily following normal distribution, the empirical mean of the samples taken from these distributions tends towards normal distribution when the number of samples is large.
 
 Let $X$ be a random variable not necessarily following normal distribution, and it has mean and variance of $\mu$ and $\sigma^2<\infty$ respectively. Let $X_i$ be samples of the random variable. The empirical mean of the samples is calculated by
 \begin{eqnarray}
@@ -645,4 +644,4 @@ The PDF of the $F$-distribution is given by
 		0 & \textup{otherwise}
 	\end{array}\right. \nonumber
 \end{eqnarray}
-where $\nu_1$, $\nu_2$ are the shape parameters of the distribution.
+where $\nu_1$, $\nu_2$ are the shape parameters of the distribution. 
