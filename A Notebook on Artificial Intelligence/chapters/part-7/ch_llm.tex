@@ -1,32 +1,28 @@
 \chapter{Large Language Model (Part 1: Theory)}
 
-This chapter serves as an overview of large language model (LLM), a popular and successful natural language processing practice. 
+This chapter serves as an overview of \mync{large language model}[LLM], a popular and successful NLP practice. Not only is LLM able to process human languages, but also can it generate new contents based on human language written requirements. The introduction of multimodal LLM further allows LLM to understand and generate not just writings but also pictures and videos. The theory and technology behind LLM are briefly discussed.
 
-Detailed illustrations to the LLM development platforms such as Google Colab, programming languages and packages such as Pytorch Transformer, and existing solutions such as OpenAI GPT and LLaMA, are introduced in followed up chapters separately.
+Nowadays, it is possible for a regular user to leverage on commercialized models to develop his own applications. Given a powerful machine, a user can also deploy LLMs locally. Open-source LLMs are available so that the user does not need to train a model from scratch. The deployment of LLMs and the interaction with them are introduced in consecutive chapters. 
 
-The majority of this chapter comes from \cite{zhao2023survey}.
+\section{Introduction to LLM}
 
-\section{Introduction}
+This section reviews existing NLP methods and their limitations, and discusses the gap LLM bridges.
 
-Natural language processing models and methods have been introduced previously. A brief review is given in this section, mainly to address their limitations
+\subsection{Existing Technologies and Gaps}
 
-There have been variety of ways to model natural language. For example, consider the following sentence:
+There have been variety of ways to model natural languages. For example, consider the following sentence:
 \begin{center}
 	\textit{``I am thirsty. Please give me a bottle of \rule{1cm}{0.15mm}.''}
 \end{center}
 It is quite natural that a human would likely to put ``water'' or ``tea'' in the blank. This is obvious because human has a dictionary of words that he can choose in his mind, and he has been reinforced of learning ``a bottle of water'' expression in many occasions. In addition, it makes sense to a human that when someone is thirsty, he would look for water.
 
-The challenge using AI to realize the above is to build the dictionary in the machine and quantitatively analyze what word or phrase would make the most sense to be filled into the blank. For that, many models have been developed.
-
-\subsection{Language Models}
-
-The most popular language models have been evolving over time in the past decades since $1990$th.
+The challenge using AI on the above task is to build the ``dictionary'' in the machine and quantitatively analyze what word or phrase would make the most sense to be filled into the blank. Many models have been proposed to solve this problem, some of which have been evolving over time in the past decades since $1990$th.
 
 \vspace{0.1in}
 \noindent \textbf{Statistical Language Models}
 \vspace{0.1in}
 
-In the early days when AI and ANN were not popular, \textit{statistical language models (SLM)} have been the most popular tool to model natural language. SLM assumes that a sentence is a Markov process, and the last word depends on the context created by the most recent $n$ words. SLM with a fixed context length of $n$ is also called a $n$-gram language model.
+In the early days when AI and ANN were not popular, \mync{statistical language models}[SLM] have been the most popular tool to model natural languages. SLM assumes that a sentence is a Markov process, and the last word depends on the context created by the most recent $n$ words. SLM with a fixed context length of $n$ is also called an $n$-gram language model.
 
 Conventionally, the paring information from $n$ words to the next word is obtained from data corpus and stored in a table-like structure. When running the model, it looks up the table for the most probable next word based on the earlier $n$ words. Smoothing technologies are used to handle zeros, i.e., when the record is not found in the table.
 
@@ -36,9 +32,9 @@ An obvious issue of SLM is that the computation and storage of the model increas
 \noindent \textbf{Neural Language Models}
 \vspace{0.1in}
 
-With the introduction of ANN, in particular RNN, \textit{Neural Language Models (NLM)} become popular. RNN-based NLM builds the word prediction function conditioned on the aggregated context features abstracted and passed recurrently from current and previous input sequence.
+With the introduction of ANN, in particular RNN, \mync{Neural Language Models}[NLM] became popular. RNN-based NLM builds the word prediction function conditioned on the aggregated context features abstracted and passed recurrently from current and previous input sequence.
 
-RNN is not a perfect one-stop solution either. The training of RNN can be difficult due to vanishing and exploding gradient problem. This limits the depth that RNN can go. When handling long sequence of words, the performance of RNN drops significantly because it is weak at building long-term dependencies.
+RNN is not a perfect one-stop solution either. The training of RNN can be difficult due to vanishing and exploding gradient problems. This limits the depth that RNN can go. When handling long sequence of words, the performance of RNN drops significantly because it is weak at building long-term dependencies.
 
 \vspace{0.1in}
 \noindent \textbf{Pre-trained Language Models and Large Language Models}
@@ -46,13 +42,13 @@ RNN is not a perfect one-stop solution either. The training of RNN can be diffic
 
 As introduced in details in earlier chapters, attention mechanism has been proposed to tackle the long-term dependency problem of RNN. Transformer architecture, which relies purely on encoder, decoder and attention mechanism without using RNN is then proposed. It has been verified that transformer architecture is good at abstracting information from sequential data, in particular, natural language. With transformer, it becomes possible to build very deep neural networks and have it trained efficiently with big size data corpus.
 
-Language models based on different transformer-based architectures are often called pre-trained language models (PLM) and large language models (LLM). The main differences between PLM and LLM are the size of the model. The scaling of the model from hundreds of millions of parameters (PLM) to tens or hundreds of billions of parameters (LLM) introduces emergent abilities such as in-context learning to the model, significantly enhancing its capability and intelligence. As of this writing, it is not very clear how the these abilities suddenly emerge with the size of the model.
+Language models based on different transformer-based architectures are often called \mync{Pre-trained Language Models}[PLM] or \mync{Large Language Models}[LLM]. The main differences between PLM and LLM are the size of the model. The scaling of the model from hundreds of millions of parameters for PLMs to tens or hundreds of billions of parameters for LLMs introduces emergent abilities such as in-context learning to the model, significantly enhancing its capability and intelligence. As of this writing, it is not very clear how the these abilities suddenly emerge with the size of the model.
 
 \subsection{Scaling Law}
 
 The performance of an LLM, usually referring to its capability in accurately and correctly complete a task, is affect by many factors such as the model architecture, model size, training data set size and quality, etc. Though it is clear that with the scaling up of the system the performance is usually improved, there is no analytical expression that gives full insights about how these factors affect the performance quantitatively.
 
-Many scaling laws have been proposed trying to quantitatively describe the LLM performance as a function of its model size and other factors. Notice that these laws are obtained from empirical experiments and they may work only within a given range of model size.
+A \mync{scaling law} tries to quantitatively describe the performance of an LLM as a function of model size and other factors. Many scaling laws have been proposed, many of which obtained from empirical experiments and they may work only within a given range of model size.
 
 Just as an example, OpenAI proposed KM scaling law in 2020 that describes LLM cross entropy loss as a function of model size, training data set size and training computation as follows.
 \begin{eqnarray}
@@ -69,20 +65,20 @@ This scaling law works for models with $22M$ to $23B$ parameters. It is assumed 
 When the size of the model becomes large, usually to the order of at least a few billions parameters, they suddenly gain emergent abilities. Details are discussed as follows.
 
 \vspace{0.1in}
-\noindent \textbf{In-context Learning (ICL)}
+\noindent \textbf{In-context Learning}
 \vspace{0.1in}
 
-ICL allows the behavior of the model be manipulated via not training or fine-tuning of the parameters, but via instructions and demonstrations given as part of the input.
+\mync{In-Context Learning}[ICL] allows the behavior of the model to be manipulated via not training or fine-tuning of the parameters, but via instructions and demonstrations given as part of the input.
 
-ICL plays an important part in LLM implementation, as it is the basis of prompt engineering. When the LLM is large, it is possible to use prompt engineering instead of fine-tuning for it to complete a task following user defined instructions. This reduces the training cost and makes the implementation more flexible.
+ICL plays an important part in LLM implementation, as it is the basis of prompt engineering. When the LLM is large, it is possible to use prompt engineering instead of fine-tuning to complete a task following user defined instructions. This reduces the training cost and makes the implementation more flexible.
 
 \vspace{0.1in}
 \noindent \textbf{Instruction Following}
 \vspace{0.1in}
 
-Supervised learning is commonly used in fine-tuning an LLM. Examples include providing ``ideal responses'' for different types of questions, so that LLM would know how to respond to these questions.
+Supervised learning is commonly used in training and fine-tuning a model. In the training set, we need to provide the model ``examples''. An example includes the input, some good responses, and some bad responses. 
 
-When comes to LLM, it is actually possible to fine-tune the model for a task without presenting it examples. Instead, just give it step-by-step instructions. LLM is able to perform well with these tasks described only by instructions. This is known as instruction tuning.
+When comes to LLM, it is possible to fine-tune a model for a specific task without using the aforementioned examples. Instead, just give it step-by-step instructions. LLM is able to perform well with these tasks described only by instructions. This is known as instruction tuning.
 
 It is worth mentioning that instruction following is also possible in ICL. Give the LLM instructions in prompt engineering without examples, and the LLM is likely to be able to finish the tasks.
 
