@@ -1,8 +1,8 @@
 \chapter{Large Language Model (Part 1: Theory)}
 
-This chapter serves as an overview of \mync{large language model}[LLM], a popular and successful NLP practice. Not only is LLM able to process human languages, but also can it generate new contents based on human language written requirements. The introduction of multimodal LLM further allows LLM to understand and generate not just writings but also pictures and videos. The theory and technology behind LLM are briefly discussed.
+This chapter serves as an overview of \mync{large language model}[LLM], a popular and successful NLP practice. LLM can not only process human languages but also generate new contents based on human language written requirements. The introduction of multimodal LLM further allows LLM to understand and generate not just writings but also pictures and videos. The theory and technology behind LLM are briefly discussed.
 
-Nowadays, it is possible for a regular user to leverage on commercialized models to develop his own applications. Given a powerful machine, a user can also deploy LLMs locally. Open-source LLMs are available so that the user does not need to train a model from scratch. The deployment of LLMs and the interaction with them are introduced in consecutive chapters. 
+Nowadays, it is possible for a regular user to leverage on commercialized models to develop his own applications. Given a powerful machine, a user can even deploy LLMs locally in a few steps. Open-source LLMs are available so that the user does not need to train a model from scratch. The deployment of LLMs and the interaction with them are introduced in consecutive chapters. 
 
 \section{Introduction to LLM}
 
@@ -40,9 +40,9 @@ RNN is not a perfect one-stop solution either. The training of RNN can be diffic
 \noindent \textbf{Pre-trained Language Models and Large Language Models}
 \vspace{0.1in}
 
-As introduced in details in earlier chapters, attention mechanism has been proposed to tackle the long-term dependency problem of RNN. Transformer architecture, which relies purely on encoder, decoder and attention mechanism without using RNN is then proposed. It has been verified that transformer architecture is good at abstracting information from sequential data, in particular, natural language. With transformer, it becomes possible to build very deep neural networks and have it trained efficiently with big size data corpus.
+As introduced in details in earlier chapters, attention mechanism has been proposed to tackle the long-term dependency problem of RNN. Transformer architecture, which relies purely on encoder, decoder and attention mechanism without using RNN is then proposed. It has been verified that transformer architecture is good at abstracting information from sequential data, in particular, natural languages. With a transformer, it becomes possible to build very deep neural networks and have it trained efficiently with big-size data corpus.
 
-Language models based on different transformer-based architectures are often called \mync{Pre-trained Language Models}[PLM] or \mync{Large Language Models}[LLM]. The main differences between PLM and LLM are the size of the model. The scaling of the model from hundreds of millions of parameters for PLMs to tens or hundreds of billions of parameters for LLMs introduces emergent abilities such as in-context learning to the model, significantly enhancing its capability and intelligence. As of this writing, it is not very clear how the these abilities suddenly emerge with the size of the model.
+Language models based on different transformer-based architectures are often called \mync{Pre-trained Language Models}[PLM]. LLM can be taken as a subset of PLM. The main difference between an LLM and a regular PLM is the size of the model. The scaling of the model from hundreds of millions of parameters for PLMs to tens or hundreds of billions of parameters for LLMs introduces emergent abilities such as in-context learning to the model, significantly enhancing its capability and intelligence. As of this writing, it is not very clear how the these abilities suddenly emerge with the size of the model.
 
 \subsection{Emergent Abilities}
 
@@ -138,9 +138,9 @@ where $N$, $D$ and $C$ denote the model size, dataset size and training computat
 
 This scaling law works for models with $22M$ to $23B$ parameters. It is assumed that the analysis of a factor can be done independently without other parameters being a bottleneck.
 
-\section{Existing Resources and Solutions}
+\section{Data Corpus Resources and Existing LLMs}
 
-Many data corpus, both open source and closed source, are available on the market. Many libraries such as PyTorch compatible Python packages have been developed to automate the training procedures and to convenient the users. Many LLM, both open-source and closed-source, have been proposed. A summary is given in Table \ref{ch:llm:tab:existingmodel}. Notice that the table only covers a small portion of existing models in the market.
+Data corpus is available online for LLM training. Many libraries such as PyTorch compatible Python packages have been developed to automate the training procedures and to convenient the users. Many LLMs, both open-source and closed-source, are available on the market. A summary is given in Table \ref{ch:llm:tab:existingmodel}. Notice that the table only covers a small portion of existing models in the market.
 
 \begin{table}
 	\centering \caption{Existing LLM models.}\label{ch:llm:tab:existingmodel}
@@ -153,7 +153,7 @@ Many data corpus, both open source and closed source, are available on the marke
 		 & LLaMA2 & $70$ & $2T$ & 2023-Jul \\ \hdashline
 		\multirow{3}{*}{closed} & GPT-3 & $175$ & $300B$ & 2020-May \\
 		 & Codex$^*$ & $12$ & $100B$ & 2021-Jul \\
-		 & GPT-4 & --- & --- & 20223-Mar \\
+		 & GPT-4 & --- & --- & 2023-Mar \\
 		\hline
 	\end{tabular}
 \begin{flushleft}
@@ -211,7 +211,7 @@ Chat-GPT was developed on top of GPT-3.5 (and later another version was released
 
 GPT-4 is a multimodal LLM, meaning that it can not only take in natural languages, but also other signals such as images. Comparing with GPT-3.5, GPT-4 demonstrates further enhanced capabilities. It is claimed that GPT-4 is safer to use and is less likely to generate toxic and misleading information.
 
-Just as a quick demonstration of its multimodal feature, pass the following Fig. \ref{fig:superpower_cat} to GPT-4 with instruction ``What is in this picture?''. GPT-4 is able to response the following:
+Just as a quick demonstration of its multimodal feature, pass the following Fig. \ref{fig:superpower_cat} (notice that this figure itself is generated by an AI model) to GPT-4 with instruction ``What is in this picture?''. GPT-4 is able to response the following:
 
 \vspace{0.1in}
 \noindent \textit{``The image showcases a majestic cat standing in a fantastical landscape. The cat emits a luminous, ethereal glow, and its fur and tail appear to be infused with swirling, fiery or cosmic energies in brilliant hues of red and gold. These radiant swirls surround the cat, adding to its supernatural aura. Behind the cat, there's a dramatic night sky with clouds illuminated by a hidden light source, possibly lightning or a celestial event. In the foreground, the terrain appears to be a combination of grassy knolls and fiery, ember-lit ground, further emphasizing the magical and otherworldly nature of the scene. The entire setting evokes a sense of wonder and fantasy.''}
@@ -228,13 +228,7 @@ Just as a quick demonstration of its multimodal feature, pass the following Fig.
 \noindent \textbf{Other OpenAI Models}
 \vspace{0.1in}
 
-DALL$\cdot$E is the model OpenAI uses to generate images. As of this writing, its latest version, DALL$\cdot$E 3, has been integrated with the latest ChatGPT. Figure \ref{fig:superpowercat} gives an example where DALL$\cdot$E 3 is used to generate a image of a superpower cat.
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=\textwidth]{./chapters/part-7/figures/dalle3_superpowercat.png}
-	\caption{OpenAI DALL$\cdot$E 3 draws cats with superpower.}
-	\label{fig:superpowercat}
-\end{figure}
+DALL$\cdot$E is the model OpenAI uses to generate images. As of this writing, its latest version, DALL$\cdot$E 3, has been integrated with the latest ChatGPT. Figure \ref{fig:superpower_cat} gives an example where DALL$\cdot$E 3 is used to generate a image of a superpower cat.
 
 OpenAI Codex, as introduced earlier, is the GPT model optimized for code generation. As of this writing, Codex has been deprecated because its capability has been integrated into ChatGPT. It is possible to ask ChatGPT to generate a piece of code following user's instruction and description.
 
