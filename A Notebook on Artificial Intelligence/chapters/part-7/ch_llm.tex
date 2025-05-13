@@ -1,14 +1,16 @@
-\chapter{Large Language Model (Part 1: Theory)}
+\chapter{Large Language Model (Part 1: Theory)} \label{ch:llmtheory}
 
-This chapter serves as an overview of \mync{large language model}[LLM], a popular and successful NLP practice. LLM can not only process human languages but also generate new contents based on human language written requirements. The introduction of multimodal LLM further allows LLM to understand and generate not just writings but also pictures and videos. The theory and technology behind LLM are briefly discussed.
+This chapter serves as an overview of \mync{large language model}[LLM], a popular and successful NLP practice, from theory and technical perspective. LLM can not only process human languages but also generate new contents based on human language written requirements. The introduction of multimodal LLM further allows LLM to understand and generate not just writings but also pictures and videos. The theory and technology behind LLM are briefly discussed.
 
-Nowadays, it is possible for a regular user to leverage on commercialized models to develop his own applications. Given a powerful machine, a user can even deploy LLMs locally in a few steps. Open-source LLMs are available so that the user does not need to train a model from scratch. The deployment of LLMs and the interaction with them are introduced in consecutive chapters. 
+Nowadays, it is possible for a regular user to leverage on commercialized models to develop his own applications. Given a powerful machine, a user can even deploy LLMs locally in a few steps. Open-source LLMs are available so that the user does not need to train a model from scratch. The deployment of LLMs and the interaction with them are introduced in consecutive chapters.
+
+Modern LLMs are built on top of Transformer framework which has been introduced in earlier Chapter \ref{ch:transformer}. It is worth emphasizing the relationship between the Transformer and LLM. Transformer is an ANN framework designed for processing any sequential data so long as it can be encoded, and apparently NLP is an important use case of it. LLM is a practice of Transformer on NLP.
 
 \section{Introduction to LLM}
 
 This section reviews existing NLP methods and their limitations, and discusses the gap LLM bridges.
 
-\subsection{Existing Technologies and Gaps}
+\subsection{Existing NLP Models and Gaps}
 
 There have been variety of ways to model natural languages. For example, consider the following sentence:
 \begin{center}
@@ -44,7 +46,7 @@ As introduced in details in earlier chapters, attention mechanism has been propo
 
 Language models based on different transformer-based architectures are often called \mync{Pre-trained Language Models}[PLM]. LLM can be taken as a subset of PLM. The main difference between an LLM and a regular PLM is the size of the model. The scaling of the model from hundreds of millions of parameters for PLMs to tens or hundreds of billions of parameters for LLMs introduces emergent abilities such as in-context learning to the model, significantly enhancing its capability and intelligence. As of this writing, it is not very clear how the these abilities suddenly emerge with the size of the model.
 
-\subsection{Emergent Abilities}
+\subsection{LLM Features and Capabilities}
 
 When the size of the model becomes large, usually to the order of at least a few billions parameters, they suddenly gain emergent abilities. Details are discussed as follows.
 
@@ -74,7 +76,51 @@ When a model is asked to complete a complicated task that involves multiple step
 
 It has been observed that an LLM with at least $100B$ parameters is likely to have good step-by-step reasoning abilities.
 
-\subsection{Milestone Techniques}
+The performance of an LLM, usually referring to its capability in accurately and correctly complete a task, is affect by many factors such as the model architecture, model size, training data set size and quality, etc. Though it is clear that with the scaling up of the system the performance is usually improved, there is no analytical expression that gives full insights about how these factors affect the performance quantitatively.
+
+A \mync{scaling law} tries to quantitatively describe the performance of an LLM as a function of model size and other factors. Many scaling laws have been proposed, many of which obtained from empirical experiments and they may work only within a given range of model size.
+
+Just as an example, OpenAI proposed KM scaling law in 2020 that describes LLM cross entropy loss as a function of model size, training data set size and training computation as follows.
+\begin{eqnarray}
+	L(N) &=& \left(\dfrac{N_c}{N}\right)^{\alpha_N} \nonumber \\
+	L(D) &=& \left(\dfrac{D_c}{D}\right)^{\alpha_D} \nonumber \\
+	L(C) &=& \left(\dfrac{C_c}{C}\right)^{\alpha_C} \nonumber
+\end{eqnarray}
+where $N$, $D$ and $C$ denote the model size, dataset size and training computation, respectively. The rests are constants whose value can be obtained via calibration.
+
+This scaling law works for models with $22M$ to $23B$ parameters. It is assumed that the analysis of a factor can be done independently without other parameters being a bottleneck.
+
+\subsection{LLM Performing Benchmarks}
+
+\subsection{LLM Development Timeline}
+
+A brief timeline of the development of LLMs since the publication of \cite{vaswani2017attention} is given below.
+
+\vspace{0.1in}
+\noindent \textbf{2017}
+\vspace{0.1in}
+
+``Attention Is All You Need'' \cite{vaswani2017attention} introduced a new type of NLP model called the ``Transformer''. Unlike traditional RNN-based models, the Transformer removes all recurrent components and adopts an encoder-decoder architecture that relies entirely on self-attention mechanisms to model dependencies within and across sequences.
+
+\vspace{0.1in}
+\noindent \textbf{2018-2020}
+\vspace{0.1in}
+
+OpenAI released the GPT-1, GPT-2, and GPT-3 models in consecutive years from 2018 to 2020, showcasing the scalability of Transformer-based architectures for autoregressive language modeling.
+
+\vspace{0.1in}
+\noindent \textbf{2022}
+\vspace{0.1in}
+
+\myabb{Reinforcement Learning from Human Feedback}{RLHF} became a widely adopted training strategy. OpenAI released ChatGPT, a chatbot fine-tuned from the GPT-3.5 model using RLHF. Its human-like conversational abilities captured public attention and spurred a surge of interest and development in LLM-based applications.
+
+\vspace{0.1in}
+\noindent \textbf{2023-2024}
+\vspace{0.1in}
+
+GPT-4, GPT-4o are published in 2023 and 2024 respectively, along with many other frontier models are published.
+
+\subsection{LLM-Relevant Milestone Technologies}
 
 This section looks back into the progression tree of LLM, and lists down milestone techniques that make LLM what it is today. It is the breakthrough in these areas that revolutionizes LLM development.
 
@@ -122,54 +168,50 @@ Multi-modal LLM has enabled different types of inputs to the LLM, not limited to
 
 Many tools and software have developed APIs for LLM. These tools enhance computation and online information retrieval capabilities of LLM.
 
-\subsection{Scaling Law}
+\section{Frontier Models}
 
-The performance of an LLM, usually referring to its capability in accurately and correctly complete a task, is affect by many factors such as the model architecture, model size, training data set size and quality, etc. Though it is clear that with the scaling up of the system the performance is usually improved, there is no analytical expression that gives full insights about how these factors affect the performance quantitatively.
+This section introduces commonly seen frontier LLM models as of this writing. Some of the most famous ones are listed below.
 
-A \mync{scaling law} tries to quantitatively describe the performance of an LLM as a function of model size and other factors. Many scaling laws have been proposed, many of which obtained from empirical experiments and they may work only within a given range of model size.
+\begin{itemize}
+  \item Open-source
+  \begin{itemize}
+    \item LLaMA, and its variations (Meta)
+    \item Gemma (Google)
+    \item Qwen (Alibaba Cloud)
+    \item Deepseek-R1 (Deepseek)
+    \item Phi (Microsoft)
+  \end{itemize}
+  \item Closed-source
+  \begin{itemize}
+    \item GPT (OpenAI)
+    \item Gemini (Google)
+    \item Claude (Anthropic)
+  \end{itemize}
+\end{itemize}
 
-Just as an example, OpenAI proposed KM scaling law in 2020 that describes LLM cross entropy loss as a function of model size, training data set size and training computation as follows.
-\begin{eqnarray}
-	L(N) &=& \left(\dfrac{N_c}{N}\right)^{\alpha_N} \nonumber \\
-	L(D) &=& \left(\dfrac{D_c}{D}\right)^{\alpha_D} \nonumber \\
-	L(C) &=& \left(\dfrac{C_c}{C}\right)^{\alpha_C} \nonumber
-\end{eqnarray}
-where $N$, $D$ and $C$ denote the model size, dataset size and training computation, respectively. The rests are constants whose value can be obtained via calibration.
+Each of the models listed above has its own strengths and weaknesses. Since the models are continuously evolving, this notebook will not address or compare their shortages. Instead, only general features that are shared among all LLMs are introduced in this section.
 
-This scaling law works for models with $22M$ to $23B$ parameters. It is assumed that the analysis of a factor can be done independently without other parameters being a bottleneck.
+The user can interact with these models using the interfaces they provide such as CLIs and APIs. The interfaces are also introduced.
 
-\section{Data Corpus Resources and Existing LLMs}
+Many LLMs are capable of engaging in human-like conversations and answering questions in depth. Some can even search the internet for the up-to-date relevant information to support their responses. Most well-known LLMs can also follow user instructions to perform specific tasks, such as completing a piece of code, provided the prompts are sufficiently clear and aligned with the model's training data.
 
-Data corpus is available online for LLM training. Many libraries such as PyTorch compatible Python packages have been developed to automate the training procedures and to convenient the users. Many LLMs, both open-source and closed-source, are available on the market. A summary is given in Table \ref{ch:llm:tab:existingmodel}. Notice that the table only covers a small portion of existing models in the market.
+That said, many LLMs (unless specifically trained on domain-specific corpora) do not perform as well as experienced professionals in specialized fields. It is often claimed that top-performing LLMs can achieve a level of performance comparable to fresh PhD graduates in certain tasks, although a noticeable gap remains when compared to experienced researchers.
 
-\begin{table}
-	\centering \caption{Existing LLM models.}\label{ch:llm:tab:existingmodel}
-	\begin{tabular}{ccccc}
-		\hline
-		Availability & Model Name & Size & Training & Release Time \\ \hline
-		\multirow{4}{*}{open} & CodeGen & $16$ & $577B$ & 2022-Mar \\
-		 & LLaMA & $65$ & $1.4T$ & 2023-Feb \\
-		 & CodeGen2 & $16$ & $400B$ & 2023-May \\
-		 & LLaMA2 & $70$ & $2T$ & 2023-Jul \\ \hdashline
-		\multirow{3}{*}{closed} & GPT-3 & $175$ & $300B$ & 2020-May \\
-		 & Codex$^*$ & $12$ & $100B$ & 2021-Jul \\
-		 & GPT-4 & --- & --- & 2023-Mar \\
-		\hline
-	\end{tabular}
-\begin{flushleft}
-	\footnotesize
-	Model size is given in number of parameters in billion. Training data size is given in number of tokens. \\
-	$^*$ Codex is trained on top of GPT-3.
-\end{flushleft}
-\end{table}
+LLMs may generate inaccurate or misleading information while expressing it in a fluent and confident manner. This behavior stems from the their lack of self-awareness and inability to judge the factual correctness of its outputs.
 
-The existing resources and solutions are briefly introduced in this section.
+LLMs can also struggle with detailed quantitative tasks. This limitation arises from how they process and generate language: input is tokenized into subword or word-like units, and outputs are generated based on statistical patterns rather than precise symbolic reasoning. For example, an LLM might fail to correctly answer a seemingly simple question like ``How many letters `a' are there in this sentence?'', because its training does not emphasize accurate character-level counting.
 
-\subsection{Data Corpus}
+Multimodal LLMs can generate images or videos based on textual descriptions. However, they often struggle to accurately render fine-grained visual details. For example, if prompted to generate an image of a car with a license plate that reads ``3.14159265358979'', the resulting image may omit or distort some of the digits. This limitation stems from the fact that image generation is driven by probabilistic pattern synthesis, not precise symbolic encoding or controlled rendering of visual elements. An example is given in Fig. \ref{fig:gpt_carplate}.
 
-Enterprise and individual users may have their own closed source data corpus for training and fine-tuning. In this section, only open source data corpora are discussed.
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./chapters/part-7/figures/gpt_carplate.png}
+	\caption{A figure from a GPT when it is asked to generate a car with a license plate that reads ``3.14159265358979''.}
+	\label{fig:gpt_carplate}
+\end{figure}
 
-\subsection{Libraries and Packages}
+It is true that each LLM is trained and fine-tuned with different data corpus and may behave differently on different types of tasks. Consider LLMs with the same model structure and training strategy. In such case, models with larger training data sets and more parameters often outperform those with smaller training data sets and less parameters. From application perspective, the trend is that the frontier models' performances are converging for regular tasks, and the costs are going to be the main differentiator. 
+
 
 \subsection{OpenAI Family}
 
@@ -382,7 +424,11 @@ Multimodal LLM and ``Any-to-Any'' LLM are not the main forecast of this chapter.
 
 LLaMA 2 is the next generation open source LLM following the original LLaMA. The model is free for research and commercial use. LLaMA 2 70B has $70B$ parameters and it is pre-trained with $2T$ tokens of training data.
 
-\section{LLM Training Pipeline}
+
+
+\section{LLM Development Workflow}
+
+This section introduces the basic steps in the LLM development workflow, should the user want to develop an LLM from scratch.
 
 \subsection{Architecture Design}
 
@@ -408,7 +454,30 @@ LLaMA 2 is the next generation open source LLM following the original LLaMA. The
 
 \subsection{Training Set Preparation}
 
-Commonly used data corpora include the following. 
+Data corpus is available online for LLM training. Many libraries such as PyTorch compatible Python packages have been developed to automate the training procedures and to convenient the users. Many LLMs, both open-source and closed-source, are available on the market. A summary is given in Table \ref{ch:llm:tab:existingmodel}. Notice that the table only covers a small portion of existing models in the market.
+
+\begin{table}
+	\centering \caption{Existing LLM models.}\label{ch:llm:tab:existingmodel}
+	\begin{tabular}{ccccc}
+		\hline
+		Availability & Model Name & Size & Training & Release Time \\ \hline
+		\multirow{4}{*}{open} & CodeGen & $16$ & $577B$ & 2022-Mar \\
+		 & LLaMA & $65$ & $1.4T$ & 2023-Feb \\
+		 & CodeGen2 & $16$ & $400B$ & 2023-May \\
+		 & LLaMA2 & $70$ & $2T$ & 2023-Jul \\ \hdashline
+		\multirow{3}{*}{closed} & GPT-3 & $175$ & $300B$ & 2020-May \\
+		 & Codex$^*$ & $12$ & $100B$ & 2021-Jul \\
+		 & GPT-4 & --- & --- & 2023-Mar \\
+		\hline
+	\end{tabular}
+\begin{flushleft}
+	\footnotesize
+	Model size is given in number of parameters in billion. Training data size is given in number of tokens. \\
+	$^*$ Codex is trained on top of GPT-3.
+\end{flushleft}
+\end{table}
+
+The existing resources and solutions are briefly introduced in this section.
 
 \subsection{Pre-training}
 
@@ -416,17 +485,7 @@ Commonly used data corpora include the following.
 
 \subsection{Model Evaluation}
 
-\section{Multimodal LLM}
+\section{A Brief Review of Multimodal LLM}
 
-\section{Examples}
-
-\subsection{LLM with Fine-Tuning}
-
-\subsection{Semantic Search}
-
-\subsection{Database Powered LLM}
-
-\subsection{Multimodal LLM for Signal Processing}
-
-\subsection{Multimodal LLM for Image Processing}
+TBA
 

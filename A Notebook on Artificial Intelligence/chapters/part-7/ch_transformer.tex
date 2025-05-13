@@ -1,12 +1,16 @@
 \chapter{Transformer} \label{ch:transformer}
 
-This chapter introduces the development of ``transformer'', an AI framework initially proposed in 2017 in a paper ``Attention is All You Need'' \cite{vaswani2017attention}. It has magically revolutionized how we train AI for NLP. The ``encoder-decoder'' framework it uses has inspired the development of generative AI.
+Transformer is an AI framework proposed in the landmark paper ``Attention Is All You Need'' \cite{vaswani2017attention}. It is designed for sequential data processing, and NLP as an important sequential data processing problem is the motivating use case in \cite{vaswani2017attention}. Later, Transformer becomes the fundamental of \myabb{Large Language Models}{LLM}.
 
-\section{Limitations of CNN and RNN}
+This chapter focuses on the basic introduction to the Transformer framework and highlights its fundamental differences from conventional RNN-based approaches to sequential data processing.
+
+\section{RNN and Its Limitations}
+
+This section briefly reviews CNN and RNN, where their limitations are addressed. The paper ``Attention is All You Need'' \cite{vaswani2017attention} is then briefly reviewed. A timeline of the development of LLM is then given.
+
+\subsection{A Brief Review of RNN}
 
 CNN and RNN have been introduced previously. This section does not focus on the detailed introduction of CNN and RNN mechanisms. Instead, only their main features are reviewed, and their limitations discussed. This section does not reflect the state-of-art of researches in CNN and RNN.
-
-\subsection{A Brief Review of CNN and RNN}
 
 The conventional feedforward network with dense ANN is widely used. It can be trained systematically using back-propagation methods such as stochastic gradient descent. However, dense ANN is not very good at interpreting correlations among the inputs. At least, it is not good at doing it efficiently.
 
@@ -16,7 +20,7 @@ In a conventional dense ANN, the correlation cannot be captured efficiently. In 
 
 CNN and RNN try to tackle the above problems by implementing a ``pre-processing'' stage, where the correlation of the spacial and sequential data is first abstracted using some mechanism, and the correlation information is sent as (additional) inputs to the followed dense ANN.
 
-\subsection{Attention Mechanism}
+\subsection{Limitations of RNN}
 
 ``Attention'' was not a new concept invented in \cite{vaswani2017attention}. It was proposed a few years earlier than the transformer, and had been integrated into several CNN and RNN models to boost their performances to capture long-range dependencies. In these researches, attention mechanism is more often a supporting role than the main character. It is quite surprising indeed that when getting rid of CNN and RNN and purely relying on attention mechanism, everything gets better: more efficient in training and better in performance.
 
@@ -38,10 +42,37 @@ Does this mean that the RNN, which we had been relying on so much, is in fact th
 	(April 14, 2023, ChatGPT-4)
 \end{mdframed}
 
-\section{Transformer}
+\section{Transformer Framework}
 
-While CNN is mainly used for spatial data processing such as computer vision, both RNN and transformer are mainly used for sequential data processing. It is worth mention in the very beginning that transformer does not guarantee superior performance in all scenarios comparing with traditional RNN-based natural language processing models such as LSTM.
+A summary of the technologies in \cite{vaswani2017attention} is given in this section.
 
-For one thing, transformer consumes larger computational capabilities. Transformer processes data in batch, while RNN does them in sequence, meaning that RNN can response faster in some real-time applications. It is difficult for the transformer to process super-long text due to the computational burden (quadratic computational complexity with respect to sequence length), while RNN can process arbitrarily long text, although the later suffers from capturing long-range dependencies.
+\subsection{Tokenization}
 
-With the above been said, the transformer does demonstrated superior performance than RNN in many tasks. The mechanism and the reasons why it performs better in these occasions are introduced as follows.
+In earlier NLP models, a sentence is either broken down into characters or words, and then encoded. Different from those approaches, 
+
+\subsection{Encoder and Decoder}
+
+TBA
+
+\subsection{Attention Mechanism}
+
+TBA
+
+\section{Practice of Transformer in NLP}
+
+\section{Transformer Development Trend}
+
+\subsection{Transformer Variants}
+
+\subsection{Trend}
+
+With the sizes and capabilities of the frontier models scaling up over the past years, the models are more and more appear to be intelligent and human-like. 
+
+A new job opportunity, ``prompt engineer'', has emerged. The workscope of a prompt engineer is to design the appropriate prompt that instructs an LLM to complete certain tasks accurately and efficiently. People starts to take advantage of LLMs in their production. 
+
+Today, some most popular LLM applications include at least the following.
+\begin{itemize}
+  \item Chatbot and customer service.
+  \item Copilot
+  \item Agentization
+\end{itemize}
