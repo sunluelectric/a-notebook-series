@@ -119,7 +119,7 @@ respectively.
 It is of the user's choice whether to use Anaconda (or its light version, Miniconda) or Pip to manage the packages. As long as this notebook goes, both of them should fulfill the needs. As of this writing, it is recommended that data scientists, researchers and lectures shall use Anaconda (non-commercial) and Miniconda (commercial), while software engineers, Pip.
 \end{shortbox}
 
-\subsection{OpenAI API Powered LLM}
+\subsection{OpenAI-Powered LLMs}
 
 If the user has decided to use a commercialized LLM model via its API key, he needs to register an account with the LLM provider, such as OpenAI, and create a new API key, and added it to the project as an environmental variable. Notice that the use of the API key often introduces costs to be paid to the LLM provider. The details about the registration of the account and the creation of the API key are not included in this notebook.
 
@@ -156,7 +156,7 @@ messages = [
 \end{lstlisting}
 where \verb|<system prompt>| tells LLM the basic setup, such as what role the LLM shall play and what it should do, whereas \verb|user prompt| gives the user specific data that the LLM needs to process.
 
-\subsection{Open-Source Model Powered LLM}
+\subsection{Open-Source-Model-Powered LLMs}
 
 In earlier sections it has been introduced that Ollama can be used to conveniently deploy an open-source LLM on the local machine, and it also provides a CLI where the user can chat with the LLM. It is possible to connect a Python program to that LLM using the interface that Ollama provides.
 
@@ -211,33 +211,39 @@ This section introduces commonly seen frontier LLM models as of this writing. So
   \end{itemize}
 \end{itemize}
 
-There are a couple of ways to use these models. Examples are given below.
+Each of the models listed above has its own strengths and weaknesses. Since the models are continuously evolving, this notebook will not address or compare their shortages. Instead, only general features that are shared among all LLMs are introduced in this section.
+
+The user can interact with these models using the interfaces they provide such as CLIs and APIs. The interfaces are also introduced.
+
+\subsection{General Features of LLMs}
+
+Many LLMs are capable of engaging in human-like conversations and answering questions in depth. Some can even search the internet for the up-to-date relevant information to support their responses. Most well-known LLMs can also follow user instructions to perform specific tasks, such as completing a piece of code, provided the prompts are sufficiently clear and aligned with the model's training data.
+
+That said, many LLMs (unless specifically trained on domain-specific corpora) do not perform as well as experienced professionals in specialized fields. It is often claimed that top-performing LLMs can achieve a level of performance comparable to fresh PhD graduates in certain tasks, although a noticeable gap remains when compared to experienced researchers.
+
+LLMs may generate inaccurate or misleading information while expressing it in a fluent and confident manner. This behavior stems from the their lack of self-awareness and inability to judge the factual correctness of its outputs.
+
+LLMs can also struggle with detailed quantitative tasks. This limitation arises from how they process and generate language: input is tokenized into subword or word-like units, and outputs are generated based on statistical patterns rather than precise symbolic reasoning. For example, an LLM might fail to correctly answer a seemingly simple question like ``How many letters `a' are there in this sentence?'', because its training does not emphasize accurate character-level counting.
+
+
+Multimodal LLMs can generate images or videos based on textual descriptions. However, they often struggle to accurately render fine-grained visual details. For example, if prompted to generate an image of a car with a license plate that reads ``3.14159265358979'', the resulting image may omit or distort some of the digits. This limitation stems from the fact that image generation is driven by probabilistic pattern synthesis, not precise symbolic encoding or controlled rendering of visual elements. An example is given in Fig. \ref{fig:gpt_carplate}.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./chapters/part-7/figures/gpt_carplate.png}
+	\caption{A figure from a GPT when it is asked to generate a car with a license plate that reads ``3.14159265358979''.}
+	\label{fig:gpt_carplate}
+\end{figure}
+
+It is true that each LLM is trained and fine-tuned with different data corpus and may behave differently on different types of tasks. Consider LLMs with the same model structure and training strategy. In such case, models with larger training data sets and more parameters often outperform those with smaller training data sets and less parameters. From application perspective, the trend is that the frontier models' performances are converging for regular tasks, and the costs are going to be the main differentiator. 
+
+\subsection{Commonly Seen LLM Interfaces}
 
 Use LLM with companies. Companies such as OpenAI, Google, Microsoft and Deepseek provide web-based chatbot interface where a user can directly chat with the model. Many of these companies also provide APIs that allow user program to connect to models running on the cloud.
 
 Use LLM with cloud service providers. Nowadays many cloud providers including AWS, Microsoft Azure, Google Cloud Service, etc., that allow the user to deploy LLM models on their servers. For example, AWS provides Amazon Bedrock which is its frontier model that can be easily deployed on AWS. Similar applies to other major cloud service providers.
 
 Use LLM on premises. Users can train their own models, or download the weights of existing models and deploy them locally. Many open-source models are downloadable from websites such as Hugging Face. Tools such as Ollama can help with quickly deployment of these models locally.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
