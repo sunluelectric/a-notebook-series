@@ -1,6 +1,6 @@
 \chapter{R (Part I: Basics)} \label{ch:r1}
 
-This and the next chapter introduce R language, a widely used programming language for data mining and visualization. This chapter focuses on the fundamental setup such as the installation of R and RStudio, basic data types, basic operations such as vector, list, table and data frame manipulations, and basic visualization methods. The next Chapter \ref{ch:r2} introduces advanced data analysis tools and skills with R.
+This and the next chapter introduce R language, a widely used programming language for data mining and visualization. This chapter focuses on the fundamental setup such as the installation of R and RStudio, basic data types, basic operations such as vector, list, table and data frame manipulations, and basic visualization methods. The next Chapter \ref{ch:r2} introduces advanced data analysis tools and skills that R uses to solve practical problems.
 
 When comes to statistics calculation and data visualization, R is often considered simpler and more efficient with large size datasets compared with other programming languages such as Python.
 
@@ -8,15 +8,17 @@ When comes to statistics calculation and data visualization, R is often consider
 
 \mync{R language} is a programming language for statistical computing and visualization. It is widely used among statisticians and data miners for developing statistical software and carrying out data analysis. R is free and can be downloaded from \cite{r} where more details about R can also be found.
 
-\mync{RStudio}, also known as \mync{Posit}, is an IDE widely used for R programming and testing. RStudio IDE has an open-source and free-of-charge community version for personal use. It can be downloaded from \cite{rstudio}. Notice that RStudio is not compulsory and there are other IDEs that supports R script programming such as VSCode and Vim. With that been said, most of the R scripts in this notebook are programmed and tested with RStudio.
+\mync{RStudio}, also known as \mync{Posit}, is an \myabb{Integrated Development Environment}{IDE} widely used for R programming and testing. RStudio IDE has an open-source and free-of-charge community version for personal use. It can be downloaded from \cite{rstudio}. Notice that RStudio is not compulsory and there are other IDEs that supports R script programming such as VSCode and Vim. With that been said, most of the R scripts in this notebook are programmed and tested with RStudio.
 
 \subsection{Installation}
 
-Download R and RStudio from the aforementioned web sites, and install them following the instructions on their official websites. It is required to install R before installing RStudio.
+Download R and RStudio from \cite{r} and \cite{rstudio}, and install them following the instructions. It is required to install R before RStudio.
+
+When working with R language, the user needs to maintain the version of R and its packages (more to be introduced in Section \ref{ch:r1:sec:rpackage}) and to make sure that they are compatible. Anaconda allows the user to create a virtual environment for a project and manage packages within that environment. For that reason, the user might prefer to use Anaconda to install and maintain R and its packages. The installation and maintenance of R via Anaconda can be found on \cite{anaconda2025r} and it is not covered in this notebook.
 
 \subsection{R Packages Management} \label{ch:r1:sec:rpackage}
 
-R uses packages, also known as libraries, to expand its capability. R packages, both built-in and third-party, provide powerful features for data analysis and visualization. Some packages may come with demonstrative sample data frames. Packages can be published and shared online. CRAN is by far the most popular platform to store and share R packages.
+R uses packages, also known as libraries, to expand its capability. R packages, both built-in and third-party, provide powerful features for data analysis and visualization. Some packages come with demonstrative sample data frames. Packages can be published and shared online. \mync{CRAN} is by far the most popular platform to store and share R packages.
 
 There are a number of default built-in packages that come along with R installation. Only third-party packages need separate installation, and it can be done using the R console. To install or remove a package, use
 \begin{lstlisting}
@@ -36,7 +38,9 @@ For example
 \begin{lstlisting}
 library(pacman)
 \end{lstlisting}
-After loading a package, the data frames and functions defined in that package can be used normally. It is possible to use the functions and data frames in a package without loading it, in which case use prefix \verb|<package>::<function>|, \verb|<package>::<dataframe>|. This is inconvenient if the functions or data frames are to be used frequently.
+After loading a package, the data frames and functions defined in that package can be used normally. 
+
+It is possible to use the functions and data frames in a package without loading it, in which case use prefix \verb|<package>::<function>|, \verb|<package>::<dataframe>|. This is inconvenient if the functions or data frames are to be used frequently.
 
 To unload a package, use
 \begin{lstlisting}
@@ -75,16 +79,16 @@ pacman::p_load(
 \end{lstlisting}
 The above command can be executed without loading \verb|pacman| in advance since \verb|pacman::p_load()| prefix is used. The listed packages are commonly used in R projects, and a brief explanation to each of them is given as comments in the above code. 
 
-RStudio provides a graphical interface to manage packages as shown in Fig. \ref{ch:r1:fig:rstudio_package_management}. A package can be loaded or unloaded simply by select and deselect the package.
-\begin{figure}
+RStudio provides a graphical interface to manage packages as shown in Fig. \ref{ch:r1:fig:rstudio_package_management}. A package can be loaded or unloaded simply by checking or unchecking the corresponding box.
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=350pt]{chapters/part-3/figures/rstudio_package_management.png}
 \caption{RStudio's graphical interface for package management.} \label{ch:r1:fig:rstudio_package_management}
 \end{figure}
 
-\section{Basic Syntax and Data Types} \label{ch:r1:sec:rprogramming}
+\section{Basic Data Types and Syntax} \label{ch:r1:sec:rprogramming}
 
-This section introduces the basic syntax and commonly used data types of R.
+This section introduces the basic data types and their associated operations. Basic syntax such as conditionals, loops and user-defined functions are also given.
 
 It is worth mentioning in the beginning that R is case sensitive. Use \verb|#| to lead a comment. In the console, use \verb|print(<variable>)| or simply type the name of the variable to print the value of a variable to the console. Use \verb|?<function>|, \verb|?<dataframe>| to access the manual for a function or data frame.
 
@@ -110,6 +114,15 @@ x = rsgt(n = sgt_n, mu = sgt_mu, sigma = sgt_sigma, lambda = sgt_lambda, p = sgt
 # Write data
 write.table(x, 'generate_sgt_data.csv', sep=",", row.names = FALSE, col.names=FALSE)
 \end{lstlisting}
+
+\subsection{Variable Names}
+
+Variable names are used as identifiers to variables. Legitimate variable names are a combination of letters, numbers, periods (\verb|.|) and underscores (\verb|_|). The name cannot start with a number of the underscore, but can start with the period. A name cannot contain dash (\verb|-|), space or special characters such as \verb|@| or \verb|$|.
+
+It is worth emphasizing the use of period (\verb|.|) in R and in other languages. Many languages such as Python and MATLAB uses the period to indicate fields in a structure. For example, there might be a structure called ``\verb|student|'', and \verb|student.name|, \verb|student.age| are the fields under \verb|student|. However, this is not the case with R. In R, \verb|student|, \verb|student.name| and \verb|student.age| are treated as different variables without logical connections.
+
+For R, it uses \verb|<variable>$<field>| to indicate fields of a structure. More details will be given in later sections when list and data frame are introduced.
+
 
 \subsection{Different Types of Scalars}
 
@@ -254,7 +267,7 @@ R uses built-in and third-party functions which extend its capability. There is 
   \begin{tabularx}{\textwidth}{lX}
     \hline
     Syntax & Description \\ \hline
-    \verb|substr(s, n1, n2)| & Segment of a string, from the $n_1$-th character to $n_2$-th character, both characters included. The index starts from $1$ instead of $0$. \\
+    \verb|substr(s, n1, n2)| & Segment of a string, from the $n_1$-th character to $n_2$-th character, both characters included. Notice that the index starts from $1$ but not $0$. \\
     \verb|grep(p, s)| & Searching for a pattern in a string. \\
     \verb|sub(s1, s2, s)| & Find and replace patterns in a string. \\
     \verb|paste(s1, s2, ..., p="")| & Concatenate strings. \\
@@ -306,106 +319,6 @@ R uses built-in and third-party functions which extend its capability. There is 
 	\end{tabularx}
 \end{table}
 
-\subsection{Conditionals and Loops}
-
-The \verb|if| statement syntax is given as follows.
-\begin{lstlisting}
-if(<condition>){
-	<command>
-} else if(<condition>){
-	<command>
-} else{
-	<command>
-}
-\end{lstlisting}
-An example of using \verb|if| statement is givne below.
-\begin{lstlisting}
-> x <- rnorm(1)
-> if(x > 0){
-	+   y <- x
-	+ } else if(x < 0){
-	+   y <- -x
-	+ } else{
-	+   y <- 0
-	+ }
-> print(x)
-[1] -1.981445
-> print(y)
-[1] 1.981445
-\end{lstlisting}
-where \verb|+| indicates the splitting of commands in multiple lines in the console.
-
-The \verb|for| loop syntax is given as follows.
-\begin{lstlisting}
-for(<variable> in <vector>){
-	<command>
-}
-\end{lstlisting}
-where \verb|<vector>| is a list of numbers or characters. Examples are given below.
-\begin{lstlisting}
-> for(i in 1:5){
-	+     print(i)
-	+ }
-[1] 1
-[1] 2
-[1] 3
-[1] 4
-[1] 5
-
-> for(i in c("a", "b", "c")){
-	+     print(i)
-	+ }
-[1] "a"
-[1] "b"
-[1] "c"
-\end{lstlisting}
-where \verb|c()| defines a list from items. This command is widely used. More details will be introduced later.
-
-The \verb|while| loop syntax is given as follows.
-\begin{lstlisting}
-while(<condition>){
-    <command>
-}
-\end{lstlisting}
-An example of using \verb|while| loop is given below.
-\begin{lstlisting}
-> counter <- 0
-> while(counter < 5){
-+     print(counter)
-+     counter <- counter + 1
-+ }
-[1] 0
-[1] 1
-[1] 2
-[1] 3
-[1] 4
-\end{lstlisting}
-
-
-An example using the above to estimate the ratio of data of a standard normal distribution between $\pm 1$ is given below.
-\begin{lstlisting}
-> N <- 1000000
-> counter <- 0
-> for(i in rnorm(N)){
-	+   if(-1 < i & i < 1){
-		+     counter <- counter + 1
-		+   }
-	+ }
-> answer <- counter / N # expected: 0.682689492
-> print(answer)
-[1] 0.682407
-\end{lstlisting}
-
-\subsection{User-Defined Functions}
-
-Define a simple function as follows. Run the codes where the function is described before calling the function.
-\begin{lstlisting}
-<function-name> <- function(<input>[=<default>], ...){
-	<command>
-	[return(<variable>)]
-}
-\end{lstlisting}
-
 \subsection{Vectors}
 
 Vector and matrix are the fundamental forms using which R stores and processes data. List is similar with vector to some extend, and it is also introduced in this section.
@@ -443,7 +356,7 @@ To append to a vector, or to add vectors to form a longer vector, or to insert a
 > c <- append(a, b)
 > print(c)
 [1] 1 2 3 4 5 6
-> d <- append(c, c(100, 200, 300), 1) # insert a vector after the Xth element
+> d <- append(c, c(100, 200, 300), 1) # insert a vector after the element
 > print(d)
 [1]   1 100 200 300   2   3   4   5   6
 \end{lstlisting}
@@ -503,14 +416,8 @@ e3
 3
 \end{lstlisting}
 
-Notice that \verb|NA| will be returned if the index used to access the element in a vector exceeds its length, or if the name used to access the element in a vector is not found. This is different from most programming languages that will return an error.
+Notice that \verb|NA| will be returned if the index used to access the element in a vector exceeds its length, or if the name used to access the element in a vector is not found. This is different from most programming languages, which will usually raise an exception or an error. To remove the name of a vector, simply assign \verb|NULL| to \verb|names(<vector>)|. 
 
-To remove the name of a vector, simply assign \verb|NULL| to \verb|names(<vector>)|. To loop over an vector, simply use
-\begin{lstlisting}
-for (<element> in <vector>){
-	<do something>
-}
-\end{lstlisting}
 And finally to return the length of a vector, use \verb|length(<vector>)|.
 
 Vectorization operations significantly speed up the calculation comparing with looping over elements. Most numerical calculations, including \verb|+|, \verb|-|, \verb|*|, \verb|/|, \verb|%/%|, \verb|%%|, \verb|^|, support vectorization operations. Examples are given below.
@@ -606,7 +513,7 @@ There are some semantic differences when using \verb|[]| and \verb|[[]]|. In sho
 
 Notice that numeric values are atomic in R, meaning that they behave the same whether they are extracted as a single-element vector or a number. That is why \verb|print(a[1])| shows the same result as \verb|print(a[[1]])| in the earlier example, except that \verb|[]| preserves the name of an element.
 
-In the context of unnamed numeric vectors and matrices, \verb|[[]]| is rarely used, and \verb|[]| works almost all the time. However, when comes to other data structures like list, etc., it is important to distinguish \verb|[]| and \verb|[[]]|, and choose the correct one depending on the purpose.
+In the context of unnamed numeric vectors and matrices, \verb|[[]]| is rarely used, and \verb|[]| works just fine almost all the time. However, when comes to other data structures like list, etc., it is important to distinguish \verb|[]| and \verb|[[]]|, and choose the correct one depending on the purpose.
 
 \end{mdframed}
 
@@ -691,7 +598,7 @@ By default, a single row or column of a matrix is treated as a vector. An exampl
 > is.vector(A[1,])
 [1] TRUE
 \end{lstlisting}
-It is possible to deliberately ask R to not drop the matrix dimensions. This can be done as follows. By doing this, the names assigned to columns and rows preserve.
+It is possible to specifically ask R to not drop the matrix dimensions. This can be done as follows. By doing this, the names assigned to columns and rows preserve.
 \begin{lstlisting}
 > A <- matrix(1:9, 3, 3)
 > is.matrix(A[1,,drop=F]) # select a row/column
@@ -820,7 +727,7 @@ For elements with names, the list looks very much like a dictionary. The content
 [1] 33
 \end{lstlisting}
 
-As introduced earlier, there are two ways to index elements in a vector, matrix or list, namely \verb|[]| and \verb|[[]]|. While in the context of vectors and matrices \verb|[]| is almost always used, in the context of list \verb|[]| and \verb|[[]]| both have purposes and they can make a big difference. And finally, \verb|<list>$<name>| is simply a shorthand for \verb|<list>[[<name>]]|. Examples are given below.Alternatively, use \verb|<list>$<name>| to access the content. Following the above example,
+As introduced earlier, there are two ways to index elements in a vector, matrix or list, namely \verb|[]| and \verb|[[]]|. While in the context of vectors and matrices \verb|[]| is almost always used, in the context of list \verb|[]| and \verb|[[]]| both have purposes and they can make a big difference. And finally, \verb|<list>$<name>| is simply a shorthand for \verb|<list>[[<name>]]|. Examples are given below.
 \begin{lstlisting}
 > print(list2$name)
 [1] "lu"
@@ -829,15 +736,114 @@ As introduced earlier, there are two ways to index elements in a vector, matrix 
 [1] 3
 \end{lstlisting}
 
+\subsection{Conditional and Loop Statements}
+
+The \verb|if| statement syntax is as follows.
+\begin{lstlisting}
+if(<condition>){
+	<command>
+} else if(<condition>){
+	<command>
+} else{
+	<command>
+}
+\end{lstlisting}
+An example of using \verb|if| statement is given below.
+\begin{lstlisting}
+> x <- rnorm(1)
+> if(x > 0){
+	+   y <- x
+	+ } else if(x < 0){
+	+   y <- -x
+	+ } else{
+	+   y <- 0
+	+ }
+> print(x)
+[1] -1.981445
+> print(y)
+[1] 1.981445
+\end{lstlisting}
+where \verb|+| indicates the splitting of commands in multiple lines in the console.
+
+The \verb|for| loop syntax is given as follows.
+\begin{lstlisting}
+for(<variable> in <vector>){
+	<command>
+}
+\end{lstlisting}
+where \verb|<vector>| is a list of numbers or characters. Examples are given below.
+\begin{lstlisting}
+> for(i in 1:5){
+	+     print(i)
+	+ }
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+
+> for(i in c("a", "b", "c")){
+	+     print(i)
+	+ }
+[1] "a"
+[1] "b"
+[1] "c"
+\end{lstlisting}
+where \verb|c()| defines a list from items. This command is widely used. More details will be introduced later.
+
+The \verb|while| loop syntax is given as follows.
+\begin{lstlisting}
+while(<condition>){
+	<command>
+}
+\end{lstlisting}
+An example of using \verb|while| loop is given below.
+\begin{lstlisting}
+> counter <- 0
+> while(counter < 5){
+	+     print(counter)
+	+     counter <- counter + 1
+	+ }
+[1] 0
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+\end{lstlisting}
+
+An example using the above to estimate the ratio of data of a standard normal distribution between $\pm 1$ is given below.
+\begin{lstlisting}
+> N <- 1000000
+> counter <- 0
+> for(i in rnorm(N)){
+	+   if(-1 < i & i < 1){
+		+     counter <- counter + 1
+		+   }
+	+ }
+> answer <- counter / N # expected: 0.682689492
+> print(answer)
+[1] 0.682407
+\end{lstlisting}
+
+\subsection{User-Defined Function}
+
+Define a simple function as follows. Run the codes where the function is described before calling the function.
+\begin{lstlisting}
+<function-name> <- function(<input>[=<default>], ...){
+	<command>
+	[return(<variable>)]
+}
+\end{lstlisting}
+
 \section{Data Frames} \label{ch:r1:sec:df}
 
 Data frame, just like vector and matrix, is another data structure defined in R. Both matrix and data frame use tables to store data, but data frame does not require all data to have the same data type, which makes it more flexible and hence very widely used in R. Another difference between matrix and data frame is that data frame rows do not have names.
 
-\subsection{Import Data into Data Frame}
+\subsection{Data Importing}
 
-Data frame can be created from scratch by concatenating columns just like matrix. However, in practice it is more common that a data frame is obtained by importing data from other data sources. Hence, data importing is introduced first and data concatenating will be introduced in a later section.
+Data frame can be created from scratch by concatenating columns just like matrix, and it is introduced in Section \ref{subsec:df-integration-of-data}. However, in practice it is more common that a data frame is obtained by importing data from other data sources. Hence, data importing is introduced first.
 
-One of the most common sources of data is a CSV file. R provides convenient functions to read data from CSV files into data frames. Use the following commands to import data from a CSV file into a data frame.
+One of the most common sources of data is a CSV file. R provides convenient functions to read data from CSV files into data frames. Details are given below.
 
 The following command pops up a separate window that allows the user to choose a CSV file manually.
 \begin{lstlisting}
@@ -850,7 +856,7 @@ setwd("<directory>") # navigate to the directory of the csv file
 \end{lstlisting}
 where notice that \verb|getwd()| and \verb|setwd()| can be used to get and set current working directory respectively.
 
-\subsection{Access Data in Data Frame}
+\subsection{Data Accessing}
 
 There are a few ways to access an element in a data frame as shown below.
 \begin{lstlisting}
@@ -864,7 +870,7 @@ where the later two essentially adopt a 2-step precedure and
 <df>[, <column-name>]
 <df>$<column-name>
 \end{lstlisting}
-are used to access the entire column in a data frame. Notice that different from a matrix, rows in data frame do not have names.
+are used to access the entire column in a data frame. Notice that different from a matrix, rows in a data frame do not have names.
 
 Table \ref{ch:r1:tab:dataframeexplore} summarizes the commonly used functions on date frames, such as checking its shape and data types.
 \begin{table}
@@ -971,11 +977,11 @@ if there is a mismatch in size, \verb|<vector>| will be cycled. To remove a colu
 <df>$<column> <- NULL
 \end{lstlisting}
 
-\subsection{Filter Data from Data Frame}
+\subsection{Filtering}
 
 Filtering allows selecting rows from a data frame that meet specific criteria. A true-false vector can be used as a filter as follows.
 \begin{lstlisting}
-<filter-name> <- <true-false-vector> # use true-false vector as filter
+<filter> <- <true-false-vector> # use true-false vector as filter
 <df>[filter,] # implement filter on data frame
 \end{lstlisting}
 An example is given below.
@@ -1004,7 +1010,7 @@ An example is given below.
 118          7.7         3.8          6.7         2.2 virginica
 132          7.9         3.8          6.4         2.0 virginica
 \end{lstlisting}
-As shown above, it is possible to use \verb|&|, \verb$|$ to form a more complex filter. The commands can be merged together as follows.
+As shown above, it is possible to use \verb|&|, \verb$|$ to form a compound filter. The commands can be merged together as follows.
 \begin{lstlisting}
 > print(iris[iris$Sepal.Length >= 7,])
     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
@@ -1025,7 +1031,7 @@ As shown above, it is possible to use \verb|&|, \verb$|$ to form a more complex 
 [1] 13
 \end{lstlisting}
 
-\subsection{Create Data Frames}
+\subsection{Data Frame from Integration of Data} \label{subsec:df-integration-of-data}
 
 So far we have been importing data or using existing \verb|iris| data frame in the well-defined library \verb|datasets| in the case study. Data frame can also be created from scratch using columns of data. To create a new data frame from scratch, use function \verb|data.frame()| as follows.
 \begin{lstlisting}
@@ -1141,11 +1147,11 @@ qplot(data=mortgage_price, x=Region, y=Price.Unit, geom="boxplot")
 
 \section{Advanced Data Visualizations Using \texttt{ggplot()}} \label{ch:r1:sec:ggplot}
 
-Function \verb|ggplot()| is the main data visualization tool in \verb|ggolot2| package. It provides very flexible features for data plotting.
+Function \verb|ggplot()| is the main data visualization tool in \verb|ggolot2| package. It provides very flexible features for data plotting. More details are given in the section. Before digging into the details of \verb|ggolot2|, grammar of graphics is introduced first. Later it will become clear that \verb|ggolot2| is practices grammar of graphics.
 
 \subsection{Grammar of Graphics}
 
-As proposed by Leland Wilkinson's Grammar of Graphics, a chart shall contain multiple independent and reusable layers including
+As proposed by Leland Wilkinson's \mync{grammar of graphics}, a chart shall contain multiple independent and reusable layers including
 \begin{itemize}
   \item Data. Original data.
   \item Aesthetics. How data is mapped to the graph, for example, by dots, curves, color blocks or lines/bars of different length.
@@ -1157,6 +1163,8 @@ As proposed by Leland Wilkinson's Grammar of Graphics, a chart shall contain mul
 \end{itemize}
 A demonstrative Fig. \ref{ch:r1:fig:chart_layer} is given to illustrate the different layers in a chart.
 
+Notice that the first 3 layers, i.e. data, aesthetics and geometries layers are essential layers, while the rest layers are optional. A graph shall contain at least the first 3 layers for the minimum visualization.
+
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/chart_layer.png}
@@ -1165,42 +1173,45 @@ A demonstrative Fig. \ref{ch:r1:fig:chart_layer} is given to illustrate the diff
 
 \subsection{Data, Aesthetics and Geometries Layers}
 
-Function \verb|ggplot()| is a very good practice of implementing the above chart design and plotting philosophy. A simple example for \verb|ggplot()|, just for quick demonstration purpose, is given below.
+Function \verb|ggplot()| is a very good practice of implementing the grammar of graphics. The basic syntax of \verb|ggplot()|, just for quick demonstration purpose, is given below. In the basic syntax, only data, aesthetics and geometries layers are concerned.
 \begin{lstlisting}
 p <- ggplot(data=<df>, 
             aes(x=<column>, y=<column>, color=<column>, size=<column>)
-     )
-p <- p + geom_point()
-p
+     ) # data and aesthetics
+p <- p + geom_point() # geometries
 \end{lstlisting}
 where \verb|aes()| is used to build mappings in the aesthetics.
 
 An interesting fact when using \verb|ggplot()| is that, when adding a layer to the chat, the layer is literally added to \verb|ggplot()|. For example, in
 \begin{lstlisting}
 p <- ggplot(data=<df>, aes(x=<column>, y=<column>, color=<column>, size=<column>))
-p + geom_point()
-p + geom_line() # another selection of geometries choice
-p + geom_line() + geom_point() # overlying both geometries choices
-p + geom_point(aes(size=<another-column>)) # overwrite aesthetics settings.
+p1 <- p + geom_point() # scatter plot
+p2 <- p + geom_line() # line plot
+p3 <- p + geom_line() + geom_point() # both scatter and line
+p4 <- p + geom_point(aes(size=<another-column>)) # overwrite aesthetics when adding scatter plot
 \end{lstlisting}
 the added layers are able to inherit the aesthetics settings, if they are not overwritten. And speaking of overwriting, even the x and y axis can be overwritten. The displaying name of the labels can be overwritten by stack \verb|xlab("")| and \verb|ylab("")| into the chart.
 
-Function \verb|ggplot()| provides many choices for geometries. The most commonly used ones are summarized in Table \ref{ch:r1:tab:geoms}.
+Function \verb|ggplot()| provides many choices for geometries. The most commonly used ones are summarized in Table \ref{ch:r1:tab:geoms}. Notice that while some of the \verb|geom_*| functions are purely geometries layers and only reflect what is in the data itself (such as scatter plot and line plot), others may paired with a statistics layer function (such as histogram). When adding the later type of \verb|geom_*| functions, statistics layers are also implemented behind the screen.
+
 \begin{table}[!htb]
-  \centering \caption{Commonly used commands for data frame exploration.}\label{ch:r1:tab:geoms}
-  \begin{tabularx}{\textwidth}{lX}
+  \centering \caption{Commonly used \texttt{ggplot} geometries and statistics layers commands. A full list can be found at \cite{ggplot2025package}.}\label{ch:r1:tab:geoms}
+  \begin{tabularx}{\textwidth}{llX}
     \hline
-    \textbf{Geom} & \textbf{Description} \\ \hline
-    \verb|geom_point()|   & Scatter plots and dot plots. \\
-    \verb|geom_line()|    & Line plots.   \\
-    \verb|geom_bar()|     & Bar plots. \\
-    \verb|geom_histogram()| & Histograms. \\
-    \verb|geom_boxplot()| & Box plots. \\
-    \verb|geom_violin()| & Violin plots.\\
-    \verb|geom_density()| & Density plots.\\
-    \verb|geom_density2d()| & 2-dimensional Density plots.\\
-    \verb|geom_text()| & Text Annotation.\\
-    \verb|geom_label()| & Label on the observations.\\ \hline
+    \textbf{Geom} & \textbf{Statistics} & \textbf{Description} \\ \hline
+	\texttt{geom\_point()} & --- & Scatter plot. \\
+	\texttt{geom\_line()} & --- & Line plot. \\
+	\texttt{geom\_segment()} & --- & Drawing a segment. \\
+	\texttt{geom\_polygon()} & --- & Polygons plot. \\
+	\texttt{geom\_contour()} & --- & Contour plot. \\
+	\texttt{geom\_text()} & --- & Text. \\ \hline
+	\texttt{geom\_histogram()} & \texttt{stat\_bin()} & Histogram. \\
+	\texttt{geom\_density()} & \texttt{stat\_density()} & Kernel density estimate of a distribution. \\
+	\texttt{geom\_bar()} & \texttt{stat\_count()} & Bar plot (occurrence plot). \\
+	\texttt{geom\_smooth()} & \texttt{stat\_smooth()} & Linear regression model. \\
+	\texttt{geom\_boxplot()} & \texttt{stat\_boxplot()} & Distribution with quartiles and outliers. \\
+	\texttt{geom\_violin()} & \texttt{stat\_ydensity()} & Combination of density estimation and box plot. \\
+	\hline
     \end{tabularx}
 \end{table}
 
@@ -1430,4 +1441,3 @@ The resulted chart is given in Fig. \ref{ch:r1:fig:mortgage_histogram_theme}. Co
 	\includegraphics[width=250pt]{chapters/part-3/figures/mortgage_histogram_theme.png}
 	\caption{Mortgage price chart with theme.} \label{ch:r1:fig:mortgage_histogram_theme}
 \end{figure}
-
