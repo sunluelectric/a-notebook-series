@@ -1,20 +1,19 @@
 \chapter{Transformer} \label{ch:transformer}
 
-Transformer is an AI framework proposed in the landmark paper ``Attention Is All You Need'' \cite{vaswani2017attention}. It is designed for sequential data processing, and NLP as an important sequential data processing problem is the motivating use case in \cite{vaswani2017attention}. Later, Transformer becomes the fundamental of \myabb{Large Language Models}{LLM}.
+\myabb{Large language model}{LLM} is one of the many solutions to NLP, and NLP is a type of problem under sequential data processing. In the past few years we have seen revolutionary development in LLM, and hence it forms a dedicated part in the notebook. With the introduction of multimodal LLM, the capability of LLM expands beyond language processing towards image and even video processing. 
 
-This chapter focuses on the basic introduction to the Transformer framework and highlights its fundamental differences from conventional RNN-based approaches to sequential data processing.
+Modern LLM is built on top of Transformer, an AI framework proposed in the landmark paper ``Attention Is All You Need'' \cite{vaswani2017attention}. Transformer is introduced in this chapter. 
+
+A brief review of RNN, the state-of-the-art framework priori to Transformer, is given, and its shortages are addressed. Transformer framework and its key components are introduced. Lastly, the development trend of Transformer is discussed.
 
 \section{RNN and Its Limitations}
 
-This section briefly reviews CNN and RNN, where their limitations are addressed. The paper ``Attention is All You Need'' \cite{vaswani2017attention} is then briefly reviewed. A timeline of the development of LLM is then given.
+RNN has been introduced in earlier Chapter \ref{ch:rnn}. A brief review is given in this section, focusing on its shortages in NLP.
 
 \subsection{A Brief Review of RNN}
 
-CNN and RNN have been introduced previously. This section does not focus on the detailed introduction of CNN and RNN mechanisms. Instead, only their main features are reviewed, and their limitations discussed. This section does not reflect the state-of-art of researches in CNN and RNN.
+Comparing with a dense ANN, RNN is more efficient in building up correlation between consecutive inputs, and hence it becomes a powerful framework when comes to sequential data processing. 
 
-The conventional feedforward network with dense ANN is widely used. It can be trained systematically using back-propagation methods such as stochastic gradient descent. However, dense ANN is not very good at interpreting correlations among the inputs. At least, it is not good at doing it efficiently.
-
-For example, consider the input to be pixels of an image of size $3\times 128 \times 128$, where $3$ corresponds to the RGB of the image, and $128 \times 128$ its pixel size. It is obvious to a human that the pixel at $(1,1)$ should definitely has a closer relationship with the one at $(1,2)$ (they are probably forming an object in the image together) than $(128, 128)$. The same applies to sequential inputs. Consider a signal sampled continuously. The first and second samples are very likely to be more strongly correlated than the first and last samples.
 
 In a conventional dense ANN, the correlation cannot be captured efficiently. In contrast, a dense ANN would treat all the inputs ``equally'' in a symmetric manner. To enforce the ANN to ``address'' the correlation, it would require a lot more layers and nodes (which is often considered low-efficient), and requires more data points during the training. Other problems of conventional dense ANN include, for example, the lack of ability in handling data with arbitrary length.
 
@@ -44,11 +43,58 @@ Does this mean that the RNN, which we had been relying on so much, is in fact th
 
 \section{Transformer Framework}
 
-A summary of the technologies in \cite{vaswani2017attention} is given in this section.
+A summary of the concepts, components and technologies in \cite{vaswani2017attention} is given in this section.
 
-\subsection{Tokenization}
+\subsection{Tokenizer}
 
-In earlier NLP models, a sentence is either broken down into characters or words, and then encoded. Different from those approaches, 
+In most NLP solutions, human language components need to be mapped to numbers before inputting into a model. The outputs of the model must then be mapped back to human-readable components so that a human can interpret them. This is no exception for LLMs. This mapping process is known as \mync{tokenization}.
+
+There are multiple ways to perform tokenization. Different models, and models for different languages, may apply different tokenization schemes. In this section, English is used as an example. Commonly seen tokenization methods are discussed.
+
+\vspace{0.1in}
+\noindent \textbf{Character-Based Tokenization}
+\vspace{0.1in}
+
+The most intuitive approach is character-based tokenization. For example, we can use the ASCII standard as the mapping table, where each English character, including spaces and most commonly used special characters, is mapped to an integer.
+
+The benefits of using character-based mapping include:
+\begin{itemize}
+	\item Flexibility. Everything can be mapped without exception, including typos or invented words.
+	\item Compact vocabulary. To cover all characters, we need only a few dozen entries in the mapping table.
+\end{itemize}
+
+The main drawback of character-based mapping is inefficiency. For instance, consider the character sequence ``t'', ``h'', and ``e''. When they appear together, they form the word ``the'' which carries a specific and frequent meaning. Ideally, such frequent patterns should be recognized as a whole. By storing this combination in the token mapping (rather than learning it from model parameters), we can improve modeling efficiency and reduce sequence length.
+
+\vspace{0.1in}
+\noindent \textbf{Word-Based Tokenization}
+\vspace{0.1in}
+
+To improve efficiency and reduce the number of input tokens, word-based tokenization was proposed. A dictionary containing around $30{,}000$ to $50{,}000$ words is often used in common applications. Any unrecognized word such as typo or extremely rare word is mapped to a special token that represents an ``unknown'' word.
+
+The advantages of word-based mapping include:
+\begin{itemize}
+	\item Efficiency. Fewer tokens are needed to represent a sentence compared to character-level mapping.
+	\item Better contextual grounding. Each token usually corresponds to a semantically meaningful unit.
+\end{itemize}
+
+However, word-based tokenization sacrifices flexibility. Unseen or misspelled words provide no meaningful signal other than ``unknown''. 
+
+Additionally, word-based schemes often ignore the semantic structure within a word. For example, consider the word ``handcraft''. It is clearly composed of two recognizable words ``hand'' and ``craft''. Semantically, ``handcraft'' relates to both. Yet, in the word-based mapping, ``hand'', ``craft'' and``handcraft'' are treated as entirely unrelated tokens. In such cases, it would be more effective to break the word into meaningful segments and tokenize those instead.
+
+\vspace{0.1in}
+\noindent \textbf{Subword-Based Tokenization}
+\vspace{0.1in}
+
+Modern LLMs typically use subword-based tokenization. This approach lies between character- and word-based methods. It tries to achieve optimum flexibility and efficiency by smartly breaking texts into semantically meaningful chunks known as subwords.
+
+Subword tokenization allows the model to:
+\begin{itemize}
+	\item Represent rare or unknown words by combining familiar parts (e.g., prefixes, stems, suffixes).
+	\item Reduce the number of out-of-vocabulary (OOV) tokens.
+	\item Maintain a compact vocabulary while preserving semantic structure.
+\end{itemize}
+
+Popular subword techniques include Byte Pair Encoding, WordPiece, and Unigram tokenization. These methods enable LLMs to handle diverse input—including code, typos, compound words, and multilingual content—while keeping input representations efficient and consistent.
 
 \subsection{Encoder and Decoder}
 
@@ -58,7 +104,7 @@ TBA
 
 TBA
 
-\section{Practice of Transformer in NLP}
+\subsection{Transformer-Based NLP}
 
 \section{Transformer Development Trend}
 
