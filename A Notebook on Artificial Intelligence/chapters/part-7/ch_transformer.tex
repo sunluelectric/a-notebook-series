@@ -14,7 +14,6 @@ RNN has been introduced in earlier Chapter \ref{ch:rnn}. A brief review is given
 
 Comparing with a dense ANN, RNN is more efficient in building up correlation between consecutive inputs, and hence it becomes a powerful framework when comes to sequential data processing. 
 
-
 In a conventional dense ANN, the correlation cannot be captured efficiently. In contrast, a dense ANN would treat all the inputs ``equally'' in a symmetric manner. To enforce the ANN to ``address'' the correlation, it would require a lot more layers and nodes (which is often considered low-efficient), and requires more data points during the training. Other problems of conventional dense ANN include, for example, the lack of ability in handling data with arbitrary length.
 
 CNN and RNN try to tackle the above problems by implementing a ``pre-processing'' stage, where the correlation of the spacial and sequential data is first abstracted using some mechanism, and the correlation information is sent as (additional) inputs to the followed dense ANN.
@@ -85,16 +84,40 @@ Additionally, word-based schemes often ignore the semantic structure within a wo
 \noindent \textbf{Subword-Based Tokenization}
 \vspace{0.1in}
 
-Modern LLMs typically use subword-based tokenization. This approach lies between character- and word-based methods. It tries to achieve optimum flexibility and efficiency by smartly breaking texts into semantically meaningful chunks known as subwords.
+Modern LLMs typically use subword-based tokenization. This approach lies between character-based and word-based methods. It tries to achieve optimum flexibility and efficiency by smartly breaking a word into semantically meaningful chunks known as ``subwords''.
+
+An example is given in Fig. \ref{fig:tokenizer}, where a small piece of text is tokenized using a tokenizer. From the example, we can see that while basic and commonly used words such as ``I'', ``am'', ``demonstrating'', ``sentence'' remain in one token, the sophisticated words such as ``OpenAI'', ``tokenization'', ``semantically'' are broken into subwords. Notice that spaces and special characters such as period ``.'' are also considered as part of tokens, as they carry meanings.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.75\textwidth]{./chapters/part-7/figures/tokenizer.png}
+	\caption{A demonstrative example where a piece of text is tokenized using GPT-4o's tokenizer.}
+	\label{fig:tokenizer}
+\end{figure}
+
+Each token is then assigned with a token ID. In the example in Fig. \ref{fig:tokenizer}, they are
+\begin{lstlisting}
+[40, 939, 73405, 6602, 2860, 328, 40536, 2360, 7788, 17527, 885, 6361, 13, 730, 290, 6602, 2860, 11, 261, 21872, 382, 17162, 1511, 2743, 175665, 33329, 1543, 10020, 13, 256]
+\end{lstlisting}
 
 Subword tokenization allows the model to:
 \begin{itemize}
 	\item Represent rare or unknown words by combining familiar parts (e.g., prefixes, stems, suffixes).
-	\item Reduce the number of out-of-vocabulary (OOV) tokens.
+	\item Reduce the number of out-of-vocabulary tokens. Even if a new word or typo is detected in the text, it is possible that it still contains meaningful subwords.
 	\item Maintain a compact vocabulary while preserving semantic structure.
 \end{itemize}
 
-Popular subword techniques include Byte Pair Encoding, WordPiece, and Unigram tokenization. These methods enable LLMs to handle diverse input—including code, typos, compound words, and multilingual content—while keeping input representations efficient and consistent.
+Just to put things into perspective, for a typical tokenizer on English writing, $1$ token is roughly $4$ characters, or $0.75$ word, and $1000$ tokens are roughly $750$ words. Nowadays, math equations, scientific terms and codes are also used as inputs and outputs to LLMs for domain knowledge related tasks. They usually consumes more tokens than English writings.
+
+Different LLMs may use different tokenizers. Popular subword techniques include Byte Pair Encoding, WordPiece, and Unigram tokenization. The example in Fig. \ref{fig:tokenizer} demonstrates the tokenizer of OpenAI's GPT-4o. There are many other tokenizers used by variety of models. At this point, there is not a universally best tokenizer.
+
+The maximum number of tokens an LLM can process, both as input and output, is limited by its \mync{context window}. For example, consider a continuous dialogue with an LLM-based chatbot. Each time the user provides a new input, the entire chat history (including all of the user's previous inputs and the LLM's previous responses) is bundled together and sent as a new stateless input to the model. Based on this complete input sequence, the LLM then generates its latest response. This stateless nature means that the LLM does not ``remember'' anything beyond what is explicitly included in the current input. 
+
+As the conversation grows longer, more and more tokens are needed to represent the chat history. For example, GPT-4o model has a context window of $128K$ tokens, roughly one-tenth the length of the complete works of Shakespeare. Once this limit is reached, older parts of the conversation must be truncated or summarized.
+
+In some scenarios, the input cannot be easily compressed or truncated and must be passed to the LLM as a whole. For example, when an LLM is used to troubleshoot a piece of code, the entire code block, possibly including multiple files, configurations, and logs, needs to be input at once to maintain context and correctness. In such cases, the size of the context window becomes a critical constraint. If the total input exceeds the model's maximum token limit, the model will either fail to process it entirely or may be forced to omit important parts of the input, potentially leading to incorrect or incomplete responses.
+
+
 
 \subsection{Encoder and Decoder}
 
@@ -121,4 +144,4 @@ Today, some most popular LLM applications include at least the following.
   \item Chatbot and customer service.
   \item Copilot
   \item Agentization
-\end{itemize}
+\end{itemize} 

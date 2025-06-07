@@ -2,33 +2,9 @@
 
 This chapter studies the selection, deployment and use of LLMs in production environment for different tasks.
 
-\section{LLM Local Deployment}
+\section{Python Environment Setup}
 
-Ollama and Langflow are introduced. Ollama allows fast deployment of an open-source LLM on a local computer, while Langflow is a low-code tool that allows a developer to easily integrate 
-LLMs, both local and commercially cloud-based, into an application.
-
-\subsection{Quick LLM Deployment with Ollama}
-
-Nowadays it is convenient to quickly deploy an open-source LLM on a PC with necessary hardware. One of the simplest way of doing that is to leverage \mync{Ollama}, an open-source tool that allows the deployment of commonly seen open-source LLMs such as LLaMA, DeepSeek, etc., on a local machine computer. During the installation of Ollama, it detects and configures the GPU of the machine and configure it accordingly, saving the user's time.
-
-Once Ollama is installed, use
-\begin{lstlisting}
-ollama run <model name>
-\end{lstlisting}
-to download and start a model. A screenshot is given in Fig. \ref{fig:ollama_llama32} as an example that runs LLaMA 3.2 with Ollama on a PC using the above command.
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=\textwidth]{./chapters/part-7/figures/ollama_llama32.png}
-	\caption{An example of running Ollama with LLaMA 3.2.}
-	\label{fig:ollama_llama32}
-\end{figure}
-
-The deployed LLM does not come with any fancy graphical interface, but instead with the basic CLI. The user has the freedom to further deploy interfaces for applications on top of the basic interface. 
-
-A list of Ollama supported LLMs are given in \cite{ollama2025library}. As of this writing, famous ones include \verb|deepseek-r1| (1.5B to 671B), \verb|llama3.3| (70B), \verb|llama3.2| (1B, 3B), \verb|gemma3| (1B to 27B), and a lot more. 
-
-\subsection{Python-Based LLM Deployment and Interaction}
+LLM provides APIs to interact with many different programming languages or platforms such as Python, JavaScript, and many more. In the scope of this chapter, we focus on Python-based LLM interaction, as Python is one of the most widely used language for ANN and LLM studies and applications development.
 
 It is recommended to collect all the necessary libraries in a file, such as \texttt{environment.yml}, and use
 \begin{lstlisting}
@@ -111,6 +87,32 @@ respectively.
 It is of the user's choice whether to use Anaconda (or its light version, Miniconda) or Pip to manage the packages. As long as this notebook goes, both of them should fulfill the needs. As of this writing, it is recommended that data scientists, researchers and lectures shall use Anaconda (non-commercial) and Miniconda (commercial), while software engineers, Pip.
 \end{shortbox}
 
+\section{LLM Local Deployment}
+
+Ollama and Langflow are introduced. Ollama allows fast deployment of an open-source LLM on a local computer, while Langflow is a low-code tool that allows a developer to easily integrate 
+LLMs, both local and commercially cloud-based, into an application.
+
+\subsection{Quick LLM Deployment with Ollama}
+
+Nowadays it is convenient to quickly deploy an open-source LLM on a PC with necessary hardware. One of the simplest way of doing that is to leverage \mync{Ollama}, an open-source tool that allows the deployment of commonly seen open-source LLMs such as LLaMA, DeepSeek, etc., on a local machine computer. During the installation of Ollama, it detects and configures the GPU of the machine and configure it accordingly, saving the user's time.
+
+Once Ollama is installed, use
+\begin{lstlisting}
+ollama run <model name>
+\end{lstlisting}
+to download and start a model. A screenshot is given in Fig. \ref{fig:ollama_llama32} as an example that runs LLaMA 3.2 with Ollama on a PC using the above command.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=\textwidth]{./chapters/part-7/figures/ollama_llama32.png}
+	\caption{An example of running Ollama with LLaMA 3.2.}
+	\label{fig:ollama_llama32}
+\end{figure}
+
+The deployed LLM does not come with any fancy graphical interface, but instead with the basic CLI. The user has the freedom to further deploy interfaces for applications on top of the basic interface. 
+
+A list of Ollama supported LLMs are given in \cite{ollama2025library}. As of this writing, famous ones include \verb|deepseek-r1| (1.5B to 671B), \verb|llama3.3| (70B), \verb|llama3.2| (1B, 3B), \verb|gemma3| (1B to 27B), and a lot more. 
+
 \subsection{Open-Source-Model-Powered LLMs}
 
 In earlier sections it has been introduced that Ollama can be used to conveniently deploy an open-source LLM on the local machine, and it also provides a CLI where the user can chat with the LLM. It is possible to connect a Python program to that LLM using the interface that Ollama provides.
@@ -151,7 +153,28 @@ Many LLM service providers, such as OpenAI, allows the user to interact with the
 
 \subsection{OpenAI-Powered LLMs}
 
-If the user has decided to use a commercialized LLM model via its API key, he needs to register an account with the LLM provider, such as OpenAI, and create a new API key, and added it to the project as an environmental variable. Notice that the use of the API key often introduces costs to be paid to the LLM provider. The details about the registration of the account and the creation of the API key are not included in this notebook.
+If the user has decided to use a commercialized LLM model via its API key, he needs to register an account with the LLM provider, such as OpenAI, and create a new API key, and added it to the project as an environmental variable. Notice that the use of the API key often introduces costs to be paid to the LLM provider. The cost depends on the model and the number of input and output tokens in a call. To give a perspective, the cost of OpenAI's API calls are given in Table \ref{tab:openai_api_price} as of this writing. Powerful models such as \texttt{gpt-o1} are significantly more expansive than less powerful ones such as \texttt{gpt-4o-mini}.
+
+\begin{table}
+	\centering \caption{OpenAI's API Calls Pricing}\label{tab:openai_api_price}
+	\begin{tabular}{lrr}
+		\hline
+		Model & Input Cost & Output Cost \\ \hline
+        \texttt{gpt-4.1} & $2.00$ & $8.00$ \\
+        \texttt{gpt-4.1-mini} & $0.40$ & $1.60$ \\
+        \texttt{gpt-4.1-nano} & $0.10$ & $0.40$ \\
+        \texttt{gpt-4o} & $2.50$ & $10.00$ \\
+        \texttt{gpt-4o-mini} & $0.15$ & $0.60$ \\
+        \texttt{gpt-o1} & $15.00$ & $60.00$ \\
+		\hline
+	\end{tabular}
+\begin{flushleft}
+	\footnotesize
+	All the costs are based upon this writing, and may change over time. All costs are given in USD per $1M$ tokens.
+\end{flushleft}
+\end{table}
+
+The details about the registration of the account and the creation of the API key are not included in this notebook.
 
 This section gives a brief demo of how to connect to OpenAI using its API. The model to be used is \verb|gpt-4o-mini|. It is assumed that API key has been created and stored under \verb|.env| file in the project folder as follows.
 \begin{lstlisting}
@@ -192,9 +215,13 @@ Use LLM with cloud service providers. Nowadays many cloud providers including AW
 
 Use LLM on premises. Users can train their own models, or download the weights of existing models and deploy them locally. Many open-source models are downloadable from websites such as Hugging Face. Tools such as Ollama can help with quickly deployment of these models locally.
 
+\section{Google Gemini-Powered LLMs}
+
+TBA
+
 \section{LLM Integration in Applications}
 
-
+TBA
 
 
 
