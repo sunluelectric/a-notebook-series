@@ -1,8 +1,8 @@
 \chapter{Semantic Web Basics} \label{ch:briefintrosemanticweb}
 
-Ontology is the philosophical study of the nature of being, existence, or reality. It concerns about ``what is everything'' and ``how to define it'' in the context of inductive and deductive reasoning. It discusses how we abstract and preserve knowledge for the generations to come.
+Ontology is the philosophical study of the nature of being, existence, or reality. It concerns about ``what is everything'' and ``how to define everything'' in the context of inductive and deductive reasoning. It discusses how we as human abstract and preserve knowledge.
 
-Ontology inspires people in computer science about how we can store and exchange information efficiently using the internet. The solution is called the semantic web, an internet-based knowledge base schema. The internet powered by semantic web (together with other technologies) defines Web 3.0, a new-generation internet framework.
+Ontology inspires people in computer science about how we can store and exchange information efficiently using the internet. The solution is known as the semantic web, an internet-based knowledge base schema. The internet powered by semantic web (together with other technologies) defines Web 3.0, a new-generation internet framework.
 
 Notice that there are subtle differences between ``internet'' and ``Internet''. The lower case ``internet'' refers to the technology that bridges machines to form a network of any size, and the upper case ``Internet'' refers to the specific internet that links the entire world together. In this part of the notebook, however, they are used interchangeably.
 
@@ -14,9 +14,9 @@ In the early days, the use of internet required professional skills. Nowadays, e
 
 \subsection{Web 1.0 and 2.0}
 
-Under the Web 1.0 framework which was popular in the early stage of internet development, information is stored on individual servers in a static manner. A user can browse the contents, but he cannot edit them. It is essentially a one-way data transmission. The ``authority'' such as a news company provides the information, and the users consume it. Examples of Web 1.0 implementations include news websites, static web gallery, etc.
+Under the \mync{Web 1.0} framework which was popular in the early stage of internet development, information is stored on individual servers in a static manner. A user can browse the contents, but he cannot edit them. It is essentially a one-way data transmission. The ``authority'' such as a news company provides the information, and the users consume it. Examples of Web 1.0 implementations include news websites, static web gallery, etc.
 
-One-way data transmission in Web 1.0 cannot meet the expectation from the users who want to share their information to other users on the internet. Thanks to the advent in information science and communication, under the Web 2.0 framework users can interact with the internet bidirectionally. A user can search and filter data from the servers and even upload his own data and share it with others. The Internet became far more powerful in terms of information exchange. The source of information does not necessarily come from the authority. The users are generators and consumers of information at the same time. Examples of Web 2.0 implementations include Blog, Twitter, YouTube and Weibo.
+One-way data transmission in Web 1.0 cannot meet the expectation from the users who want to share their information to other users on the internet. Thanks to the advent in information science and communication, under the \mync{Web 2.0} framework users can interact with the internet bidirectionally. A user can search and filter data from the servers and even upload his own data and share it with others. The internet became far more powerful in terms of information exchange. The source of information does not necessarily come from the authority. The users are generators and consumers of information at the same time. Examples of Web 2.0 implementations include Blog, Twitter, YouTube and Weibo.
 
 Web 2.0 is extremely popular and successful even to date. Yet, under the background of industry 4.0, big data and data-driven modeling of almost everything, there are still limitations and downsides to Web 2.0 that we would wish to improve.
 
@@ -28,12 +28,12 @@ Structure determines functions. To solve the problem once for all, new data stor
 
 \subsection{Web 3.0}
 
-The goal of Web 3.0 is to allow more efficient information retrieval and sharing using the internet. Ideally, we would want the searching engine to truly understand the user's demand, and return only the most relevant information summarized in a nice manner. If there is no readily available response on the internet, the searching engine shall derive the response based on existing information, i.e., it should be capable of doing simple reasoning. 
+The goal of \mync{Web 3.0} is to allow more efficient information retrieval and sharing using the internet. Ideally, we would want the searching engine to truly understand the user's demand, and return only the most relevant information summarized in a nice manner. If there is no readily available response on the internet, the searching engine shall derive the response based on existing information, i.e., it should be capable of doing simple reasoning. 
 
 For this purpose, there are at least the following two development trends:
 \begin{itemize}
   \item Let the LLM-based AI remember all the knowledge. The LLM should be smart enough to precisely capture what the user wants and get back to him with useful and accurate information. This leads to chatbots and copilots.
-  \item Create a powerful and flexible NoSQL database. Make the information in the database readable for both humans and machines, and somehow integrate the semantics of the contents into the database. This leads to semantic web.
+  \item Create a powerful and flexible NoSQL database. Make the information in the database readable for both humans and machines, and somehow integrate the semantics of the contents into the database. This leads to \mync{semantic web}.
 \end{itemize}
 
 In practice, it is most recommended to use both LLM-based AI and semantic web simultaneously. This is because both LLM-based AI and semantic web have drawbacks when used alone.
@@ -54,15 +54,15 @@ In practice, it is most recommended to use both LLM-based AI and semantic web si
 
 Web 3.0 schema focuses on semantic web. The word ``semantics'' in this context specifically refers to the relations of objects and properties that can be used for machine-driven descriptive reasoning. See later sections for details. Semantic web is so important that it is often considered synonymous with Web 3.0, although the broader vision of Web 3.0 includes other features as well.
 
-Another feature of Web 3.0 is distributed storage of information. Distributed storage has both advantages and disadvantages. On one hand, it provides higher resilience against data loss. On the other hand, it adds challenges to the searching and collecting of information during the querying. Technologies like InterPlanetary File System (IPFS), blockchain, and distributed databases are used to address these challenges.
+Another feature of Web 3.0 is distributed storage of information. Distributed storage has both advantages and disadvantages. On one hand, it provides higher resilience against data loss. On the other hand, it adds challenges to the searching and collecting of information during the querying. Technologies like \myabb{InterPlanetary File System}{IPFS}, blockchain, and distributed databases are used to address these challenges.
 
-This notebook discusses the technologies used in semantic web such as resource description framework (RDF) model, RDF schema (RDFS) and web ontology language (OWL). We will see how we can use semantic web to collect and organize information, and create a knowledge base for both humans, machines, and AI.
+This notebook discusses the technologies used in semantic web such as \mync{resource description framework}[RDF] model, \mync{RDF schema}[RDFS] and \mync{web ontology language}[OWL]. We will see how we can use semantic web to collect and organize information, and create a knowledge base for both humans, machines, and AI.
 
 \subsection{Semantic Web Vision}
 
 Semantic web database is ``semantic'' due to its data model. Semantic web data model not only stores objects and their properties, but also the relationships among objects and properties. The relationships, often represented by graphs, can be used for descriptive logic reasoning. The logic reasoning allows new information to be derived based on existing facts. In addition, semantic web is more scalable, reusable and reader-friendly for both humans and machines comparing with AI methods.
 
-Many research institutes and organizations have tried building semantic webs of different scales. An example is DBPedia \textit{dbpedia.org}. The goal of DBPedia is to create something like Wikipedia, but using semantic web.
+Many research institutes and organizations have tried building semantic webs of different scales. An example is DBPedia (\textit{dbpedia.org}). The goal of DBPedia is to create something like Wikipedia, but using semantic web.
 
 \subsection{Semantic Web Stack} \label{subsec:semanticwebstack}
 
@@ -75,28 +75,28 @@ A commonly seen semantic web stack looks like Fig. \ref{fig:semanticwebstack}.
 	\label{fig:semanticwebstack}
 \end{figure}
 
-The layers and components in each associated layer are briefly introduced as follows.
+The layers and components in each layer are briefly introduced as follows.
 \begin{itemize}
 	\item Web platform layer
 	\begin{itemize}
-		\item Uniform resource identifier (URI)/ internationalized resource identifier, often a string used to identify and trace an information resource;
-		\item Communication protocols, such as HTTP/HTTPS;
-		\item Text encoding methods, such as unicode, utf-8;
-		\item Authentication methods;
+		\item \myabb{Uniform resource identifier}{URI} and/or internationalized resource identifier, often a string used to identify and trace an information resource.
+		\item Communication protocols, such as HTTP and HTTPS.
+		\item Text encoding methods, such as unicode, utf-8.
+		\item Authentication methods.
 	\end{itemize}
 	\item Syntax
 	\begin{itemize}
-		\item File formats to store information, such as and RDF/XML;
+		\item File formats to store information, such as RDF/XML and JSON-LD.
 	\end{itemize}
 	\item Knowledge representation, semantics, and interfacing tools
 	\begin{itemize}
-		\item RDF model by default, which uses triples to represent a graphical database;
-		\item RDFs and OWL which expand the capability of RDF model;
-		\item SPARQL which is the default language for semantic web query (SPARQL 1.0) and manipulation (SPARQL 1.1);
+		\item RDF (by default) which uses triples to represent a graphical database.
+		\item RDFS and OWL which expand the capability of RDF model.
+		\item SPARQL which is the recommended language for semantic web query (SPARQL 1.0) and manipulation (SPARQL 1.1).
 	\end{itemize}
 	\item Logic
 	\begin{itemize}
-		\item Logic statements and reasoning that semantic web supports for query;
+		\item Logic statements and reasoning that semantic web supports for query.
 		\item Rules that describes what query can be executed.
 	\end{itemize}
 \end{itemize}
@@ -105,7 +105,7 @@ The knowledge and semantics are stored using the RDF/RDFS model. The RDF/RDFS is
 
 It is worth mentioning that many syntax such as RDF/XML can be used as the markup languages to describe RDF/RDFS/OWL used in a semantic web. More details are introduced in later chapters.
 
-SPARQL Protocol and RDF Query Language (SPARQL) is the recommended query language for querying and manipulating the semantic web. It allows a user to search, retrieve, and modify information stored in the RDF model. The syntax of SPARQL is designed to look similar with SQL, and many commands in SPARQL have counterparts in SQL, such as \verb|SELECT|, \verb|WHERE|, \verb|GROUP BY|, and \verb|ORDER BY|. However, the backend technologies of a semantic web engine (known as triplestore or RDF management system) and a relational database management system differ largely. For example, triplestore relies heavily on graph theory and graph pattern mapping when searching through the semantic web.
+\mync{SPARQL Protocol and RDF Query Language}[SPARQL] is the recommended query language for querying and manipulating the semantic web. It allows a user to search, retrieve, and modify information stored in the RDF model. The syntax of SPARQL is designed to look similar with SQL, and many commands in SPARQL have counterparts in SQL, such as \verb|SELECT|, \verb|WHERE|, \verb|GROUP BY|, and \verb|ORDER BY|. However, the backend technologies of a semantic web engine (known as triplestore or RDF management system) and a relational database management system differ largely. For example, triplestore relies heavily on graph theory and graph pattern mapping when searching through the semantic web.
 
 An example of semantic web is given below.
 \begin{mdframed}
@@ -114,10 +114,10 @@ An example of semantic web is given below.
 {\centering \textbf{Example: Semantic Web on Animals}}
 \vspace{0.1in}
 
-The following examples demonstrates the use of RDF/RDFS model and OWL to create a small semantic web on animals. The example is provided by \textit{ChatGPT-4}.
+The following examples demonstrates the use of RDF/RDFS model and OWL to create a small semantic web on animals.
 
 \vspace{0.1in}
-\noindent \textbf{RDF/RDFS}
+\noindent \textbf{RDF/RDFS Only}
 \vspace{0.1in}
 
 \begin{lstlisting}
@@ -160,7 +160,7 @@ In this example, RDF/RDFS is used to:
 \end{itemize}
 
 \vspace{0.1in}
-\noindent \textbf{OWL}
+\noindent \textbf{RDF/RDFS with OWL}
 \vspace{0.1in}
 
 \begin{lstlisting}
@@ -229,7 +229,7 @@ Ontology has very rich meanings from both philosophy and semantic web perspectiv
 
 \subsection{Philosophy Perspective}
 
-Knowledge is the overlapping part of ground truth and human beliefs, i.e., it is the truth that humans know of being the truth. Ontology is the methodology of storing and communicating knowledge.
+Knowledge is the overlapping part of truth and human beliefs, i.e., it is the truth that humans know of being the truth. \mync{Ontology} is the methodology of storing and communicating knowledge.
 
 In the context of philosophy, ontology discusses the meaning of objects being ``existing'', how objects can be categorized, and how objects relate to each other. Ontology mainly discusses the following questions:
 
@@ -259,7 +259,7 @@ In practice, RDF/RDFS and OWL can be used to express the ontology. The following
 
 \subsection{Ontology Types and Categories}
 
-Ideally in the vision of W3C, all ontology models should be linked together using URIs and form a global model just like the global Internet. In this single model, ontology is divided into layers. The higher the layer, the more general the knowledge. The lower the layer, the more specific the knowledge within a particular domain, application or task. An example is given in Fig. \ref{fig:ontologylevel}. In practice, there might not be a clear boundary between two adjacent layers.
+Ideally in the vision of W3C, all ontology models should be linked together using URIs and form a global model just like the global Internet. In this ultimate global model, ontology is divided into layers. The higher the layer, the more general the knowledge. The lower the layer, the more specific the knowledge within a particular domain, application or task. An example is given in Fig. \ref{fig:ontologylevel} on spacecraft control. Lower-layer ontology can inherit and modify knowledge from the upper-layer ontology. In practice, there might not be a clear boundary between two adjacent layers.
 
 \begin{figure}[htbp]
 	\centering
@@ -268,17 +268,17 @@ Ideally in the vision of W3C, all ontology models should be linked together usin
 	\label{fig:ontologylevel}
 \end{figure}
 
-Lower-layer ontology can inherit and modify knowledge from the upper-layer ontology. Other ways of leveling ontology include using the expressiveness. The ``light-weight'' ontology is informal, less semantic, and supports less comprehensive logic. The ``heavy-weight'' ontology, on the other hand, is formal, more semantic, and supports more comprehensive logic and reasoning up to first-order logic. The vocabulary also grows with the ontology complexity.
+Other ways of leveling ontology include using the expressiveness. The ``light-weight'' ontology is informal, less semantic, and supports less comprehensive logic. The ``heavy-weight'' ontology, on the other hand, is formal, more semantic, and supports more comprehensive logic and reasoning up to first-order logic. The vocabulary also grows with the ontology complexity.
 
 \section{Logic} \label{sec:logic}
 
-Humans are good at deriving new knowledge from existing knowledge. The systematic way of doing so is logic. The term ``formal logic'' rigorously defines logic reasoning methods and procedures to automate logic inference by machines.
+Humans are good at deriving new knowledge from existing knowledge. The systematic way of doing so is \mync{logic}. The term ``formal logic'' rigorously defines logic reasoning methods and procedures to automate logic inference by machines.
 
-Notice that logic and logical expression form a research area by themselves and it is not possible to include all the details in the scope of this notebook. Only a brief scratch is given.
+Notice that logic and logical expression are by themselves very complex and rich concepts. It is not possible to include all the details about them in the scope of this notebook. Only a brief scratch is given.
 
 \subsection{Different Semantics from the Same Syntax}
 
-Given the same information, different people and/or machines can draw different semantics. Consider the following example. This is a piece of code written in Python syntax.
+Given the same information, different people and/or machines can draw different semantics. Consider the following example. This is a piece of code written in Python.
 \begin{lstlisting}
 ax = []
 for i in range(20):
@@ -291,7 +291,7 @@ Three interpreters are studied, the Python interpreter, the AI model, and the hu
 
 The Python interpreter is purely syntax-driven. When it executes a script, it follows the provided instructions without any broader comprehension or anticipation of what the code is doing. In the context of this example, the interpreter does not recognize that it is generating the famous Fibonacci sequence. It simply follows the rules of the script, calculating and outputting each number in the series as instructed.
 
-On the other hand, an AI model like GPT-3 does possess a level of semantic understanding, but it is quite different from that of a human. Through training on massive data corpus especially codes, it can associate the above Python script with Fibonacci series. This understanding is not innate but rather a result of statistical inference and pattern matching from the training data. In other words, in the training data there are similar codes which is referred as ``tho code to generate Fibonacci series''. When asked about the script, it can provide a summary or explanation based on its learned associations, including the name of the series and the purpose of each line of the code. It can even suggest improvement or fix bugs, so long as in the training data a similar but more efficient realization of the code is provided.
+On the other hand, an AI model like GPT-3 does possess a level of semantic understanding. Through training on massive data corpus especially codes, it can associate the above Python script with Fibonacci series. This understanding is not innate but rather a result of statistical inference and pattern matching from the training data. In other words, in the training data there are similar codes which is referred as ``the code to generate Fibonacci series''. When asked about the script, it can provide a summary or explanation based on its learned associations, including the name of the series and the purpose of each line of the code. It can even suggest improvement or fix bugs, so long as in the training data a more efficient realization of the code is provided.
 
 Finally, there's the human level of semantics, which is by far most advanced and intuitive. Not only can a human understand the Python script and the concept of the Fibonacci series, they can also infer its broader mathematical properties, such as its relation to the golden ratio, and its general behavior. One good at mathematics can intuitively understand that the series will converge to the golden ratio not only when starting with 0 and 1 but with any two initial positive integers, even if he is not specifically taught that knowledge. This level of understanding is a combination of learned knowledge, pattern recognition, and the ability to extrapolate or generalize from existing information.
 
@@ -311,22 +311,22 @@ Propositional logic is the fundamental of logic reasoning. In propositional logi
 \noindent \textbf{First-Order Logic}
 \vspace{0.1in}
 
-First-order logic (FOL) is the most commonly used logic as of today. In FOL, quantifiers and logic connectives are introduced, including universal quantification $\forall$, existential quantification $\exists$, conjunction $\land$, disjunction $\lor$ and negation $\neg$. A formal way of representing logic expressions are defined. For example, using the following to represent ``all humans are mortal''
+\myabb{First-order logic}{FOL} is the most commonly used logic as of today. In FOL, quantifiers and logic connectives are introduced, including universal quantification $\forall$, existential quantification $\exists$, conjunction $\land$, disjunction $\lor$ and negation $\neg$. A formal way of representing logic expressions are defined. For example, using the following to represent ``all humans are mortal''
 \begin{eqnarray}
 	\forall x \left(\textup{Human}(x) \rightarrow \textup{Mortal}(x)\right) \nonumber
 \end{eqnarray}
-where $\textup{CLASS}(x)$ is equivalent of a proposition ``$x$ belongs to CLASS'', which can be either true or false. The above proposition says ``for any item, if that item belongs to human, then that item belongs to mortal''.
+where $\textup{CLASS}(x)$ is equivalent of a proposition ``$x$ belongs to CLASS'', which can be either true or false. The above proposition says ``for any item, if it is true that the item belongs to human, then it must be true that the item belongs to mortal''.
 
 \vspace{0.1in}
 \noindent \textbf{Description Logic}
 \vspace{0.1in}
 
-Description logic (DL) is a subset of the first-order logic. Derivation of DL from FOL is not under the scope of this notebook. Some key features of DL are summarized as follows.
+\myabb{Description logic}{DL} is a subset of FOL. Derivation of DL from FOL is not under the scope of this notebook. Some key features of DL are summarized as follows.
 \begin{itemize}
-	\item Define classes and subclasses
-	\item Define properties (roles) and associated domains and ranges
-	\item Define restrictions on classes and properties
-	\item Support universal and existential quantifiers
+	\item Define classes and subclasses.
+	\item Define properties (roles) and associated domains and ranges.
+	\item Define restrictions on classes and properties.
+	\item Support universal and existential quantifiers.
 \end{itemize}
 Semantic web uses OWL to implement DL on computers. More details are given in Section \ref{sec:owl}.
 
@@ -334,23 +334,25 @@ Semantic web uses OWL to implement DL on computers. More details are given in Se
 	
 \Boxhead{Undecidability in FOL}
 
-We would surely want to introduce highly expressive and complex formalisms to the existing RDF/RDFS model. This motivates OWL, which enables DL in semantic web. More details of OWL is introduced later in Section \ref{sec:owl}. Notice that DL instead of FOL is widely used in semantic web due to the fact that FOL is undecidable.
+We would surely want to introduce highly expressive and complex formalisms to the existing RDF/RDFS model. This motivates OWL, which enables DL in semantic web. More details of OWL is introduced later in Section \ref{sec:owl}. 
 
-A logic is decidable if there is an algorithm that can determine whether any given statement in the logic is true or false (valid or invalid). If no such algorithm exists for a logic, it is undecidable. G$\ddot{o}$del's Incompleteness Theorems indicates that in any sufficiently powerful logical system such as FOL, there are statements that are true but cannot be proven within the system. FOL formula can be undecidable. An FOL reasoning algorithm may not terminate in finite time. The proof of this theorem can be found elsewhere and is not given in this notebook.
+Notice that DL instead of FOL is widely used in semantic web due to the fact that FOL is undecidable.
+
+A logic is decidable if there is an algorithm that can determine whether any given statement in the logic is true or false. If no such algorithm exists for a logic, it is undecidable. G$\ddot{o}$del's Incompleteness Theorems indicates that in any sufficiently powerful logical system such as FOL, there are statements that are true but cannot be proven within the system. FOL, therefore, is undecidable. An FOL reasoning algorithm may not terminate in finite time. The proof of this theorem can be found elsewhere and is not given in this notebook.
 
 While FOL inference is not decidable, DL inference, on the other hand, is decidable. That is one of the reasons DL is preferred over FOL in semantic web.
 	
 \end{shortbox}
 
-Attributive language with complement (ALC) is one of the ways to describe a simple DL, and it forms an important subset of OWL. Understanding ALC is helpful with learning OWL in later sections. A brief introduction of ALC is given below.
+\mync{Attributive language with complement}[ALC] is one of the ways to describe a simple DL, and it forms an important subset of OWL. Understanding ALC is helpful with learning OWL in later sections. A brief introduction of ALC is given below.
 
 ``Concept'' (corresponding with class in RDF/RDFS) and ``role'' (corresponding with property in RDF/RDFS) are introduced in ALC. Top concept (root class) and bottom concepts (leaf classes) are defined. Each property is associated with a range, which is basically a set of values that the property can take.
 
 Constructors are used to describe the concepts, roles and ranges used in ALC. Conjunction, disjunction, negation, existential and universal quantifiers are supported. For example, let $R$ be a role and $C$ be a concept, and $\forall R.C$ means that all roles ``$R$'' must take values from concept ``$C$''. Likewise, $\exists R.C$ means that there is at least one role ``$R$'' whose value is taken from concept ``$C$''. Concept relations are defined. Commonly used concept relation constructors are inclusion (to describe subclass), equality (to assign class), union, intersection, complement, etc.
 
-ALC uses terminological knowledge statements (define concepts and roles schema) and assertional logic (insert instances) statements to record knowledge. Examples are given below. Using terminological knowledge we can define a teacher as
+ALC uses \mync{terminological knowledge statements} (define concepts and roles schema) and \mync{assertional logic statements} (insert instances) to record knowledge. Examples are given below. Using terminological knowledge we can define a teacher as
 \begin{lstlisting}[mathescape=true]
-	Teacher $\equiv$ Person $\land$ $\exists$ HasStudent.Student $\land$ $\exists$ Teaches.Lecture
+Teacher $\equiv$ Person $\land$ $\exists$ HasStudent.Student $\land$ $\exists$ Teaches.Lecture
 \end{lstlisting}
 which translates to ``a Teacher is a Person, and it has at least one role HasStudent whose value is from Student, and has at lease one role Teaches whose value is from Lecture'', where ``Person'', ``Student'', ``Lecture'' are concepts and ``HasStudent'', ``Teaches'' are roles. There are also teachers who teach only tutorials but not classes. To include them into the Teacher class, consider using
 \begin{lstlisting}[mathescape=true]
@@ -383,7 +385,7 @@ where
 
 In \eqref{eq:logicentailment}, $\phi$ is known as the logical consequence of $\Phi$. If two logical assertions satisfy $\Phi \models \Psi$ and $\Psi \models \Phi$, then they are logically equivalent $\Phi \equiv \Psi$.
 
-A logic statement is meaningful only if its interpretation $I$ and formula $F$ are clearly articulated. $I$ and $F$ are two very important terms in logic expression. Interpretation is a formal construct that defines the meaning of a symbol in a formal language. For example, in the ontology of people, an interpretation can map an instance symbol, such as ``Alice'', to an actual person in the real world, and class symbol ``Person'', to the concept of a human being, etc. Formula, on the other hand, is a statement formulated by string of symbols from a formal language. It is an assertion trying to represent some fact. For example, a formula can be ``Alice hasSibling Bob''. 
+A logic statement is meaningful only if its interpretation $I$ and formula $F$ are clearly articulated. $I$ and $F$ are two very important terms in logic expression. \mync{Logic interpretation} is a formal construct that defines the meaning of a symbol in a formal language. For example, in the ontology of people, an interpretation can map an instance symbol, such as ``Alice'', to an actual person in the real world, and class symbol ``Person'', to the concept of a human being, etc. \mync{Logic formula}, on the other hand, is a statement formulated by string of symbols from a formal language. It is an assertion trying to represent some fact. For example, a formula can be ``Alice hasSibling Bob''. 
 
 The true or false of the formula depend not only by the formula itself, but also by the interpretation. In the earlier example ``Alice hasSibling Bob'', if ``Alice'' and ``Bob'' are indeed mapped to two siblings, and the relation ``hasSibling'' is as it literally represents, then it is true. Here is another example. Consider formula ``10 is greater than 5''. Intuitively, this is a universal truth. But from the interpretation and formula perspective, this also depends on the interpretation. If ``10'' and ``5'' are interpreted as numerical quantities and ``is greater than'' as the standard numerical greater-than relation, then it is true. However, if ``10'' and ``5'' are interpreted as amounts of debt and ``is greater than'' as ``richer'' (with less debt being richer), then it would be false under this interpretation.
 
@@ -399,11 +401,11 @@ Multiple formulas can be grouped into a theory ($T$), which can be used intercha
 
 \subsection{Logical Equivalence}
 
-Logical equivalence has already been introduced in an earlier section. Recall \eqref{eq:compoundlogicentailment} where we say if $\Phi \models \Psi$ and $\Psi \models \Phi$, $\Phi$ and $\Psi$ are logically equivalent denoted by $\Phi \equiv \Psi$. Here $\Phi$ and $\Psi$ are sets of statements.
+Logical equivalence has already been introduced earlier. Recall \eqref{eq:compoundlogicentailment} where we say if $\Phi \models \Psi$ and $\Psi \models \Phi$, $\Phi$ and $\Psi$ are logically equivalent denoted by $\Phi \equiv \Psi$. Here $\Phi$ and $\Psi$ are sets of statements.
 
 Consider a simplified case where $\Phi$ and $\Psi$ each contains only one statement. Let the formula of the statements of $\Phi$ and $\Psi$ be $F$ and $G$ respectively. The notations applied to $\Phi$ and $\Psi$ applies to $F$ and $G$ similarly. For example, $F\models G$ means that under the same interpretation if $F$ is true, $G$ must also be true. If $F \models G$ and $G \models F$, $F$ and $G$ are logically equivalent denoted by $F\equiv G$.
 
-There is a huge table of logical equivalence formulas. The proof of the formulas is not given here. Commonly seen equivalence is given in Table \ref{tab:logicalequivalence}. The interpretation of conjunction $\land$, disjunction $\lor$ and negation $\neg$ are ``AND'', ``OR'', ``NOT'' respectively.
+There is a huge table of logical equivalence formulas. Commonly seen equivalence is given in Table \ref{tab:logicalequivalence}. The proof of the formulas is not given here. The interpretation of conjunction $\land$, disjunction $\lor$ and negation $\neg$ are ``AND'', ``OR'', ``NOT'' respectively.
 \begin{table}
 	\centering \caption{Numerical calculations.} \label{tab:logicalequivalence}
 	\begin{tabularx}{\textwidth}{llX}

@@ -4,7 +4,7 @@ Semantic web uses URI to identify an existing interpretation, RDF/RDFS and OWL t
 
 \section{Uniform Resource Identifier}
 
-Human use symbols to represent objects in reality. The concept associated with a symbol is used to help define and interpret objects. An example of interpreting ``Apple'' is given in Fig. \ref{fig:semiotictriangle}.
+Human uses symbols to represent objects in reality. The concept associated with a symbol is used to help define and interpret objects. An example of interpreting ``Apple'' is given in Fig. \ref{fig:semiotictriangle}.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\textwidth]{chapters/part-4/figures/semiotic_triangle.png}
@@ -14,7 +14,7 @@ Human use symbols to represent objects in reality. The concept associated with a
 
 URI points to the interpretation of the symbols used in the semantic web. In practice, the resource is either the definition of the class/object/property, or the higher-level ontology (maybe also in the format of semantic web). For example, consider building a semantic web to describe an apple farm. Consider using \texttt{dbpedia.org/page/Apple} from DBpedia as the URI of interpretation of apple, which already gives a clear and rich definition of apple such as abstract, Wikipedia link, emoji, sugar level, etc. This saves the time of building the interpretation of apple from scratch.
 
-URI shall contain at least two pieces of information: the address (locator), and the identity (name). URI is often ASCII encoded, but it is possible to extend to unicode. The generic syntax is given below. If it looks similar with Uniform Resource Locator (URL), that is because URL is considered as a subclass of URI.
+URI shall contain at least two pieces of information: the address (locator), and the identity (name). URI is often ASCII encoded, but it is possible to extend to unicode. The generic syntax is given below. If it looks similar with the \myabb{Uniform Resource Locator}{URL}, that is because URL is considered as a subclass of URI.
 \begin{lstlisting}
 scheme:[//authority]path[?query][#fragment]
 \end{lstlisting}
@@ -39,8 +39,8 @@ RDF is the backbone data model of the semantic web. It stores data in the form o
 Notice that RDF is not a syntax by itself. A markup language is needed to host the RDF framework. Commonly used markup languages are listed below. They can be translated from one to the other.
 \begin{itemize}
   \item RDF/XML: has good compatibility with old machines.
-  \item Terse RDF Triple Language (Turtle): easy to use, human-readable.
-  \item JSON for Linked Data (JSON-LD): popular in web applications and APIs where JSON-based format is required.
+  \item \myabb{Terse RDF Triple Language}{Turtle}: easy to use, human-readable.
+  \item \myabb{JSON for Linked Data}{JSON-LD}: popular in web applications and APIs where JSON-based format is required.
   \item N-Triples: simple, machine-readable format for data exchange between tools.
 \end{itemize}
 Unless otherwise mentioned, Turtle is used in this notebook.
@@ -84,15 +84,17 @@ to assign multiple predicates to a subject to avoid repeating the same object in
 
 \subsection{Multi-valued Relation and Blank Node}
 
-It is possible to use multi-valued relations and blank nodes to enforce combining of information. Consider an example given in Fig. \ref{fig:lectureexp}, where the graph is used to demonstrate a lecture taking place at a specific room at given time slot. What if the lecture takes place twice a week, each time at a different location? With the help of multi-valued relations and blank nodes, this can be demonstrated clearly as shown in Fig. \ref{fig:lectureexp2}.
-\begin{figure}[htbp]
+It is possible to use multi-valued relations and blank nodes to enforce combining of information. Consider an example given in Fig. \ref{fig:lectureexp}, where the graph is used to demonstrate a lecture taking place at a specific room at given time slot. What if the lecture takes place twice a week, each time at a different location? 
+
+With the help of multi-valued relations and blank nodes, this can be demonstrated clearly as shown in Fig. \ref{fig:lectureexp2}. In this example, blank node plays as an unnamed intermediate node that hosts a nested structure.
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.6\textwidth]{chapters/part-4/figures/lectureexp.png}
 	\caption{An example that demonstrate when and where a lecture takes place.}
 	\label{fig:lectureexp}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.6\textwidth]{chapters/part-4/figures/lectureexp2.png}
 	\caption{An example that demonstrate a lecture taking place at multiple locations and time slots using multi-valued relations and blank nodes.}
@@ -112,12 +114,12 @@ To refer to a blank node, it is also possible to give the blank node a name. The
 _:<blank-node-name> <predicate2> <object2> .
 _:<blank-node-name> <predicate3> <object3> .
 \end{lstlisting}
-where \verb|_:<blank-node-name>| is used to declare a blank node and assign it a name.
+where \verb|_:<blank-node-name>| is used to declare a blank node and assign it a name. For normal nodes URI takes the position of \verb|_|. Bland nodes do not possess a global identifier, and \verb|_:<blank-node-name>| is only a local identifier used in a single RDF script.
 
 \subsection{Lists}
 
-Lists help to make the code clean and readable. There are two types of lists, the container (open list, extendable) and the collections (closed list, fixed). Container is helpful to handle the situation given in Fig.  \ref{fig:lectureexp3}.
-\begin{figure}[htbp]
+Lists help to make the code clean and readable. There are two types of lists, containers (open list, extendable, unordered or partially ordered) and collections (closed list, well-defined, ordered and fixed). Container is helpful to handle the situation given in Fig.  \ref{fig:lectureexp3}.
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.6\textwidth]{chapters/part-4/figures/lectureexp3.png}
 	\caption{An example of a container.}
@@ -126,7 +128,7 @@ Lists help to make the code clean and readable. There are two types of lists, th
 Notice that the blank node has a type \verb|rdf:Seq|. This tells that the items stored in the container follows an ordered set. There are other container types, such as \verb|rdf:Bag| (unordered set) and \verb|rdf:Alt| (alternatives of elements; only one element is relevant for the application).
 
 The collection, on the other hand, defines a closed list as shown by Fig. \ref{fig:lectureexp4}. In Turtle, this can be done by using nested \verb|[]| iteratively.
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.6\textwidth]{chapters/part-4/figures/lectureexp4.png}
 	\caption{An example of a collection.}
@@ -140,7 +142,7 @@ A short cut is to use \verb|()|, with the items in the collection listed down in
 \subsection{Reification}
 
 RDF permits interleaving of statements, i.e., to make a statement about another statement. For example, consider ``Alice says that Bob ate the cake''. This example contains nested statement, where ``Bob ate the cake'' is a statement, and ``Alice says \ldots'' is a statement on that statement. RDF reification follows Fig. \ref{fig:reificationexp}.
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.6\textwidth]{chapters/part-4/figures/reificationexp.png}
 	\caption{An example of RDF reification.}
@@ -150,7 +152,7 @@ RDF permits interleaving of statements, i.e., to make a statement about another 
 \subsection{Converting RDB to RDF}
 
 For small-scale relational database, it is possible to convert it to semantic web RDF manually. For example, consider an RDB for all the books in a study. There are three tables in the database, books, authors and publishers, respectively. Each table contains a few dozens of entries. The RDB can be converted to RDF as shown in Fig. \ref{fig:bookexp}. It can be realized very easily, simply by defining everything as nodes and stack triples for all relationships.
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.8\textwidth]{chapters/part-4/figures/bookexp.png}
 	\caption{Semantic web of a few books, and their authors and publishers.}
@@ -159,28 +161,24 @@ For small-scale relational database, it is possible to convert it to semantic we
 
 However, when comes to a large and complicated database, converting it to RDF manually would consume too much labor. Several ways to systematically do the conversion have been proposed. Details are not covered here. See \cite{michel2014survey} for more details.
 
-\subsection{Conclusion}
+In summary, RDF defines the objects (nodes) and also the properties among objects (edges). This is essentially how RDF differs from a conventional key-value based NoSQL. RDF can be easily scaled up.
 
-In summary, RDF, different from a plain XML or JSON which can also store independent classes, defines not only the objects (nodes) themselves but also the relationships among objects. This is essentially how RDF differs from a conventional key-value based NoSQL. RDF can be easily scaled up as nodes with the same name naturally merge together.
+The underlying mechanisms behind RDF, such as how machine stores graphical database including nodes and relationships, and how it enables query using SPARQL, is out of the scope of this notebook. Though details are not given, a brief review of the mechanisms is given in later part of the notebook.
 
-The underlying mechanism behind RDF, such as how machine stores graphical database including nodes and relationships, and how it enables query using SPARQL, is out of the scope of this notebook. In short, there are several ways to do that, for example by transforming the graph links into multiple small tables, etc. Different approaches may have their pros and cons. Details are neglected here.
-
-\section{RDF Schema (RDFS)}
+\section{RDF Schema}
 
 RDFS enforces schema to the RDF model. By using RDF/RDFS, a more consistent and semantic RDF model can be achieved compared with using RDF along.
 
-\subsection{RDFS Motivation}
+\subsection{RDF Versus RDF/RDFS} \label{subsec:rdfvsrdfs}
 
-RDF is flexible. It is so flexible that sometimes it becomes difficult to maintain consistency of the RDF model, let alone performing sophisticated reasoning from it. RDFS, also known as RDF vocabulary description language, enforce schema to the RDF model by adding more ``meta information'' which builds more connections among the nodes.
+RDF is flexible. It is so flexible that sometimes it becomes difficult to maintain consistency, let alone performing sophisticated reasoning from it. RDFS enforces schema to the RDF model by adding more ``meta information'' which builds more connections among the nodes.
 
 RDFS expands the vocabulary of RDF. It introduces the concepts of ``class'' and ``subclass'' to RDF. It provides built-in predefined classes such as \verb|rdfs:Literal|, \verb|rdfs:Resource|, \verb|rdfs:Datatype|, etc., and enforce the nodes to be linked to these classes. RDF already defines \verb|rdf:Property|. RDFS further expands the properties and relations. All above makes the RDF/RDFS modeling more consistent and semantic than using RDF alone.
 
 In the deeper insights, RDFS helps to add ``ontology'' to the RDF model by introducing the schema. It essentially integrate common understanding and domain knowledge to the information. For example, by creating a property ``\verb|:hasSpouse|'' whose domain and range person, it demonstrates the common knowledge that a person can be married to another person.
 
-\subsection{RDF Versus RDF/RDFS via an Example} \label{subsec:rdfvsrdfs}
-
 The following example compares RDF and RDF/RDFS implementations on the same context. Consider statement ``banana is yellow, apple is red, and orange is orange color''. In a RDF implementation, this would look like the green-colored elements in Fig. \ref{fig:fruitexp}. It is a disconnected graph. The semantic web failed to bridge the triples together and realize that all of them are discussing colors of fruits.
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.8\textwidth]{chapters/part-4/figures/fruitexp.png}
 	\caption{Semantic web of fruits and their colors, with RDF implementation in green RDF/RDFS in red.}
@@ -240,8 +238,8 @@ RDFS expands the vocabulary of RDF by introducing classes and properties hierarc
 
 RDFS introduces additional powerful properties for a class. They help to make the RDF model more human-readable. The following is a short list of some of the new properties.
 \begin{itemize}
-	\item \verb|rdfs:seeAlso| points to a resource where a detailed explanation of the node can be found.
-	\item \verb|rdfs:isDefinedBy| defines the relation of a resource to its definition.
+	\item \verb|rdfs:seeAlso| points to a reference where a detailed explanation of the node can be found.
+	\item \verb|rdfs:isDefinedBy| defines the relation of a source to its definition.
 	\item \verb|rdfs:comment| points to text comment.
 	\item \verb|rdfs:label| assign a more human-readable name to the node.
 \end{itemize}
