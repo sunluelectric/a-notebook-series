@@ -4,7 +4,9 @@ MongoDB is a source-available, cross-platform, general-purpose, document-oriente
 
 Data in MongoDB can be exported to or imported from files, such as BSON and JSON files. These files can be ported to other machines or consumed by other programs. MongoDB server also provides APIs for both local and remote access. 
 
-\section{Main Features}
+\section{A Brief Introduction}
+
+\mync{MongoDB} is a source-available, cross-platform, general-purpose, document-oriented NoSQL database program. It stores data in documents with flexible schema.
 
 Comparing with conventional RDBs, MongoDB is better at
 \begin{itemize}
@@ -23,16 +25,16 @@ Examples of MongoDB-suitable applications include
 
 Notice that MongoDB as well as many other NoSQL databases are not suitable to handle financial transactions due to the consistency issue that many NoSQL databases suffer. But things might change as new technologies become handy.
 
-MongoDB is a document-oriented database program and it stores data in documents and collections instead of rows and tables. A document is the basic unit of the storage. A collection is a group of documents on the same/similar topic. Each document in the same collection can adopt its own schema, and it should be self-contained so that when querying the data the user does not need to join collections and map documents. Figure \ref{ch:database:mongotree} gives a demonstrative example of how MongoDB stores and organizes data.
+MongoDB is a document-oriented database program and it stores data in documents and collections instead of rows and tables. A \mync{MongoDB document} is the basic unit of the storage. A \mync{MongoDB collection} is a group of documents on the same/similar topic. Each document in the same collection can adopt its own schema, and it should be self-contained so that when querying the data the user does not need to join collections and map documents. Figure \ref{ch:database:mongotree} gives a demonstrative example of how MongoDB stores and organizes data.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/mongodb_tree.png}
 	\caption{A demonstrative example of how MongoDB stores data as (nested) object.} \label{ch:database:mongotree}
 \end{figure}
 
-In Fig. \ref{ch:database:mongotree}, a collection ``USER'' is defined, and it contains two documents. Each document has a few properties. Different document may share common properties such as ``name''. Each of them can also have unique properties of its own such as ``age'', ``address'' and ``language''. Different properties may have different data types. For example, a property can be string, numeric, or a nested object, or an array of the above. When querying MongoDB, the DBMS is able to return selected properties of documents that meet specific criteria, and sort them in the required order.
+In the example demonstrated by Fig. \ref{ch:database:mongotree}, a collection ``USER'' is defined, and it contains two documents. Each document has several properties. Different document may share common properties such as ``name'' in this example. Each of them can also have unique properties of its own such as ``age'', ``address'' and ``language''. Different properties may have different data types. For example, a property can be string, numeric, or a nested object, or an array of the above. When querying MongoDB, the DBMS is able to return selected properties of documents that meet specific criteria, and sort them in the required order.
 
-The data is stored in the format of \mync{binary JSON}[BSON]. BSON is an extension of JSON that supports more data types.
+The data is stored in the format of \mync{binary JSON}[BSON]. BSON is an extension of JSON that supports more data types. MongoDB uses BSON to store and process data due to its enhanced capability, and uses JSON to display the data.
 
 \begin{shortbox}
 	\Boxhead{JSON VS BSON}
@@ -43,11 +45,9 @@ The data is stored in the format of \mync{binary JSON}[BSON]. BSON is an extensi
 	
 \end{shortbox}
 
-MongoDB uses BSON to store and process data due to its enhanced capability, and uses JSON to display the data.
+It is strongly recommended to make the data (document and collection) self-contained. The MongoDB architecture design should base on how the data is to be queried. Data that is accessed together should reside together. This concept is known as embedding. Embedding may add redundancy to the data storage and make documents bigger, but will make query simpler. Notice that when using embedding, make sure the size of the document is bounded and would not go towards infinity. MongoDB has a maximum $16$MB size limitation for each document.
 
-It is strongly recommended to make the data (document and collection) self-contained. The design of MongoDB architecture should depend on how the data would be queried. Data that is accessed together should reside together. This is known as embedding, which adds redundancy to the data storage and make documents bigger, but will make query simpler. Notice that when using embedding, make sure the size of the document is bounded and would not go towards infinity. MongoDB has a maximum $16$MB size limitation for each document.
-
-MongoDB database, unlike relational DB, is by nature not designed for joining. However, MongoDB does support referencing documents and even performing joins (to some extent) through different mechanisms, such as \verb|$lookup| stage in the aggregation pipe.
+MongoDB database, unlike relational DB, is by nature not designed for joining. However, MongoDB does support referencing documents and even performing joins (to some extent) through different mechanisms.
 
 \section{Installation}
 
@@ -55,9 +55,9 @@ MongoDB, like many other DBMS, has both community and enterprise versions. Mongo
 \begin{lstlisting}
 https://www.mongodb.com/try/download/community
 \end{lstlisting}
-A MongoDB server can host a MongoDB cluster, inside which are many MongoDB databases. Each database can have its own access policy, etc.
+A MongoDB server can host a MongoDB cluster, inside which are many MongoDB databases. Each database can have its own configurations and policies.
 
-To interact with MongoDB DBMS, the quickest way is to use MongoDB shell (also known as ``mongosh''). A description of the shell can be found at
+To interact with MongoDB DBMS, the quickest way is to use MongoDB shell (also known as ``mongosh''). MongoDB shell and its explanation are available at
 \begin{lstlisting}
 https://www.mongodb.com/try/download/shell
 \end{lstlisting}
@@ -65,7 +65,7 @@ Notice that when installing MongoDB server, it is possible that the server comes
 
 Different versions of MongoDB are available. Choose the correct MongoDB version depending on the CPU and the OS of the machine. MongoDB community server installation size is about 500MB.
 
-MongoDB provides enterprise service, MongoDB Atlas, as part of its cloud solution where user can deploy clusters to host databases. With proper gateway setup, the user can connect to MongoDB Atlas clusters from his local server to retrieve data or to manipulate the databases. MongoDB Atlas is briefly introduced in a later section.
+MongoDB provides enterprise service, MongoDB Atlas, as part of its cloud solution where user can deploy clusters to host databases. With proper gateway setup, the user can connect to MongoDB Atlas clusters from his local server to retrieve data or to manipulate the databases. MongoDB Atlas is briefly introduced in later Section \ref{sec:mongodb-atlas}.
 
 \section{MongoDB Shell}
 
@@ -75,14 +75,14 @@ $ mongosh
 \end{lstlisting}
 in the command line to login to the DBMS. JavaScript-like commands are used to manipulate the database, such as creating databases and inserting data.
 
-\subsection{Basic Operation}
+\subsection{Select Database}
 
 The object \verb|db| contains many methods using which the user can access and modify the basic configurations of the database. For example,
 \begin{lstlisting}
 > db.version()
 \end{lstlisting}
 gives the version of the database server. More commands can be found using \verb|db.help()|. Some commonly used commands are listed in Table \ref{ch:db:tab:mongodbbasics}.
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{MongoDB basic commands.}\label{ch:db:tab:mongodbbasics}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
@@ -110,7 +110,7 @@ Notice that there is no ``create database'' command in MongoDB. To create a data
 
 \subsection{Create Collection and Document}
 
-A MongoDB database contains multiple collections. A collection is similar to a table in an RDB in the sense that it is the collection of data on the same / similar topic. However, unlike tables where schematics such as column names and datatypes are enforced upon creation of the table, a collection does not enforce fields and their data types. The syntax is given below.
+A MongoDB database contains one or more collections. A collection is similar to a table in an RDB in the sense that it is the collection of data on the same / similar topic. However, unlike tables where schematics such as column names and data types are enforced upon creation of the table, a collection does not enforce fields and their data types. The syntax is given below.
 \begin{lstlisting}
 db.createCollection(<name>, <options>)
 \end{lstlisting}
@@ -153,9 +153,9 @@ An example of creating a collection inside a database is given below.
 Use \verb|show collections| to show the collections in the current database.
 
 \begin{shortbox}
-\Boxhead{Should I use semicolon in the end of each MongoDB command?}
+\Boxhead{Should I use a semicolon in the end of each MongoDB command?}
 
-If you are using MongoDB shell, then technically speaking, you don't have to. It works both ways. However, if you are using JavaScript environment such as \textit{Node.js} and integrating MongoDB commands as part of the program, you should use semicolon.
+You don't have to. It works both ways. However, if you are using JavaScript environment such as \textit{Node.js} and integrating MongoDB commands as part of the program, it is recommended to do so. An example is given below.
 
 For example, to select a database, in MongoDB shell
 \begin{lstlisting}
@@ -165,13 +165,15 @@ or
 \begin{lstlisting}
 > use myNewDatabase;
 \end{lstlisting}
-would both work just fine. However, in \textit{Node.js},
+would both work just fine. 
+
+However, in \textit{Node.js},
 \begin{lstlisting}
 const newDb = client.db("myNewDatabase");
 \end{lstlisting}
-the semicolon is highly recommended by JavaScript.
+the semicolon is highly recommended by JavaScript. Although in JavaScript semicolon has become optional due to \myabb{Automatic Semicolon Insertion}{ASI}, it is still widely recommended to use semicolon anyway.
 
-As a conclusion, semicolon is recommended mostly, just to follow the general JavaScript good practice. Although in JavaScript semicolon is also optional due to Automatic Semicolon Insertion (ASI), it is still widely recommended to use semicolon anyway.
+As a conclusion, semicolon is recommended mostly, just to follow the general JavaScript good practice. 
 \end{shortbox}
 
 Data can be inserted into a collection in the form of documents. It is possible to insert one or multiple documents at a time. To insert documents, first prepare the document in JSON-like format. For example, consider the following documents.
@@ -186,7 +188,8 @@ Data can be inserted into a collection in the form of documents. It is possible 
     mother: "Kite"
   }
 }
-
+\end{lstlisting}
+\begin{lstlisting}
 {
   name: "Bob",
   age: Long.fromNumber(25),
@@ -194,7 +197,8 @@ Data can be inserted into a collection in the form of documents. It is possible 
   hobbies: BSON.Array(["basketball", "jogging"])
 }
 \end{lstlisting}
-Notice that user ``Alice'' and ``Bob'' in the above example are represented by JSON and BSON respectively. MongoDB uses BSON internally, but it can also take JSON as input, in which case MongoDB driver converts JSON to BSON.
+
+Notice that user ``Alice'' and ``Bob'' in the above example are represented by JSON and BSON respectively. MongoDB uses BSON internally, but it can also take JSON as input, in which case MongoDB converts JSON to BSON internally.
 
 Then use the following syntax to insert the document into the collection.
 \begin{lstlisting}
@@ -233,17 +237,17 @@ db.getCollection('<collection_name>').<function>();
 The first implementation is more convenient while the second more flexible as it supports dynamic naming.
 \end{shortbox}
 
-More examples are given below. Assume that there is a collection \verb|posts|, inside which are documents recording the posts by a blogger. Each post may have some comments. The number of comments are recorded in the field \verb|comments| of the documents. To find documents that has a certain field with certain values, use the following
+Examples are given below to demonstrate the user of the query dictionary. Assume that there is a collection \verb|posts|, inside which are documents recording the posts by a blogger. Each post may have some comments. The number of comments are recorded in the field \verb|comments| of the documents. To find documents that has a certain field with certain values, use the following
 \begin{lstlisting}
 db.getCollection('posts').find({comments: 1})
 \end{lstlisting}
-The above query search documents with field \verb|comments| whose value is $1$ (or whose value is an array that contains $1$ as its element). under collection \verb|posts|. To get those posts with at least $1$ comment, use the following
+The above query search documents with field \verb|comments| whose value is $1$. under collection \verb|posts|. To get those posts with at least $1$ comment, use the following
 \begin{lstlisting}
 db.getCollection('posts').find({comments: {$gt: 0}})
 \end{lstlisting}
 where \verb|{$gt: 0}| stands for any value greater than $0$. Commonly seen query operators are given in Table \ref{ch:db:tab:mongodbqueryoperator}, each with an example.
 
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{MongoDB basic query operators.} \label{ch:db:tab:mongodbqueryoperator}
 	\begin{tabularx}{\textwidth}{llX}
 		\hline
@@ -261,7 +265,7 @@ where \verb|{$gt: 0}| stands for any value greater than $0$. Commonly seen query
 	\end{tabularx}
 \end{table}
 
-To specifically query for elements in an array, use \verb|$elemMatch| as follows.
+Query can be applied to elements in an array. A commonly used operator is \verb|$elemMatch|.
 \begin{lstlisting}
 { <field>: { $elemMatch: { <query1>, <query2>, ... } } }
 \end{lstlisting}
@@ -271,7 +275,11 @@ db.scores.find(
 	{ results: { $elemMatch: { $gte: 80, $lt: 85 } } }
 )
 \end{lstlisting}
-which returns a document only if: it has a field \verb|results|, and the field \verb|results| is an array, and the array contains at least one such element that is greater or equal than $80$ and less than $85$.
+which returns a document if and only if: 
+\begin{itemize}
+	\item it has a field \verb|results|, and the field \verb|results| is an array;
+	\item the array field \verb|results| contains at least one element that is greater or equal than $80$ and less than $85$.
+\end{itemize}
 
 \subsection{Update Document}
 
@@ -315,75 +323,59 @@ To update documents that meet certain criteria all at once, use \verb|updateMany
 
 \subsection{Remove Document}
 
-Use either \verb|deleteOne()| or \verb|deleteMany()| to remove documents, with the input the filter document.
+Use either \verb|deleteOne(<filter>)| or \verb|deleteMany(<filter>)| to remove documents, with the input the filter document.
 
-\section{MongoDB Compass}
+\subsection{Advanced Query}
 
-MongoDB Compass is the desktop GUI developed by MongoDB. As a MongoDB client, it can connect to a MongoDB server, either local, remote or MongoDB Atlas, using the connection string. It provides an intuitive user interface that can be used to view and edit the data on the server. 
+It been introduced earlier how \verb|find()| \verb|findOne()| can be used to retrieve documents. More about query is introduced below, such as sorting and limiting the results, returning only selected fields, returning aggregated information, etc.
 
-MongoDB Compass comes with analytical tools and data visualization tools that help the user understand the insight of the data as well as the database structure. It allows the user to define and compose aggregation pipelines that automatically abstract useful aggregated information from the data.
+It is worth mentioning that \verb|find()| returns a cursor, but not the documents themselves. One can iterate through the cursor to get all the documents matching the query. This is different from \verb|findOne()| which directly returns a document. When viewing the data in MongoDB Compass or Atlas, this does not pose an issue. One can simply take \verb|find()| as a function that returns multiple documents. However, in the programming interface, it is important to note the differences between a cursor and a document.
 
-\section{Advanced Query}
-
-It been introduced in the earlier section how \verb|find()| \verb|findOne()| can be used to retrieve documents. The input argument to the above functions is the filter document in JSON-like format, and the documents in the collection that match with the filter document will be returned.
-
-More about query is introduced in this section, such as sorting and limiting the results, returning only selected fields, returning aggregated information, etc.
-
-\subsection{More about \texttt{find()}}
-
-It is worth mentioning that \verb|find()| returns a cursor, but not the documents themselves. One can iterate through the cursor to get all the documents matching the query. This is different from \verb|findOne()| which directly returns a document.
-
-When viewing the data in MongoDB Compass or Atlas, this does not pose an issue. One can simply take \verb|find()| as a function that returns multiple documents. However, in the programming interface, it is important to note the differences between a cursor and a document.
-
-The below are two demonstrative examples how a Python program should treat the returns from \verb|find()| and \verb|findOne()| differently. The same idea applies to other programming languages as well.
+The below are two demonstrative examples how a Python program should treat the returns from \verb|find()| and \verb|findOne()| differently. The same idea applies to other programming languages as well. More about MongoDB connectivity from Python is introduced in later sections. Here, the examples are only to demonstrate the differences between \verb|find()| and \verb|findOne()|.
 
 \begin{lstlisting}
 from pymongo import MongoClient
 
 def find_users():
-	client = MongoClient('mongodb://localhost:27017/')
-	db = client.mydatabase
-	collection = db.users
+client = MongoClient('mongodb://localhost:27017/')
+db = client.mydatabase
+collection = db.users
 
-	cursor = collection.find({ 'age': { '$gte': 18 } })
+cursor = collection.find({ 'age': { '$gte': 18 } })
 
-	# Iterate over the cursor
-	for doc in cursor:
-		print(doc)
-	
-	# Alternatively, convert to a list
-	results = list(cursor)
-	print(results)
+# Iterate over the cursor
+for doc in cursor:
+print(doc)
 
-	client.close()
+# Alternatively, convert to a list
+results = list(cursor)
+print(results)
+
+client.close()
 \end{lstlisting}
 
 \begin{lstlisting}
 from pymongo import MongoClient
 
 def find_one_user():
-	client = MongoClient('mongodb://localhost:27017/')
-	db = client.mydatabase
-	collection = db.users
+client = MongoClient('mongodb://localhost:27017/')
+db = client.mydatabase
+collection = db.users
 
-	# Find one document
-	user = collection.find_one({ 'name': "John Doe" })
-	print(user)
+# Find one document
+user = collection.find_one({ 'name': "John Doe" })
+print(user)
 
-	client.close()
+client.close()
 \end{lstlisting}
 
 Since a cursor, instead of the documents themselves, is returned, we can perform further actions on the return such as sorting the result, etc.
 
-\subsection{Sorting}
-
 Use the following syntax to retrieve and sort the return.
 \begin{lstlisting}
-cursor.sort({<field>:<value>})
+	cursor.sort({<field>:<value>})
 \end{lstlisting}
 which sorts the result according to \verb|<field>|. The value ``$1$'' or ``$-1$'' represents the sorting order, either ascending or descending, respectively.
-
-\subsection{Limiting the Number of Returns}
 
 When it is unnecessary to return all the details of all the documents fulfilling the query criteria, it is possible to limit the field number of returned documents which is often helpful with improving the data processing efficiency.
 
@@ -392,8 +384,6 @@ It is possible to limit the number of documents in the returns to improve the qu
 cursor.sort({<field>:<value>}).limit(<number>)
 \end{lstlisting}
 where \verb|<number>| specifies the number of returns.
-
-\subsection{Limiting the Fields of Returns}
 
 Notice that the full syntax of \verb|find| is
 \begin{lstlisting}
@@ -413,12 +403,18 @@ with \verb|<value>| be either $1$ or $0$, one can control which fields to be inc
 
 With some more advanced setups, \verb|<projection>| can also be used to specify what elements in an array to return, and more. For details, check the user manual of \verb|db.collection.find()| function.
 
-\subsection{Counting the Number of Returns}
-
 Consider counting the number of documents fulfilling a particular filter document. Use
 \begin{lstlisting}
 db.<collection>.countDocuments( <query>, <options> )
 \end{lstlisting}
+
+\section{MongoDB Compass}
+
+Should the user decides to use GUI instead of MongoDB Shell to interact with the MongoDB server, he may consider MongoDB Compass, the official GUI client for MongoDB.
+
+MongoDB Compass is the desktop GUI developed by MongoDB. As a MongoDB client, it can connect to a MongoDB server, either local, remote or MongoDB Atlas, using the connection string. It provides an intuitive user interface that can be used to view and edit the data on the server. 
+
+MongoDB Compass comes with analytical tools and data visualization tools that help the user understand the insight of the data as well as the database structure. It allows the user to define and compose aggregation pipelines that automatically abstract useful aggregated information from the data.
 
 \section{Sharding and Indexing}
 
@@ -426,29 +422,45 @@ Given that MongoDB is often used with big data such as web data or IoT data, eff
 
 \subsection{Sharding}
 
-Sharding is a method of distributing data across multiple servers or instances. In MongoDB, a shard consists of a subset of the total dataset, and each shard is responsible for managing a portion of the data. This distribution allows MongoDB to scale horizontally by adding more servers, thereby spreading the load and the data volume across a cluster. When a query is executed, it only needs to be processed by the shards that contain relevant data, rather than the entire dataset. This can significantly reduce query times in a large, distributed system. Sharding is particularly useful for very large datasets and high throughput operations, where a single server would not be sufficient to store the data or provide acceptable performance.
+Sharding is a method of distributing data across multiple servers or instances. In MongoDB, a shard consists of a subset of the total dataset, and each shard is responsible for managing a portion of the data. This distribution allows MongoDB to scale horizontally by adding more servers, thereby spreading the load and the data volume across a cluster. When a query is executed, it only needs to be processed by the shards that contain relevant data, rather than the entire data set. This can significantly reduce query times in a large, distributed system. Sharding is particularly useful for very large datasets and high throughput operations, where a single server would not be sufficient to store the data or provide acceptable performance.
 
 \subsection{Indexing}
 
-Indexing is a technique used to speed up the retrieval of documents within a database. MongoDB uses indexes to quickly locate a document without having to scan every document in a collection. Indexes are a critical component of database optimization, as they can drastically reduce the amount of data MongoDB needs to retrieve documents for a query. 
+Indexing is a technique used to speed up the retrieval of documents within a database. MongoDB uses indexes to quickly locate a document without having to scan every document in a collection. Indexes are a critical component of database optimization, as they can drastically reduce the amount of data MongoDB needs to access the documents for a query. 
 
 When a filter such as \verb|find()|, \verb|findOne()|, or in an aggregation pipeline, \verb|$match| are used, MongoDB automatically utilizes the available indexes to speed up the query, making it more efficient.
 
-When projection is used to limit the fields to be returned, and if it happens that all the returned fields are part of the index, MongoDB would not need to look back into the documents. In this case, the query speed can be significantly faster.
+When projection is used to limit the fields to be returned, and if it happens that all the returned fields are part of the index, MongoDB would not need to revisit the original documents. In this case, the query speed can be significantly faster.
 
 \begin{shortbox}
 \Boxhead{MongoDB's B-Tree}
 
-MongoDB primarily uses B-Tree data structures for its indexes. A B-Tree is a self-balancing tree data structure that maintains sorted data in a way that allows searches, sequential access, insertions, and deletions in logarithmic time. The ``B'' in B-Tree stands for ``balanced'' and indicates that the tree is designed to keep the data balanced, ensuring that operations are efficient as the dataset grows. The B-Tree structure allows MongoDB to perform efficient query. Instead of scanning every document in a collection, MongoDB can use the B-Tree index to quickly navigate through a small subset of the data to find the documents that match the query criteria.
+MongoDB primarily uses B-Tree data structures for its indexes. A B-Tree is a self-balancing tree data structure that maintains sorted data in a way that allows searches, sequential access, insertions, and deletions in logarithmic time. 
+
+The ``B'' in B-Tree stands for ``balanced'' and indicates that the tree is designed to keep the data balanced, ensuring that operations are efficient as the dataset grows. The B-Tree structure allows MongoDB to perform efficient query. Instead of scanning every document in a collection, MongoDB can use the B-Tree index to quickly navigate through a small subset of the data to find the documents that match the query criteria.
 \end{shortbox}
 
 However, index by itself is also an argument data structure and it consumes disk and memory space. Each time there is a write operation, the index needs to be updated. Therefore, a very complicated index schema slows down data insertion. It is critical to design appropriate index to optimize the overall performance of the database.
 
-The default index for a collection is ``\verb|_id|'', a compulsory and unique field required by MongoDB. The user can also define index of different types. User-defined index can be unique or non-unique. The index of a collection can be created when the collection is empty, or when there are already some documents.
+The default index for a collection is ``\verb|_id|'', a compulsory and unique field required by MongoDB. The user can also define index of different types. User-defined index can be unique or non-unique. The index of a collection can be created at any time, and it does not have to be when the collection is empty.
 
 A MongoDB collection can have multiple indexes, and when you perform a query, MongoDB will choose the most suitable index to use based on the query's criteria.
 
-\subsection{Simple and Compound Index}
+Index related operations are introduced below.
+
+\vspace{0.1in}
+\noindent \textbf{Check Index}
+\vspace{0.1in}
+
+To check existing indexes, use
+\begin{lstlisting}
+db.collection_name.getIndexes()
+\end{lstlisting}
+The index can also be viewed from the graphical UI.
+
+\vspace{0.1in}
+\noindent \textbf{Create Index}
+\vspace{0.1in}
 
 There are many options when creating the user-defined index. The following function 
 \begin{lstlisting}
@@ -478,9 +490,7 @@ The order of fields in a compound index can significantly impact query performan
 
 It is possible to use the \verb|<options>| argument to set additional constraints to the index, for example, to enforce its value to be unique.
 
-\subsection{Multi-key Index}
-
-When defining index on an array field, the index is known as multi-key index. Like the scalar fields, multi-key index can also be both single or compound. It is also possible to mix scalar keys with array keys.
+When defining index using a field of array, the index is known as multi-key index. Like the scalar fields, multi-key index can also be both single or compound. It is also possible to mix scalar keys with array keys.
 
 Syntax wise, defining a multi-key index looks similar with defining a regular single or compound index as follows.
 \begin{lstlisting}
@@ -496,7 +506,9 @@ The only limitation is that there can be only one array key per index.
 
 Behind the screen, MongoDB treats each element in the array key as a separate index value. Likewise, each element in the array of the index can be scalar, string, or nested object.
 
-\subsection{Hide and Remove Index}
+\vspace{0.1in}
+\noindent \textbf{Hide and Remove Index}
+\vspace{0.1in}
 
 It is not recommended to modify the index of a collection frequently, as deleting and recreating index take time and resources. Sometimes we do need to remove a redundant index if it is adding too much writing cost.
 
@@ -544,25 +556,15 @@ After hiding the user-defined index, the index status becomes
 
 To remove an index instead of hiding it, use \verb|dropIndex()| instead of \verb|hideIndex()|. A similar-looking command \verb|dropIndexes()| allows removing multiple indexes at the same time.
 
-\subsection{Performance Evaluation with Index}
-
-To check the indexes of a system, use
-\begin{lstlisting}
-db.collection_name.getIndexes()
-\end{lstlisting}
-The index can also be viewed from the graphical UI.
+\vspace{0.1in}
+\noindent \textbf{Evaluate Performance}
+\vspace{0.1in}
 
 Consider using \verb|explain()| function as follows when carrying out a find operation.
 \begin{lstlisting}
 db.<collection>.explain().find()
 \end{lstlisting}
-which will list down the down-to-the-ground stages to carry out the query. Apply the same query to two identical collections, one with index and the other without on different scenarios where:
-\begin{enumerate}
-	\item The filter document and the projection only contains indexed fields.
-	\item The filter document contains indexed fields, but the returns require more fields.
-	\item The filter document does not contain indexed fields.
-\end{enumerate}
-and compare the differences.
+which will list down the down-to-the-ground stages to carry out the query. The user can use this to test the same document with different index setups, and compare their performance.
 
 \section{Third-Party Connection}
 
@@ -584,12 +586,9 @@ Both MongoDB shell CLI and MongoDB Compass GUI can connect to MongoDB as introdu
 	\item \verb|TypeScript|
 \end{itemize}
 \end{multicols}
-A full list can be found at
-\begin{lstlisting}
-https://www.mongodb.com/docs/drivers/
-\end{lstlisting}
+A full list can be found at \cite{driver2025mongo}
 
-Here is a quick example to connect to MongoDB using Python library \verb|PyMongo|. The installation of the library is not given.
+Here is a quick example to connect to MongoDB using Python library \verb|PyMongo|.
 \begin{lstlisting}
 import pymongo
 from pymongo import MongoClient
@@ -630,14 +629,10 @@ def pull_from_mongodb(connection_string, database_name, collection_name, query_d
 	return results
 
 \end{lstlisting}
-A full instruction to execute the above example can be found at
-\begin{lstlisting}
-https://www.mongodb.com/docs/languages/python/pymongo-driver/current/get-started/
-\end{lstlisting}
 
-\section{Aggregation Framework}
+\section{Aggregation Pipeline}
 
-Aggregation is the analysis and summary of data. MongoDB, like many other databases, provides powerful tools to perform aggregation functions such as counting the number of documents, calculating the sum / average of a particular field of filtered documents, etc. Beyond that, MongoDB allows the user to define a pipeline composed of a sequence of data processing procedures for aggregation. This enables autonomous data processing and analysis, and it is useful especially for big data applications. This feature, known as the data aggregation framework or data aggregation pipeline, is one of the most powerful and useful features that MongoDB offers.
+In the context of MongoDB, aggregation is the analysis and summary of data. MongoDB, like many other databases, provides powerful tools to perform aggregation functions such as counting the number of documents, calculating the sum or average of a particular field of filtered documents, etc. Beyond that, MongoDB allows the user to define a pipeline composed of a sequence of data processing procedures for aggregation. This enables autonomous data processing and analysis, and it is useful especially for big data applications. This feature, known as the data aggregation framework or data \mync{aggregation pipeline}, is one of the most powerful and useful features that MongoDB offers.
 
 Aggregation pipeline is supported in all MongoDB tiers, including MongoDB Community, Enterprise and Atlas.
 
@@ -704,10 +699,10 @@ And the return is a cursor pointing to the following array of documents
 	{ _id: 'Pepperoni', totalQuantity: 20 }
 ]
 \end{lstlisting}
-The return of an aggregation pipeline can be returned to the program for further data mining. It can also create new documents or modify existing documents.
 
-Notice that the design of pipeline affects the performance of the query. There are many supported stages, each with a different list of input arguments. A full list of supported stages can be found from MongoDB's user manual at \cite{mongodb2024aggregation}
-under ``Aggregation Stages''. Calculations can be performed along with the aggregation pipeline. The calculations are triggered by aggregation operators. A full list of supported aggregation operators can be found from MongoDB's user manual at \cite{mongodb2024aggregationoperators} under ``Aggregation Operators''.
+The return of an aggregation pipeline can be consumed by a program, or used to create a new collection.
+
+Notice that the design of the pipeline, such as the order of the stages, may affect the execution speed and efficiency of the aggregation pipeline. There are many supported stages, each with a different list of input arguments. A full list of supported stages can be found from MongoDB's user manual at \cite{mongodb2024aggregation} under ``Aggregation Stages''. Calculations can be performed along with the aggregation pipeline. The calculations are triggered by aggregation operators. A full list of supported aggregation operators can be found from MongoDB's user manual at \cite{mongodb2024aggregationoperators} under ``Aggregation Operators''.
 
 It is highly recommended that one should read through MongoDB's user manual to learn the aggregation framework. For the convenience of the reader, commonly used stages are introduced as follows.
 
@@ -715,7 +710,7 @@ It is highly recommended that one should read through MongoDB's user manual to l
 
 The \verb|$match| stage filters the documents to pass only the documents that match the specified conditions to the next pipeline stage. A general syntax is given below.
 \begin{lstlisting}
-	{$match: <filter>}
+{$match: <filter>}
 \end{lstlisting}
 
 The \verb|$match| stage should be used in early steps to make the pipeline more efficient.
@@ -814,7 +809,7 @@ The \verb|$addFields| or \verb|$set| stage (alias of each other) is used to modi
 \end{lstlisting}
 The assignment can be either a value or an expression, such as rounding, multiplying by a gain, etc. A list of supported arithmetic aggregation functions is given in Table \ref{tab:mongodb_arithmetic_aggregation}.
 
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{MongoDB arithmetic aggregation functions.}\label{tab:mongodb_arithmetic_aggregation}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
@@ -901,7 +896,7 @@ or
 }
 \end{lstlisting}
 
-\section{MongoDB Atlas}
+\section{MongoDB Atlas} \label{sec:mongodb-atlas}
 
 MongoDB Atlas is the MongoDB cloud-based serverless solution. It allows the user to deploy MongoDB on the cloud. The user has the freedom to choose the base cloud service provider including AWS, Azure and Google Cloud. Thanks to Altas, the user has the flexibility to seamlessly change cloud service providers and service tiers without downtime. 
 
