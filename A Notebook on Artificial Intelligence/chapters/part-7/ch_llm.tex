@@ -1,14 +1,14 @@
-\chapter{Large Language Model (Part 1: Theory)} \label{ch:llmtheory}
+\chapter{Large Language Model: Theory} \label{ch:llmtheory}
 
-This chapter serves as an overview of \mync{large language model}[LLM], a popular and successful NLP practice, from theory and technical perspective. LLM can not only process human languages but also generate new contents based on human language written requirements. The introduction of multimodal LLM further allows LLM to understand and generate not just writings but also pictures and videos. The theory and technology behind LLM are briefly discussed.
+This chapter serves as an overview of the large language model from the theory and technical perspective. LLM is a successful practice of NLP and beyond. It can not only process human languages but also generate new contents based on human language written requirements. The introduction of multimodal LLM further allows LLM to understand and generate not just writings but also pictures and videos.
 
-Nowadays, it is possible for a regular user to leverage on commercialized models to develop his own applications. Given a powerful machine, a user can even deploy LLMs locally in a few steps. Open-source LLMs are available so that the user does not need to train a model from scratch. The deployment of LLMs and the interaction with them are introduced in consecutive chapters.
+Nowadays, it is possible for a regular user to leverage on commercialized models to develop his own applications. Given a powerful machine, a user can even deploy LLMs locally in a few steps. Open-source LLMs are available so that the user does not need to train a model from scratch. The deployment of LLMs and the interaction with them are introduced in the next Chapter \ref{ch:llmpractice}.
 
 Modern LLMs are built on top of Transformer framework which has been introduced in earlier Chapter \ref{ch:transformer}. It is worth emphasizing the relationship between the Transformer and LLM. Transformer is an ANN framework designed for processing any sequential data so long as it can be encoded, and apparently NLP is an important use case of it. LLM is a practice of Transformer on NLP.
 
 \section{Introduction to LLM}
 
-This section reviews existing NLP methods and their limitations, and discusses the gap LLM bridges.
+This section reviews existing NLP methods and their limitations, and discusses the gaps that LLM bridges.
 
 \subsection{Existing NLP Models and Gaps}
 
@@ -34,7 +34,7 @@ An obvious issue of SLM is that the computation and storage of the model increas
 \noindent \textbf{Neural Language Models}
 \vspace{0.1in}
 
-With the introduction of ANN, in particular RNN, \mync{Neural Language Models}[NLM] became popular. RNN-based NLM builds the word prediction function conditioned on the aggregated context features abstracted and passed recurrently from current and previous input sequence.
+With the introduction of ANN, in particular RNN, \mync{Neural Language Models}[NLM] became popular. RNN-based NLM builds the word prediction function conditioned on the aggregated context features abstracted and passed recurrently from current and previous input sequence. More about RNN has been introduced in Chapter \ref{ch:rnn}.
 
 RNN is not a perfect one-stop solution either. The training of RNN can be difficult due to vanishing and exploding gradient problems. This limits the depth that RNN can go. When handling long sequence of words, the performance of RNN drops significantly because it is weak at building long-term dependencies.
 
@@ -42,7 +42,7 @@ RNN is not a perfect one-stop solution either. The training of RNN can be diffic
 \noindent \textbf{Pre-trained Language Models and Large Language Models}
 \vspace{0.1in}
 
-As introduced in details in earlier chapters, attention mechanism has been proposed to tackle the long-term dependency problem of RNN. Transformer architecture, which relies purely on encoder, decoder and attention mechanism without using RNN is then proposed. It has been verified that transformer architecture is good at abstracting information from sequential data, in particular, natural languages. With a transformer, it becomes possible to build very deep neural networks and have it trained efficiently with big-size data corpus.
+As introduced in details in earlier chapters, attention mechanism has been proposed to tackle the long-term dependency problem of RNN. Transformer architecture, which relies purely on encoder, decoder and attention mechanism without using RNN is then proposed. It has been verified that transformer architecture is good at abstracting information from sequential data, in particular, natural languages. With a transformer, it becomes possible to build very deep neural networks and have it trained efficiently with big-size data corpus. The outcome is known as the \mync{large language model}[LLM].
 
 Language models based on different transformer-based architectures are often called \mync{Pre-trained Language Models}[PLM]. LLM can be taken as a subset of PLM. The main difference between an LLM and a regular PLM is the size of the model. The scaling of the model from hundreds of millions of parameters for PLMs to tens or hundreds of billions of parameters for LLMs introduces emergent abilities such as in-context learning to the model, significantly enhancing its capability and intelligence. As of this writing, it is not very clear how the these abilities suddenly emerge with the size of the model.
 
