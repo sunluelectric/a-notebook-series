@@ -1,0 +1,101 @@
+\chapter{Brief Introduction to \texttt{conda}}
+
+Developed and maintained by Anaconda Inc., \verb|conda| is a free and open-source program for package and environment management. When installing and updating packages with \verb|conda|, it automatically detects the hardware of the machine and the dependencies of packages, and applies the latest compatible versions.
+
+The purpose of this chapter is not to give a detailed introduction to \verb|conda| which can be found at \cite{conda2025}. This chapter is merely a summary of commonly used configurations and commands.
+
+Majority of contents in this chapter come from \cite{conda2025cheatsheet}.
+
+\section{Installation}
+
+It is recommended that the user shall install Miniconda, a variation of Anaconda distribution, to use \verb|conda|.
+
+Miniconda is a light version of Anaconda distribution. The former of which contains only \verb|conda|, \verb|python| and a small number of other packages, while the latter contains more than three hundred packages, some of which are proprietary to Anaconda and may require a license for use in production environments.
+
+\section{Configuration of Channels}
+
+\section{Environment Management}
+
+To list all environments, use
+\begin{lstlisting}
+conda info --envs
+\end{lstlisting}
+
+To list all packages and their source channels, use
+\begin{lstlisting}
+conda list --name <env name> --show-channel-urls
+\end{lstlisting}
+
+Create. Create with requirement.txt.
+
+To create an environment, use
+\begin{lstlisting}
+conda create --name <env name> [python=<version>]
+\end{lstlisting}
+
+To clone an environment, use
+\begin{lstlisting}
+conda create --clone <source env name> --name <env name>
+\end{lstlisting}
+
+Remove.
+
+To remove an environment, use
+\begin{lstlisting}
+conda remove --name <env name> --all
+\end{lstlisting}
+
+Export.
+
+The environment, including the platform, packages and channels information can be exported as a plain text file, usually either a YAML file or a TXT file. This file can be used to quickly setup an identical environment in a later stage.
+
+It is recommended to name the file after the environment name so that the name is preserved.
+
+To export the environment, use
+\begin{lstlisting}
+conda export --from-history > <env name>.yml
+\end{lstlisting}
+
+\section{Package Management}
+
+Install.
+
+To install a package in specified environment, use
+\begin{lstlisting}
+conda install --name <environment name> <package name>
+\end{lstlisting}
+
+Update.
+
+To update all packages in an environment, use
+\begin{lstlisting}
+conda update --all --name <environment name>
+\end{lstlisting}
+
+Remove.
+
+To remove a package from specific environment, use
+\begin{lstlisting}
+conda uninstall --name <environment name> <package name>
+\end{lstlisting}
+
+If no environment name is specified in the above commands, current environment will be used.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
