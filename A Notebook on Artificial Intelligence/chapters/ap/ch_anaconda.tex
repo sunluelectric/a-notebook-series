@@ -2,9 +2,7 @@
 
 Developed and maintained by Anaconda Inc., \verb|conda| is a free and open-source program for package and environment management. When installing and updating packages with \verb|conda|, it automatically detects the hardware of the machine and the dependencies of packages, and applies the latest compatible versions.
 
-The purpose of this chapter is not to give a detailed introduction to \verb|conda| which can be found at \cite{conda2025}. This chapter is merely a summary of commonly used configurations and commands.
-
-Majority of contents in this chapter come from \cite{conda2025cheatsheet}.
+The purpose of this chapter is not to give a detailed introduction to \verb|conda| which can be found at \cite{conda2025}. This chapter is merely a summary of commonly used configurations and commands. Majority of contents in this chapter come from \cite{conda2025cheatsheet}.
 
 \section{Installation}
 
@@ -14,6 +12,27 @@ Miniconda is a light version of Anaconda distribution. The former of which conta
 
 \section{Configuration of Channels}
 
+Channels refer to the cloud archive from where \verb|conda| downloads and upgrades packages. There are default channels coming with \verb|conda| installation, and the user can add channels or change their priorities in the list.
+
+The channels are stored in file \verb|.condarc|, which is usually stored in the user's directory. The user can add or remove channels by directly editing that file. Alternatively, there are commands to add channels or to check channel status. 
+
+To list all channels, use
+\begin{lstlisting}
+conda config --show channels
+\end{lstlisting}
+
+Commonly seen channels include \verb|defaults| and \verb|conda-forge|. Notice that \verb|defaults| is a collection of three Anaconda defined channels, and it contains propriety packages developed by Anaconda, and it may require licensing to be used in commercial environment.
+
+To add a channel, either use
+\begin{lstlisting}
+conda config --add channels <new channel>
+\end{lstlisting}
+to add a new channel to the top (highest priority) of the channel list, or
+\begin{lstlisting}
+conda config --append channels <new channel>
+\end{lstlisting}
+to append a new channel to the end (lowest priority) of the channel list.
+
 \section{Environment Management}
 
 To list all environments, use
@@ -21,31 +40,34 @@ To list all environments, use
 conda info --envs
 \end{lstlisting}
 
+To activate or deactivate an environment, use
+\begin{lstlisting}
+conda activate <env name>
+conda deactivate
+\end{lstlisting}
+respectively.
+
 To list all packages and their source channels, use
 \begin{lstlisting}
 conda list --name <env name> --show-channel-urls
 \end{lstlisting}
-
-Create. Create with requirement.txt.
+where notice that the additional \verb|--show-channel-urls| displays where each package come from.
 
 To create an environment, use
 \begin{lstlisting}
 conda create --name <env name> [python=<version>]
 \end{lstlisting}
+where additional \verb|--file| followed by the list of packages in TXT or YAML file can be used to create an environment and install required packages. In this case, \verb|conda| automatically checks and configures the machine setup and handles package dependencies. 
 
 To clone an environment, use
 \begin{lstlisting}
 conda create --clone <source env name> --name <env name>
 \end{lstlisting}
 
-Remove.
-
 To remove an environment, use
 \begin{lstlisting}
 conda remove --name <env name> --all
 \end{lstlisting}
-
-Export.
 
 The environment, including the platform, packages and channels information can be exported as a plain text file, usually either a YAML file or a TXT file. This file can be used to quickly setup an identical environment in a later stage.
 
@@ -53,26 +75,20 @@ It is recommended to name the file after the environment name so that the name i
 
 To export the environment, use
 \begin{lstlisting}
-conda export --from-history > <env name>.yml
+conda export --from-history><env name>.yml
 \end{lstlisting}
 
 \section{Package Management}
-
-Install.
 
 To install a package in specified environment, use
 \begin{lstlisting}
 conda install --name <environment name> <package name>
 \end{lstlisting}
 
-Update.
-
 To update all packages in an environment, use
 \begin{lstlisting}
 conda update --all --name <environment name>
 \end{lstlisting}
-
-Remove.
 
 To remove a package from specific environment, use
 \begin{lstlisting}

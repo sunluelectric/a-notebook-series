@@ -162,12 +162,14 @@ Nowadays many cloud providers including AWS, Microsoft Azure, Google Cloud Servi
 
 \subsection{API-Based LLM}
 
-Many LLM service providers, such as OpenAI, allows the user to interact with their cloud-based LLMs using APIs. Each API call introduces a cost which often depends on the model it uses and the token the questions and responses consume. If the user has decided to use a commercialized LLM model via its API key, he needs to register an account with the LLM provider, such as OpenAI, and create a new API key, and added it to the project as an environmental variable. 
+Many LLM service providers, such as OpenAI, allows the user to interact with their cloud-based LLMs using APIs through command lines. Notice that the API-based LLM has a completely different business model compared with the chatbot, and should be treated as different services.
 
-Notice that the use of the API key often introduces costs to be paid to the LLM provider. The cost depends on the model and the number of input and output tokens in a call. To give a perspective, the cost of OpenAI's API calls are given in Table \ref{tab:openai_api_price} as of this writing. Powerful models such as \texttt{gpt-o1} are significantly more expansive than less powerful ones such as \texttt{gpt-4o-mini}.
+If the user has decided to use a commercialized LLM model via its API key, he needs to register an account with the LLM provider, such as OpenAI, and create a new API key, and added it to the project as an environmental variable. 
+
+Notice that the use of the API key often introduces costs to be paid to the LLM provider. The cost depends on the model and the number of input and output tokens in a call. To give a perspective, as of this writing the cost of OpenAI's API calls are given in Table \ref{tab:openai_api_price} as of this writing. Powerful models such as \texttt{gpt-o1} are significantly more expansive than less powerful ones such as \texttt{gpt-4o-mini}. This is different from chatbot service where the user pays a fixed monthly subscription fee and get almost unlimited access to most of the models of his choice.
 
 \begin{table}
-	\centering \caption{OpenAI's API Calls Pricing}\label{tab:openai_api_price}
+	\centering \caption{OpenAI's API Calls Pricing, in USD per $1M$ tokens.}\label{tab:openai_api_price}
 	\begin{tabular}{lrr}
 		\hline
 		Model & Input Cost & Output Cost \\ \hline
@@ -179,20 +181,28 @@ Notice that the use of the API key often introduces costs to be paid to the LLM 
         \texttt{gpt-o1} & $15.00$ & $60.00$ \\
 		\hline
 	\end{tabular}
-\begin{flushleft}
-	\footnotesize
-	All the costs are based upon this writing, and may change over time. All costs are given in USD per $1M$ tokens.
-\end{flushleft}
 \end{table}
 
 The details about the registration of the account and the creation of the API key are not included in this notebook.
 
-This section gives a brief demo of how to connect to OpenAI using its API. The model to be used is \verb|gpt-4o-mini|. It is assumed that API key has been created and stored under \verb|.env| file in the project folder as follows.
+The Python library \verb|openai| provides a quick way to interact with its models, given that the user has a valid API key. A basic realization looks like the following. An example is given later. The ``completions'' API is used, which asks the LLM to complete a conversation.
 \begin{lstlisting}
-OPENAI_API_KEY=sk-proj-<content>
+from openai import OpenAI
+
+api_key = '<sk-proj-...>' # put api key here
+
+openai = OpenAI()
+messages = [
+{"role": "system", "content": "<system prompt>"},
+{"role": "user", "content": "<user prompt>"}
+]
+response = openai.chat.completions.create(model="<model>", messages=messages)
 \end{lstlisting}
 
-The following code demonstrates the connection of the local Python plant to the OpenAI LLM model. The ``completions'' API is used, which asks the LLM to complete a conversation.
+The format of \verb|message|, originally defined by OpenAI, has now become a convention for LLM API calls. In the message, \verb|<system prompt>| tells LLM the basic setup, such as what role the LLM shall play and what it should do, whereas \verb|user prompt| gives the user specific data that the LLM needs to process.
+
+An example connecting to \verb|gpt-4o-mini| is given below.
+
 \begin{lstlisting}
 import os
 from openai import OpenAI
@@ -218,10 +228,47 @@ messages = [
 \end{lstlisting}
 where \verb|<system prompt>| tells LLM the basic setup, such as what role the LLM shall play and what it should do, whereas \verb|user prompt| gives the user specific data that the LLM needs to process.
 
-
 \section{Model Fine-Tuning}
 
+Many LLM service providers such as OpenAI allows a user to fine-tune a clone of their base models using his own data. The user pays the computation resources consumed during the fine tuning, and the fine-tuned model needs to reside at the servers of the service provider. Alternatively, a user can also download open-source models from the community, such as Hugging Face, and fine-tune a model locally.
+
+This section introduces the practices in model fine-tuning. To start, a brief review of some of the frontier models is given as of this writing.
+
 \subsection{A Review of Frontier Models}
+
+Models to be reviewed in this section are summarized in Table XXX. It is also indicated in the table whether the model is propriety or open-source, whether the corresponding company provides a browser-based chatbot where the user can quickly test its performance, and whether the corresponding company provides API call services where the user can link an application to the LLM running at the company's servers.
+
+\begin{table}[!htb]
+	\centering
+	\caption{Frontier LLMs and their accessibility features.}
+	\label{tab:frontiermodels}
+	\begin{tabular}{lccc}
+		\hline
+		Model                  & Proprietary / Open-Source\textsuperscript{1} & Chatbot\textsuperscript{2} & API\textsuperscript{3} \\
+		\hline
+		GPT (OpenAI)           & P & Y & Y \\
+		Claude (Anthropic)     & P & Y & Y \\
+		Gemini (Google)        & P & Y & Y \\
+		LLaMA (Meta)           & O & N & N \\
+		Qwen (Alibaba)         & O & Y & Y \\
+		DeepSeek (DeepSeek)    & O & Y & Y \\
+		\hline
+	\end{tabular}
+	
+	\vspace{0.5em}
+	\begin{flushleft}
+		\tiny
+		Note: A model may have multiple versions or variants with different accessibility features. This table reflects the latest version of each model line as of this writing. \\
+		\textsuperscript{1} Proprietary / Open-Source: Whether the model weights are publicly released and can be deployed locally. \\
+		\textsuperscript{2} Chatbot: Whether an official website hosted by the developer allows users to interact with the model. Costs may apply, even for open-source models. \\
+		\textsuperscript{3} API: Whether the developer provides official API access. Costs may apply, even for open-source models.
+	\end{flushleft}
+\end{table}
+
+
+
+
+
 
 \subsection{Frontier Model Fine-Tuning}
 
