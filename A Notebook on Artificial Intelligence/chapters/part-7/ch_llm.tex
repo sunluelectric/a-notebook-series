@@ -168,30 +168,14 @@ Multi-modal LLM has enabled different types of inputs to the LLM, not limited to
 
 Many tools and software have developed APIs for LLM. These tools enhance computation and online information retrieval capabilities of LLM.
 
-\section{Frontier Models}
+\section{Existing LLMs Features}
 
-This section introduces commonly seen frontier LLM models as of this writing. Some of the most famous ones are listed below.
+As of this writing, there are countless LLMs available on the market or within the open-source community, and the list continues to evolve rapidly. 
 
-\begin{itemize}
-  \item Open-source
-  \begin{itemize}
-    \item LLaMA, and its variations (Meta)
-    \item Gemma (Google)
-    \item Qwen (Alibaba Cloud)
-    \item Deepseek-R1 (Deepseek)
-    \item Phi (Microsoft)
-  \end{itemize}
-  \item Closed-source
-  \begin{itemize}
-    \item GPT (OpenAI)
-    \item Gemini (Google)
-    \item Claude (Anthropic)
-  \end{itemize}
-\end{itemize}
+This section introduces the shared properties and general characteristics of existing LLMs, without delving into detailed performance metrics or task-specific comparisons. The goal here is not to promote one model over another, but rather to provide a broad overview of what defines an LLM in practice.
 
-Each of the models listed above has its own strengths and weaknesses. Since the models are continuously evolving, this notebook will not address or compare their shortages. Instead, only general features that are shared among all LLMs are introduced in this section.
+A more detailed performance review of selected models is provided in Section~\ref{sec:frontierllmmodels}.
 
-The user can interact with these models using the interfaces they provide such as CLIs and APIs. The interfaces are also introduced.
 
 Many LLMs are capable of engaging in human-like conversations and answering questions in depth. Some can even search the internet for the up-to-date relevant information to support their responses. Most well-known LLMs can also follow user instructions to perform specific tasks, such as completing a piece of code, provided the prompts are sufficiently clear and aligned with the model's training data.
 
@@ -212,6 +196,7 @@ Multimodal LLMs can generate images or videos based on textual descriptions. How
 
 It is true that each LLM is trained and fine-tuned with different data corpus and may behave differently on different types of tasks. Consider LLMs with the same model structure and training strategy. In such case, models with larger training data sets and more parameters often outperform those with smaller training data sets and less parameters. From application perspective, the trend is that the frontier models' performances are converging for regular tasks, and the costs are going to be the main differentiator. 
 
+OpenAI's GPT models and Meta's LLaMA models are the first models that gain popularity. A brief review is given in the remaining of the section.
 
 \subsection{OpenAI Family}
 
@@ -424,9 +409,9 @@ Multimodal LLM and ``Any-to-Any'' LLM are not the main forecast of this chapter.
 
 LLaMA 2 is the next generation open source LLM following the original LLaMA. The model is free for research and commercial use. LLaMA 2 70B has $70B$ parameters and it is pre-trained with $2T$ tokens of training data.
 
+\subsection{Other LLMs}
 
-
-\section{LLM Development Workflow}
+\section{LLM Development}
 
 This section introduces the basic steps in the LLM development workflow, should the user want to develop an LLM from scratch.
 
@@ -452,30 +437,9 @@ This section introduces the basic steps in the LLM development workflow, should 
 \noindent \textbf{Attention Mechanism}
 \vspace{0.1in}
 
-\subsection{Training Set Preparation}
+\subsection{Training Corpus Preparation}
 
-Data corpus is available online for LLM training. Many libraries such as PyTorch compatible Python packages have been developed to automate the training procedures and to convenient the users. Many LLMs, both open-source and closed-source, are available on the market. A summary is given in Table \ref{ch:llm:tab:existingmodel}. Notice that the table only covers a small portion of existing models in the market.
-
-\begin{table}
-	\centering \caption{Existing LLM models.}\label{ch:llm:tab:existingmodel}
-	\begin{tabular}{ccccc}
-		\hline
-		Availability & Model Name & Size & Training & Release Time \\ \hline
-		\multirow{4}{*}{open} & CodeGen & $16$ & $577B$ & 2022-Mar \\
-		 & LLaMA & $65$ & $1.4T$ & 2023-Feb \\
-		 & CodeGen2 & $16$ & $400B$ & 2023-May \\
-		 & LLaMA2 & $70$ & $2T$ & 2023-Jul \\ \hdashline
-		\multirow{3}{*}{closed} & GPT-3 & $175$ & $300B$ & 2020-May \\
-		 & Codex$^*$ & $12$ & $100B$ & 2021-Jul \\
-		 & GPT-4 & --- & --- & 2023-Mar \\
-		\hline
-	\end{tabular}
-\begin{flushleft}
-	\footnotesize
-	Model size is given in number of parameters in billion. Training data size is given in number of tokens. \\
-	$^*$ Codex is trained on top of GPT-3.
-\end{flushleft}
-\end{table}
+Data corpus is available online for LLM training. Many libraries such as PyTorch compatible Python packages have been developed to automate the training procedures and to convenient the users.
 
 The existing resources and solutions are briefly introduced in this section.
 
@@ -485,7 +449,7 @@ The existing resources and solutions are briefly introduced in this section.
 
 \subsection{Model Evaluation}
 
-\section{A Brief Review of Multimodal LLM}
+\section{Multimodal LLM}
 
 TBA
 
