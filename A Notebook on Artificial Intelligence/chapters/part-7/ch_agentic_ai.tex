@@ -1,14 +1,54 @@
 \chapter{Agentic AI} 
 
-Agentic AI describes a comprehensive AI system that can make decisions and perform actions for either general or specific tasks, with minimum human intervention. It is an important building block of autonomous systems.
+Agentic AI describes a comprehensive AI system that can make decisions and perform actions for either general or specific tasks, with minimal human intervention. It is a fundamental building block of autonomous systems.
 
-The concept of agentic AI is not new. However, in the past few years it has drawn increasing attentions due to the advent in LLM. LLM provides a general-purpose language interface for an agentic AI, and makes it more scalable and cost-efficient. Therefore, agentic AI is included in this part of the notebook.
+The concept of agentic AI is not new. However, in recent years it has drawn increasing attention due to the rapid advancements in LLM. LLMs provide a general-purpose language interface that makes agentic AI significantly more scalable and cost-effective. As a result, agentic AI is included as a key topic in this part of the notebook.
 
 \section{Introduction to Agentic AI}
 
+The term ``agent'' refers to an entity that acts on behalf of a human. By this definition, agentic AI refers to AI-based systems that can solve complex problems with limited human oversight. This idea predates LLMs. However, with the rise of LLMs, the term ``agentic AI'' has been re-contextualized and is experiencing renewed popularity.
+
+We explore agentic AI from two perspectives:
+
+\begin{itemize}
+  \item Conventional intelligent agents. Classical agents developed in traditional AI literature before the rise of LLMs.
+  \item LLM-driven agentic AI. Modern, language-enabled agents powered by large language models.
+\end{itemize}
+
+More details are given in the rest of the section.
+
+\subsection{Conventional Intelligent Agent}
+
 TBA
 
-\section{Conventional Intelligent Agents}
+\subsection{Agentic AI in the Context of LLM}
 
-TBA
+Agentic AI in the context of LLMs refers to an autonomous system in which LLMs not only perform tasks, but also participate in decision-making and workflow orchestration. In such systems, LLMs serve both as computational units that solve sub-tasks and as the high-level orchestrator that determines how the problem should be approached.
+
+An LLM in an agentic AI system may take on one or more of the following roles:
+\begin{itemize}
+  \item Decompose the original problem into smaller sub-problems.
+  \item Assign these sub-problems to LLM instances, either sequentially or in parallel.
+  \item Evaluate the outputs of LLMs and either accept the results or reject them with feedback and revision instructions.
+  \item Integrate the outputs from sub-problems into a final, coherent solution to the original problem.
+\end{itemize}
+whereas in a conventional LLM-integrated application, human need to do all of the above tasks. From this sense, agentic AI reduces human intervention and uses LLMs to iteratively solve a complex problem.
+
+Another key feature of LLM-based agentic AI is that it does not rely solely on the internal knowledge encoded in the model. Instead, it can be configured to interact with external tools, such as databases, web browsers, calculators, code interpreters and APIs, to enhance its problem-solving capabilities. This tool-augmented reasoning is essential for tasks that require up-to-date information, precise computation, or direct action in external environments. 
+
+Recall RAG in Section \ref{sec:retrievalaugmentedgeneration} which focuses on database-integrated LLMs to expand knowledge boundaries and suppress hallucinations. A fully developed agentic AI can be taken as an extension of RAG.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
