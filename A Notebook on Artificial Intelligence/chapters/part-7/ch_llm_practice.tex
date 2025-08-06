@@ -219,7 +219,7 @@ from openai import OpenAI
 
 api_key = '<sk-proj-...>' # put api key here
 
-openai = OpenAI()
+openai = OpenAI(api_key=api_key)
 messages = [
 {"role": "system", "content": "<system prompt>"},
 {"role": "user", "content": "<user prompt>"}
@@ -234,13 +234,17 @@ An example connecting to \verb|gpt-4o-mini| is given below.
 \begin{lstlisting}
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
 
-api_key = os.getenv('OPENAI_API_KEY')
+load_dotenv(override=True) # api key is loaded as an environment variable
+
 openai = OpenAI()
 message = "Hello, GPT! I am connecting you via your API. Let's see how it works."
 response = openai.chat.completions.create(model="gpt-4o-mini", messages=[{"role":"user", "content":message}])
 print(response.choices[0].message.content)
 \end{lstlisting}
+
+For the above code to work, make sure that \verb|.env| file exists, and environment variable \verb|OPENAI_API_KEY| has been setup inside.
 
 A response similar to the following can be obtained.
 \begin{lstlisting}

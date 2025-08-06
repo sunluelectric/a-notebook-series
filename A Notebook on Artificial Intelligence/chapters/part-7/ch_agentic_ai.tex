@@ -27,27 +27,100 @@ Agentic AI in the context of LLMs refers to an autonomous system in which LLMs n
 
 An LLM in an agentic AI system may take on one or more of the following roles:
 \begin{itemize}
-  \item Decompose the original problem into smaller sub-problems.
-  \item Assign these sub-problems to LLM instances, either sequentially or in parallel.
-  \item Evaluate the outputs of LLMs and either accept the results or reject them with feedback and revision instructions.
-  \item Integrate the outputs from sub-problems into a final, coherent solution to the original problem.
+	\item Decompose the original problem into smaller sub-problems.
+	\item Assign these sub-problems to LLM instances, either sequentially or in parallel.
+	\item Evaluate the outputs of LLMs and either accept the results or reject them with feedback and revision instructions.
+	\item Integrate the outputs from sub-problems into a final, coherent solution to the original problem.
 \end{itemize}
-whereas in a conventional LLM-integrated application, human need to do all of the above tasks. From this sense, agentic AI reduces human intervention and uses LLMs to iteratively solve a complex problem.
 
-Another key feature of LLM-based agentic AI is that it does not rely solely on the internal knowledge encoded in the model. Instead, it can be configured to interact with external tools, such as databases, web browsers, calculators, code interpreters and APIs, to enhance its problem-solving capabilities. This tool-augmented reasoning is essential for tasks that require up-to-date information, precise computation, or direct action in external environments. 
+In contrast, conventional LLM-integrated applications rely on humans or pre-written deterministic code to perform all of the above tasks. From this perspective, agentic AI further reduces human intervention and increases the level of automation.
+
+A comparison is illustrated in Fig.~\ref{fig:agenticwf1}. In the conventional architecture shown in (a), the workflow is either hard-coded or defined externally, and the LLM merely serves as a problem solver. In the agentic AI architecture shown in (b), the LLM autonomously orchestrates the task, determines the workflow, and governs the solution process.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=\textwidth]{./chapters/part-7/figures/agenticaiworkflow.png}
+	\caption{Conventional architecture (a) versus agentic AI architecture (b).}
+	\label{fig:agenticwf1}
+\end{figure}
+
+Figure~\ref{fig:agenticwf1} is not the only architectural pattern for agentic AI. Another commonly used architecture is shown in Fig.~\ref{fig:agenticwf2}. In this design, one LLM generates an output while another LLM evaluates its quality, decides whether to accept or reject it, and provides revision instructions if necessary. The two LLMs collaborate in an iterative loop, refining the solution step by step. This self-evaluative architecture has been shown to significantly reduce the likelihood of low-quality or hallucinated outputs.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./chapters/part-7/figures/agenticaiworkflow2.png}
+	\caption{Self-evaluative agentic AI architecture.}
+	\label{fig:agenticwf2}
+\end{figure}
+
+Another key feature of LLM-based agentic AI is that it does not rely solely on the internal knowledge encoded in the model. Instead, it can be configured to interact with external tools such as databases, web browsers, calculators, etc., to enhance its problem-solving capabilities. This tool-augmented reasoning is essential for tasks that require up-to-date information, precise computation, or direct interaction with external environments. It also helps with reducing hallucination. A representative architecture is given in Fig.~\ref{fig:agenticwf3}, where the LLM autonomously decides when to invoke an external tool and generates the appropriate commands using pre-defined protocols known as the \mync{Message Communication Protocol}[MCP]. More details are given in later sections.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./chapters/part-7/figures/agenticaiworkflow3.png}
+	\caption{LLM with memory and tool interfaces.}
+	\label{fig:agenticwf3}
+\end{figure}
 
 Recall RAG in Section \ref{sec:retrievalaugmentedgeneration} which focuses on database-integrated LLMs to expand knowledge boundaries and suppress hallucinations. A fully developed agentic AI can be taken as an extension of RAG.
 
+In addition, the LLM is equipped with a memory module, which stores historical inputs and outputs to maintain context and support long-term reasoning. This is also shown in Fig.~\ref{fig:agenticwf3}.
 
+\subsection{Agentic AI Framework}
 
+Agentic AI can be understood as a form of LLM orchestration. The user specifies the overall task and provides a list of available tools, while the agentic AI system decides how to structure the workflow, which tools to invoke, how to prompt the LLMs, and how to evaluate their outputs.
 
+An \mync{agentic AI framework} refers to the infrastructure that supports the creation, configuration, and execution of such systems. It provides the necessary abstractions and utilities that allow users to define and deploy agentic AI pipelines more easily. While it is always possible to manually coordinate LLMs, prompts, and tool calls, using a mature agentic AI framework significantly simplifies the process of building scalable, multi-agent, or tool-augmented systems.
 
+In this sense, an agentic AI framework plays a role analogous to that of Kubernetes in the context of containerized applications: it abstracts low-level orchestration logic and enables the declarative specification and runtime management of complex, distributed components.
 
+Commonly seen agentic AI frameworks include OpenAI Agents SDK, CrewAI, LangGraph, AutoGen, and many more. Details are introduced in later sections.
 
+\section{Example: Local Retrieval-Augmented-Generation Pipeline}
 
+An example is given in this section where agentic AI is used to solve a practical problem.
 
+\subsection{Problem Statement}
 
+In the local drive there is a directory containing arbitrary number and size PDFs, HTMLs and markdown files of arbitrary topic. The purpose is to build a stateful chatbot that allows the user to ask questions about the information in the documents. The earlier historical conversation is recovered when a new chatbot is opened.
 
+An \verb|OPENAI_KPI_KEY| is provided in the \verb|.env| file, together with the LLM model of selection and the path to the directory.
+
+Document contents embedding should be carried out to reduce the tokens sent to OpenAI with each dialogue. In the first run of the program, all the documents need to be read to the Python program. The program parse the documents into small chunks, each with a token size of less than $8k$ as required by OpenAI. This can be done by parsing by several paragraphs. Optimal overlaps are allowed. The parsed results are then send to OpenAI for embedding, using its API. An example of the embedding API can be found below. Notice that \verb|OPENAI_API_KEY| is assumed already setup as an environment variable.
+
+\begin{lstlisting}
+from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv(override=True) # api key is loaded as an environment variable
+
+client = OpenAI()
+response = client.embeddings.create(
+input="Your text string goes here",
+model="text-embedding-3-small"
+)
+
+print(response.data[0].embedding)
+\end{lstlisting}
+
+The embedded vectors for the chunks should be saved locally.
+
+From the second call onward, when the embedded vectors files present in the local system, the program should carry out a semantic search first to find the most relevant $N$ chunks. The number $N$ is also specified in the \verb|.env| file. The relevant chunks, not the entire parsed documents, is sent to OpenAI together with chat histories and with the user's latest questions. OpenAI should respond the question with the chunks of information. An example of the completion API can be found below.
+
+\begin{lstlisting}
+from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv(override=True) # api key is loaded as an environment variable
+
+client = OpenAI()
+message = "Hello, GPT! I am connecting you via your API. Let's see how it works."
+response = client.chat.completions.create(model="gpt-4o-mini", messages=[{"role":"user", "content":message}])
+
+print(response.choices[0].message.content)
+\end{lstlisting}
+
+Each time a conversation is carried out, it is saved to the historical record file which sits locally in the same directory. Notice that the parsed document and the embedded vectors, though passed through to OpenAI, is not saved in the historical record. The historical record focuses on the chat between the user and the chatbot. When a new conversation is started, the historical records are automatically loaded.
 
 
 
