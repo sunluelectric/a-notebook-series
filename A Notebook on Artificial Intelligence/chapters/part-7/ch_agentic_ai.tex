@@ -62,66 +62,501 @@ Another key feature of LLM-based agentic AI is that it does not rely solely on t
 	\label{fig:agenticwf3}
 \end{figure}
 
-Recall RAG in Section \ref{sec:retrievalaugmentedgeneration} which focuses on database-integrated LLMs to expand knowledge boundaries and suppress hallucinations. A fully developed agentic AI can be taken as an extension of RAG.
+Recall RAG which focuses on database-integrated LLMs to expand knowledge boundaries and suppress hallucinations. A fully developed agentic AI can be taken as an extension of RAG.
 
 In addition, the LLM is equipped with a memory module, which stores historical inputs and outputs to maintain context and support long-term reasoning. This is also shown in Fig.~\ref{fig:agenticwf3}.
 
-\subsection{Agentic AI Framework}
+\section{Agentic AI Framework}
 
-Agentic AI can be understood as a form of LLM orchestration. The user specifies the overall task and provides a list of available tools, while the agentic AI system decides how to structure the workflow, which tools to invoke, how to prompt the LLMs, and how to evaluate their outputs.
+Agentic AI can be understood as a form of LLM orchestration. The user specifies the overall task and provides a list of available tools, while the agentic AI system determines how to structure the workflow, which tools to invoke, how to prompt the LLMs, and how to evaluate their outputs.
 
 An \mync{agentic AI framework} refers to the infrastructure that supports the creation, configuration, and execution of such systems. It provides the necessary abstractions and utilities that allow users to define and deploy agentic AI pipelines more easily. While it is always possible to manually coordinate LLMs, prompts, and tool calls, using a mature agentic AI framework significantly simplifies the process of building scalable, multi-agent, or tool-augmented systems.
 
-In this sense, an agentic AI framework plays a role analogous to that of Kubernetes in the context of containerized applications: it abstracts low-level orchestration logic and enables the declarative specification and runtime management of complex, distributed components.
+In this sense, an agentic AI framework plays a role analogous to that of Kubernetes in the context of containerized applications: it abstracts away low-level orchestration logic and enables the declarative specification and runtime management of complex, distributed components.
 
-Commonly seen agentic AI frameworks include OpenAI Agents SDK, CrewAI, LangGraph, AutoGen, and many more. Details are introduced in later sections.
+Common examples of agentic AI frameworks include the OpenAI Agents SDK, CrewAI, LangGraph, AutoGen, and many more. Details are introduced in later sections.
 
-\section{Example: Local Retrieval-Augmented-Generation Pipeline}
+\subsection{Asynchronous Python}
 
-An example is given in this section where agentic AI is used to solve a practical problem.
+Before introducing different agentic AI frameworks, it is worth reviewing asynchronous Python programming, as it is widely used across many agentic AI platforms.
 
-\subsection{Problem Statement}
+Asynchronous programming (often abbreviated as async programming) is a well-established concept that predates agentic AI. In a nutshell, it creates a ``multi-thread-like'' framework where functions do not necessarily run in the order they are defined, but instead follow a ``first-ready, first-served'' execution model. In the context of async Python programming, an event loop switches between tasks whenever one is waiting (typically due to I/O). It is multi-thread-like in behavior, but there is no true CPU-level parallelism and no true multithreading. By itself, \verb|asyncio| runs on a single thread and a single CPU core; true CPU-bound parallelism requires multiprocessing or native threads.
 
-In the local drive there is a directory containing arbitrary number and size PDFs, HTMLs and markdown files of arbitrary topic. The purpose is to build a stateful chatbot that allows the user to ask questions about the information in the documents. The earlier historical conversation is recovered when a new chatbot is opened.
+Even before the emergence of agentic AI frameworks, async programming had already proven valuable in many applications, such as web servers handling HTTP requests or user interfaces monitoring human actions on dashboards. By using async programming, an application does not need to freeze while a task is waiting for inputs—usually from a user or over the internet—and can continue executing other tasks in the meantime.
 
-An \verb|OPENAI_KPI_KEY| is provided in the \verb|.env| file, together with the LLM model of selection and the path to the directory.
+The \verb|asyncio| library is the standard Python library for writing concurrent code using the \verb|async|/\verb|await| syntax, and many other async libraries are built on top of it. A detailed introduction to \verb|asyncio| can be found at \cite{python2025asyncio}. A brief review of the basic syntax is given below.
 
-Document contents embedding should be carried out to reduce the tokens sent to OpenAI with each dialogue. In the first run of the program, all the documents need to be read to the Python program. The program parse the documents into small chunks, each with a token size of less than $8k$ as required by OpenAI. This can be done by parsing by several paragraphs. Optimal overlaps are allowed. The parsed results are then send to OpenAI for embedding, using its API. An example of the embedding API can be found below. Notice that \verb|OPENAI_API_KEY| is assumed already setup as an environment variable.
-
+The basic syntax to define and run a Python \mync{coroutine function} is as follows:
 \begin{lstlisting}
-from openai import OpenAI
-from dotenv import load_dotenv
+import asyncio
 
-load_dotenv(override=True) # api key is loaded as an environment variable
+async def <coroutine_function_name>(input) -> output:
+    <do something; can contain nested coroutines>
+    [return <something>]
+    
+[result = ]asyncio.run(<coroutine_function_name>(input))
+\end{lstlisting}
+Here, \texttt{async def} defines a coroutine function, and calling it returns a coroutine object. The function \texttt{asyncio.run()} runs the given coroutine object as the main entry point of the program. It creates and manages the event loop, runs the coroutine until it is complete, and then closes the loop. This approach is particularly useful when multiple coroutines are executed inside the main coroutine.
 
-client = OpenAI()
-response = client.embeddings.create(
-input="Your text string goes here",
-model="text-embedding-3-small"
+Calling a coroutine function directly, as in the example below, does not run it immediately; instead, it returns a coroutine object:
+\begin{lstlisting}
+[<coroutine_object> = ]<coroutine_function_name>(input) # does not execute
+\end{lstlisting}
+In this case, the result is a coroutine object rather than the calculation’s output. This coroutine object can then be scheduled and executed as follows:
+\begin{lstlisting}
+[result = ]asyncio.run(<coroutine_object>)
+\end{lstlisting}
+When executing a coroutine object like this, there is no need to pass its input arguments again. A coroutine object can be awaited only once.
+
+Another way to execute a coroutine is with the \verb|await| expression:
+\begin{lstlisting}
+[result = ]await <coroutine_function_name>(input)
+\end{lstlisting}
+However, this syntax can only be used inside another coroutine. It cannot be used at the top level, because \verb|await| requires an already running event loop. What it does is suspend the current coroutine until the awaited coroutine completes, allowing the event loop to run other tasks in the meantime.
+
+The \texttt{asyncio.gather()} function is another way to schedule multiple coroutines concurrently on the same event loop. For example:
+\begin{lstlisting}
+x = await cx()
+y = await cy()
+
+x, y = await asyncio.gather(
+    cx(), 
+    cy()
 )
-
-print(response.data[0].embedding)
 \end{lstlisting}
+In the first approach, \verb|cx| and \verb|cy| are executed sequentially. If \verb|cx| is delayed due to I/O, \verb|cy| must wait until \verb|cx| finishes. During this time, the event loop may run other ready-to-execute tasks. In the second approach, \verb|cx| and \verb|cy| are scheduled concurrently. While \verb|cx| is waiting for inputs, \verb|cy| can still execute. If both are waiting, \verb|asyncio.gather| pauses, and the event loop switches to other tasks.
 
-The embedded vectors for the chunks should be saved locally.
+The same principle applies to the entire event loop. If the whole event loop is paused (its ready queue is empty), it uses the OS-level selector to wait for I/O readiness, and the operating system schedules other work until new events are ready.
 
-From the second call onward, when the embedded vectors files present in the local system, the program should carry out a semantic search first to find the most relevant $N$ chunks. The number $N$ is also specified in the \verb|.env| file. The relevant chunks, not the entire parsed documents, is sent to OpenAI together with chat histories and with the user's latest questions. OpenAI should respond the question with the chunks of information. An example of the completion API can be found below.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{OpenAI Agents SDK}
+
+\subsection{CrewAI}
+
+\subsection{LangGraph}
+
+\subsection{AutoGen}
+
+\section{Examples}
+
+Demonstrative projects are given as examples for a variety of agentic AI applications. 
+
+\subsection{Manually Implemented Agentic AI: Semantic-Search-Based RAG}
+
+This section demonstrates a manually implemented retrieval‑augmented agent. Documents (papers, reports, web pages, etc.) are stored locally. The agent answers user questions about these documents. Because the total corpus can be large, it is impractical to send all text to the LLM on every turn. Instead, the system performs semantic search to select only the most relevant chunks.
+
+On first run, the program checks whether embeddings already exist locally. If not found, it chunks the documents into pieces with a specified token budget and uses OpenAI’s vector embeddings API to compute vector representations. These vectors are cached locally. On subsequent runs, the cached embeddings are loaded.
+
+On each user request, the query is embedded and used to retrieve the most relevant chunks. These chunks are appended to the prompt and sent to the LLM. The LLM is given an explicit ``retrieval'' tool. If it determines that more context is needed, it may trigger another semantic search with refined keywords or increase the number of returned chunks, or both. This can be performed as many times as the LLM requires.
+
+Dialogues are stored locally so conversations persist across sessions. Only the user’s messages and the assistant’s replies are saved. Retrieved chunks are treated as ephemeral context and are not stored in the conversation log.
+
+The implementation is framework‑free (no agent framework) and can be found at \cite{sun2025document}. Key components are outlined below.
+
+\vspace{0.1in}
+\noindent \textbf{Chunk Documents}
+\vspace{0.1in}
+
+The following codes are relevant to the chunk of documents.
 
 \begin{lstlisting}
-from openai import OpenAI
-from dotenv import load_dotenv
+def set_tokenizer(self):
+    self.tokenizer = tiktoken.encoding_for_model(self.LLM_EMBEDDING_MODEL)
 
-load_dotenv(override=True) # api key is loaded as an environment variable
+def tokenize(self, text):
+    return self.tokenizer.encode(text)
 
-client = OpenAI()
-message = "Hello, GPT! I am connecting you via your API. Let's see how it works."
-response = client.chat.completions.create(model="gpt-4o-mini", messages=[{"role":"user", "content":message}])
+def count_tokens(self, text):
+    return len(self.tokenize(text))
 
-print(response.choices[0].message.content)
+def chunk_text(self, text):
+    words = text.split()
+    chunks = []
+    chunk = []
+    tokens_so_far = 0
+    for word in words:
+        token_count = self.count_tokens(word)
+        if tokens_so_far + token_count > self.MAX_TOKENS:
+            chunks.append(" ".join(chunk))
+            if self.OVERLAP > 0:
+                chunk = chunk[-self.OVERLAP:]
+                tokens_so_far = self.count_tokens(" ".join(chunk))
+            else:
+                chunk = []
+                tokens_so_far = 0
+        chunk.append(word)
+        tokens_so_far += token_count
+
+    if chunk:
+        chunks.append(" ".join(chunk))
+
+    return chunks
+
+def chunk_documents(self):
+    chunks = []
+    for filename in os.listdir(self.DOC_DIR_PATH):
+        if filename.endswith('.pdf'):
+            doc_path = os.path.join(self.DOC_DIR_PATH, filename)
+            doc = fitz.open(doc_path)
+            text = ""
+            for page in doc:
+                text += page.get_text()
+            doc.close()
+            chunks.extend(self.chunk_text(text))
+        elif filename.endswith('.html') or filename.endswith('.htm'):
+            with open(os.path.join(self.DOC_DIR_PATH, filename), 'r', encoding='utf-8') as f:
+                soup = BeautifulSoup(f.read(), 'html.parser')
+                text = soup.get_text()
+                chunks.extend(self.chunk_text(text))
+    return chunks
 \end{lstlisting}
 
-Each time a conversation is carried out, it is saved to the historical record file which sits locally in the same directory. Notice that the parsed document and the embedded vectors, though passed through to OpenAI, is not saved in the historical record. The historical record focuses on the chat between the user and the chatbot. When a new conversation is started, the historical records are automatically loaded.
+The idea is simple and straight forward. For a given block of text, it first splits it into words, and then accumulates the words into a chunk while counting the total token size. Once the maximum token budget is reached, the words are packaged into a chunk. If chunk overlap is enabled, the next chunk starts by including the overlapped words. Otherwise, the next chunk starts fresh.
 
+\vspace{0.1in}
+\noindent \textbf{Embed Chunks and Perform Semantic Search}
+\vspace{0.1in}
 
+The following codes are relevant to the embedding of the chunks.
 
+\begin{lstlisting}
+def generate_embeddings(self, chunks):
+    embeddings = []
+    for chunk in chunks:
+        response = self.client.embeddings.create(
+            model=self.LLM_EMBEDDING_MODEL,
+            input=chunk,
+            encoding_format="float"
+        )
+        embedding = response.data[0].embedding
+        embeddings.append(embedding)
+    return embeddings
+
+def save_chunks_embeddings(self, chunks, embeddings):
+    with open('parsed_chunks.json', 'w', encoding='utf-8') as f:
+        json.dump(chunks, f, ensure_ascii=False, indent=2)
+    np.save('embeddings.npy', embeddings)
+
+def load_chunks_embeddings(self):
+    if os.path.exists('parsed_chunks.json') and os.path.exists('embeddings.npy'):
+        with open('parsed_chunks.json', 'r', encoding='utf-8') as f:
+            chunks = json.load(f)
+        embeddings = np.load('embeddings.npy')
+        return chunks, embeddings
+    return None, None
+\end{lstlisting}
+
+OpenAI's vector embedding API, \verb|OpenAI.embeddings.create| is used to generate the embeddings. Both the embeddings and chunks that contain the original text are saved in ordered list. The idea is to use the embeddings for semantic search, and use the chunks corresponding to the top matched result for LLM analysis. 
+
+Once the user raise a request or the agentic AI decides to perform a new round of semantic search with some specified keywords, the following is executed.
+
+\begin{lstlisting}
+def semantic_search(self, query, embeddings, chunks, top_n=0):
+    similarities = []
+    query_embedding = self.client.embeddings.create(
+        model=self.LLM_EMBEDDING_MODEL,
+        input=query,
+        encoding_format="float"
+    ).data[0].embedding
+    for embedding in embeddings:
+        similarity = np.dot(query_embedding, embedding) / (np.linalg.norm(query_embedding) * np.linalg.norm(embedding))
+        similarities.append(similarity)
+    top_indices = np.argsort(similarities)[::-1][:top_n]
+    top_chunks = [chunks[i] for i in top_indices]
+    return top_chunks
+\end{lstlisting}
+
+The query is embedded in the same manner, and the resulted vector compared with the embeddings vectors from the chunk. The chunks with the top similarity is returned.
+
+\vspace{0.1in}
+\noindent \textbf{Tools}
+\vspace{0.1in}
+
+Several tools are defined for the agentic AI. The most important tools include that the agentic AI is able to perform semantic search with customized keywords and to increase the number of returned chunks. These tools allow the system to autonomously decide what and how many times to retrieve information from the documents to respond to user's question.
+
+The following JSON objects are created and used as the ``user manuals'' for the LLM.
+
+\begin{lstlisting}
+request_more_info_json = {
+    "name": "request_more_info",
+    "description": "Use this tool to request larger number of results from the semantic search",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "is_more_results_required": {
+                "type": "boolean",
+                "description": "Whether to return more results"
+            }
+        },
+        "required": ["is_more_results_required"],
+        "additionalProperties": False
+    }
+}
+
+request_semantic_search_json = {
+    "name": "request_semantic_search",
+    "description": "Use this tool to request performing semantic search to the documents with a key sentence",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "semantic_search_key": {
+                "type": "string",
+                "description": "The key sentence for the semantic search"
+            }
+        },
+        "required": ["semantic_search_key"],
+        "additionalProperties": False
+    }
+}
+\end{lstlisting}
+
+The above information is passed to LLM via role \verb|function| as follows. Notice that in addition to the aforementioned tools, other tools are defined as well to record questions that the LLM cannot answer (likely due to that the information is missing from the document) and the suggestions from the user such as further information to be included to the documents or useful features the user would like the application to have.
+
+\begin{lstlisting}
+def tools(self):
+    return [
+        {"type": "function", "function": record_unknown_question_json},
+        {"type": "function", "function": record_suggestion_json},
+        {"type": "function", "function": request_semantic_search_json},
+        {"type": "function", "function": request_more_info_json}
+    ]
+\end{lstlisting}
+
+Lastly, when the agentic AI decides to trigger the tools, the following codes handle the call.
+
+\begin{lstlisting}
+def request_more_info(self, is_more_results_required):
+    if is_more_results_required:
+        self.TOP_N += 5
+        if self.TOP_N > self.TOP_N_MAX:
+            self.TOP_N = self.TOP_N_MAX
+            return {"status": "error", "message": f"Cannot increase TOP_N beyond {self.TOP_N_MAX}."}
+    return {"status": "success", "message": f"Top N increased to {self.TOP_N}."}
+
+def request_semantic_search(self, semantic_search_key):
+    if not semantic_search_key:
+        return {"status": "error", "message": "Semantic search key is required."}
+    chunks, embeddings = self.load_chunks_embeddings()
+    if chunks is None or embeddings is None:
+        return {"status": "error", "message": "Failed to load document chunks or embeddings."}
+    context = self.semantic_search(semantic_search_key, embeddings, chunks, top_n=self.TOP_N)
+    context = "\n\n".join(context)
+    if not context:
+        return {"status": "error", "message": "No relevant chunks found for the semantic search key."}
+    else:
+        return {"status": "success", "message": "Semantic search completed successfully.", "data": context}
+        
+def handle_tool_call(self, tool_calls):
+    results = []
+    for tool_call in tool_calls:
+        tool_name = tool_call.function.name
+        arguments = json.loads(tool_call.function.arguments)
+        print(f"AI is calling tool: {tool_name}", flush=True)
+        tool = getattr(self, tool_name, None)
+        result = tool(**arguments) if tool else {"status": "error", "message": f"Tool {tool_name} not found"}
+        results.append({"role": "tool", "content": json.dumps(result), "tool_call_id": tool_call.id})
+    return results
+\end{lstlisting}
+
+\vspace{0.1in}
+\noindent \textbf{Tools}
+\vspace{0.1in}
+
+Several tools are defined for the agentic AI. The most important capabilities are the ability to perform semantic search with customized keywords and to increase the number of returned chunks. These tools allow the system to autonomously decide what to retrieve, how often to retrieve it within a turn, and how much context to bring into the answer.
+
+The following JSON objects are created and used as concise ``user manuals'' for the LLM. They describe the tool names, the intent of each tool, and the parameter schemas that the model should supply when invoking them.
+
+\begin{lstlisting}
+request_more_info_json = {
+    "name": "request_more_info",
+    "description": "Use this tool to request larger number of results from the semantic search",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "is_more_results_required": {
+                "type": "boolean",
+                "description": "Whether to return more results"
+            }
+        },
+        "required": ["is_more_results_required"],
+        "additionalProperties": False
+    }
+}
+
+request_semantic_search_json = {
+    "name": "request_semantic_search",
+    "description": "Use this tool to request performing semantic search to the documents with a key sentence",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "semantic_search_key": {
+                "type": "string",
+                "description": "The key sentence for the semantic search"
+            }
+        },
+        "required": ["semantic_search_key"],
+        "additionalProperties": False
+    }
+}
+\end{lstlisting}
+
+The above information is passed to the LLM via the function/tool interface as follows. In addition to these retrieval tools, other tools are provided to record questions the LLM cannot answer because the information is missing, and to collect user suggestions about documents to add or features to implement.
+
+\begin{lstlisting}
+def tools(self):
+    return [
+        {"type": "function", "function": record_unknown_question_json},
+        {"type": "function", "function": record_suggestion_json},
+        {"type": "function", "function": request_semantic_search_json},
+        {"type": "function", "function": request_more_info_json}
+    ]
+\end{lstlisting}
+
+Lastly, when the agentic AI decides to trigger the tools, the following code handles the calls.
+
+\begin{lstlisting}
+def request_more_info(self, is_more_results_required):
+    if is_more_results_required:
+        self.TOP_N += 5
+        if self.TOP_N > self.TOP_N_MAX:
+            self.TOP_N = self.TOP_N_MAX
+            return {"status": "error", "message": f"Cannot increase TOP_N beyond {self.TOP_N_MAX}."}
+    return {"status": "success", "message": f"Top N increased to {self.TOP_N}."}
+
+def request_semantic_search(self, semantic_search_key):
+    if not semantic_search_key:
+        return {"status": "error", "message": "Semantic search key is required."}
+    chunks, embeddings = self.load_chunks_embeddings()
+    if chunks is None or embeddings is None:
+        return {"status": "error", "message": "Failed to load document chunks or embeddings."}
+    context = self.semantic_search(semantic_search_key, embeddings, chunks, top_n=self.TOP_N)
+    context = "\n\n".join(context)
+    if not context:
+        return {"status": "error", "message": "No relevant chunks found for the semantic search key."}
+    else:
+        return {"status": "success", "message": "Semantic search completed successfully.", "data": context}
+        
+def handle_tool_call(self, tool_calls):
+    results = []
+    for tool_call in tool_calls:
+        tool_name = tool_call.function.name
+        arguments = json.loads(tool_call.function.arguments)
+        print(f"AI is calling tool: {tool_name}", flush=True)
+        tool = getattr(self, tool_name, None)
+        result = tool(**arguments) if tool else {"status": "error", "message": f"Tool {tool_name} not found"}
+        results.append({"role": "tool", "content": json.dumps(result), "tool_call_id": tool_call.id})
+    return results
+\end{lstlisting}
+
+\vspace{0.1in}
+\noindent \textbf{Chat and Record Conversation}
+\vspace{0.1in}
+
+The following code is executed to initiate and maintain the chat session. It loads historical conversation records if they exist and, upon quitting, saves the most recent conversation history.
+
+The functions below handle saving and loading conversation history from the local drive.
+
+\begin{lstlisting}
+def save_history(self, history):
+    with open('history.json', 'w', encoding='utf-8') as f:
+        json.dump(history, f, ensure_ascii=False, indent=2)
+
+def load_history(self):
+    if os.path.exists('history.json'):
+        with open('history.json', 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return []
+\end{lstlisting}
+
+The following function generates the system prompt, which provides the LLM with role instructions, context, and an overview of the available tools.
+
+\begin{lstlisting}
+def system_prompt(self):
+    system_prompt = (
+        f"You are a document explainer system. You are asked to explain variety of documents that is saved in the user's system.\n"
+        f"Semantic search has been implemented prior to this request. The most relevant chunks relevant to the user's latest question have been identified. These chunks will be given to you shortly. The total number of chunks will also be given. \n"
+        f"Your task is to provide a concise and accurate explanation of the document based on the provided chunks and the user's questions. \n"
+        f"Use the following tools when necessary:\n"
+        f"- record_unknown_question: Use this tool to record any question that couldn't be answered from the chunks, even after you have requested the maximum number of chunks.\n"
+        f"- record_suggestion: Use this tool to record a suggestion for enriching the system, such as adding more documents or improving the search functionality.\n"
+        f"- request_semantic_search: Use this tool to request performing semantic search to the documents with a key sentence of your choice. Use this tool when you think you need to query something from the documents for further information.\n"
+        f"- request_more_info: Use this tool to request larger number of chunks returned from the semantic search. Notice that there is a limit on the number of {self.TOP_N_MAX} chunks that can be returned. Do not use this function to request more chunks if that limit is hit. Notice that in the beginning of each conversation, the chunk number is reset to {self.TOP_N_DEFAULT} upon the completion of a round of conversation.\n"
+        f"Remember to always provide a clear and concise explanation, and use the tools only when necessary.\n"
+        f"If you cannot find the answer in the chunks, let the user know honestly, especially if the user requires you to answer based on the chunks.\n"
+        f"If you cannot find the answer in the chunks, and you think you can answer based on your own knowledge, let the user know that you are answering based on your own knowledge.\n\n"
+    )
+    return system_prompt
+\end{lstlisting}
+
+The following function block starts the chat session. It performs all actions introduced so far: it ensures embeddings are available, retrieves the most relevant chunks for the query, constructs the initial system prompt, and handles iterative interaction with the LLM.
+
+\begin{lstlisting}
+def chat(self, query, history):
+    chunks, embeddings = self.load_chunks_embeddings()
+    if chunks is None or embeddings is None:
+        chunks = self.chunk_documents()
+        embeddings = self.generate_embeddings(chunks)
+        self.save_chunks_embeddings(chunks, embeddings)
+    context = self.semantic_search(query, embeddings, chunks, top_n=self.TOP_N)
+    intro_prompt = self.system_prompt() + (
+        f"Below are information chunks extracted from various documents.\n"
+        f"Current number of chunks: {len(chunks)}.\n\n"
+    )
+    content_prompt = intro_prompt + "\n\n".join(context)
+    messages = (
+        [{"role": "system", "content": content_prompt}] + 
+        history +
+        [{"role": "user", "content": query}]
+    )
+    done = False
+    tools = self.tools()
+    while not done:
+        response = self.client.chat.completions.create(model=self.LLM_MODEL, messages=messages, tools=tools)
+        if response.choices[0].finish_reason == "tool_calls":
+            message = response.choices[0].message
+            tool_calls = message.tool_calls
+            results = self.handle_tool_call(tool_calls)
+            messages.append(message)
+            messages.extend(results)
+        else:
+            done = True
+    return response.choices[0].message.content
+
+def main(self):
+    history = self.load_history()
+    while True:
+        query = input("You: ")
+        if query.lower() in ['exit', 'quit']:
+            break
+        response = self.chat(query, history)
+        self.TOP_N = self.TOP_N_DEFAULT
+        print(f"Bot: {response}")
+        print("---")
+        history.append({"role": "user", "content": query})
+        history.append({"role": "assistant", "content": response})
+    self.save_history(history)
+\end{lstlisting}
+
+When the agentic AI triggers a tool, the LLM returns a structured function call in the \verb|response| object generated by
+\begin{lstlisting}
+response = self.client.chat.completions.create(model=self.LLM_MODEL, messages=messages, tools=tools)
+\end{lstlisting}
+The response for tool invocations contains one or more function call objects, each including a unique tool call ID, the function name, and its arguments. When a tool call is processed, its results must be appended to the \verb|messages| list as a new entry with the role \verb|tool|, along with the matching tool call ID. This explicit linking allows the LLM to correlate each tool’s return with its original request, maintaining coherence in multi-step reasoning and tool use.
 
