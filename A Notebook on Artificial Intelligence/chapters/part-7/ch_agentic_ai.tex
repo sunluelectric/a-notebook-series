@@ -128,25 +128,51 @@ In the first approach, \verb|cx| and \verb|cy| are executed sequentially. If \ve
 
 The same principle applies to the entire event loop. If the whole event loop is paused (its ready queue is empty), it uses the OS-level selector to wait for I/O readiness, and the operating system schedules other work until new events are ready.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \subsection{OpenAI Agents SDK}
+
+The OpenAI Agents SDK simplifies the deployment of an agentic AI system without sacrificing flexibility. In fact, it enables more versatile agentic AI pipelines, such as chaining multiple AI agents using handoffs and nesting AI agents within tools-capabilities that would be almost impossible to implement manually due to the complexity of such systems.
+
+The OpenAI Agents SDK offers at least the following features:
+\begin{itemize}
+	\item Simplified deployment of a single AI agent or tool.
+	
+	For example, when defining a tool manually, the user must create a detailed “user manual” in JSON object format and pass it to the LLM. This JSON must include the tool’s name, description, and input arguments with their types—carefully specified to ensure correct behavior. With the OpenAI Agents SDK, the user can simply add a decorator to a Python function to turn it into a tool, without needing to write a separate descriptive JSON object.
+	
+	\item Easy conversion of AI agents into tools.
+	
+	A single-line command can convert an AI agent into a tool, enabling nested structures. This significantly increases the capabilities of higher-level AI agents that use these tools.
+	
+	\item Chaining AI agents using handoffs. 
+	
+	Information processed by an upstream AI agent can be passed to a downstream agent easily via \mync{handoffs}, a mechanism for explicitly transferring control and data between agents during execution. The upstream agent decides when and where to pass the data. This allows true cooperation between AI agents and enables highly flexible agentic AI pipelines.
+\end{itemize}
+
+Figure \ref{fig:openai_agents_sdk_pipeline} illustrates the key features of the OpenAI Agents SDK compared with a manual implementation. As shown, in the SDK-based pipeline, an AI agent can be converted into a tool and respond to tool calls (red arrows). Multiple AI agents can also be chained to form an upstream–downstream pipeline via handoffs (blue arrows). When an AI agent has multiple possible downstream agents, it can decide at runtime which one to hand over data and control to.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=\textwidth]{./chapters/part-7/figures/openai_agents_sdk_pipeline.png}
+	\caption{Manually implemented (a) versus OpenAI Agents SDK–based (b) agentic AI pipelines. Red arrows represent tool calls, and blue arrows represent handoffs.}
+	\label{fig:openai_agents_sdk_pipeline}
+\end{figure}
+
+Basic syntax is introduced below.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection{CrewAI}
 
