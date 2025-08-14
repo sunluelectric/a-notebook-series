@@ -103,7 +103,61 @@ If no environment name is specified in the above commands, current environment w
 
 \section{UV}
 
-TBA
+\texttt{uv} is another open-source Python package manager that has gained increasing popularity recently. Compared with \verb|conda|, it has the following features:
+\begin{itemize}
+	\item Fast. This is because it is implemented in Rust, a programming language whose performance characteristics are comparable to C/C++, whereas many other Python package managers such as \verb|conda| are implemented in the much slower languages such as Python. It is said that \verb|uv| is typically 10 to 100 times faster than \verb|conda| when comes to massive library installation.
+	
+	\item Git-style management. The user can use \verb|uv| to initialize a Python project and create a virtual environment. Unlike \verb|venv| or \verb|conda| which store virtual environments and associated packages in a dedicated location outside the project folder, \verb|uv| stores all virtual environment data inside the project root folder by default, typically in the \verb|.venv| directory.
+\end{itemize}
+
+Details of \verb|uv| can be found at \cite{astral2025uv}. A brief is given in the remaining of this section.
+
+\subsection{Installation}
+
+To install \verb|uv|, follow the instructions in \cite{astral2025uv}. Installation is performed with a single-line PowerShell or Bash command on both Windows and Linux/macOS, which downloads the installation script and installs \verb|uv| on the system.
+
+For Linux and macOS:
+\begin{lstlisting}
+$ curl -LsSf https://astral.sh/uv/install.sh | sh
+\end{lstlisting}
+
+For Windows:
+\begin{lstlisting}
+> powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+\end{lstlisting}
+
+\subsection{Python Interpreter Installation}
+
+Once \verb|uv| is installed, the user may want to install a Python runtime interpreter for basic script execution.
+
+Unlike \verb|conda|, where each virtual environment is self-contained and includes its own \verb|python.exe| (on Windows) or \verb|python| binary (on Linux/macOS), \verb|uv| manages Python interpreters in a centralized manner. In \verb|uv|, the Python runtime is downloaded once and stored in a global cache directory, shared by all projects.  
+
+Project folders do not contain the interpreter itself. Instead, they include a \verb|.python-version| file, which specifies the version of Python required for that project. When a virtual environment is created, it links to the corresponding cached interpreter.
+
+To install the latest Python interpreter, run:
+\begin{lstlisting}
+uv python install
+\end{lstlisting}
+
+To install a specific version, use:
+\begin{lstlisting}
+uv python install <version>
+\end{lstlisting}
+
+To install a version and set it as the default for new projects:
+\begin{lstlisting}
+uv python install <version> --default
+\end{lstlisting}
+
+With the above steps completed, the user can run basic Python scripts without creating a project or a virtual environment by using:
+\begin{lstlisting}
+uv run <script>.py
+\end{lstlisting}
+
+
+\subsection{Environment Management}
+
+\subsection{Package Management}
 
 
 
