@@ -271,6 +271,106 @@ It is recommended to include clear instructions in the \verb|instructions| (syst
 
 Run the upstream agent, and it will automatically trigger the downstream agents if, based on its instructions and reasoning, it decides to do so. The return value will be the final result of the entire pipeline. Note that handoffs do not force an upstream agent to pass data. It is possible for the upstream agent to return its response directly to the user, completely bypassing the downstream pipeline. In this sense, an upstream agent determines the execution path of the pipeline from itself onward.
 
+\vspace{0.1in}
+\noindent \textbf{Guardrail}
+\vspace{0.1in}
+
+It is recommended to double-check both the initial user input and the final output of an agentic AI system to ensure that the input meets the required criteria or contains the necessary information, and that the output does not include harmful content.
+
+There are several ways to achieve this. For example, OpenAI provides a moderation API that checks whether a piece of multimodal content contains material related to sexual content, hate, self-harm, and other restricted categories. More about this API will be introduced later in this section, and it will be tested in the project examples.
+
+Within the OpenAI Agents SDK, guardrails can be implemented by defining dedicated AI agents to check the input and output of the agentic AI system according to customized requirements. Such guardrail agents return a boolean flag indicating whether the guardrail was triggered, along with details about what content caused the trigger. If a guardrail is triggered, it will raise an exception.
+
+The following syntax demonstrates the minimum implementation of a guardrail. It involves the following steps.
+\begin{enumerate}
+	\item Define a class to hold the return value of the guardrail agent. 
+	\item Define the guardrail agent itself.  
+	\item Define a coroutine function, decorated with \verb|@input_guardrail| or \verb|@output_guardrail|, that triggers the guardrail agent.
+\end{enumerate}
+
+\begin{lstlisting}
+from pydantic import BaseModel
+from openai_agents import Agent, Runner, input_guardrail, output_guardrail, GuardrailFunctionOutput
+
+
+class <guardrail return class>(BaseModel):
+	<is_triggered>: bool
+	<reason or content>: str
+
+guardrail_agent = Agent(
+	name="<guardrail check agent name>",
+	instructions="<instructions, often the things to check>",
+	output_type=<guardrail return class>,
+)
+
+@output_guardrail
+async def <guardrail coroutine name>(ctx: RunContextWrapper, agent: Agent, output: MessageOutput) -> GuardrailFunctionOutput:
+	result = await Runner.run(guardrail_agent, output.response, context=ctx.context)
+	return GuardrailFunctionOutput(output_info=result.final_output,tripwire_triggered=result.final_output.<is_triggered>)
+\end{lstlisting}
+
+When defining an agent in the pipeline, include the above coroutine function as a guardrail:
+
+\begin{lstlisting}
+agent = Agent( 
+	name="Customer support agent",
+	instructions="<instructions>",
+	output_guardrails=[<guardrail coroutine name>],
+)
+\end{lstlisting}
+
+The above example defines an output guardrail. An input guardrail can be defined in a similar way.
+
+Notice that in OpenAI Agents SDK, \verb|input_guardrails| only run when attached to the \emph{first} agent in a chain (on the initial user input), and \verb|output_guardrails| only run when attached to the \emph{last} agent (on the final agent output). Guardrails attached to intermediate agents do not trigger.
+
+Recall that OpenAI provides moderate API to check whether a content contains harmful information. It can be used as the output guardrail as follows.
+\begin{lstlisting}
+@output_guardrail
+async def moderation_guardrail(ctx, agent: Agent, message):
+	response = client.moderations.create(
+		model="omni-moderation-latest",
+		input=message.response
+	)
+	flagged = response.results[0].flagged
+	return GuardrailFunctionOutput(output_info=response.results[0],tripwire_triggered=flagged)
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \subsection{CrewAI}
 
 \subsection{LangGraph}
@@ -281,7 +381,7 @@ Run the upstream agent, and it will automatically trigger the downstream agents 
 
 Demonstrative projects are given as examples for a variety of agentic AI applications. 
 
-\subsection{Manually Implemented Agentic AI: Semantic-Search-Based RAG}
+\subsection{Semantic-Search-Based RAG}
 
 This section demonstrates a manually implemented retrieval‑augmented agent. Documents (papers, reports, web pages, etc.) are stored locally. The agent answers user questions about these documents. Because the total corpus can be large, it is impractical to send all text to the LLM on every turn. Instead, the system performs semantic search to select only the most relevant chunks.
 
