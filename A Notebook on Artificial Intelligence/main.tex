@@ -1,0 +1,61 @@
+% ---
+% sunlu
+% ---
+\input{../style/preamble.tex}
+
+\makeindex
+
+\begin{document}
+
+\frontmatter
+
+\title{A Notebook on Artificial Intelligence}
+\author{Lu Sun, and many more.}
+
+\maketitle
+
+\input{../frontmatter/dedication.tex}
+\tableofcontents
+\input{../frontmatter/foreword.tex}
+\include{frontmatter/preface}
+\listoffigures
+\listoftables
+
+\mainmatter
+
+\part{Artificial Intelligence}
+
+\part{Basic Artificial Neural Networks}
+
+\include{chapters/part-4/ch_regression}
+
+\include{chapters/part-4/ch_perceptron}
+
+\include{chapters/part-4/ch_multilayer}
+
+\part{Convolution and Recurrent Networks}
+
+\include{chapters/part-5/ch_cnn}
+
+\include{chapters/part-6/ch_rnn}
+
+\part{Large Language Model}
+
+\include{chapters/part-7/ch_transformer}
+
+\include{chapters/part-7/ch_llm}
+
+\include{chapters/part-7/ch_llm_practice}
+
+\include{chapters/part-7/ch_agentic_ai}
+
+\appendix
+
+\include{chapters/ap/ch_anaconda}
+
+\bibliographystyle{plain}
+\bibliography{reference}
+
+\printindex
+
+\end{document}

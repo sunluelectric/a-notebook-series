@@ -1,0 +1,99 @@
+\documentclass[krantz1,ChapterTOCs]{krantz} 
+
+\usepackage{fix-cm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{makeidx}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{listings}
+\lstset{
+	backgroundcolor=\color{lightgray},
+}
+\usepackage[shortlabels]{enumitem}
+\usepackage{footnote}
+\usepackage{color}
+\usepackage{flexisym}
+\usepackage{url}
+\usepackage{undertilde}
+\usepackage{matlab-prettifier}
+\usepackage{flexisym}
+\usepackage{mdframed}
+\usepackage{lipsum}
+\usepackage{expl3}
+
+\DeclareMathOperator*{\argmin}{arg\,min} % Jan Hlavacek
+\DeclareMathOperator*{\argmax}{arg\,max} % Jan Hlavacek
+
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+
+\ExplSyntaxOn
+\seq_new:N \g_used_concepts_seq
+\seq_new:N \g_used_abbreviations_seq
+
+\NewDocumentCommand{\mync}{m o}
+ {
+  \seq_if_in:NnTF \g_used_concepts_seq {#1}
+   {
+    \PackageWarning{}{The term `#1` has already been defined.}
+    \IfValueTF {#2}
+    {
+      #2
+    }
+    {
+      #1
+    }
+   }
+   {
+    \seq_gput_right:Nn \g_used_concepts_seq {#1}
+    \IfValueTF {#2}
+     {
+      \seq_if_in:NnTF \g_used_abbreviations_seq {#2}
+       {
+        #2
+        \PackageWarning{}{The abbreviation `#2` has been assigned elsewhere before defining `#1`.}
+       }
+       {
+        \seq_gput_right:Nn \g_used_abbreviations_seq {#2}
+        \textbf{#1}~(#2)
+       }
+     }
+     {
+      \textbf{#1}
+     }
+   }
+ }
+
+\NewDocumentCommand{\myabb}{m m}
+ {
+  % Check if the full name has already been used
+  \seq_if_in:NnTF \g_used_abbreviations_seq {#2}
+   {
+    #2
+    \PackageWarning{}{The abbreviation `#2' has already been defined.}
+   }
+   {
+    \seq_gput_right:Nn \g_used_abbreviations_seq {#1}
+    #1~(#2)
+   }
+ }
+\ExplSyntaxOff 
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{exercise}{Exercise}[chapter]
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+\newtheorem{proof}{Proof}
+
+\lstset{
+basicstyle=\small\ttfamily,
+columns=flexible,
+breaklines=true
+} 
+
+\frenchspacing
+\tolerance=5000 

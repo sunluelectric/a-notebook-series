@@ -1,0 +1,64 @@
+% ---
+% sunlu
+% ---
+
+\input{../style/preamble.tex}
+
+\makeindex
+
+\begin{document}
+
+\frontmatter
+
+\title{A Notebook on Probability, Statistics and Data Science}
+\author{Lu Sun, and many more.}
+
+\maketitle
+
+\input{../frontmatter/dedication.tex}
+\tableofcontents
+\input{../frontmatter/foreword.tex}
+\include{frontmatter/preface}
+\listoffigures
+\listoftables
+
+\mainmatter
+
+\part{Probability}
+
+\include{chapters/part-1/ch_probability_basics}
+
+\include{chapters/part-1/ch_random_variables}
+
+\part{Statistics}
+
+\include{chapters/part-2/ch_sampling_basic_statistics}
+
+\include{chapters/part-2/ch_hypothesis_testing}
+
+\include{chapters/part-2/ch_bayesian_methods}
+
+\part{Tools}
+
+\include{chapters/part-3/ch_r_basics}
+
+\include{chapters/part-3/ch_r_advanced}
+
+\include{chapters/part-3/ch_python_basics}
+
+\include{chapters/part-3/ch_python_advanced}
+
+\part{Semantic Web}
+
+\include{chapters/part-4/ch_semantic_web_basics}
+
+\include{chapters/part-4/ch_semantic_web_architecture}
+
+\include{chapters/part-4/ch_semantic_web_practice}
+
+\bibliographystyle{plain}
+\bibliography{reference}
+
+\printindex
+
+\end{document}

@@ -1,0 +1,277 @@
+\chapter{Brief Introduction to Python Package Manager}
+
+Two package managers, \verb|conda| and \verb|uv|, are introduced.
+
+\section{Conda}
+
+Developed and maintained by Anaconda Inc., \verb|conda| is a free and open-source program for package and environment management. When installing and updating packages with \verb|conda|, it automatically detects the hardware of the machine and the dependencies of packages, and applies the latest compatible versions.
+
+The purpose of this chapter is not to give a detailed introduction to \verb|conda| which can be found at \cite{conda2025}. This chapter is merely a summary of commonly used configurations and commands. Majority of contents in this chapter come from \cite{conda2025cheatsheet}.
+
+\subsection{Installation}
+
+It is recommended that the user shall install Miniconda, a variation of Anaconda distribution, to use \verb|conda|.
+
+Miniconda is a light version of Anaconda distribution. The former of which contains only \verb|conda|, \verb|python| and a small number of other packages, while the latter contains more than three hundred packages, some of which are proprietary to Anaconda and may require a license for use in production environments.
+
+\subsection{Configuration of Channels}
+
+Channels refer to the cloud archive from where \verb|conda| downloads and upgrades packages. There are default channels coming with \verb|conda| installation, and the user can add channels or change their priorities in the list.
+
+The channels are stored in file \verb|.condarc|, which is usually stored in the user's directory. The user can add or remove channels by directly editing that file. Alternatively, there are commands to add channels or to check channel status. 
+
+To list all channels, use
+\begin{lstlisting}
+conda config --show channels
+\end{lstlisting}
+
+Commonly seen channels include \verb|defaults| and \verb|conda-forge|. Notice that \verb|defaults| is a collection of three Anaconda defined channels, and it contains propriety packages developed by Anaconda, and it may require licensing to be used in commercial environment.
+
+To add a channel, either use
+\begin{lstlisting}
+conda config --add channels <new channel>
+\end{lstlisting}
+to add a new channel to the top (highest priority) of the channel list, or
+\begin{lstlisting}
+conda config --append channels <new channel>
+\end{lstlisting}
+to append a new channel to the end (lowest priority) of the channel list.
+
+\subsection{Environment Management}
+
+To list all environments, use
+\begin{lstlisting}
+conda info --envs
+\end{lstlisting}
+
+To activate or deactivate an environment, use
+\begin{lstlisting}
+conda activate <env name>
+conda deactivate
+\end{lstlisting}
+respectively.
+
+To list all packages and their source channels, use
+\begin{lstlisting}
+conda list --name <env name> --show-channel-urls
+\end{lstlisting}
+where notice that the additional \verb|--show-channel-urls| displays where each package come from.
+
+To create an environment, use
+\begin{lstlisting}
+conda create --name <env name> [python=<version>]
+\end{lstlisting}
+where additional \verb|--file| followed by the list of packages in TXT or YAML file can be used to create an environment and install required packages. In this case, \verb|conda| automatically checks and configures the machine setup and handles package dependencies. 
+
+To clone an environment, use
+\begin{lstlisting}
+conda create --clone <source env name> --name <env name>
+\end{lstlisting}
+
+To remove an environment, use
+\begin{lstlisting}
+conda remove --name <env name> --all
+\end{lstlisting}
+
+The environment, including the platform, packages and channels information can be exported as a plain text file, usually either a YAML file or a TXT file. This file can be used to quickly setup an identical environment in a later stage.
+
+It is recommended to name the file after the environment name so that the name is preserved.
+
+To export the environment, use
+\begin{lstlisting}
+conda export --from-history><env name>.yml
+\end{lstlisting}
+
+\subsection{Package Management}
+
+To install a package in specified environment, use
+\begin{lstlisting}
+conda install --name <environment name> <package name>
+\end{lstlisting}
+
+To update all packages in an environment, use
+\begin{lstlisting}
+conda update --all --name <environment name>
+\end{lstlisting}
+
+To remove a package from specific environment, use
+\begin{lstlisting}
+conda uninstall --name <environment name> <package name>
+\end{lstlisting}
+
+If no environment name is specified in the above commands, current environment will be used.
+
+\section{UV}
+
+\texttt{uv} is another open-source Python package manager that has gained increasing popularity recently. Compared with \verb|conda|, it has the following features:
+\begin{itemize}
+	\item Fast. This is because it is implemented in Rust, a programming language whose performance characteristics are comparable to C/C++, whereas many other Python package managers such as \verb|conda| are implemented in the much slower languages such as Python. It is said that \verb|uv| is typically 10 to 100 times faster than \verb|conda| when comes to massive library installation.
+	
+	\item Git-style management. The user can use \verb|uv| to initialize a Python project and create a virtual environment. Unlike \verb|venv| or \verb|conda| which store virtual environments and associated packages in a dedicated location outside the project folder, \verb|uv| stores all virtual environment data inside the project root folder by default, typically in the \verb|.venv| directory.
+\end{itemize}
+
+Details of \verb|uv| can be found at \cite{astral2025uv}. A brief is given in the remaining of this section.
+
+\subsection{Installation}
+
+To install \verb|uv|, follow the instructions in \cite{astral2025uv}. Installation is performed with a single-line PowerShell or Bash command on both Windows and Linux/macOS, which downloads the installation script and installs \verb|uv| on the system.
+
+For Linux and macOS:
+\begin{lstlisting}
+$ curl -LsSf https://astral.sh/uv/install.sh | sh
+\end{lstlisting}
+
+For Windows:
+\begin{lstlisting}
+> powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+\end{lstlisting}
+
+\subsection{Python Interpreter Installation}
+
+Once \verb|uv| is installed, the user may want to install a Python runtime interpreter for basic script execution.
+
+Unlike \verb|conda|, where each virtual environment is self-contained and includes its own \verb|python.exe| (on Windows) or \verb|python| binary (on Linux/macOS), \verb|uv| manages Python interpreters in a centralized manner. In \verb|uv|, the Python runtime is downloaded once and stored in a global cache directory, shared by all projects.
+
+Project folders do not contain the interpreter itself. Instead, they include a \verb|.python-version| file, which specifies the version of Python required for that project. When a virtual environment is created, it links to the corresponding cached interpreter.
+
+To install the latest Python interpreter and make it available as \verb|python3.<minor>| on your \texttt{PATH}, run:
+\begin{lstlisting}
+uv python install
+\end{lstlisting}
+
+To install a specific version:
+\begin{lstlisting}
+uv python install <version>
+\end{lstlisting}
+
+To also make this version the default \verb|python| and \verb|python3| executable in your shell, use:
+\begin{lstlisting}
+uv python install <version> --default
+\end{lstlisting}
+
+With the above steps completed, the user can run basic Python scripts without creating a project or a virtual environment by using:
+\begin{lstlisting}
+uv run <script>.py
+\end{lstlisting}
+
+In addition to the Python interpreter itself, similar commands can be used to install Python-related standalone executables such as \verb|ruff|. These are not Python libraries, but tools that developers commonly use when developing Python applications. To install such tools, use:
+\begin{lstlisting}
+uv tool install <tool>
+\end{lstlisting}
+The tool will be installed in a centralized cache.
+
+Python interpreters and tools can be upgraded or removed using similar commands.
+
+
+\subsection{Environment Management}
+
+While both Python interpreters and standalone executable tools are installed in a centralized manner, Python libraries are installed within their corresponding projects. Each project defines its own environment, and the libraries and dependencies are managed by files stored locally inside the project root folder. This is where the package management becomes Git-style.
+
+To initiate a new project, use
+\begin{lstlisting}
+uv init <project name>
+\end{lstlisting}
+which will create a new directory with the project name, and inside the project, a demo ``hello-world'' python script. If the project folder already exists, set it as the current working directory and use
+\begin{lstlisting}
+uv init
+\end{lstlisting}
+
+Once a project is initiated, \verb|uv| automatically applies the following file system
+\begin{lstlisting}
+|- .gitignore
+|- .python-version
+|- README.md
+|- main.py
+|- pyproject.toml
+\end{lstlisting}
+
+Notice that though \verb|.gitignore| is automatically created and caches used by \verb|uv| added, the user still needs to use \verb|git init| should he wants to make it a git repository.
+
+With Python interpreter installed, the user can run the script, by default ``hello-world'', using
+\begin{lstlisting}
+uv run main.py
+\end{lstlisting}
+Once done, a \verb|.venv| should be created as follows.
+\begin{lstlisting}
+.
+|- .venv
+|    |- bin
+|    |- lib
+|    |- pyvenv.cfg
+|- .python-version
+|- README.md
+|- main.py
+|- pyproject.toml
+|- uv.lock
+\end{lstlisting}
+
+Important files and subdirectories are explained below.
+\begin{itemize}
+	\item \verb|.venv| contains the actual code and binaries of the Python libraries installed for the project, along with scripts and environment-specific configuration.
+	\item \verb|uv.lock| is a human-readable lockfile that lists the fully resolved dependency graph for the project, including the exact names, versions, sources, and hashes of all libraries.
+	\item \verb|pyproject.toml| declares the minimum set of required libraries and dependencies for the project, without necessarily specifying exact versions or the complete dependency tree.
+	\item \verb|.python-version| specifies the required Python interpreter version for the project, which \verb|uv| uses to select the appropriate cached runtime.
+\end{itemize}
+
+The \verb|uv.lock| file contains libraries and dependencies information. It is automatically created and updated when the user runs the program or update the libraries. Share the project with \verb|uv.lock| so that the receiver can re-create the environment. There is no need to specifically export a \verb|requirements.txt| file so long as the receiver also uses \verb|uv|.
+
+While the lockfile is created automatically, the lockfile may also be explicitly created or updated using
+\begin{lstlisting}
+uv lock
+\end{lstlisting}
+While the lockfile is automatically updated. the user can check whether it is up to date by
+\begin{lstlisting}
+uv lock --check
+\end{lstlisting}
+The user can export \verb|requirements.txt| specifically if it needs to be shared with someone with \verb|conda|. To do that, use
+\begin{lstlisting}
+uv export --format requirements.txt
+\end{lstlisting}
+
+To install files from \verb|uv.lock| simply run the script and \verb|uv| will automatically update the installed libraries. Alternatively, use
+\begin{lstlisting}
+uv sync
+\end{lstlisting}
+to manually trigger an installation.
+
+\subsection{Package Management}
+
+
+By default, \verb|uv| uses the \myabb{Python Package Index}{PyPI} for dependency resolution and package installation. However, \verb|uv| can be configured to use other package indexes; details are not given here.
+
+To install all packages specified in the \verb|uv.lock| file, use \verb|uv sync| as explained earlier.
+
+To install one or more specific packages, use:
+\begin{lstlisting}
+uv add <package>
+\end{lstlisting}
+This command not only downloads and installs the package(s) into the project’s virtual environment, but also updates the \verb|pyproject.toml| and \verb|uv.lock| files accordingly.
+
+Similarly, use:
+\begin{lstlisting}
+uv remove <package>
+\end{lstlisting}
+to remove a package from the environment and update the dependency files.
+
+Use:
+\begin{lstlisting}
+uv tree
+\end{lstlisting}
+to display the project’s dependency tree.
+
+In addition to \verb|uv add|, \verb|uv| provides:
+\begin{lstlisting}
+uv pip install <package>
+\end{lstlisting}
+which behaves like \verb|pip install| inside the project virtual environment, and adds libraries to \verb|.venv|. Unlike \verb|uv add|, it does not modify the \verb|pyproject.toml| or \verb|uv.lock| files. This makes \verb|uv pip install| suitable for local (usually experimental) installations that should not be traced as part of the project permanent dependencies. (Notice that \verb|.venv| is in \verb|.gitignore| by default, and it is not meant to share across platforms.) For reproducible dependencies, \verb|uv add| is the recommended command.
+
+
+
+
+
+
+
+
+
+
+
