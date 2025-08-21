@@ -348,35 +348,114 @@ CrewAI is not just a framework but also a company and an ecosystem. Depending on
 \end{itemize}
 In this notebook, we will focus on the CrewAI framework.
 
-Recall the OpenAI Agents SDK introduced in Section~\ref{sec:openaisgentssdk}, where the user defines agents, tools, and handoffs, and links them together, while the agents decide which tools and handoffs to use. The CrewAI framework follows a very different philosophy. A ``Crew'' in this context is a team (e.g., engineering, data science, or marketing), where each AI agent acts as an employee. A job is assigned to the team, with specified context, inputs, and outputs. The user plays the role of hiring manager: defining the roles and characteristics of each AI agent, the context and goals of each task, and assembling the team from scratch. Once all agents and tasks are defined, the team completes the job.
+Recall the OpenAI Agents SDK introduced in Section~\ref{sec:openaisgentssdk} and Fig.~\ref{fig:openai_agents_sdk_pipeline}, where the user defines agents, tools, and handoffs, and links them together, while the agents decide which tools and handoffs to use. The CrewAI framework follows a very different philosophy. A ``Crew'' in this context is a team (e.g., engineering, data science, or marketing), where each AI agent acts as an employee. A job is assigned to the team, with specified context, inputs, and outputs. The user plays the role of a ``hiring manager'', defining the roles and characteristics of each AI agent, the context and goals of each task, and assembling the team from scratch. Once all agents and tasks are defined, the team completes the job. This is demonstrated by Fig. \ref{fig:crewai_pipeline}.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./chapters/part-7/figures/crewai.png}
+	\caption{CrewAI framework pipeline, where the user defines agents, tasks and their associations and the crew get things done automatically.}
+	\label{fig:crewai_pipeline}
+\end{figure}
 
 In this sense, while the OpenAI Agents SDK requires the user to micro-manage pipeline details, CrewAI emphasizes macro-management by defining context, inputs and outputs, and assigning agents to tasks. The OpenAI Agents SDK is more flexible, but when a job aligns well with CrewAI's philosophy, implementing it in CrewAI is often much easier.
 
 \vspace{0.1in}
-\noindent \textbf{CrewAI as UV Tool}
+\noindent \textbf{CrewAI Installation as a UV Tool}
 \vspace{0.1in}
 
-CrewAI provides not only Python libraries but also CLI tools. It is recommended to install both the Python library and the CLI tool when using CrewAI. The CLI tool conveniently creates a CrewAI project directory tree with template Python scripts that users can adapt for their applications. Manually creating such a directory tree from scratch would be tedious.
+CrewAI provides both Python libraries and CLI tools. It is recommended to install both when working with CrewAI. The CLI tool simplifies project setup by generating a directory tree with template Python scripts that can be adapted for specific applications. Manually creating such a structure from scratch would be tedious.
 
-To install and update CrewAI as a tool with \verb|uv|, use
+To install or update CrewAI as a tool with \verb|uv|, use:
 \begin{lstlisting}
 uv tool install crewai
 uv tool install crewai --upgrade
 \end{lstlisting}
 
+Once CrewAI is installed, a new project can be created with:
+\begin{lstlisting}
+crewai create crew <project_name>
+\end{lstlisting}
 
+This command generates a project root folder containing a hello-world-style template. During creation, the user is prompted to select a default LLM service provider and model, and to provide an API key. These choices are used in generating the template but can be modified later.
 
+An example of the template directory structure is shown below \cite{crewai2025install}:
+\begin{lstlisting}
+my_project/
+|-- .gitignore
+|-- knowledge/
+|-- pyproject.toml
+|-- README.md
+|-- tests/
+|-- .env
+\-- src/
+  \-- my_project/
+    |-- __init__.py
+      |-- main.py
+      |-- crew.py
+      |-- tools/
+      |  |-- custom_tool.py
+      |  \-- __init__.py
+      \-- config/
+        |-- agents.yaml
+        \-- tasks.yaml
+\end{lstlisting}
 
+\vspace{0.1in}
+\noindent \textbf{Agents and Tasks Definition}
+\vspace{0.1in}
 
+In the project template, \verb|agents.yaml| and \verb|tasks.yaml| are configuration files that specify the properties of agents and tasks. An \emph{agent} refers to an LLM with defined capabilities and tools, while a \emph{task} represents a workflow step with input, desired output, and context. These configuration files may include prompts, parameters, and other metadata that shape the agent’s behavior and the execution of tasks.
 
+For example, in a document-refinement workflow, the agent might be a ``publication editor,'' and the task could be ``correct-grammar-error.'' The input would be text containing grammatical mistakes, and the output would be error-free text that preserves the original meaning with minimal changes.
 
+Below is an example of \verb|agents.yaml| created during project initialization.
+\begin{lstlisting}
+researcher:
+  role: >
+    {topic} Senior Data Researcher
+  goal: >
+    Uncover cutting-edge developments in {topic}
+  backstory: >
+    You're a seasoned researcher with a knack for uncovering the latest developments in {topic}. Known for your ability to find the most relevant information and present it in a clear and concise manner.
 
+reporting_analyst:
+  role: >
+    {topic} Reporting Analyst
+  goal: >
+    Create detailed reports based on {topic} data analysis and research findings
+  backstory: >
+    You're a meticulous analyst with a keen eye for detail. You're known for your ability to turn complex data into clear and concise reports, making it easy for others to understand and act on the information you provide.
+\end{lstlisting}
 
+Here, two agents, ``researcher'' and ``reporting analyst,'' are defined. Each agent has three key components: \verb|role|, \verb|goal|, and \verb|backstory|. Together, these specify the agent’s intended capabilities and behavior.
+The symbol \verb|>| in YAML indicates a folded block scalar, meaning that multi-line text is treated as a single string with line breaks converted to spaces. The placeholder \verb|{topic}| in the example will be filled dynamically by the higher-level script.
 
+In addition to the compulsory \verb|role|, \verb|goal|, and \verb|backstory| fields, other optional fields may be included. A commonly used one is \verb|llm|, which lets the user specify an LLM model other than the default. For example:
+\begin{lstlisting}
+<agent_name>:
+  role: <something>
+  goal: <something>
+  backstory: <something>
+  llm: openai/gpt-5-mini
+\end{lstlisting}
+A full list of allowed fields can be found at \cite{crewaiAgentsConcepts}, including tools, agents as tools, maximum iteration number, maximum LLM request rate, etc.
 
+Below is an example of \verb|tasks.yaml| created during project initialization.
+\begin{lstlisting}
+research_task:
+  description: >
+    Conduct a thorough research about {topic}. Make sure you find any interesting and relevant information given the current year is {current_year}.
+  expected_output: >
+    A list with 10 bullet points of the most relevant information about {topic}
+  agent: researcher
 
-
-
+reporting_task:
+  description: >
+    Review the context you got and expand each topic into a full section for a report. Make sure the report is detailed and contains any and all relevant information.
+  expected_output: >
+    A fully fledged report with the main topics, each with a full section of information. Formatted as markdown without '```'
+  agent: reporting_analyst
+\end{lstlisting}
 
 \subsection{LangGraph}
 
