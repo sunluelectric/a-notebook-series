@@ -390,14 +390,14 @@ my_project/
 \-- src/
   \-- my_project/
     |-- __init__.py
-      |-- main.py
-      |-- crew.py
-      |-- tools/
-      |  |-- custom_tool.py
-      |  \-- __init__.py
-      \-- config/
-        |-- agents.yaml
-        \-- tasks.yaml
+    |-- main.py
+    |-- crew.py
+    |-- tools/
+    |  |-- custom_tool.py
+    |  \-- __init__.py
+    \-- config/
+      |-- agents.yaml
+      \-- tasks.yaml
 \end{lstlisting}
 
 \vspace{0.1in}
@@ -408,7 +408,7 @@ In the project template, \verb|agents.yaml| and \verb|tasks.yaml| are configurat
 
 For example, in a document-refinement workflow, the agent might be a ``publication editor,'' and the task could be ``correct-grammar-error.'' The input would be text containing grammatical mistakes, and the output would be error-free text that preserves the original meaning with minimal changes.
 
-Below is an example of \verb|agents.yaml| created during project initialization.
+Below is an example of \verb|agents.yaml| created during project initialization:
 \begin{lstlisting}
 researcher:
   role: >
@@ -427,8 +427,7 @@ reporting_analyst:
     You're a meticulous analyst with a keen eye for detail. You're known for your ability to turn complex data into clear and concise reports, making it easy for others to understand and act on the information you provide.
 \end{lstlisting}
 
-Here, two agents, ``researcher'' and ``reporting analyst,'' are defined. Each agent has three key components: \verb|role|, \verb|goal|, and \verb|backstory|. Together, these specify the agent’s intended capabilities and behavior.
-The symbol \verb|>| in YAML indicates a folded block scalar, meaning that multi-line text is treated as a single string with line breaks converted to spaces. The placeholder \verb|{topic}| in the example will be filled dynamically by the higher-level script.
+Here, two agents, ``researcher'' and ``reporting analyst,'' are defined. Each agent has three key components: \verb|role|, \verb|goal|, and \verb|backstory|. Together, these specify the agent’s intended capabilities and behavior. The symbol \verb|>| in YAML indicates a folded block scalar, meaning that multi-line text is treated as a single string with line breaks converted to spaces. The placeholder \verb|{topic}| in the example will be filled dynamically by the higher-level script.
 
 In addition to the compulsory \verb|role|, \verb|goal|, and \verb|backstory| fields, other optional fields may be included. A commonly used one is \verb|llm|, which lets the user specify an LLM model other than the default. For example:
 \begin{lstlisting}
@@ -438,24 +437,145 @@ In addition to the compulsory \verb|role|, \verb|goal|, and \verb|backstory| fie
   backstory: <something>
   llm: openai/gpt-5-mini
 \end{lstlisting}
-A full list of allowed fields can be found at \cite{crewaiAgentsConcepts}, including tools, agents as tools, maximum iteration number, maximum LLM request rate, etc.
+A full list of allowed fields can be found at \cite{crewaiAgentsConcepts}, including tools, delegation, maximum iteration count, rate limits, and others.
 
-Below is an example of \verb|tasks.yaml| created during project initialization.
+Below is an example of \verb|tasks.yaml| created during project initialization:
 \begin{lstlisting}
 research_task:
   description: >
-    Conduct a thorough research about {topic}. Make sure you find any interesting and relevant information given the current year is {current_year}.
+    Conduct thorough research about {topic}. Make sure you find any interesting and relevant information given the current year is {current_year}.
   expected_output: >
     A list with 10 bullet points of the most relevant information about {topic}
   agent: researcher
 
 reporting_task:
   description: >
-    Review the context you got and expand each topic into a full section for a report. Make sure the report is detailed and contains any and all relevant information.
+    Review the context you got and expand each topic into a full section for a report. Make sure the report is detailed and contains all relevant information.
   expected_output: >
     A fully fledged report with the main topics, each with a full section of information. Formatted as markdown without '```'
   agent: reporting_analyst
 \end{lstlisting}
+
+Here, two tasks are defined, each assigned to an agent. The user provides a description and expected output for each task. In addition to \verb|description| and \verb|expected_output|, other optional fields can also be specified. A full list can be found at \cite{crewai2025tasks}, including settings that limit the tools available for a task, enforce output formats, and define guardrails.
+
+\vspace{0.1in}
+\noindent \textbf{Crew Definition}
+\vspace{0.1in}
+
+A crew is an integration of agents and tasks defined in the YAML files. The configuration files define the ``class'' of different types of agents and tasks, while the crew Python script reads these configurations and instantiates them. An example is given below. Notice that different decorators are used.
+\begin{lstlisting}
+from crewai import Agent, Crew, Process, Task
+from crewai.project import CrewBase, agent, crew, task
+from crewai.agents.agent_builder.base_agent import BaseAgent
+from typing import List
+
+@CrewBase
+class DocumentRefiner():
+"""<description of the crew>"""
+
+  agents: List[BaseAgent]
+  tasks: List[Task]
+
+  @agent
+  def researcher(self) -> Agent:
+    return Agent(
+      config=self.agents_config['researcher'],
+      verbose=True
+    )
+
+  @agent
+  def reporting_analyst(self) -> Agent:
+    return Agent(
+      config=self.agents_config['reporting_analyst'],
+      verbose=True
+    )
+
+  @task
+  def research_task(self) -> Task:
+    return Task(
+      config=self.tasks_config['research_task'],
+    )
+
+  @task
+  def reporting_task(self) -> Task:
+    return Task(
+      config=self.tasks_config['reporting_task'],
+      output_file='report.md'
+    )
+
+  @crew
+  def crew(self) -> Crew:
+  """<description>"""
+    return Crew(
+      agents=self.agents,
+      tasks=self.tasks,
+      process=Process.sequential,
+      verbose=True,
+    )
+\end{lstlisting}
+
+When using the \verb|agent| and \verb|task| decorators, the defined components are automatically added to the \verb|self.agents| and \verb|self.tasks| lists.
+
+\vspace{0.1in}
+\noindent \textbf{Execution}
+\vspace{0.1in}
+
+Finally, the crew can be executed as follows:
+\begin{lstlisting}
+def run():
+"""
+Run the crew.
+"""
+  inputs = {
+	'topic': 'AI LLMs',
+	'current_year': str(datetime.now().year)
+  }
+
+  try:
+    DocumentRefiner().crew().kickoff(inputs=inputs)
+  except Exception as e:
+    raise Exception(f"An error occurred while running the crew: {e}")
+
+if __name__ == "__main__":
+run()
+\end{lstlisting}
+
+The above summarizes the basic usage of the CrewAI framework. More advanced materials are introduced in the following sections.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection{LangGraph}
 
