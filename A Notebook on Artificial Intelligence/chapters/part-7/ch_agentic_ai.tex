@@ -348,7 +348,7 @@ CrewAI is not just a framework but also a company and an ecosystem. Depending on
 \end{itemize}
 In this notebook, we will focus on the CrewAI framework.
 
-Recall the OpenAI Agents SDK introduced in Section~\ref{sec:openaisgentssdk} and Fig.~\ref{fig:openai_agents_sdk_pipeline}, where the user defines agents, tools, and handoffs, and links them together, while the agents decide which tools and handoffs to use. The CrewAI framework follows a very different philosophy. A ``Crew'' in this context is a team (e.g., engineering, data science, or marketing), where each AI agent acts as an employee. A job is assigned to the team, with specified context, inputs, and outputs. The user plays the role of a ``hiring manager'', defining the roles and characteristics of each AI agent, the context and goals of each task, and assembling the team from scratch. Once all agents and tasks are defined, the team completes the job. This is demonstrated by Fig. \ref{fig:crewai_pipeline}.
+Recall the OpenAI Agents SDK introduced in Section~\ref{sec:openaisgentssdk} and Fig.~\ref{fig:openai_agents_sdk_pipeline}, where the user defines agents, tools, and handoffs, and links them together, while the agents decide which tools and handoffs to use. The CrewAI framework follows a very different philosophy. A ``Crew'' in this context is a team (e.g., engineering, data science, or marketing), where each AI agent acts as an employee. A job is assigned to the team, with specified context, inputs, and outputs. The user plays the role of a ``hiring manager'', defining the roles and characteristics of each AI agent, the context and goals of each task, and assembling the team from scratch. Once all agents and tasks are defined, the team completes the job. This is demonstrated by Fig. \ref{fig:crewai_pipeline}. Notice that a ``manager'' agent can be assigned to a crew to determine the pipeline flow.
 
 \begin{figure}[!htb]
 	\centering
@@ -470,7 +470,7 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 
 @CrewBase
-class DocumentRefiner():
+class <crew class name>():
 """<description of the crew>"""
 
   agents: List[BaseAgent]
@@ -514,7 +514,52 @@ class DocumentRefiner():
     )
 \end{lstlisting}
 
-When using the \verb|agent| and \verb|task| decorators, the defined components are automatically added to the \verb|self.agents| and \verb|self.tasks| lists.
+When using the \verb|agent| and \verb|task| decorators, the defined components are automatically added to the \verb|self.agents| and \verb|self.tasks| lists in their defined order. Notice that in this example \verb|Process.sequential| is used. In this case, the sequence of tasks in \verb|self.tasks| matters, as this will be the task pipeline of the crew. In this sense, the user defines the pipeline.
+
+It is possible to assign a \mync{manager agent} to supervise the crew and ensure the quality of generations. In this setup, the manager oversees the behavior of each agent and task, and can determine the crew’s execution flow. A manager agent can be assigned in the \verb|@crew| definition as follows:
+\begin{lstlisting}
+@crew
+def crew(self) -> Crew:
+"""<description>"""
+  
+  manager = Agent(
+    config=self.agents_config['manager'],
+    allow_delegation=True
+  )
+  
+  return Crew(
+    agents=self.agents,
+    tasks=self.tasks,
+    process=Process.hierarchical,
+    verbose=True,
+    manager_agent=manager,
+  )
+\end{lstlisting}
+
+Here, a manager is defined, assuming its role description is provided in the \verb|agents| configuration file. It is then assigned to the crew via \verb|manager_agent|. The process is changed from \verb|Process.sequential| to \verb|Process.hierarchical|, allowing the manager to supervise the crew above other agents. The manager can dynamically re-order, route, or request follow-ups across tasks and agents. In hierarchical mode, the pipeline is determined not by the sequence of task definitions but by the manager agent.
+
+It is also possible to assign an LLM model directly as the manager without creating an agent instance or defining it in the \verb|agents| configuration file. However, it has been reported that a properly defined manager agent may outperform a bare model assignment.
+
+It is possible to enforce structured output for a task. This can be done in a manner similar to the OpenAI Agents SDK. A Pydantic model inheriting from \verb|BaseModel| is defined with the desired output structure. An example is shown below:
+\begin{lstlisting}
+class <ModelName>(BaseModel):
+    """ <description> """
+    <field>: <type> = Field(description="<description>")
+    <field>: <type> = Field(description="<description>")
+    <field>: <type> = Field(description="<description>")
+\end{lstlisting}
+When defining a task, the model is specified via the \verb|output_pydantic| argument:
+\begin{lstlisting}
+@task
+def <task_name>(self) -> Task:
+    return Task(
+        config=self.tasks_config['<task name in configuration>'],
+        output_pydantic=<ModelName>,
+    )
+\end{lstlisting}
+Notice that Pydantic models can be nested. For example, one can define a model with a field that is a list of another Pydantic model.
+
+It is not required but can become helpful sometimes to also remind CrewAI of the required structured output in the configuration files for tasks and agents.
 
 \vspace{0.1in}
 \noindent \textbf{Execution}
@@ -542,10 +587,17 @@ run()
 
 The above summarizes the basic usage of the CrewAI framework. More advanced materials are introduced in the following sections.
 
+\vspace{0.1in}
+\noindent \textbf{Advanced CrewAI: Customized Tool}
+\vspace{0.1in}
 
+\vspace{0.1in}
+\noindent \textbf{Advanced CrewAI: Memory}
+\vspace{0.1in}
 
-
-
+\vspace{0.1in}
+\noindent \textbf{Advanced CrewAI: Coder Agent}
+\vspace{0.1in}
 
 
 
