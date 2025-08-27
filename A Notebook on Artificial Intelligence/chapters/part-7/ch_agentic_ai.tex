@@ -588,12 +588,80 @@ run()
 The above summarizes the basic usage of the CrewAI framework. More advanced materials are introduced in the following sections.
 
 \vspace{0.1in}
-\noindent \textbf{Advanced CrewAI: Customized Tool}
+\noindent \textbf{Advanced CrewAI: Tool}
 \vspace{0.1in}
+
+Tools are one of the most important features of an agentic AI system, as they significantly extend its capabilities. Recall that the OpenAI Agents SDK provides several ways for a user to define tools, including at least the following:
+\begin{itemize}
+	\item Using tools from a library, for example, \verb|WebSearchTool| provided by OpenAI, which allows an LLM to query information from the web.
+	\item Defining a custom function tool with the \verb|@function_tool| decorator.
+	\item Supplying a JSON-formatted descriptive tool.
+	\item Using an agent as a tool.
+\end{itemize}
+
+CrewAI likewise provides multiple methods for calling tools from libraries or defining customized tools. More details are given below.
+
+
+
+
+
+
+
+
+
+
+
 
 \vspace{0.1in}
 \noindent \textbf{Advanced CrewAI: Memory}
 \vspace{0.1in}
+
+LLMs are inherently stateless. In an LLM-based chatbot application, the conversation between the user and the model is typically stored and then reused as context whenever the LLM is triggered. Conventionally, the conversation is saved in a JSON file, for example \verb|history.json|, which may look like:
+\begin{lstlisting}
+[
+	{"role": "user", "message": "<something>"},
+	{"role": "assistant", "message": "<something>"},
+	...
+]
+\end{lstlisting}
+
+When the conversation history grows long, feeding the entire record to the LLM for every call is problematic for at least the following reasons.
+\begin{itemize}
+	\item Much of the historical dialogue may be irrelevant to the current query, making it wasteful to process.
+	\item The total token count of the history may exceed the LLM’s input limit.
+\end{itemize}
+This naturally motivates several strategies as follows.
+\begin{itemize}
+	\item Query only for relevant past information before sending it as context to the LLM, rather than including the full history.
+	\item Periodically prune older conversations, as they tend to become less relevant over time.
+	\item Selectively preserve information likely to be useful in the future by tagging it so that it is not removed.
+\end{itemize}
+These ideas form the foundation of memory management in CrewAI.
+
+As an agentic AI framework, CrewAI involves multiple LLM agents. Memory is managed at the agent level, the task level and the crew level, and memory sharing across agents can be enabled if desired. CrewAI defines several memory types, such as short-term memory, long-term memory, and entity memory, and each can be activated independently. When a memory type is enabled, CrewAI automatically promotes selected conversations into that memory category. Unlike conventional conversation logs stored solely in JSON format, CrewAI combines JSON (for raw text), embedded vectors (for semantic retrieval), and SQLite (for efficient tagging and metadata queries) to store memory. The storage medium depends on the memory type.
+
+The commonly used memory types and their features are introduced below.
+
+Short-term memory. Short-term memory stores the recent inputs and outputs of an AI agent using embedded vectors. It relies on ChromaDB \cite{chroma2025chroma}, an open-source, file-based embedding database.
+
+Long-term memory. Long-term memory stores important task results that can be reused across sessions. Both ChromaDB and SQLite are employed for this purpose.
+
+Entity memory. Entity memory tracks entities such as names, places, and concepts. It also uses ChromaDB for storage.
+
+The above three memory types are collectively referred to as the basic memory system, and they can be enabled by:
+\begin{lstlisting}
+	crew = Crew(
+	agents=[...],
+	tasks=[...],
+	process=Process.sequential,
+	memory=True,  # Enables short-term, long-term, and entity memory
+	verbose=True
+	)
+\end{lstlisting}
+
+The user can choose the storage location and the vector embedding tool. If not specified, a default location inside the project folder is used, and the OpenAI embedding API is applied. The behavior of the embedding tool can also be configured. More details are given at \cite{crewai2025memory}.
+
+Once memory is properly enabled, the overall performance of the agentic system is improved. In general, it becomes more efficient, potentially cheaper—since semantic search is used instead of retrieving the entire chat history as context—and it remembers important concepts more accurately and consistently. Applications benefit from these improvements naturally, without needing to manage the internal details of the memory system.
 
 \vspace{0.1in}
 \noindent \textbf{Advanced CrewAI: Coder Agent}
