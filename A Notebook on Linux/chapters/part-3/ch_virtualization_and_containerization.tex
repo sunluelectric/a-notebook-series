@@ -12,7 +12,7 @@ This can be achieved through \mync{virtualization}, which enables running multip
 
 Deploying a new VM generally consumes a considerably large amount of time and resources because it virtualizes the infrastructure and the entire OS needs be installed on the newly deployed VM. It is hardly possible to launch a VM for each microservice when there are many of them. In this case, a more efficient approach is to deploy a single VM and place each application in a ``container'' with its own customized drivers and configurations. The technology used to deploy and manage containers is known as \mync{containerization}.
 
-A container is similar to a VM in the sense that it provides a degree of isolation from others, but it is typically ``lighter'' than a VM because it doesn't need to virtualize or duplicate the whole OS as VMs do. This makes containers cheaper to launch and manage. A container contains all the configuration and requirement information of an application. Running a container on different platforms would consistently generate the same expected result. This has made the sharing and rapid deployment of containers remarkably easy and convenient. 
+A container is similar to a VM in the sense that it provides certain degrees of isolation from others, but it is typically ``lighter'' than a VM because it doesn't need to virtualize or duplicate the whole OS as VMs do. This makes containers cheaper to launch and manage. A container contains all the configuration and requirement information of an application. Running a container on different platforms would consistently generate the same expected result. This has made the sharing and rapid deployment of containers remarkably easy and convenient. 
 
 The similarities and differences of personal PCs, VMs, and container applications are summarized in Fig. \ref{ch:vac:fig:pcvmcontainersructure}.
 
@@ -22,7 +22,7 @@ The similarities and differences of personal PCs, VMs, and container application
 	\caption{System architectures of PC, VM and container.} \label{ch:vac:fig:pcvmcontainersructure}
 \end{figure}
 
-As an analogy, think of running an APP as cooking a dish. The hardware corresponds with the physical resources in the kitchen such as the cooktop and gas. The OS corresponds with the cook. The OS requires drivers and libraries to run the APP correctly. The drivers and libraries correspond with the specific skills or cookers for the dish. Finally, the APP is corresponding with the expected dish.
+As an analogy, think of running an APP as cooking a dish. The hardware corresponds with the physical resources in the kitchen such as the cooktop and gas. The OS corresponds with the cook. The OS requires drivers and libraries to run the APP correctly. The drivers and libraries correspond with the specific skills or cookers for the dish. Finally, the APP corresponds with the expected dish.
 
 In the most simple configuration, a dedicated machine is used to run an APP. This is like constructing a dedicated kitchen and hiring a dedicated cook for each dish. The cook is trained to master all necessary skills required for that specific dish. This is shown in Fig. \ref{ch:vac:fig:acookinakitchen}.
 \begin{figure}[htbp]
@@ -45,9 +45,9 @@ While Fig. \ref{ch:vac:fig:manycooksinakitchen} might be a popular practice in m
 	\caption{Container implementation: one cook in a kitchen, handling multiple dishes, each has a cookbook and stays in its own pan.} \label{ch:vac:fig:multitaskcook}
 \end{figure}
 
-Just like a recipe guaranteeing the consistency of dishes, in containerization, an ``image'' guarantees the consistent behavior of container instances. An image is basically a collection of prerequisites and configurations to start a container efficiently and consistently. Images can be shared among machines to replicate the containers even if the machines adopt different underlying infrastructures such as hardware and OS.
+In the case of a restaurant, recipes describes the cookers and the raw materials a dish requires. Similarly in containerization, an ``image'' describes the initialization requirements of a set of containers. An image is basically a collection of prerequisites and configurations to start a container consistently. Images can be shared among machines to replicate the containers initial status even if the machines adopt different underlying infrastructures such as hardware and OS.
 
-\section{Virtualization and Containerization}
+\section{Virtualization and Containerization Technologies}
 
 Virtualization and containerization have been studied for decades. This section gives a brief introduction to both technologies.
 
@@ -55,16 +55,18 @@ Virtualization and containerization have been studied for decades. This section 
 
 In a conventional data center, multiple physical servers are deployed, and each server has a single associated application. Servers may share the same \myabb{local area network}{LAN} and \myabb{network-attached storage}{NAS} for data exchanging. A big issue of this implementation is the utilization efficiency of the servers and the unevenly distributed loads: some of the servers may not be utilized efficiently, while others may be overwhelmed. To deploy a new application, a new server must be purchased, which can take months of time. With more and more servers, the management and IT cost may grow exponentially.
 
-To solve this problem, we need a systematical and automated way of integrating the resources in a data center and re-distributed them to the applications in an efficient manner. Virtualization is one of the most important technology used in this framework. Virtualization is essentially about running a system on a ``virtualized machine'', where by saying ``virtualized'' we mean that the machine is not a physical machine, but a virtual execution environment that is emulated and managed by a special software running on the actual machine known as the ``\mync{Virtual Machine Monitor}[VMM]'' or ``\mync{hypervisor}''. The setup should be transparent to the applications in the sense that the applications perform the same way as if it were running on a dedicated physical machine.
+To solve this problem, we need a systematical and automated way of integrating and re-distributed computational resources to the applications in an efficient manner. Virtualization is one of the most important technologies used in this framework. Virtualization is essentially about running a system on a ``virtualized machine'', where by saying ``virtualized'' we mean that the machine is not a physical machine, but a virtual environment emulated and managed by a special software running on the actual machine known as the ``\mync{Virtual Machine Monitor}[VMM]'' or ``\mync{hypervisor}''. The setup is often transparent to the applications as they perform the same way as if they were running on a dedicated physical machine.
 
 Depending on the items to be virtualized, virtualization can be divided into the following categories.
 \begin{itemize}
-  \item Virtualization of equipment, mainly network resources and storages. This results in \myabb{virtual LAN}{VLAN}, \myabb{virtual private network}{VPN}, NAS and \myabb{storage area network}{SAN}.
+  \item Virtualization of equipment, mainly network resources and storage. This results in \myabb{virtual LAN}{VLAN}, \myabb{virtual private network}{VPN}, NAS and \myabb{storage area network}{SAN}.
   \item Virtualization of operating systems. This results in the well-known VM and virtual desktop.
-  \item Virtualization of application running environments. An example is \myabb{Java virtual machine}{JVM} that allows Java to generate consistent result while running on different machines.
+  \item Virtualization of application running environments. An example is \myabb{Java virtual machine}{JVM} that allows Java to generate consistent results while running on different machines.
 \end{itemize}
+This chapter focuses on the virtualization of operating systems and the conventional VM concept.
 
-There are different virtualization architectures. Commonly seen components shared by different architectures often include
+
+There are different virtualization architectures. Commonly seen components shared by almost all architectures often include
 \begin{itemize}
 	\item Host OS. The OS that resides on the physical machine, on which virtualization tools run.
 	\item VMM. This is a software that runs on the host OS, managing all the guest OSs, providing them interface to the host OS and the hardware.
@@ -79,7 +81,7 @@ Different virtualization techniques are used in different types of VMMs. They ca
 	\item Hardware-assisted virtualization. The processor of the system is specifically designed to provide certain VM functions. These functions, after passing through VMM, are directed and executed on the hadrware, thus enhancing system performance.
 \end{itemize}
 
-VMM is able to virtualize hardware resources such as CPU, memory and I/O. For the virtualization of CPU, the key is to virtualize privileged instructions (a set of instructions that can only be executed by software running in privileged mode, usually the OS) for the guest OS, so that the guest OS would think it is directly talking to a CPU. This is challenging because guest OS usually does not possess the privilege due to the VM architecture. If the requests of the guest OS contain privileged instructions, the CPU will deny the request. When that happens, an exception will be raised to the VMM which will take care of the privileged instructions sequentially. Since hypervisor runs in privileged mode, it can execute those instructions.
+VMM is able to virtualize hardware resources such as CPU, memory and I/O. For the virtualization of CPU, one of the challenges is to enable privileged instructions for the guest OS. This can be difficult because guest OS does not naturally run in privileged mode due to the VM architecture. If the requests of the guest OS contain privileged instructions, the CPU will deny the request. When that happens, an exception will be raised to the VMM which will take care of the privileged instructions sequentially. Since hypervisor runs in privileged mode, it can execute those instructions.
 
 For the virtualization of memory, VMM uses shadow page table to assign memory pages to different VMs. The maximum memory allocated to a VM can change dynamically.
 
@@ -94,51 +96,50 @@ For the virtualization of I/O, the development trend is that I/O operations will
 
 \subsection{Containerization}
 
-Containerization is an alternative virtualization approach to VM that can also virtualize independent workspaces for applications. Comparing with VM, containers are often lighter, hence more efficient for massive microservices deployment. Depending on the context, the term ``container'' may refer to one or more of the following 3 concepts: container runtime, container engine, and container orchestration.
+Containerization is an alternative virtualization approach to VM that can also virtualize independent workspaces for applications. Comparing with VM, containers are often lighter, hence more efficient for massive microservices deployment. Depending on the context, the term ``container'' may refer to the following different concepts: container runtime, container engine, and container orchestration.
 
-Container runtime refers to the backend software that actually executes the containers. Examples of widely used container runtimes are ``containerd'', ``runc'' and ``cri-o''. 
+Container runtime refers to the backend software that actually executes the containers. Examples of widely used container runtimes are \verb|containerd|, \verb|runc| and \verb|cri-o|. 
 
-It is often inconvenient for users to talk to container runtimes directly. Container engine is the interface for a user or software to manage images and containers. Examples of container engines include ``docker'' and ``podman''. 
+It is often inconvenient for users to talk to container runtimes directly. Container engine is the interface for a user or software to manage images and containers. Examples of container engines include docker and podman. 
 
-Finally, container orchestration is the software that strategically deploy, monitor, restart, and terminate the containers on servers. It can scale up and down the number of containers based on the demanding, and balance the API calls each container receives. Container orchestration is very useful in production environment of large-scale services. One of the most widely used container orchestrations is ``kubernetes''.
+Finally, container orchestration is the software that strategically deploy, monitor, restart, and terminate the containers on servers. It can scale up and down the number of containers based on the demanding, and balance the API calls each container receives. Container orchestration is very useful in production environment of large-scale services. One of the most widely used container orchestrations is kubernetes.
 
-Notice that though container runtime is always a must-have, container engine and container orchestration are not.
+Notice that though container runtime is always a must-have, container engine and container orchestration are not. In the old days, a container orchestration talks to a container runtime through a container engine. Nowadays, many container orchestrations directly communicate with container runtimes.
 
-\section{Docker Container Basics} \label{ch:vac:sec:dc}
+\section{Container Engine Basics} \label{ch:vac:sec:dc}
 
-This section introduces \mync{docker}. Notice that though being famous for docker container engine, docker as a company or community provides many revolutionary container related tools and services that go far beyond a container engine brand. Many tools and technologies of docker are used in container runtimes and container engines of other brands.
+This section introduces docker and podman container engines. Notice that the scope of this notebook does not cover execution technologies behind the screen. When comes to user experience, docker and podman share very similar interfaces, and hence can be introduced as a whole. Unless otherwise mentioned, everything introduced in the remaining of this section can run in a machine with either docker installation or podman installation and \verb|docker| set as its alias.
 
-This section focuses mostly on the introduction of docker container engine.
+\subsection{Container Engine Choices}
 
-\subsection{Docker Engine VS Alternatives}
-
-Docker engine is the most popular container engine available on the market as of 2023, and it is free of charge for open-source, personal and small business usage. More details of docker can be found at \textit{https://docs.docker.com/}.
+\mync{Docker} engine is the most popular container engine available on the market as of 2023 (over $80\%$ market share), and it is free of charge for open-source, personal and small business usage.
 
 But does that mean docker engine is the absolutely best and perfect container engine solution?
 
-Docker has surely revolutionized how we use containerization technology in software development and deployment, and it has been one of the most popular and beloved container engine solutions. However, it is worth mentioning that docker engine is not the only available container engine. For example, as explained earlier \mync{podman}, developed by Red Hat, is an alternative to docker. It supports the same interface as docker in its CLI (as if podman were an alias), and claims to have better performance and security. As a matter of fact, RHEL already started the transition from docker to podman from RHEL 8. Nowadays, installing docker on the latest versions of RHEL is possible but tedious. On the contrary, podman often comes with RHEL installation.
-
-Kubernetes, a famous container orchestration, is also dropping docker support according to their statement ``docker support in the kubernetes is now deprecated and will be removed in a future release''. Some may even argue that ``containers are alive, but the role that docker plays is shrinking''. Many open-source initiatives such as podman are gaining popularity.
+Docker has surely revolutionized how we use containerization technology in software development and deployment, and it has been one of the most popular and beloved container engine solutions. However, it is worth mentioning that docker engine is not the only available container engine. For example, as explained earlier \mync{podman}, developed by Red Hat, is an alternative to docker. It supports the same interface as docker in its CLI (as if podman were an alias), and claims to have better performance and security. RHEL has already started the transition from docker to podman from RHEL 8. Nowadays, installing docker on the latest versions of RHEL is possible but tedious. On the contrary, podman often comes with RHEL installation by default. Kubernetes, a famous container orchestration, is also dropping docker support. According to the official statement, docker support will eventually be removed in a future release. Some may even argue that ``containers are alive, but the role that docker plays is shrinking''. Many open-source initiatives such as podman are gaining popularity.
 
 Docker has some disadvantages indeed. For one thing, docker uses docker server (docker daemon), a single piece of software running in the backend of the system, to support all the services. This creates a single-point-of-failure in the system. Docker requires root privileges, and it starts a container on behalf of the root user. This means that the program running inside the container and the users in the docker group can potentially bypass the OS access control and gain root access, which introduces security risk. These shortages are to some extent addressed by other container engines such as podman which is daemon-less and does not necessarily need to run on root user's behalf.
 
-This is not to say that Docker is falling behind as a whole. Some key techniques that docker introduced are widely used in all different types and brands of container runtimes and engines. It is just that people do not like some of the features of docker engine, and alternative tools are being developed to fix these problems, the latter of which starting drawing more and more attention. Docker still enjoys widespread usage and support due to its massive community, wealth of online resources, and extensive compatibility with numerous tools and platforms. Nevertheless, for demonstration purpose, for the remaining sections docker is used throughout this notebook. Since podman provides the same interface, it is probable that podman can be used likewise to replicate all the results.
-
-As of 2023, docker is still the dominating container market engine, with a market share of over $80\%$.
+This is not to say that Docker is falling behind as a whole. Some key techniques that docker introduced are widely used in all different types and brands of container runtimes and engines. It is just that people do not like some of the features of docker engine, and alternative tools are being developed to fix these problems, the latter of which starting drawing more and more attention. Docker still enjoys widespread usage and support due to its massive community, wealth of online resources, and extensive compatibility with numerous tools and platforms. 
 
 \subsection{Docker Installation}
 
-As explained earlier, RHEL uses podman as its recommended container engine, and podman comes with RHEL installation. This notebook focuses on RHEL, and hence podman will be used in the remaining of the chapter. With podman-docker package installed, \verb|docker| and \verb|podman| can be used interchangeably. To install podman (in case it is not pre-installed) and podman-docker, simply use
+As explained earlier, RHEL uses podman as its recommended container engine. This notebook focuses on RHEL, and hence podman will be used in the remaining of the chapter. Notice that docker and podman have similar interfaces. Everything introduced in this chapter should apply to both docker and podman, unless otherwise mentioned, and the command \verb|docker| and \verb|podman| can be used interchangeably. Given the popularity of docker, in this chapter \verb|docker| is used as an alias of \verb|podman|.
+
+Podman ships with recent versions of RHEL, and does not require specific installation. In case the user needs to install podman on a RHEL distribution manually, use
 \begin{lstlisting}
 $ sudo dnf install podman podman-docker
 \end{lstlisting}
 
-Nevertheless, due to the popularity of docker, its installation is introduced below. Ubuntu Linux distribution is used as the host machine. Firstly, remove existing docker engine and runtime as follows.
+Given the popularity, docker installation on a Debian distribution is introduced below. Ubuntu Linux distribution is used as the host machine. 
+
+Firstly, remove existing docker engine and runtime as follows.
 \begin{lstlisting}
 $ sudo apt-get remove docker docker-engine docker.io
 $ sudo apt-get remove containerd runc
 \end{lstlisting}
-Add docker's official GPG key and set up the repository.
+
+Add docker official GPG key and set up the repository.
 \begin{lstlisting}
 $ sudo apt-get update
 $ sudo apt-get install ca-certificates curl gnupg lsb-release
@@ -148,6 +149,7 @@ $ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 \end{lstlisting}
+
 Install docker.
 \begin{lstlisting}
 $ sudo apt-get update
