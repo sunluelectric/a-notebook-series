@@ -122,7 +122,7 @@ Docker has some disadvantages indeed. For one thing, docker uses docker server (
 
 This is not to say that Docker is falling behind as a whole. Some key techniques that docker introduced are widely used in all different types and brands of container runtimes and engines. It is just that people do not like some of the features of docker engine, and alternative tools are being developed to fix these problems, the latter of which starting drawing more and more attention. Docker still enjoys widespread usage and support due to its massive community, wealth of online resources, and extensive compatibility with numerous tools and platforms. 
 
-\subsection{Docker Installation}
+\subsection{Installation}
 
 As explained earlier, RHEL uses podman as its recommended container engine. This notebook focuses on RHEL, and hence podman will be used in the remaining of the chapter. Notice that docker and podman have similar interfaces. Everything introduced in this chapter should apply to both docker and podman, unless otherwise mentioned, and the command \verb|docker| and \verb|podman| can be used interchangeably. Given the popularity of docker, in this chapter \verb|docker| is used as an alias of \verb|podman|.
 
@@ -178,7 +178,7 @@ and add
 
 \subsection{Container Manipulation}
 
-This section discusses basic container manipulation such as launching and stopping a container. This notebook focuses on RHEL where podman is used instead of docker. Since podman-docker package is installed, command \verb|docker| can be used as an alias to podman. With that in mind, the examples given in the remaining of the chapter uses \verb|docker|, but behind the screen podman is executed.
+This section discusses basic container manipulation such as launching and stopping a container. As mentioned earlier, command \verb|docker| is used as an alias to \verb|podman|.
 
 \vspace{0.1in}
 \noindent \textbf{Launch a Container from an Image}
@@ -188,9 +188,11 @@ To launch and run a container from an image, simply use
 \begin{lstlisting}
 $ docker run <configuration> <image>
 \end{lstlisting}
-Docker will search the local and remote repositories for the image, download the image if necessary, and start a container from that image. By default, \verb|docker run| starts a container in attached mode (frontend mode) unless flag \verb|-d| is used. After successful execution and completion of all the tasks, the container will enter ``Exited'' status. 
+Docker will search the local and default remote repositories for the image, download the image if necessary, and start a container from that image. Customized remote repositories configuration is introduced later.
 
-For example, consider running a container of \textit{alpine} using the command below. A screen shot is given in Fig. \ref{ch:vac:fig:dockerrunexp}.
+By default, \verb|docker run| starts a container in attached mode (frontend mode) unless flag \verb|-d| is used. After successful execution and completion of all the tasks, the container will enter ``exited'' status. 
+
+For example, consider running a container of alpine using the command below. A screen shot is given in Fig. \ref{ch:vac:fig:dockerrunexp}.
 \begin{lstlisting}
 $ docker run -it --name test-alpine alpine
 \end{lstlisting}
@@ -198,22 +200,22 @@ where \verb|-i| stands for ``interactive'', which keeps the container's standard
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-3/figures/dockerrunexp.png}
-	\caption{An example of running \textit{apline} container, with interactive TTY and name \textit{test-apline}.} \label{ch:vac:fig:dockerrunexp}
+	\caption{An example of running alpine container, with interactive TTY and name \textit{test-alpine}.} \label{ch:vac:fig:dockerrunexp}
 \end{figure}
 
 It can be seen from Fig. \ref{ch:vac:fig:dockerrunexp} that once the container is started, the user can interact with the container via shell and perform actions such as listing items in the current directory in the container. This is because the container is running in attached mode, and flags \verb|-it| map the the containers input and output with the console.
 
-While keeping the container running, open another terminal and use \verb|docker container ls| to check the status of the container. More about \verb|docker container ls| are introduced later. The container \verb|test-alpine| shall appear in the list, as shown in Fig. \ref{ch:vac:fig:dockerrunexppart2}.
+While keeping the container running, open another terminal and use \verb|docker container ls| to check the status of the container. More about container commands are collectively introduced later. The container \verb|test-alpine| shall appear in the list, as shown in Fig. \ref{ch:vac:fig:dockerrunexppart2}.
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/dockerrunexppart2.png}
-	\caption{List the running container \textit{test-apline}.} \label{ch:vac:fig:dockerrunexppart2}
+	\caption{List the running container \textit{test-alpine}.} \label{ch:vac:fig:dockerrunexppart2}
 \end{figure}
-After exiting from Fig. \ref{ch:vac:fig:dockerrunexp} (by using \verb|exit| in \textit{alpine}), the container will transfer its status from ``running'' to ``exited'', as shown in Fig. \ref{ch:vac:fig:dockerrunexppart3}.
+After exiting from Fig. \ref{ch:vac:fig:dockerrunexp} (by using \verb|exit| in alpine), the container will transfer its status from ``running'' to ``exited'', as shown in Fig. \ref{ch:vac:fig:dockerrunexppart3}.
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/dockerrunexppart3.png}
-	\caption{List the exited container \textit{test-apline}.} \label{ch:vac:fig:dockerrunexppart3}
+	\caption{List the exited container \textit{test-alpine}.} \label{ch:vac:fig:dockerrunexppart3}
 \end{figure}
 
 Functional wise, \verb|docker run| executes two commands behind the screen, namely \verb|docker create| and \verb|docker start|, where \verb|docker create| creates a container and \verb|docker start| starts the container by executing the startup script defined in the image. These two commands can be used separately. For example, to start an exited container, use
@@ -224,7 +226,7 @@ $ docker start <container>
 \begin{shortbox}
 \Boxhead{Differences between \texttt{docker run} and \texttt{docker start}}
 
-Do note the fundamental differences between \verb|docker run| and \verb|docker start|. First of all, \verb|docker run| starts a container from an image and it always creates a new container, whereas \verb|docker start| starts an existing but exit container. Secondly, \verb|docker run| runs a container in attached mode by default unless \verb|-d| flag is used, while in contrast \verb|docker start| runs a container in detached (backend) mode by default unless \verb|-a| is used. 
+Do note the fundamental differences between \verb|docker run| and \verb|docker start|. Firstly, \verb|docker run| starts a container from an image and it always creates a new container, whereas \verb|docker start| starts an existing but exit container. Secondly, \verb|docker run| runs a container in attached mode by default unless \verb|-d| flag is used, while in contrast \verb|docker start| runs a container in detached (backend) mode by default unless \verb|-a| is used. 
 \end{shortbox}
 
 An example of using \verb|docker run| with \verb|-d| flag to start a container in detached mode is given below.
@@ -244,7 +246,7 @@ Commonly used commands regarding launching a container are given in Table \ref{c
         \verb|docker start| & --- & Start an existing but exit container in detached mode by default. \\
         \verb|docker run| & \verb|-i| & Keep the standard input of the container open when launching the container. \\ 
         \verb|docker run| & \verb|-d| & Launch the container in the backend and keep it running. \\ 
-        \verb|docker run| & \verb|--rm| & Automatically remove the container when exiting. The removed container will not be listed in \verb|docker container ls -a|. This is usually used with temporary containers during debugging. \\ 
+        \verb|docker run| & \verb|--rm| & Automatically remove the container when exiting. The removed container will not be listed in \verb|docker container ls -a| as an exit container. This is usually used in testings. \\ 
         \verb|docker run| & \verb|-t| & Allocate a pseudo-TTY. The flag usually comes with the flags \verb|-i| or \verb|-d|, to form \verb|-it| or \verb|-dt|. \\ 
         \verb|docker run| & \verb|--restart| & Enforce restart of the container upon exiting. This is usually used on containers running in the backend. Commonly used restart configurations include \verb|--restart no| (do not restart), \verb|--restart on-failure[:<max retries>]| (restart if exits with an error flag), \verb|--restart always| (always restart when exists). \\ 
         \verb|docker run| & \verb|--name| & Assign a name to the container. \\
@@ -252,7 +254,7 @@ Commonly used commands regarding launching a container are given in Table \ref{c
 	\end{tabularx}
 \end{table}
 
-It is worth mentioning that file system snapshot and startup commands are defined inside an image. See Section \ref{ch:vac:sec:di} for more details. When a container starts, the file system snapshot is pasted to the container file system, and the startup commands executed. It is possible to overwrite the startup commands when starting a container, simply by amending the revised startup commands to the image name as follows.
+It is worth mentioning that file system snapshot and startup commands are defined inside an image. See Section \ref{ch:vac:sec:di} for more details. When a container starts, the file system snapshot is pasted to the container file system, and the startup commands executed. It is possible to overwrite the startup commands when starting a container by amending the revised startup commands to the image name as follows.
 \begin{lstlisting}
 $ docker run <image> <revised command>
 \end{lstlisting}
@@ -270,7 +272,7 @@ To enable the TTY shell of a container running in the backend, use
 \begin{lstlisting}
 $ docker exec -it <container> <command>
 \end{lstlisting}
-If \verb|<command>| is replaced by the shell name used in the container, this would open the terminal of the container. Notice that the shell used by the application running inside the container may differ from the one used in the host machine. In the case of an \textit{alpine} image based container, \verb|ash| is the default shell. For a \textit{ubuntu} image based container, \verb|bash| is often used. To exit from the TTY shell while keep the container running in the backend, use shortcut key \verb|Ctrl+p+q|. An alternative way to interact with containers running in the backend is to use
+If \verb|<command>| is replaced by the shell name used in the container, this would open the terminal of the container. Notice that the shell used by the application running inside the container may differ from the one used in the host machine. In the case of an alpine image based container, \verb|ash| is the default shell. For a \textit{ubuntu} image based container, \verb|bash| is often used. To exit from the TTY shell while keep the container running in the backend, use shortcut key \verb|Ctrl+p+q|. An alternative way to interact with containers running in the backend is to use
 \begin{lstlisting}
 $ docker attach <container>
 \end{lstlisting}
@@ -389,7 +391,7 @@ More about containerized application connectivity to the internet, to the host m
 
 An example of setting up a web server in containers from scratch is given in this section. For simplicity, everything happens on a single physical server. Only one container is used and the load balancer and the shared services are not included in the example.
 
-As a first step, create a container from the official \textit{nginx} image as follows. Notice that it is also possible to create a container from \textit{apline}, and install \textit{nginx} on \textit{apline}.
+As a first step, create a container from the official \textit{nginx} image as follows. Notice that it is also possible to create a container from alpine, and install \textit{nginx} on alpine.
 \begin{lstlisting}
 $ docker run -dt --name simple-web nginx
 \end{lstlisting}
