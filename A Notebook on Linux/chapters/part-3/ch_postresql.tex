@@ -6,9 +6,9 @@ PostgreSQL (or Postgres) is a powerful open-source relational database project. 
 
 \section{Brief Introduction}
 
-PostgreSQL is claimed to be the world's most advanced open-source RDB, and it has some great features. It is a object-relational database where the user can define customized data types in the form of objects. The database functions are modularized, meaning that it has a small base installation (only 40MB) as given in Table \ref{ch:db:tab:rdbrequirements}, and the user can expand its capability by installing additional modules per required. It complies very well with the latest SQL standard, with additional powerful add-ons.
+\mync{PostgreSQL} is claimed to be the world's most advanced open-source RDB, and it has some great features. It is an object-relational database where the user can define customized data types in the form of objects. The database functions are modularized, meaning that it has a small base installation (only 40MB) as given in Table \ref{ch:db:tab:rdbrequirements}, and the user can expand its capability by installing additional modules per required. It complies very well with the latest SQL standard, with additional powerful add-ons.
 
-Though powerful and efficient, PostgreSQL has not grown as popular as some other databases such as Oracle, Microsoft SQL server, and MySQL. One of the reasons for this is the lack of enterprise tier support. Being under PostgreSQL license (an open-source license similar to BSD and MIT), the available support is mostly from the community. With that being said, PostgreSQL is mature and has been adopted in some large enterprises. Of course the IT department of these companies need to work hard to maintain the database. In addition, great flexibility often means a steeper learning curve, making mastering PostgreSQL generally more difficult than other aforementioned databases.
+Though powerful and efficient, PostgreSQL has not grown as popular as some other databases such as Oracle, Microsoft SQL server and MySQL. One of the reasons for this is the lack of enterprise tier support. Being under PostgreSQL license (an open-source license similar to BSD and MIT), the available support is mostly from the community. With that being said, PostgreSQL is mature and has been adopted in some large enterprises. Of course the IT department of these companies need to work hard to maintain the database. In addition, great flexibility often means a steeper learning curve, making mastering PostgreSQL generally more difficult than other aforementioned databases.
 
 However, with the populating use of microservices where the database efficiency and performance becomes absolutely critical, PostgreSQL is gaining more and more attentions. It is especially popular when using inside containers.
 
@@ -29,9 +29,9 @@ The installation of PostgreSQL depends on the OS. As of this writing, the latest
 
 \subsection{Installation}
 
-PostgreSQL supports a large range of operating systems including Linux, MacOS, Windows, and more. The source code and very detailed documentations of PostgreSQL are available on its websites and can be downloaded to a local machine freely. Due to the lite weight of the base installation, PostgreSQL can be used conveniently in containers. The associated images can be found on Docker Hub.
+PostgreSQL supports a large range of operating systems including Linux, MacOS, Windows, and more. The source code and very detailed documentations of PostgreSQL are available on its websites and can be downloaded to a local machine freely. Due to the light weight of the base installation, PostgreSQL can be used conveniently in containers. The associated images can be found on Docker Hub.
 
-To install PostgreSQL directly on a host machine, simply follow the instructions on the official website, where command line tools are provided for Linux users, and installer for windows users. For example, to install and enable PostgreSQL 16 on RHEL 9.4 running on \verb|x86_64|, use
+To install PostgreSQL directly on a host machine, simply follow the instructions on the official website, where command line tools are provided for Linux users, and installer for Windows users. For example, to install and enable PostgreSQL 16 on RHEL 9.4 running on \verb|x86_64|, use
 \begin{lstlisting}
 $ sudo dnf module install postgresql:16/server
 $ sudo postgresql-setup --initdb
@@ -43,14 +43,21 @@ After installation, use command \verb|pg_ctl| to control the server, and \verb|p
 
 \subsection{Regular Authentication}
 
-The default ``root'' user of a PostgreSQL database is ``\verb|postgres|''. A database of the same name ``\verb|postgres|'' is also created automatically. A sudoer can log in to this account as follows.
+When installing Postgres, it automatically does the following.
+\begin{itemize}
+  \item Create an OS user \texttt{postgres}. This OS user has full access to the database.
+  \item Create a database role user \texttt{postgres}. This role has full access to the database.
+  \item Create a database \texttt{postgres}.
+\end{itemize}
+
+A sudoer can log in to the database as the OS user \verb|postgres| as follows. Then he does that, he is automatically assigned the database role \verb|postgres|. As mentioned earlier, this role has administrative access over the database.
 \begin{lstlisting}
 $ sudo -u postgres psql postgres
 postgres=#
 \end{lstlisting}
 where \verb|postgres=#| is the prompt of the DBMS console.
 
-After logging in to the database as user \verb|postgres|, the user can create users and databases using
+After logging in to the database as \verb|postgres|, the user can create users and databases using
 \begin{lstlisting}
 postgres=# CREATE ROLE <username> LOGIN PASSWORD '<password>';
 postgres=# CREATE DATABASE <database name> WITH OWNER = <username>;
@@ -63,13 +70,13 @@ where \verb|<port>| is defined in the configuration file and it is \verb|5432| b
 
 \subsection{Peer Authentication}
 
-Given that the user already logged in to the OS with his username in the OS, it is possible to use peer authentication if the login is from the local host and the PostgreSQL username is the same with the OS username.
+Given that the user already logged in to the OS, it is possible to use peer authentication if the login is from localhost and the PostgreSQL role is the same with the OS username.
 
 Quickly create a user in PostgreSQL with the same username as OS using
 \begin{lstlisting}
 $ sudo -u postgres createuser -s $USER
 \end{lstlisting}
-which essentially logs in as PostgreSQL and creates a user of \verb|$USER|. With the user created, create a database for the user using
+which creates a database user \verb|$USER|, with the same username as the OS user. With the user created, create a database for the user using
 \begin{lstlisting}
 $ createdb <database name>
 \end{lstlisting}
@@ -89,9 +96,40 @@ to login to the database.
 
 After logging in to the database, use \verb|\du| and \verb|\l| to check the users and the databases in PostgreSQL, and use \verb|SHOW port;| to check the port that PostgreSQL is running on which by default should be \verb|5432|.
 
-\subsection{Run PostgreSQL in Containers}
+\subsection{Deployment of PostgreSQL in Container}
 
-To use PostgreSQL in containers, either download and run PostgreSQL images from Docker Hub, or create a Dockerfile like the following that installs and configures PostgreSQL on top of an Alpine base image. An example of such Dockerfiles is given below.
+To use PostgreSQL in containers, you can either download and run official PostgreSQL images from Docker Hub, or build a custom Dockerfile that installs and configures PostgreSQL on top of a base image such as Alpine. 
+
+The following example shows how to launch PostgreSQL in a container using the Docker Hub image. In this example, a persistent volume is mounted to preserve user and database data, so that if the container is restarted, previously created users and databases are not lost. Environment variables such as the username and password are stored in an \verb|.env| file.
+
+\begin{lstlisting}
+#!/bin/bash
+
+source ~/.env
+
+if podman container exists "$PG_CONTAINER"; then
+    status=$(podman inspect -f '{{.State.Status}}' "$PG_CONTAINER")
+    if [ "$status" = "running" ]; then
+        echo "Container $PG_CONTAINER is already running."
+    else
+        echo "Starting existing container $PG_CONTAINER..."
+        podman start "$PG_CONTAINER"
+    fi
+else
+    echo "Creating and starting container $PG_CONTAINER..."
+    podman run -d \
+        --name "$PG_CONTAINER" \
+        -e POSTGRES_USER="$PG_USER" \
+        -e POSTGRES_PASSWORD="$PG_PASSWORD" \
+        -e POSTGRES_DB="$PG_DB" \
+        -v "$PG_DATA_DIR":/var/lib/postgresql/data:Z \
+        -p "$PG_PORT":5432 \
+        docker.io/library/postgres
+fi
+\end{lstlisting}
+
+The next example shows a Dockerfile that installs PostgreSQL on Alpine Linux.
+
 \begin{lstlisting}
 FROM alpine
 RUN apk update
@@ -118,9 +156,13 @@ COPY ./google_stock_price.csv /var/lib/postgresql/user-data
 CMD ["/bin/sh", "/var/lib/postgresql/user-scripts/start.sh"]
 \end{lstlisting}
 
-\section{PostgreSQL-Specific New Data Types}
+\section{Data Types}
 
-PostgreSQL supports a large range of data types, more than other databases such as MySQL and MariaDB. In addition to the commonly seen numeric types, character types, date and time types and boolean type, the following data types are supported.
+PostgreSQL supports a large range of data types, more than other databases such as MySQL and MariaDB. 
+
+\subsection{PostgreSQL-Specific Data Types}
+
+In addition to the commonly seen numeric types, character types, date and time types and boolean type, the following data types are supported.
 \begin{itemize}
 	\item Currency (monetary) types.
 	\item Geometric types, including points, line segments, boxes, paths, polygons and circles.
@@ -130,7 +172,7 @@ PostgreSQL supports a large range of data types, more than other databases such 
 	\item Many more.
 \end{itemize}
 
-\section{PostgreSQL User-Defined Data Types}
+\subsection{User-Defined Data Types}
 
 User-defined data types can be used to demonstrate the object-relational database aspect of PostgreSQL. It essentially means that the attribute of an element can be an object, and can have some complex and comprehensive features.
 

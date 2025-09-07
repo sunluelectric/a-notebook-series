@@ -1326,8 +1326,696 @@ def main(self):
 
 Notice that \verb|asyncio.run| is used to start the two agents.
 
+\subsection{CrewAI: Credit Card Bill Recorder}
+
+The following agentic AI system is built using CrewAI framework. The system is used to parse a credit card bill, and use the information to maintain 3 tables: cards, merchants and transactions. The following AI agents and tasks are defined.
+\begin{itemize}
+  \item Agents:
+  \begin{itemize}
+    \item Credit Card Parser. Read and credit card PDF, and from the PDF summarizes credit card information in the form of Pydantic object and summarized transaction record in the form of list of Pydantic objects. 
+    \item Card manager. Read the credit card information, and maintain the card table.
+    \item Merchant manager. Read the merchants from the summarized transactions records, collect the frequently visit merchants, and maintain the merchants table.
+    \item Transaction manager. Read the summarized transaction and maintain the transactions table.
+  \end{itemize}
+  \item A task is associated with each agent.
+\end{itemize}
+
+Details are as follows.
+
+\vspace{0.1in}
+\noindent \textbf{Database Preparation}
+\vspace{0.1in}
+
+PostgreSQL database is created and deployed in a podman container. Three tables are created. Details are as follows.
+
+To deploy the database, use
+\begin{lstlisting}
+#!/bin/bash
+
+source ~/Projects/smart-home/.env
+
+if podman container exists "$PG_CONTAINER"; then
+    status=$(podman inspect -f '{{.State.Status}}' "$PG_CONTAINER")
+    if [ "$status" = "running" ]; then
+	echo "Container $PG_CONTAINER is already running."
+    else
+	echo "Starting existing container $PG_CONTAINER..."
+	podman start "$PG_CONTAINER"
+    fi
+else
+    echo "Creating and starting container $PG_CONTAINER..."
+    podman run -d \
+	--name "$PG_CONTAINER" \
+	-e POSTGRES_USER="$PG_USER" \
+	-e POSTGRES_PASSWORD="$PG_PASSWORD" \
+	-e POSTGRES_DB="$PG_DB" \
+	-v "$PG_DATA_DIR":/var/lib/postgresql/data:Z \
+	-p "$PG_PORT":5432 \
+        docker.io/library/postgres:15
+fi
+\end{lstlisting}
+where the database login credentials and configurations are given in the \verb|.env| file as environmental variables.
+
+To create the database tables, use
+\begin{lstlisting}
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Define enum for card status (safe for re-execution)
+DO $$
+BEGIN
+IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'card_status') THEN
+CREATE TYPE card_status AS ENUM ('in_use', 'replaced', 'lost', 'closed');
+END IF;
+END
+$$;
+
+CREATE TABLE IF NOT EXISTS cards (
+id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+name TEXT NOT NULL,
+issuer TEXT NOT NULL,
+network TEXT NOT NULL,
+last4 CHAR(4) NOT NULL,
+status card_status NOT NULL,
+opened_on DATE,
+closed_on DATE,
+expires_on DATE NOT NULL,
+tags JSONB,
+notes TEXT,
+created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+\end{lstlisting}
+
+\begin{lstlisting}
+CREATE TABLE IF NOT EXISTS merchants (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  name TEXT NOT NULL,                      -- Display name: "Coles", "Amazon"
+  canonical_name TEXT,                     -- Optional normalized/merged name
+  merchant_type TEXT,                      -- e.g. 'grocery', 'online_shop', 'restaurant'
+
+  location_label TEXT,                     -- Free-form (e.g. 'Macquarie Centre')
+  latitude DOUBLE PRECISION,               -- Optional: physical location
+  longitude DOUBLE PRECISION,              -- Optional: physical location
+  opening_hours JSONB,                     -- Optional: hours for physical stores
+
+  is_digital BOOLEAN,                      -- True if goods/services are typically digital
+  is_recurrent BOOLEAN,                    -- True if charges are usually recurring/subscription-based
+
+  tags TEXT[],                             -- Program-friendly labels (e.g. ['australian', 'food'])
+  properties JSONB,                        -- Arbitrary structured merchant-specific metadata
+  notes TEXT,                              -- Human-facing comments or clarifications
+
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Insert default "Others" merchant as a fallback
+INSERT INTO merchants (
+  id, name, canonical_name, merchant_type, tags, notes
+)
+VALUES (
+  gen_random_uuid(),
+  'Others',
+  'Others',
+  'uncategorized',
+  ARRAY['fallback', 'unknown'],
+  'Catch-all merchant for unmatched or unresolved transactions'
+);
+\end{lstlisting}
+
+\begin{lstlisting}
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS card_transactions (
+id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+card_id UUID NOT NULL REFERENCES cards(id),
+merchant_id UUID NOT NULL REFERENCES merchants(id),
+date DATE NOT NULL,
+amount NUMERIC(10, 2) NOT NULL,
+currency CHAR(3) NOT NULL DEFAULT 'AUD',
+raw_entity TEXT NOT NULL,
+tags JSONB,
+notes TEXT,
+statement_id TEXT,
+imported_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+\end{lstlisting}
+
+\vspace{0.1in}
+\noindent \textbf{Tools}
+\vspace{0.1in}
+
+Two tools are defined, namely the PostgreSQL tool that allows an AI agent to execute an SQL command (query or insert), and the web search tool. Notice that the web search tool is used by the merchant manager to query information about a merchant from online to determine its merchant type.
+
+The following PostgreSQL Query Executor is defined.
+\begin{lstlisting}
+from crewai.tools import tool
+import os
+import psycopg
+from dotenv import load_dotenv
+
+dotenv_path = os.path.expanduser("~/Projects/smart-home/.env")
+load_dotenv(dotenv_path=dotenv_path, override=True)
+
+@tool("PostgreSQL Query Executor")
+def run_postgres_query(query: str) -> str:
+    """
+    Executes a SQL query on a PostgreSQL database and returns the results.
+
+    Args:
+        query (str): The SQL query to execute.
+
+    Returns:
+        str: The results of the query or an error message.
+    """
+    try:
+        # Load database connection details from environment variables
+        db_host = os.getenv("PG_HOST", "localhost")
+        db_port = os.getenv("PG_PORT", "5432")
+        db_name = os.getenv("POSTGRES_DB", "mydatabase")
+        db_user = os.getenv("POSTGRES_USER", "SUNLU")
+        db_password = os.getenv("PG_PASSWORD", "")
+        print(f"Connecting to database {db_name} at {db_host}:{db_port} as user {db_user}")
+        # Connect to the PostgreSQL database
+        with psycopg.connect(
+            host=db_host,
+            port=db_port,
+            dbname=db_name,
+            user=db_user,
+            password=db_password
+        ) as conn:
+          # Create a cursor to execute the query
+            with conn.cursor() as cur:
+                cur.execute(query)
+                if cur.description:  # If the query returns rows
+                    results = cur.fetchall()
+                    return str(results)
+                else:  # If the query does not return rows (e.g., INSERT, UPDATE)
+                    conn.commit()
+                    return "Query executed successfully."
+    except Exception as e:
+        return f"An error occurred: {e}"
+\end{lstlisting}
+
+Serper API is used as the web search tool.
+\begin{lstlisting}
+from crewai_tools import SerperDevTool
+
+search_tool = SerperDevTool()
+\end{lstlisting}
+
+\vspace{0.1in}
+\noindent \textbf{Agents and Tasks}
+\vspace{0.1in}
+
+The following agents and tasks are defined. 
+
+\begin{lstlisting}
+credit_bill_parser:
+  role: >
+    Credit Bill Parser
+  goal: >
+    Extract and summarize key information from a credit card bill
+  backstory: >
+    You are a helpful assistant skilled in analyzing credit card bills. You are given a credit card bill in text form, and you need to extract the following information --
+    - Bank and card basic information, such as customer name, bank name, card last four digits, statement date, the status of the card (active or inactive), etc.
+    - Money to be paid from last month, and money actually paid for last month.
+    - Money to be paid for this month, minimum payment due date, and minimum payment amount.
+    - Summary of each line item, including:
+      - Date of transaction
+      - Merchant name
+      - Amount spent
+      - Currency
+    You must output the extracted information as a structured JSON object that strictly conforms to the `BillAnalysis` Pydantic model. This includes a `CardInfo` object, a `StatementSummary` object, and a list of `Transaction` objects.
+  llm: openai/gpt-4o-mini
+
+credit_card_manager:
+  role: >
+    Credit Card Manager
+  goal:
+    Help the user manage credit cards database, including adding new cards and updating existing cards
+  backstory: >
+    You are a helpful assistant skilled in managing the credit cards database.
+    You receive a `CardInfo` Pydantic object from the upstream agent.
+    You have a tool, 'PostgreSQL Query Executor', that you use to generate and execute SQL queries to access the credit card table. The name of the table is `cards`.
+    The credit card table structure is as follows:
+        Column   |           Type           | Collation | Nullable |      Default
+    ------------+--------------------------+-----------+----------+--------------------
+     id         | uuid                     |           | not null | uuid_generate_v4()
+     name       | text                     |           | not null |
+     issuer     | text                     |           | not null |
+     last4      | character(4)             |           | not null |
+     status     | card_status              |           | not null |
+     opened_on  | date                     |           |          |
+     closed_on  | date                     |           |          |
+     expires_on | date                     |           | not null |
+     tags       | jsonb                    |           |          |
+     notes      | text                     |           |          |
+     created_at | timestamp with time zone |           | not null | now()
+    Your primary function is to manage credit card records in the `cards` table. You first need to query the table to determine if a card already exists. A card is identified as a match if the `issuer` and `last4` digits from the provided `CardInfo` object match a record in the database.
+    If no matching card is found, you must generate an SQL `INSERT` query to add the new card. You must use placeholder values for any required fields that are not present in the `CardInfo` object. For example, use 'unknown' for text fields, '0000' for last 4 digits, and '9999-12-31' for date fields like expires_on.
+    If a matching card is found, you can generate an SQL `UPDATE` query. You need to compare the existing database record with the new `CardInfo` object. You should only update a field in the database if the corresponding field in the database is currently a placeholder (e.g., 'unknown', '0000', or '9999-12-31') and the new data from `CardInfo` is valid.
+    
+    Tool usage rules for "PostgreSQL Query Executor":
+      - Pass ONLY the raw SQL string to the tool's `query` argument.
+      - Do NOT wrap SQL in JSON, Python, code fences, or quotes like "{\"query\": \"...\"}".
+      - Return the SQL string directly.
+      - Forbidden patterns:
+        - "{\"query\": \"...\"}"
+        - "```sql ... ```"
+        - Python dicts or JSON objects instead of plain SQL strings
+
+  llm: openai/gpt-4o-mini
+
+merchant_manager:
+  role: >
+    Merchant Manager
+  goal:
+    Help the user manage merchants database, including adding new merchants and updating existing merchants
+  backstory: >
+    You are a helpful assistant skilled in managing the merchants database.
+    You receive a list of transaction records from the upstream agent. Each record contains a merchant name. You have two tools at your disposal: 'PostgreSQL Query Executor' for database access, and 'Search Internet' to look up merchant information online.
+    The merchants table structure is as follows. The name of the table is `merchants`.
+        Column     |           Type           | Collation | Nullable |      Default
+    ----------------+--------------------------+-----------+----------+-------------------
+     id             | uuid                     |           | not null | gen_random_uuid()
+     name           | text                     |           | not null |
+     canonical_name | text                     |           |          |
+     merchant_type  | text                     |           |          |
+     location_label | text                     |           |          |
+     latitude       | double precision         |           |          |
+     longitude      | double precision         |           |          |
+     opening_hours  | jsonb                    |           |          |
+     is_digital     | boolean                  |           |          |
+     is_recurrent   | boolean                  |           |          |
+     tags           | text[]                   |           |          |
+     notes          | text                     |           |          |
+     created_at     | timestamp with time zone |           | not null | now()
+    Your primary function is to iterate through each unique merchant in the transaction list.
+    For each unique merchant, you must first query the `merchants` table using your 'PostgreSQL Query Executor' tool to check if the merchant already exists in the database.
+    - If the merchant exists, no further action is needed for this merchant.
+    - If the merchant does not exist, you must decide whether to add it to the database. A merchant is worth adding if it appears 3 or more times in the transaction list or if it is a well-known brand. You can use your 'Search Internet' tool to gather information and make this decision.
+    If you decide to add a new merchant, you must use your 'Search Internet' tool to gather necessary information, such as `canonical_name`, `merchant_type`, and `is_digital`. Once you have the information, you must generate a well-formed SQL `INSERT` query and execute it using the 'PostgreSQL Query Executor' tool. You should use 'Others' as the default `merchant_type` if the type cannot be determined.
+  
+    Tool usage rules for "PostgreSQL Query Executor":
+      - Pass ONLY the raw SQL string to the tool's `query` argument.
+      - Do NOT wrap SQL in JSON, Python, code fences, or quotes like "{\"query\": \"...\"}".
+      - Return the SQL string directly.
+      - Forbidden patterns:
+        - "{\"query\": \"...\"}"
+        - "```sql ... ```"
+        - Python dicts or JSON objects instead of plain SQL strings
+
+  llm: openai/gpt-4o-mini
+
+credit_card_transaction_manager:
+  role: >
+    Credit Card Transaction Manager
+  goal:
+    Help the user manage the credit card transactions database, mainly adding new transactions to the database
+  backstory: >
+    You are a helpful assistant skilled in managing the credit card transactions database.
+    You receive a structured Pydantic object containing a list of `Transaction` records.
+    You have a tool, 'PostgreSQL Query Executor', that you use to generate and execute SQL queries.
+    The `card_transactions` table structure is as follows:
+        Column    |           Type           | Collation | Nullable |      Default
+    --------------+--------------------------+-----------+----------+--------------------
+     id           | uuid                     |           | not null | uuid_generate_v4()
+     card_id      | uuid                     |           | not null |
+     merchant_id  | uuid                     |           | not null |
+     date         | date                     |           | not null |
+     amount       | numeric(10,2)            |           | not null |
+     currency     | character(3)             |           | not null |
+     raw_entity   | text                     |           | not null |
+     tags         | jsonb                    |           |          |
+     notes        | text                     |           |          |
+     statement_id | text                     |           |          |
+     imported_at  | timestamp with time zone |           | not null | now()
+
+    The `cards` table structure is as follows:
+        Column   |           Type           | Collation | Nullable |      Default
+    ------------+--------------------------+-----------+----------+--------------------
+     id         | uuid                     |           | not null | uuid_generate_v4()
+     name       | text                     |           | not null |
+     issuer     | text                     |           | not null |
+     last4      | character(4)             |           | not null |
+     status     | card_status              |           | not null |
+     opened_on  | date                     |           |          |
+     closed_on  | date                     |           |          |
+     expires_on | date                     |           | not null |
+     tags       | jsonb                    |           |          |
+     notes      | text                     |           |          |
+     created_at | timestamp with time zone |           | not null | now()
+    
+    The `merchants` table structure is as follows:
+        Column     |           Type           | Collation | Nullable |      Default
+    ----------------+--------------------------+-----------+----------+-------------------
+     id             | uuid                     |           | not null | gen_random_uuid()
+     name           | text                     |           | not null |
+     canonical_name | text                     |           |          |
+     merchant_type  | text                     |           |          |
+     location_label | text                     |           |          |
+     latitude       | double precision         |           |          |
+     longitude      | double precision         |           |          |
+     opening_hours  | jsonb                    |           |          |
+     is_digital     | boolean                  |           |          |
+     is_recurrent   | boolean                  |           |          |
+     tags           | text[]                   |           |          |
+     notes          | text                     |           |          |
+     created_at     | timestamp with time zone |           | not null | now()
+
+    Your primary function is to process each transaction in the list. For each one, you must:
+    1. Check if the transaction already exists in the `card_transactions` table using the date, amount, currency, and raw entity.
+    2. If it does not exist, you need to find the `id` of the corresponding card from the `cards` table. You can use the card's `issuer` and `last4` to query for the correct `card_id`.
+    3. You must also find the `id` of the corresponding merchant from the `merchants` table.
+    4. Once you have both the `card_id` and `merchant_id`, generate an SQL `INSERT` query to add the new transaction to the `card_transactions` table.
+    - If you cannot find a matching card, you must report this as an error.
+    - If you cannot find a matching merchant, you should map the transaction to a default 'Others' merchant category.
+
+    Tool usage rules for "PostgreSQL Query Executor":
+      - Pass ONLY the raw SQL string to the tool's `query` argument.
+      - Do NOT wrap SQL in JSON, Python, code fences, or quotes like "{\"query\": \"...\"}".
+      - Return the SQL string directly.
+      - Forbidden patterns:
+        - "{\"query\": \"...\"}"
+        - "```sql ... ```"
+        - Python dicts or JSON objects instead of plain SQL strings
+
+  llm: openai/gpt-4o-mini
+
+crew_master:
+  role: >
+    Crew Master
+  goal: >
+    Orchestrate a team of agents to achieve a common goal.
+  backstory: >
+    You are an experienced project manager and team lead. Your role is to oversee the entire process, delegate tasks to the right agents, and ensure they are completed correctly and in the proper order. You are the ultimate authority and decision-maker for the crew.
+  llm: openai/gpt-4o
+  
+\end{lstlisting}
+
+The following tasks are defined.
+
+\begin{lstlisting}
+manage_card_database:
+  description: >
+    Receive a CardInfo object from the upstream agent. Use the 'PostgreSQL Query Executor' tool to first check if the card already exists in the 'cards' table using the issuer and last4 digits. If not, generate an SQL INSERT query to add the new card. If it exists, generate an SQL UPDATE query to update any placeholder values with valid data from the CardInfo object.
+  expected_output: >
+    A simple confirmation message, such as 'Card added successfully' or 'Card updated successfully', or 'No changes needed'.
+  agent: credit_card_manager
+  context:
+    - parse_bill
+
+manage_merchants:
+  description: >
+    Receive a structured Pydantic object from the upstream agent and process the `transactions` list within it. For each unique merchant, check for its existence in the 'merchants' table. If the merchant is new, decide if it should be added to the database based on its frequency (3+ times) or prominence. If so, use online search to gather details and generate an SQL INSERT query for the new merchant.
+  expected_output: >
+    A summary of the actions taken, for example, 'Analyzed 15 merchants. Added 3 new merchants to the database: [list of new merchant names]'.
+  agent: merchant_manager
+  context:
+    - parse_bill
+
+manage_transactions:
+  description: >
+    Receive a structured Pydantic object from the upstream agent and process the `transactions` list within it. For each transaction, check for its existence in the `card_transactions` table. If it's a new transaction, use the 'PostgreSQL Query Executor' tool to retrieve the `card_id` from the `cards` table and the `merchant_id` from the `merchants` table. Once the required IDs are found, generate an SQL INSERT query to add the transaction to the database.
+  expected_output: >
+    A summary of the actions taken, such as 'Processed 25 transactions. Added 20 new transactions to the database.'
+  agent: credit_card_transaction_manager
+  context:
+    - parse_bill
+    - manage_card_database
+    - manage_merchants
+
+parse_bill:
+  description: |
+    You are given the full raw text of a credit card bill between the delimiters.
+    Extract a single JSON object that strictly matches the BillAnalysis schema
+    (card_info, statement_summary, transactions). Return ONLY JSON (no Markdown).
+
+    ---BEGIN BILL TEXT---
+    {bill_content}
+    ---END BILL TEXT---
+
+    ## Source format & extraction rules (OCBC examples)
+    - The issuer is "OCBC Bank" if present. Customer name appears near the top (e.g., "SUN, LU").
+    - Card number appears like "XXXX-XXXX-XXXX-6684" -> last4 = "6684".
+    - Statement date appears as "STATEMENT DATE" followed by either "01-07-2023" or "01 JUL 23".
+      * Normalize ALL dates to YYYY-MM-DD.
+      * If you see DD/MM (e.g., "31/05"), infer the year from the statement date's year.
+      * If the date is like "01 JUL 23", map month names to numbers and expand "23" to "2023".
+    - Minimum payment and due date appear as "TOTAL MINIMUM DUE" and "PAYMENT DUE DATE".
+    - Totals often appear as "TOTAL AMOUNT DUE" and/or "TOTAL".
+    - "LAST MONTH'S BALANCE" is the previous balance.
+    - Payments/credits may be shown in parentheses (e.g., "(1,657.81 PAYMENT BY INTERNET)") -> treat as negative amounts for payments_and_credits.
+    - Transaction section looks like:
+        TRANSACTION DATE
+        DESCRIPTION
+        AMOUNT (SGD)
+      Followed by blocks such as:
+        "31/05"
+        "NINTENDO ... (extra lines like FOREIGN CURRENCY ...)"
+        "112.00"
+      * Merchant names may span multiple lines; join them into a single merchant_name string with spaces.
+      * Use the SGD number shown in the AMOUNT column as the transaction amount.
+      * Use currency "SGD" unless explicitly stated otherwise for the final charged amount.
+      * Parentheses around amounts mean negative/refund (e.g., "(194.40 ANNUAL FEE WAIVER)").
+      * Include fees/rebates as transactions with merchant_name like "ANNUAL FEE", "ANNUAL FEE WAIVER", "CASH REBATE", etc.
+      * Ignore boilerplate text (contact info, headings, totals/subtotals rows).
+    - Set card_status to "Active" unless the bill explicitly indicates otherwise.
+    - Set card_network to null unless you can reliably infer it (do NOT guess).
+
+    ## Output schema (strict)
+    {
+      "card_info": {
+        "customer_name": "string",
+        "issuer": "string",
+        "card_network": "string|null",
+        "last4": "string",
+        "statement_date": "YYYY-MM-DD",
+        "card_status": "string"
+      },
+      "statement_summary": {
+        "previous_balance": number,
+        "payments_and_credits": number,
+        "new_charges": number,
+        "new_balance": number,
+        "minimum_payment": number,
+        "minimum_payment_due_date": "YYYY-MM-DD"
+      },
+      "transactions": [
+        {
+          "date": "YYYY-MM-DD",
+          "merchant_name": "string",
+          "amount": number,
+          "currency": "SGD",
+          "raw_entity": "string"  // a concise slice of the original lines used
+        }
+      ]
+    }
+
+    ## Validation & normalization
+    - Use null for unknowns rather than inventing values.
+    - All numbers must be plain numbers (no currency symbols, commas, or parentheses).
+      * For negative amounts shown as "(xxx.xx)", output a negative number (e.g., -194.40).
+    - Dates must be ISO "YYYY-MM-DD".
+    - Ensure totals are consistent: new_balance = previous_balance - payments_and_credits + new_charges.
+
+  expected_output: >
+    A single JSON object that validates against the BillAnalysis Pydantic schema. No additional text.
+  agent: credit_bill_parser
+\end{lstlisting}
+
+\vspace{0.1in}
+\noindent \textbf{Crew}
+\vspace{0.1in}
+
+Crew is defined as follows.
+
+\begin{lstlisting}
+import sys
+import os
+from datetime import date
+
+from crewai_tools import SerperDevTool
+from crewai import Agent, Task, Crew, Process
+from crewai.project import CrewBase, agent, crew, task
+from pydantic import BaseModel, Field
+from typing import List, Optional
+
+# Import the custom tools
+from credit_card_bill_injector.tools.postgresql_tools import run_postgres_query
+
+from pydantic import BaseModel, Field
+from typing import List, Optional
+
+class Transaction(BaseModel):
+    """Represents a single transaction line item from a credit card bill."""
+    date: str = Field(..., description="Date of the transaction in YYYY-MM-DD format.")
+    merchant_name: str = Field(..., description="Name of the merchant as it appears on the bill.")
+    amount: float = Field(..., description="Amount of the transaction.")
+    currency: str = Field(..., description="Currency of the transaction, e.g., 'AUD', 'USD'.")
+    raw_entity: Optional[str] = Field(None, description="The raw, unparsed text line for the transaction.")
+
+class StatementSummary(BaseModel):
+    """Summarizes the key financial figures from a credit card statement."""
+    previous_balance: float = Field(..., description="Balance from the previous statement.")
+    payments_and_credits: float = Field(..., description="Total amount of payments and credits applied.")
+    new_charges: float = Field(..., description="Total amount of new charges this period.")
+    new_balance: float = Field(..., description="The new total balance due for this statement.")
+    minimum_payment: float = Field(..., description="Minimum payment due.")
+    minimum_payment_due_date: str = Field(..., description="Due date for the minimum payment in YYYY-MM-DD format.")
+
+class CardInfo(BaseModel):
+    """Contains basic information about the credit card and cardholder."""
+    customer_name: str = Field(..., description="The name of the cardholder.")
+    issuer: str = Field(..., description="The name of the bank or card issuer.")
+    card_network: Optional[str] = Field(None, description="The network of the card, e.g., 'Visa', 'Mastercard'.")
+    last4: str = Field(..., description="The last four digits of the credit card number.")
+    statement_date: str = Field(..., description="The date the statement was issued in YYYY-MM-DD format.")
+    card_status: str = Field(..., description="The status of the card, e.g., 'Active'.")
+
+class BillAnalysis(BaseModel):
+    """The complete structured output for a parsed credit card bill."""
+    card_info: CardInfo = Field(..., description="Basic card and statement information.")
+    statement_summary: StatementSummary = Field(..., description="Summary of statement balances and payments.")
+    transactions: List[Transaction] = Field(..., description="A list of all transactions for this statement.")
 
 
+search_tool = SerperDevTool()
+
+@CrewBase
+class CreditCardBillInjector():
+    """CreditCardBillInjector crew"""
+
+    agents_config = 'config/agents.yaml' 
+    tasks_config = 'config/tasks.yaml'
+
+    @agent
+    def credit_bill_parser(self) -> Agent:
+        return Agent(
+            config=self.agents_config['credit_bill_parser'],
+            verbose=True,
+            allow_delegation=False
+        )
+    
+    @agent
+    def credit_card_manager(self) -> Agent:
+        return Agent(
+            config=self.agents_config['credit_card_manager'],
+            tools=[run_postgres_query],
+            verbose=True,
+            allow_delegation=True
+        )
+
+    @agent
+    def merchant_manager(self) -> Agent:
+        return Agent(
+            config=self.agents_config['merchant_manager'],
+            tools=[run_postgres_query, search_tool],
+            verbose=True,
+            allow_delegation=True
+        )
+
+    @agent
+    def credit_card_transaction_manager(self) -> Agent:
+        return Agent(
+            config=self.agents_config['credit_card_transaction_manager'],
+            tools=[run_postgres_query],
+            verbose=True,
+            allow_delegation=True
+        )
 
 
+    @task
+    def parse_bill(self) -> Task:
+        return Task(
+            config=self.tasks_config['parse_bill'],
+            agent=self.credit_bill_parser(),
+            output_pydantic=BillAnalysis
+        )
+
+    @task
+    def manage_card_database(self) -> Task:
+        return Task(
+            config=self.tasks_config['manage_card_database'],
+            agent=self.credit_card_manager(),
+            context=[self.parse_bill()]
+        )
+
+    @task
+    def manage_merchants(self) -> Task:
+        return Task(
+            config=self.tasks_config['manage_merchants'],
+            agent=self.merchant_manager(),
+            context=[self.parse_bill()]
+        )
+
+    @task
+    def manage_transactions(self) -> Task:
+        return Task(
+            config=self.tasks_config['manage_transactions'],
+            agent=self.credit_card_transaction_manager(),
+            context=[self.parse_bill(), self.manage_card_database(), self.manage_merchants()]
+        )
+
+    @crew
+    def crew(self) -> Crew:
+        #manager = Agent(
+        #    config=self.agents_config['crew_master'],
+        #    allow_delegation=True
+        #)
+        return Crew(
+            agents = self.agents,
+            tasks = self.tasks,
+            verbose=True,
+            process=Process.sequential,
+        )
+\end{lstlisting}
+
+And finally, in the main program,
+
+\begin{lstlisting}
+import sys
+import warnings
+
+from datetime import datetime
+
+from credit_card_bill_injector.crew import CreditCardBillInjector
+
+warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
+
+from dotenv import load_dotenv
+import os
+
+import fitz
+
+def run():
+    """
+    This function sets up the environment and runs the CrewAI process.
+    """
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+    dotenv_path = os.path.expanduser('~/Projects/smart-home/.env')
+    load_dotenv(dotenv_path=dotenv_path, override=True)
+
+    doc = fitz.open('/data/Projects/smart-home/input-document/credit_card_bill.pdf')
+    bill_content = ""
+    for page in doc:
+        bill_content += page.get_text()
+    doc.close()
+
+    injector_crew = CreditCardBillInjector()
+
+    result = injector_crew.crew().kickoff(
+        inputs={
+            'bill_content': bill_content
+        }
+    )
+
+    print("\n\n########################")
+    print("## Here is your Crew's result:")
+    print("########################\n")
+    print(result)
+
+if __name__ == '__main__':
+    run()
+\end{lstlisting}
 
