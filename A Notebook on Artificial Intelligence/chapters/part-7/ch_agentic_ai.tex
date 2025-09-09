@@ -70,9 +70,9 @@ In addition, the LLM is equipped with a memory module, which stores historical i
 
 Agentic AI can be understood as a form of LLM orchestration. The user specifies the overall task and provides a list of available tools, while the agentic AI system determines how to structure the workflow, which tools to invoke, how to prompt the LLMs, and how to evaluate their outputs.
 
-An \mync{agentic AI framework} refers to the infrastructure that supports the creation, configuration, and execution of such systems. It provides the necessary abstractions and utilities that allow users to define and deploy agentic AI pipelines more easily. While it is always possible to manually coordinate LLMs, prompts, and tool calls, using a mature agentic AI framework significantly simplifies the process of building scalable, multi-agent, or tool-augmented systems.
+An \mync{agentic AI framework} refers to the infrastructure that supports the creation, configuration, and execution of such systems. It provides the necessary abstractions and utilities that allow users to define and deploy agentic AI pipelines more easily. While it is always possible to manually coordinate LLMs, prompts, and tool calls, using a mature agentic AI framework significantly simplifies the process of building scalable, multi-agent, or tool-augmented systems. In this sense, an agentic AI framework plays a role analogous to that of Kubernetes in the context of containerized applications. It abstracts away low-level orchestration logic and enables the declarative specification and runtime management of complex, distributed components. 
 
-In this sense, an agentic AI framework plays a role analogous to that of Kubernetes in the context of containerized applications: it abstracts away low-level orchestration logic and enables the declarative specification and runtime management of complex, distributed components.
+On one hand, agentic AI frameworks simplify the deployment of LLM applications, but on the other hand they add additional layers of abstraction and prompt, thus making the system behavior less controllable and sometimes more difficult to debug. The user should choose whether to use agentic AI frameworks wisely based on the need.
 
 Common examples of agentic AI frameworks include the OpenAI Agents SDK, CrewAI, LangGraph, AutoGen, and many more. Details are introduced in later sections.
 
@@ -601,17 +601,6 @@ Tools are one of the most important features of an agentic AI system, as they si
 
 CrewAI likewise provides multiple methods for calling tools from libraries or defining customized tools. More details are given below.
 
-
-
-
-
-
-
-
-
-
-
-
 \vspace{0.1in}
 \noindent \textbf{Advanced CrewAI: Memory}
 \vspace{0.1in}
@@ -672,6 +661,100 @@ On a machine where containerization tools are installed, an agent can trigger th
 The user is able to setup maximum trail number and maximum waiting time for the trail code execution.
 
 \subsection{LangGraph}
+
+It is worth mentioning the differences between LangChain and LangGraph. They are two distinct products from the same company, LangChain. A brief explanation is given below.
+
+\mync{LangChain} is an open, composable framework that provides a standard interface for LLM models tools, and databases \cite{langchain2025}. Suppose that an agentic AI system with multiple components has been defined. If LangChain is used to connect and integrate these components, the user can switch underlying models (for example, from OpenAI to Anthropic) and tools (for example, from MySQL to PostgreSQL) with relatively little code change. This greatly enhances the portability and robustness of the agentic AI solution.
+
+\mync{LangGraph}, on the other hand, is an agentic AI framework, broadly comparable to the OpenAI Agents SDK and CrewAI. It focuses on coordinating AI agents and reliably handling complex tasks by representing applications as stateful graphs \cite{langchain2025langgraph}, with newly introduced concepts of states, nodes and edges. 
+
+This section focuses on LangGraph, the agentic AI framework. LangChain, the standard framework for gluing components, will also be used when needed.
+
+LangGraph introduces the concepts of states, nodes and edges to visualize the workflow as a graph. A \mync{LangGraph state} represents a snapshot of the application. The state is immutable, meaning that each update of any kind creates a new state derived from the old one. In this way, LangGraph maintains a full history of the system status and supports time-travel debugging and replay. A \mync{LangGraph node} typically represents an atomic unit of computation, such as a function, tool, or an agent call. It receives the current state as input and produces a new state derived from it, with some data processed. Finally, a \mync{LangGraph edge} represents a directed route that connects nodes, thereby defining the pipeline of the dataflow.
+
+An example is given in Fig. \ref{fig:langgraph_simpledemo} to demonstrate the concept of nodes and edges. In the figure, apart from the start and end nodes, two nodes are defined, namely the LLM chatbot node and the tool node, likely for resource augmentation. The arrows are edges, where the solid arrows represent deterministic paths, and the dashed arrows, conditional paths. When the LLM chatbot node decides to use a tool call, tool node is executed. The result is returned to the LLM chatbot node. This process is iteratively carried out until the LLM node decides to proceed without tool calls. Along the edges, states are passed from one node to the other.
+
+An example is given in Fig.~\ref{fig:langgraph_simpledemo} to illustrate the concept of nodes and edges. In the figure, apart from the start and end nodes, two nodes are defined, namely the LLM chatbot node and a tool node, likely used for resource augmentation. The arrows represent edges. Solid arrows indicate deterministic paths, while dashed arrows denote conditional paths. When the LLM chatbot node decides to make a tool call, the tool node is executed and the result is returned to the LLM chatbot node. This process is repeated until the LLM node decides to proceed without tool calls. Along the edges, states are passed from one node to another.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./chapters/part-7/figures/langgraph_simpledemo.png}
+	\caption{A simple demonstration of LangGraph with one LLM and one tool.}
+	\label{fig:langgraph_simpledemo}
+\end{figure}
+
+The following steps are typically required to define a LangGraph-based agentic AI system.
+\begin{itemize}
+  \item Define the state, often as a Python dataclass or Pydantic model.
+  \item Create nodes.
+  \item Create edges.
+  \item Compile the graph.
+  \item Kick off and run the graph.
+\end{itemize}
+
+Detailed introduction is given below.
+
+\vspace{0.1in}
+\noindent \textbf{State Definition}
+\vspace{0.1in}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\vspace{0.1in}
+\noindent \textbf{Node Definition}
+\vspace{0.1in}
+
+
+
+
+
+
+
+
+
+
+\vspace{0.1in}
+\noindent \textbf{Edge Definition}
+\vspace{0.1in}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection{AutoGen}
 
