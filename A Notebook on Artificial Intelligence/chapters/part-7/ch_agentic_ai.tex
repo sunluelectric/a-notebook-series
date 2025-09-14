@@ -588,7 +588,7 @@ run()
 The above summarizes the basic usage of the CrewAI framework. More advanced materials are introduced in the following sections.
 
 \vspace{0.1in}
-\noindent \textbf{Advanced CrewAI: Tool}
+\noindent \textbf{Tool}
 \vspace{0.1in}
 
 Tools are one of the most important features of an agentic AI system, as they significantly extend its capabilities. Recall that the OpenAI Agents SDK provides several ways for a user to define tools, including at least the following:
@@ -601,8 +601,40 @@ Tools are one of the most important features of an agentic AI system, as they si
 
 CrewAI likewise provides multiple methods for calling tools from libraries or defining customized tools. More details are given below.
 
+User defined tools need to be saved under the folder \texttt{tools} as a function. An example is given below.
+\begin{lstlisting}
+@tool("<tool name>")
+def <tool function name>(<input>) -> str:
+    <do something>
+    ...
+    try:
+        <do something>
+        return "Tool executed successfully"
+    except Exception as e:
+        return f"An error occurred: {e}"
+\end{lstlisting}
+
+In the \verb|crew.py| file, import tools as follows.
+\begin{lstlisting}
+from crewai_tools import <tool function name> # official tool 
+from <project name>.tools.<tool file name> import <tool function name> # user-defined tool
+\end{lstlisting}
+When defining an agent, assign tools to it as follows.
+\begin{lstlisting}
+@agent
+def <agent name>(self) -> Agent:
+    return Agent(
+        config=self.agents_config['<agent name>'],
+        tools=[<tool function name>, <tool function name>],
+        verbose=True,
+        allow_delegation=True
+    )
+\end{lstlisting}
+
+Do not forget to introduce the tool to the agent in \verb|agents.yaml|. When introducing the tool, use \texttt{<tool name>} in the decorator.
+
 \vspace{0.1in}
-\noindent \textbf{Advanced CrewAI: Memory}
+\noindent \textbf{Memory}
 \vspace{0.1in}
 
 LLMs are inherently stateless. In an LLM-based chatbot application, the conversation between the user and the model is typically stored and then reused as context whenever the LLM is triggered. Conventionally, the conversation is saved in a JSON file, for example \verb|history.json|, which may look like:
@@ -653,7 +685,7 @@ The user can choose the storage location and the vector embedding tool. If not s
 Once memory is properly enabled, the overall performance of the agentic system is improved. In general, it becomes more efficient, potentially cheaper—since semantic search is used instead of retrieving the entire chat history as context—and it remembers important concepts more accurately and consistently. Applications benefit from these improvements naturally, without needing to manage the internal details of the memory system.
 
 \vspace{0.1in}
-\noindent \textbf{Advanced CrewAI: Coder Agent}
+\noindent \textbf{Coder Agent}
 \vspace{0.1in}
 
 On a machine where containerization tools are installed, an agent can trigger the execution of a code that it generates, and it refines the code based on the error message or output or several times. This improves the stability and performance of a coder agent.
@@ -664,17 +696,20 @@ The user is able to setup maximum trail number and maximum waiting time for the 
 
 It is worth mentioning the differences between LangChain and LangGraph. They are two distinct products from the same company, LangChain. A brief explanation is given below.
 
-\mync{LangChain} is an open, composable framework that provides a standard interface for LLM models tools, and databases \cite{langchain2025}. Suppose that an agentic AI system with multiple components has been defined. If LangChain is used to connect and integrate these components, the user can switch underlying models (for example, from OpenAI to Anthropic) and tools (for example, from MySQL to PostgreSQL) with relatively little code change. This greatly enhances the portability and robustness of the agentic AI solution.
+\mync{LangChain} is an open-source, composable framework that provides a standard interface for LLM models and APIs to databases and a variety of tools \cite{langchain2025}. Suppose that an agentic AI system with multiple components has been defined. If LangChain is used to connect and integrate these components, the user can switch underlying models (for example, from OpenAI to Anthropic) and tools (for example, from MySQL to PostgreSQL) with relatively little code change. This greatly enhances the portability and robustness of the agentic AI solution.
 
-\mync{LangGraph}, on the other hand, is an agentic AI framework, broadly comparable to the OpenAI Agents SDK and CrewAI. It focuses on coordinating AI agents and reliably handling complex tasks by representing applications as stateful graphs \cite{langchain2025langgraph}, with newly introduced concepts of states, nodes and edges. 
+\mync{LangGraph}, on the other hand, is an agentic AI framework, broadly comparable to the OpenAI Agents SDK and CrewAI. It focuses on coordinating AI agents and reliably handling complex tasks by representing applications as stateful graphs \cite{langchain2025langgraph}. It is sufficient to use only LangChain to build an LLM application with deterministic pipeline. LangGraph, on the other hand, can be taken as an abstraction layer built on top of LangChain that provides orchestration intelligence, enriching the system with agentic AI capability.
 
-This section focuses on LangGraph, the agentic AI framework. LangChain, the standard framework for gluing components, will also be used when needed.
+This section focuses on LangGraph, the agentic AI framework. Technologies offered by LangChain will also be introduced and used. After all, LangGraph uses LangChain under the hood.
+
+Install LangGraph as a Python package as follows.
+\begin{lstlisting}
+uv pip install -U langgraph
+\end{lstlisting}
 
 LangGraph introduces the concepts of states, nodes and edges to visualize the workflow as a graph. A \mync{LangGraph state} represents a snapshot of the application. The state is immutable, meaning that each update of any kind creates a new state derived from the old one. In this way, LangGraph maintains a full history of the system status and supports time-travel debugging and replay. A \mync{LangGraph node} typically represents an atomic unit of computation, such as a function, tool, or an agent call. It receives the current state as input and produces a new state derived from it, with some data processed. Finally, a \mync{LangGraph edge} represents a directed route that connects nodes, thereby defining the pipeline of the dataflow.
 
 An example is given in Fig. \ref{fig:langgraph_simpledemo} to demonstrate the concept of nodes and edges. In the figure, apart from the start and end nodes, two nodes are defined, namely the LLM chatbot node and the tool node, likely for resource augmentation. The arrows are edges, where the solid arrows represent deterministic paths, and the dashed arrows, conditional paths. When the LLM chatbot node decides to use a tool call, tool node is executed. The result is returned to the LLM chatbot node. This process is iteratively carried out until the LLM node decides to proceed without tool calls. Along the edges, states are passed from one node to the other.
-
-An example is given in Fig.~\ref{fig:langgraph_simpledemo} to illustrate the concept of nodes and edges. In the figure, apart from the start and end nodes, two nodes are defined, namely the LLM chatbot node and a tool node, likely used for resource augmentation. The arrows represent edges. Solid arrows indicate deterministic paths, while dashed arrows denote conditional paths. When the LLM chatbot node decides to make a tool call, the tool node is executed and the result is returned to the LLM chatbot node. This process is repeated until the LLM node decides to proceed without tool calls. Along the edges, states are passed from one node to another.
 
 \begin{figure}[!htb]
 	\centering
@@ -698,35 +733,96 @@ Detailed introduction is given below.
 \noindent \textbf{State Definition}
 \vspace{0.1in}
 
+As explained earlier, the state class is essentially a data structure, such as a Pydantic model or a \texttt{TypedDict}. The following is an example from the official documentation.
 
+\begin{lstlisting}
+from typing import Annotated
+from typing_extensions import TypedDict
+from operator import add
 
+class State(TypedDict):
+    foo: int
+    bar: Annotated[list[str], add]
+\end{lstlisting}
 
+Here, \texttt{TypedDict} is used as the basis of the state class. Pydantic \texttt{BaseModel} is also supported, but it is generally less performant than \texttt{TypedDict} \cite{langgraph2025compilingYourGraph}. In the rest of this chapter, \texttt{TypedDict} will be used for LangGraph.
 
+It is worth mentioning the \mync{reducer function}, which can be defined in a state. As noted earlier, a node creates and outputs a new state based on the existing state it receives as input. By default, a node may overwrite fields in the new state with fresh values, discarding the previous contents of those fields. This does not affect the connectivity of the graph itself, but it may result in the loss of useful historical information. 
 
+A reducer function provides a mechanism to preserve such information. If a field in the state is associated with a reducer function, the node must update the field through that function. The reducer function specifies how new values should be merged with existing ones, ensuring that past information is retained. For example, a common reducer function appends new values to a list so that all historical entries for the field are preserved.
 
+There are different ways to define a reducer, one of which is through Annotated. \mync{Python Annotated} allows the programmer to attach metadata to a variable, often specifying its data type and usage. In the example above, \texttt{add} from the \texttt{operator} library is used as the annotation. This reducer function specifies how \verb|bar| should be updated. In this case, new values should be concatenated to the list.
 
+LangGraph provides commonly used state classes and reducer functions that can be imported and used directly, many of which in \texttt{langgraph.graph}.
 
+Once the state is defined, a graph can be declared as follows.
+\begin{lstlisting}
+class State(TypedDict):
+    <defined earlier>
 
+from langgraph.graph import StateGraph
 
-
-
-
-
-
-
-
-
+builder = StateGraph(State)
+\end{lstlisting}
+And all the nodes and edges what will be added to this graph later will use the defined state in the data pipeline.
 
 \vspace{0.1in}
 \noindent \textbf{Node Definition}
 \vspace{0.1in}
 
+A node is a function that consumes the current state and produces a new state. For example, assume the state is defined as follows:
+\begin{lstlisting}
+from typing import Annotated
+from typing_extensions import TypedDict
+from operator import add
 
+class State(TypedDict):
+    foo: int
+    bar: Annotated[list[str], add]
 
+from langgraph.graph import StateGraph
 
+builder = StateGraph(State)
+\end{lstlisting}
 
+A node can then be defined as:
+\begin{lstlisting}
+def update_state(state: State) -> State:
+    return {
+        "foo": state["foo"] + 1,
+        "bar": ["new item"]   # appears as an overwrite
+    }
+\end{lstlisting}
 
+In this example, the node outputs a dictionary. The update to the \texttt{bar} field appears to be an overwrite. However, since a reducer is defined for \texttt{bar}, LangGraph intercepts the update and applies the reducer instead, resulting in concatenation of the old and new values.
 
+The node can be added to the graph as follows. The function name is passed directly into the \verb|add_node| method without requiring an additional decorator:
+\begin{lstlisting}
+<builder name>.add_node("<node name>", <node function name>)
+\end{lstlisting}
+For the earlier example:
+\begin{lstlisting}
+builder.add_node("first_node", update_state)
+\end{lstlisting}
+
+In practice, a node may contain an LLM call. An example is shown below:
+\begin{lstlisting}
+from langgraph.graph.message import add_messages
+
+class State(TypedDict):
+    messages: Annotated[list[str], add_messages]
+    
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(model="<model name>")
+
+def update_state(state: State) -> State:
+    response = llm.invoke(state.messages)
+    new_state = {
+        "messages": [response]
+    }
+    return new_state
+\end{lstlisting}
 
 
 
@@ -734,6 +830,59 @@ Detailed introduction is given below.
 \noindent \textbf{Edge Definition}
 \vspace{0.1in}
 
+Edges can be either deterministic or selective. For selective edges, the upstream node decides which edge to follow.
+
+To add a deterministic edge that connects two nodes, use:
+\begin{lstlisting}
+<builder name>.add_edge("<upstream node name>", "<downstream node name>")
+\end{lstlisting}
+
+In the earlier example, the following edges can be added:
+\begin{lstlisting}
+from langgraph.graph import START, END
+
+builder.add_edge(START, "first_node")
+builder.add_edge("first_node", END)
+\end{lstlisting}
+Here, \texttt{START} and \texttt{END} represent the default entry and exit points of the graph. At the start point, the agentic AI system receives input from the user, and at the end point, it returns a response. The entire execution of the graph is referred to as a \mync{super step}.
+
+\vspace{0.1in}
+\noindent \textbf{Graph Compiling and Invoking}
+\vspace{0.1in}
+
+Once all nodes and edges have been added, the graph must be compiled before it can be executed:
+\begin{lstlisting}
+<graph name> = <builder name>.compile()
+\end{lstlisting}
+
+After compilation, the graph can be visualized as a Mermaid diagram in a Jupyter notebook:
+\begin{lstlisting}
+from IPython.display import Image, display
+
+display(Image(<graph name>.get_graph().draw_mermaid_png()))
+\end{lstlisting}
+
+To invoke a graph once with an initial state, use the following. This will trigger a super step, i.e., the execution of the whole graph.
+\begin{lstlisting}
+<graph name>.invoke(<initial state>)
+\end{lstlisting}
+Alternatively, the graph can be executed step by step using \verb|.stream()|, which yields intermediate states and outputs at each stage of the execution.
+
+\begin{mdframed}
+\textbf{Does LangGraph necessarily involve LLM?}
+
+No. LangGraph and LangChain can be used to develop applications that have nothing to do with LLMs. Data processing is handled by the nodes. Technically, it is possible to build an application in which all nodes perform conventional computations without involving any LLM.
+
+In an LLM-based application, the state class often contains text, and LLMs are introduced in the nodes to process that text.
+\end{mdframed}
+
+Note that memory are not automatically synchronized between different super steps. As a result, the user must either use a global parameter to save the chat history and supply it as the initial state for each super step, or persist the information in a database and let the node retrieve it via tools.
+
+\vspace{0.1in}
+\noindent \textbf{Tool}
+\vspace{0.1in}
+
+LangGraph allows packaging a function into a tool conveniently. An example is given below.
 
 
 
@@ -743,6 +892,13 @@ Detailed introduction is given below.
 
 
 
+
+
+
+
+\vspace{0.1in}
+\noindent \textbf{Handoff}
+\vspace{0.1in}
 
 
 
