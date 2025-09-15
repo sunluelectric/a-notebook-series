@@ -17,7 +17,7 @@ To improve the efficiency of the system, especially \myabb{Central Processing Un
 	\caption{A demonstration of running multiple processes on a single-core CPU.} \label{ch:pm:fig:processflow}
 \end{figure}
 
-The status of a process is stored in its \mync{Process Control Block}[PCB]. The PCB is a special data structure used to describe the metadata and the dynamic of a process. The OS manages the PCBs and control the processes accordingly. Some of the attributes of a PCB are summarized in Table \ref{ch:pm:tab:pcbcontent}.
+The status and context of a process are stored in its \mync{Process Control Block}[PCB]. The PCB is a special data structure used to describe the metadata and the dynamic of a process. The OS manages the PCBs and control the processes accordingly. Some of the attributes of a PCB are summarized in Table \ref{ch:pm:tab:pcbcontent}.
 
 \begin{table}[!htb]
 	\centering \caption{Some attributes of a PCB.}\label{ch:pm:tab:pcbcontent}
@@ -33,7 +33,7 @@ The status of a process is stored in its \mync{Process Control Block}[PCB]. The 
 	\end{tabularx}
 \end{table}
 
-A process shall at least have the following states. The fundamental states of a process and their transferring are introduced in Fig \ref{ch:pm:fig:processstatetransfer}, where ``blocked'' indicates that the process is waiting for other inputs to carry out the remaining part of the program, and ``suspended'' indicates that the process is hold for some reasons. When a process is offloaded from the CPU, its context is moved from the CPU registers to the PCB of the progress.
+Fig.~\ref{ch:pm:fig:processstatetransfer} shows the possible states that a process might be at. Note the differences between ``blocked'' and ``suspended''. ``Block'' indicates that the process is waiting for other inputs to carry out the remaining part of the program, and ``suspended'' indicates that the process is put on hold for some reasons. When a process is offloaded from the CPU, its context is moved from the CPU registers to the PCB of the progress.
 
 \begin{figure}[!htb]
 	\centering
@@ -41,9 +41,9 @@ A process shall at least have the following states. The fundamental states of a 
 	\caption{Fundamental states of a process and their transferring.} \label{ch:pm:fig:processstatetransfer}
 \end{figure}
 
-There are different types of processes. For example, based on the source of the processes, there are OS triggered processes and user triggered processes, the first of which usually has a higher priority. Based on the running environment, there are front-ground processes and background processes. Based on the resources used, there are CPU processes and I/O processes.
+There are different types of processes. For example, based on the source of the processes, there are OS triggered processes and user triggered processes, the first of which usually have a higher priority. Based on the running environment, there are front-ground processes and background processes. Based on the resources used, there are CPU processes and I/O processes.
 
-A process usually has a relatively isolated environment, and it does not share memory storage with other processes. Special inter process communication mechanism, which is often referred as ``pipe'', is required for processes to talk to each other. Inter process communication requires OS level controls.
+A process usually has a relatively isolated environment, and it does not share memory storage with other processes. Special inter process communication mechanism, which is often referred as ``pipe'', is required for processes to talk to each other. Inter-process communication requires OS level controls.
 
 \subsection{Thread}
 
