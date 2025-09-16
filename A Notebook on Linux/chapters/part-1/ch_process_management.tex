@@ -67,7 +67,7 @@ Notice that for many OS, including Linux, the kernel can provide thread level se
 
 Basic process management commands including monitoring and terminating a process are given. Switching a process between foreground and background is also introduced.
 
-\subsection{Monitor Process}
+\subsection{Monitor}
 
 Two commands, \verb|ps| and \verb|top|, are widely used in monitoring the running process in the OS. They can be used stand-alone, without additional arguments as follows.
 \begin{lstlisting}
@@ -102,7 +102,7 @@ Some commonly used options for \verb|ps| are summarized below.
 	\item \verb|-u <username>| filter by user
 \end{itemize}
 
-\subsection{Terminate a Process}
+\subsection{Termination}
 
 To kill a process, use the \verb|kill| command as follows.
 \begin{lstlisting}
@@ -125,7 +125,7 @@ Another command \verb|killall| runs similarly as \verb|kill|, except that it kil
 
 Notice that in Linux the process is arranged in a tree structure; killing a parent process will automatically terminate its children processes, and killing a child process may result in its parent process to restart a new child process.
 
-\subsection{Switch between Foreground and Background}
+\subsection{Switching between Foreground and Background}
 
 To start a command as a background process, use \verb|&| in the end of the command as follows
 \begin{lstlisting}
@@ -148,9 +148,9 @@ $ fg %<job number>
 \end{lstlisting}
 where \verb|<job number>| is the index given in \verb|jobs| outputs. If no job number is given, the most recent job will be brought to the foreground.
 
-\subsection{Change Process Priority}
+\subsection{Process Priority Manipulation}
 
-The priority of a process is given by an integer between $-100$ and $39$, the smaller the more prioritized. This value can be viewed using \verb|top|, as shown in Fig. \ref{ch:pm:fig:topcommand} under column ``PR''. The process with priority $-100$ is displayed as \verb|rt|, indicating the highest priority.
+The \mync{priority}[PR] of a process is given by an integer between $-100$ and $39$, the smaller the more prioritized. This value can be viewed using \verb|top|, as shown in Fig. \ref{ch:pm:fig:topcommand} under column ``PR''. The process with priority $-100$ is displayed as \verb|rt|, indicating the highest priority.
 
 The entire priority range from $-100$ to $39$ is divided into two portions. The priority between $-100$ and $-1$ is known as ``real-time'', and between $0$ and $39$, ``normal''. In practice, real-time processes are mainly managed by the root user and are not accessible to regular users. A regular user's process typically falls within the normal priority range of $0$ to $39$. 
 
@@ -164,9 +164,9 @@ A ``\mync{NICE value}'' is assigned to the priorities. The priority $0$ correspo
 
 For normal processes, their NICE values can be viewed using \verb|top| as shown in Fig. \ref{ch:pm:fig:topcommand} under column ``NI''. Real-time processes do not use NICE value, hence NI are displayed as $0$ for these processes.
 
-A properly designed OS should have built-in algorithms to manage process priorities and scheduling. However, tools like \verb|nice| and \verb|renice| are provided to give users and administrators the ability to influence these priorities in specific situations. Examples are given below.
+A properly designed OS should have built-in algorithms to manage process priorities and scheduling. However, tools like \verb|nice| and \verb|renice| are provided to give users and administrators the ability to manipulate these priorities in specific situations. Examples are given below.
 
-To start a command with a specified NICE value, use
+To run a command with a specified NICE value, use
 \begin{lstlisting}
 $ nice -n <increment> <command>
 \end{lstlisting}
@@ -179,17 +179,5 @@ $ renice -n <increment> -p <prosess id>
 where \verb|<increment>|, being either positive or negative, will be added to the current NICE value of the process with the specified process ID.
 
 It is also possible to manage the priorities not by individual process ID, but by a group of processes. This is useful when a group of processes belongs to a similar service or to a group of users, and we want to change the priority of the service or users all together.
-
-
-
-
-
-
-
-
-
-
-
-
 
 

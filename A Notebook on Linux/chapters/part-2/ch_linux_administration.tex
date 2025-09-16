@@ -6,11 +6,11 @@ This chapter discusses user account management such as assigning roles and enabl
 
 Managing and protecting the root user account is a key portion in Linux administration. It is worth mentioning that the root user is different from a sudoer, i.e., a user that can use \verb|sudo| command, although they both have elevated privileges when comes to system administration. A more detailed explanation is given below.
 
-The root user is created during the installation of the OS. Its username is by default ``root'', with a UID of 0, and a GID of 0. Its home directory is by default \verb|/root| instead of \verb|/home/<user name>|. The default prompt for the root user is often \verb|#| instead of \verb|$| which is commonly seen for regular users. The root user has administrative privileges and can do almost everything without being denied or questioned by the system. 
+The root user is created during the installation of the OS. Its username is by default ``root'', with a UID of 0, and a GID of 0. Its home directory is by default \verb|/root| instead of \verb|/home/<user name>|. The default prompt for the root user is often \verb|#| instead of \verb|$|, the later of which used by regular users. The root user has administrative privileges and can do almost everything without being denied or questioned by the system. 
 
 As a widely appreciated safety practice, the password for the root user is usually disabled. Therefore, nobody can login to the system as the root user using username and password authentication. In the case when administrative tasks need to be performed by the root user account, a sudoer may be able to temporarily switch to the root user using \verb|sudo su|.
 
-Notice that the root user does not necessarily need to use the username ``root'', although it is a default convention. The root user privilege comes from the UID of 0, not the username. Theocratically speaking, it is even possible to create multiple accounts with root user privilege by letting them share the same UID of 0, thought it is very rare and highly not recommended to do so.
+Notice that the root user does not necessarily need to use the username ``root'', although it is a default convention. The root user privilege comes from the UID of 0, not the username. Theocratically speaking, it is even possible to create multiple accounts with root user privilege by letting them share the same UID of 0, thought it is very rare and not recommended.
 
 To check the root user information, use
 \begin{lstlisting}
