@@ -2,15 +2,15 @@
 
 Git is a distributed version control system for tracking changes during the software development, and it can be used on multiple platforms including Windows, Unix/Linux and MacOS. This chapter introduces the basic use of Git on a local Linux machine and with a remote repository host server such as GitHub. 
 
-Git-based version control is widely used in association with \myabb{Continuous Integration and Continuous Deployment}{CI/CD}. CI/CD is an important concept in nowadays software development and deployment. GitHub Actions is the tool that GitHub manages its CI/CD workflow, and its basics are also introduced.
+Git-based version control is widely used in association with \myabb{Continuous Integration and Continuous Deployment}{CI/CD}. CI/CD is an important concept in nowadays software development and deployment. GitHub Actions is GitHub's CI/CD solution and it is also briefly introduced.
 
 \section{Introduction}
 
-\mync{Git}, created by Linus Trovalds in 2005, is a distributed version control system for tracking changes in source code and files. It is helpful with maintaining data integrity during the collaborative development of software in distributed non-linear workflows. Git is free and open-source under GNU general public license.
+\mync{Git}, initially created by Linus Trovalds in 2005, is a distributed version control system for tracking changes in source code and files. It is helpful with maintaining data integrity during the collaborative development of software in distributed non-linear workflows. Git is free and open-source under GNU general public license.
 
-Git introduces \mync{Git repository}, which refers to the ``ecosystem'' Git uses to manage a project. To be more specific, it refers to the \verb|.git| file associated with each Git-managed project, using which Git traces the development of the project. 
+Git introduces \mync{Git repository}, which refers to the ``ecosystem'' Git uses to manage a project. This refers to the \verb|.git| file associated with each Git-managed project, using which Git traces the development of the project. 
 
-With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and it can synchronize with a centralized remote server. It introduces \mync{branch}, to be more precise ``master'' and ``slave'' branches, to manage the concurrent development of different features of the project, where the master branch is the stable and shared repository among everyone, and the feature branches are copies of the master branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the master branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
+With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and they can synchronize with centralized remote servers. It introduces \mync{branch}, namely ``main'' (also known as ``master'') and ``child'' branches, to manage the concurrent development of different features of the project, where the main branch is the stable and shared repository among everyone, and the child branches are copies of the main branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the main branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-3/figures/gitflow.png}
@@ -19,20 +19,14 @@ With Git, all computers participating in the software development store a copy o
 
 CLI is often used to manage a Git repository. Some commonly used commands are shown in Fig. \ref{ch:sma:fig:gitflow} with more to be introduced later. Notice that a graphical user interface is also available. However, in the scope of this notebook, command line is mostly used.
 
-\section{Git Installation and Configuration}
+\section{Git Setup}
 
-Git can be installed and configured as follows.
-
-\subsection{Installation}
-
-Git and its relevant documents can be obtained from its official website \textit{https://git-scm.com/}. In many Linux distributions, Git is pre-installed. If Git is missing, follow the instructions on the official website to install it. Notice that the installation procedure may differ with different OS.
+Git and its relevant documents can be obtained from its official website \textit{https://git-scm.com/}. In many Linux distributions, Git is pre-installed. If Git is missing, follow the instructions on the official website to install it. The installation procedure may differ with different Linux distributions.
 
 To install Git on RHEL, simply use
 \begin{lstlisting}
 $ sudo dnf install git-all
 \end{lstlisting}
-
-\subsection{Configuration}
 
 Upon successful installation, it is recommended to use \verb|git config| for the necessary basic configurations such as the username and user email. Without these configurations, Git cannot run normally.
 
@@ -69,11 +63,11 @@ Navigate to the project directory. Use the following command to create a new Git
 \begin{lstlisting}
 $ git init
 \end{lstlisting}
-From this point forward, Git monitors everything that happens inside this directory and its sub-directories and tries to track any change to the files, unless otherwise configured specifically. Many Git commands such as \verb|git status| become available. More details are introduced in the remaining of the section.
+When the above command is applied, Git creates \verb|.git| directory in the working directory. From this point onward, Git monitors everything that happens inside this directory and its sub-directories and tries to track any change to the files, unless otherwise configured specifically. Many Git commands such as \verb|git status| become available. More details are introduced in the remaining of the section.
 
 \subsection{Version Tracking}
 
-For simplicity, assume that there is only one branch in the repository, namely the master branch. Notice that when there are multiple branches, the version-tracking works the same for each and every branch in a separate and independent manner. The mechanism behind version tracking is briefly introduced as follows.
+For simplicity, assume that there is only one branch in the repository, namely the main branch. Notice that when there are multiple branches, the version-tracking works the same for each and every branch in a separate and independent manner. The mechanism behind version tracking is briefly introduced as follows.
 
 The project directory is split into two parts, outside \verb|./.git/| the workspace, and inside \verb|./.git/| the Git repository. The workspace has the up-to-date project contents and it is directly managed by the user, while Git repository is managed by Git. The user should not manage the repository directly unless using the Git interface.
 
@@ -238,7 +232,7 @@ To merge a branch back to the current branch, use
 \begin{lstlisting}
 $ git merge <branch name>
 \end{lstlisting}
-and fill in the comments accordingly. A use case of the command is to merge the features developed in a feature branch to the master branch, after a pull request is raised by the feature branch. To do that, checkout to the master branch, and use
+and fill in the comments accordingly. A use case of the command is to merge the features developed in a feature branch to the main branch, after a pull request is raised by the feature branch. To do that, checkout to the main branch, and use
 \begin{lstlisting}
 $ git merge <feature branch name>
 \end{lstlisting}
@@ -252,7 +246,7 @@ A demonstrative Fig. \ref{ch:sma:fig:gitrebase} explains the differences between
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-3/figures/gitrebase.png}
-	\caption{Two approaches of integrating branches, \texttt{git merge} VS \texttt{git rebase}. In the \texttt{git rebase} example, two rebase commands are executed consecutively, the first on the feature branch and second the master branch.} \label{ch:sma:fig:gitrebase}
+	\caption{Two approaches of integrating branches, \texttt{git merge} VS \texttt{git rebase}. In the \texttt{git rebase} example, two rebase commands are executed consecutively, the first on the feature branch and second the main branch.} \label{ch:sma:fig:gitrebase}
 \end{figure}
 
 An intuitive way to understand \verb|git rebase| is given as follows. Imagine two branches $A$ and $B$ that have diverged from the same commit $O$. On branch $A$, execute \verb|git rebase B|. Here is a step-by-step breakdown of what happens:
@@ -348,9 +342,9 @@ When performing \texttt{git push} for the first time, authentication is required
 
 \section{Pull Request} \label{sec:pull_request}
 
-In a collaborative project, the master branch is managed very carefully because everything on that branch will affect the project in the production environment. There is often a group of senior developers maintaining the master branch. Any code to be added to the master branch must be reviewed by one or a few of them.
+In a collaborative project, the main branch is managed very carefully because everything on that branch will affect the project in the production environment. There is often a group of senior developers maintaining the main branch. Any code to be added to the main branch must be reviewed by one or a few of them.
 
-When a feature branch wants the features developed on that branch to be merged to the master branch, it does not push the changes to the master branch directly. Instead, the owner of the feature branch needs to raise a ``pull request'' from the GitHub dashboard. As its name suggests, it requests the master branch to pull the updates from the feature branch. The master branch maintenance team will then view and check the feature branch, making sure that everything is correct before they approve the merging.
+When a feature branch wants the features developed on that branch to be merged to the main branch, it does not push the changes to the main branch directly. Instead, the owner of the feature branch needs to raise a ``pull request'' from the GitHub dashboard. As its name suggests, it requests the main branch to pull the updates from the feature branch. The main branch maintenance team will then view and check the feature branch, making sure that everything is correct before they approve the merging.
 
 If the pull request is approved, GitHub will perform the merge in the cloud. Neither the owner of the feature branch nor the maintenance team needs to run the merge manually.
 
@@ -379,14 +373,14 @@ After forking, the contributor can clone the project from his GitHub account to 
 $ git push
 \end{lstlisting}
 
-\begin{shortbox}
-\Boxhead{Is it possible to push to the original repository directly?}
+\begin{mdframed}
+\textbf{Is it possible to push to the original repository directly?}
 
 It is worth mentioning that if \verb|git fork| were not used to fork the repository to the contributor's GitHub account, this \verb|git push| will run into a permission issue. This is because the contributor does not possess ownership to the original repository, hence prevented from modifying it.
 
-It is not recommended, but possible, that the contributor can contact the owner of the repository and ask for permission. The owner of the original repository can invite the contributor as a collaborator of the project. In that case, the contributor will be able to create and push branches to the original repository. Notice that likely the contributor cannot merge his branch to the master branch and still needs pull request to do so.
+It is not recommended, but possible, that the contributor can contact the owner of the repository and ask for permission. The owner of the original repository can invite the contributor as a collaborator of the project. In that case, the contributor will be able to create and push branches to the original repository. Notice that likely the contributor cannot merge his branch to the main branch and still needs pull request to do so.
 
-\end{shortbox}
+\end{mdframed}
 
 When the forked repository has been updated with improvements, the contributor can create a pull request in the original community repository. The maintainers of the community project will review the pull request, evaluate the modifications, and either reject it, provide feedback, or approve it for merging.
 
@@ -398,3 +392,7 @@ $ git rebase upstream/master
 \end{lstlisting}
 
 By following this procedure, the contributor ensures that his work remains aligned with the latest developments in the community project, reducing the chances of conflicts and making their contributions easier to integrate.
+
+\section{GitHub Actions}
+
+TBA
