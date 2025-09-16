@@ -718,13 +718,14 @@ An example is given in Fig. \ref{fig:langgraph_simpledemo} to demonstrate the co
 	\label{fig:langgraph_simpledemo}
 \end{figure}
 
-The following steps are typically required to define a LangGraph-based agentic AI system.
+The following steps are typically required to define a LangGraph-based application.
 \begin{itemize}
-  \item Define the state, often as a Python dataclass or Pydantic model.
-  \item Create nodes.
-  \item Create edges.
-  \item Compile the graph.
-  \item Kick off and run the graph.
+  \item Define the state class, often in the form of a Python dataclass or Pydantic model.
+  \item Create a state graph builder with the defined state class.
+  \item Create nodes and add nodes to the graph builder.
+  \item Create edges and add edges to the graph builder.
+  \item Compile the graph builder to obtain the graph.
+  \item Invoke the graph with the initial state.
 \end{itemize}
 
 Detailed introduction is given below.
@@ -755,7 +756,7 @@ There are different ways to define a reducer, one of which is through Annotated.
 
 LangGraph provides commonly used state classes and reducer functions that can be imported and used directly, many of which in \texttt{langgraph.graph}.
 
-Once the state is defined, a graph can be declared as follows.
+Once the state is defined, a \mync{state graph builder} can be declared as follows. All the nodes and edges what will be added to this graph later will use the defined state in the data pipeline.
 \begin{lstlisting}
 class State(TypedDict):
     <defined earlier>
@@ -764,13 +765,12 @@ from langgraph.graph import StateGraph
 
 builder = StateGraph(State)
 \end{lstlisting}
-And all the nodes and edges what will be added to this graph later will use the defined state in the data pipeline.
 
 \vspace{0.1in}
 \noindent \textbf{Node Definition}
 \vspace{0.1in}
 
-A node is a function that consumes the current state and produces a new state. For example, assume the state is defined as follows:
+A node is a function that consumes the current state and produces a new state. For example, assume the state is defined as follows.
 \begin{lstlisting}
 from typing import Annotated
 from typing_extensions import TypedDict
@@ -781,7 +781,6 @@ class State(TypedDict):
     bar: Annotated[list[str], add]
 
 from langgraph.graph import StateGraph
-
 builder = StateGraph(State)
 \end{lstlisting}
 
@@ -793,7 +792,6 @@ def update_state(state: State) -> State:
         "bar": ["new item"]   # appears as an overwrite
     }
 \end{lstlisting}
-
 In this example, the node outputs a dictionary. The update to the \texttt{bar} field appears to be an overwrite. However, since a reducer is defined for \texttt{bar}, LangGraph intercepts the update and applies the reducer instead, resulting in concatenation of the old and new values.
 
 The node can be added to the graph as follows. The function name is passed directly into the \verb|add_node| method without requiring an additional decorator:
@@ -817,20 +815,18 @@ from langchain_openai import ChatOpenAI
 llm = ChatOpenAI(model="<model name>")
 
 def update_state(state: State) -> State:
-    response = llm.invoke(state.messages)
+    response = llm.invoke(state["messages"])
     new_state = {
         "messages": [response]
     }
     return new_state
 \end{lstlisting}
 
-
-
 \vspace{0.1in}
 \noindent \textbf{Edge Definition}
 \vspace{0.1in}
 
-Edges can be either deterministic or selective. For selective edges, the upstream node decides which edge to follow.
+Edges can be either deterministic or optional. 
 
 To add a deterministic edge that connects two nodes, use:
 \begin{lstlisting}
@@ -841,10 +837,19 @@ In the earlier example, the following edges can be added:
 \begin{lstlisting}
 from langgraph.graph import START, END
 
-builder.add_edge(START, "first_node")
-builder.add_edge("first_node", END)
+<builder name>.add_edge(START, "first_node")
+<builder name>.add_edge("first_node", END)
 \end{lstlisting}
-Here, \texttt{START} and \texttt{END} represent the default entry and exit points of the graph. At the start point, the agentic AI system receives input from the user, and at the end point, it returns a response. The entire execution of the graph is referred to as a \mync{super step}.
+Here, \texttt{START} and \texttt{END} represent the default entry and exit points of the graph.
+
+For optional edges, a routing function is used to decide which edge to select.
+\begin{lstlisting}
+<builder name>.add_conditional_edges("<upstream node>", <routing function>)
+\end{lstlisting}
+where the return of the routing function needs to be a string of the name of the desired downstream node. Boolean routing function can be used as well, in which case the syntax is given below.
+\begin{lstlisting}
+<builder name>.add_conditional_edges("<upstream node>", <routing boolean function>, {True: "<downstream node 1>", False: "<downstream node 2>"})
+\end{lstlisting}
 
 \vspace{0.1in}
 \noindent \textbf{Graph Compiling and Invoking}
@@ -882,13 +887,63 @@ Note that memory are not automatically synchronized between different super step
 \noindent \textbf{Tool}
 \vspace{0.1in}
 
-LangGraph allows packaging a function into a tool conveniently. An example is given below.
+LangGraph allows packaging a function into a tool conveniently. First, define the function you want to package. Then wrap the function with \verb|Tool|. A simple example is shown below:
+\begin{lstlisting}
+def <function name>(input) -> <output type>:
+    <do something>
+    return <output>
 
+from langchain.agents import Tool
+<tool> = Tool(
+    name="<tool name>",
+    func=<function name>,
+    description="<description>"
+)
+# to test the tool, use <tool>.invoke(<input>)
+\end{lstlisting}
 
+The LangChain community provides a variety of tools. An example is shown below:
+\begin{lstlisting}
+from langchain_community.utilities import GoogleSerperAPIWrapper
 
+serper = GoogleSerperAPIWrapper()
 
+tool_search = Tool(
+    name="tool_search",
+    func=serper.run,  # serper.run() triggers the function
+    description="useful for making online queries for additional information"
+)
+\end{lstlisting}
 
+Recall that a node is essentially a user-defined function. To use tools in a node, simply call the tool functions within the node’s source code.
 
+In an agentic AI application, a node is often an LLM, and it decides what tools to trigger in a dynamic manner. In this case, consider binding the tools to the LLM as follows.
+\begin{lstlisting}
+from langgraph.graph.message import add_messages
+
+class State(TypedDict):
+    messages: Annotated[list[str], add_messages]
+    
+from langchain_openai import ChatOpenAI
+llm = ChatOpenAI(model="<model name>")
+llm_with_tools = llm.bind_tools([<tool 1>, <tool 2>, ...])
+
+def update_state(state: State) -> State:
+    response = llm_with_tools.invoke(state["messages"])
+    new_state = {
+        "messages": [response]
+    }
+    return new_state
+\end{lstlisting}
+
+Add the set of tools as a ``tool node'' to the graph. Use conditional edges so that the LLM determines whether to call a tool. A typical pattern is as follows.
+\begin{lstlisting}
+from langgraph.prebuilt import ToolNode, tools_condition
+
+<builder name>.add_node("<tool node>", ToolNode(tools=[<tool 1>, <tool 2>, ...]))
+<builder name>.add_conditional_edges("<llm node>", tools_condition, "<tool node>")
+\end{lstlisting}
+Notice that when using \verb|tools_condition|, if the LLM decides to not use any tool, the edge is routed to \verb|END|. Hence, there is no need to specifically connect the LLM node to the end node.
 
 
 
