@@ -823,7 +823,7 @@ def update_state(state: State) -> State:
 \end{lstlisting}
 
 \vspace{0.1in}
-\noindent \textbf{Edge Definition}
+\noindent \textbf{Edge (and Handoff) Definition}
 \vspace{0.1in}
 
 Edges can be either deterministic or optional. 
@@ -867,7 +867,7 @@ from IPython.display import Image, display
 display(Image(<graph name>.get_graph().draw_mermaid_png()))
 \end{lstlisting}
 
-To invoke a graph once with an initial state, use the following. This will trigger a super step, i.e., the execution of the whole graph.
+To invoke a graph once with an initial state, use the following. This will trigger a \mync{super step} which is the execution of the whole graph.
 \begin{lstlisting}
 <graph name>.invoke(<initial state>)
 \end{lstlisting}
@@ -945,15 +945,38 @@ from langgraph.prebuilt import ToolNode, tools_condition
 \end{lstlisting}
 Notice that when using \verb|tools_condition|, if the LLM decides to not use any tool, the edge is routed to \verb|END|. Hence, there is no need to specifically connect the LLM node to the end node.
 
-
-
-
-
-
-
 \vspace{0.1in}
-\noindent \textbf{Handoff}
+\noindent \textbf{Memory Sharing across Super Steps}
 \vspace{0.1in}
+
+As explained earlier, each invocation of the graph is known as a super step. By default, the input to a super step contains only the initial state. The memory from the previous super step is not automatically carried over to the next one. 
+
+A straightforward way to share memory across super steps is to manually add the conversation or results from earlier steps to the initial state of the next step. While this works, it is tedious and error-prone. LangGraph provides a native and robust mechanism for sharing memory across super steps. A demonstrative example is shown below:
+\begin{lstlisting}
+from langgraph.checkpoint.memory import MemorySaver
+
+memory = MemorySaver()
+
+<define class, graph builder, add nodes and edges>
+
+graph = builder.compile(checkpointer=memory)
+config = {"configurable": {"thread_id": "1"}}
+graph.invoke(<initial state>, config=config)
+\end{lstlisting}
+
+In the above example, \texttt{MemorySaver} is used to share memory across super steps. When compiling the graph, pass it as the checkpointer. When invoking a super step, set a thread ID in the configuration. All super steps with the same thread ID will share the same memory.
+
+One can use the following command:
+\begin{lstlisting}
+graph.get_state_history(config)
+\end{lstlisting}
+to retrieve all checkpointer values, i.e., the complete sequence of state snapshots since the first invocation of the graph. It is also possible to rewind to a specific checkpoint in this history and restart the graph from that point, which can be useful for certain applications.
+
+
+
+
+
+
 
 
 
