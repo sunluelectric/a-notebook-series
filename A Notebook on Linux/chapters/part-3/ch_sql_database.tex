@@ -1,14 +1,14 @@
 \chapter{Database}
 
-Database and \myabb{database manage systems}{DBMS} are introduced in this and consecutive chapters. Both relational and non-relational databases are covered. Tools and languages to manipulate databases, such as \myabb{structured query language}{SQL} for relational databases, are introduced.
+Database and database manage systems are introduced in this and consecutive chapters. Both relational and non-relational databases are covered. Tools and languages to manipulate databases, such as structured query language for relational databases, are introduced.
 
 \section{Relational Database}
 
 \mync{Database}, in a broad view, refers to an organized collection of data of any format. In this sense, any file format that hosts information in a meaningful and explainable way, such as CSV, XML and JSON, is a database. These file formats often work fine when the data is stored in a centralized manner and its size small.
 
-As the data size grows, the robustness and efficiency of storing and retrieving data become challenging, and different database models have been proposed to tackle it. Dedicated software, namely DBMS, is developed to manage and maintain the database and provide an interface for the users to create, retrieve, update and delete data. Different database models require different database engines and DBMS, and different DBMS may provide different interfaces for the users.
+As the data size grows, the robustness and efficiency of storing and retrieving data become challenging, and different database models have been proposed to tackle it. Dedicated software, namely \mync{database manage system}[DBMS], is developed to manage and maintain the database and provide an interface for the users to create, retrieve, update and delete data. Different database models require different database engines and DBMS, and different DBMS may provide different interfaces for the users.
 
-There are many database models available in the market. The most widely seen database models can be divided into two categories, namely the \mync{Relational Database}[RDB] and the non-relational databases.
+There are many database models available on the market. The most widely seen database models can be divided into two categories, namely the \mync{Relational Database}[RDB] and the non-relational databases.
 
 Relational database was proposed in 1970s by IBM. Some important features of a relational database include the following.
 \begin{itemize}
@@ -17,9 +17,9 @@ Relational database was proposed in 1970s by IBM. Some important features of a r
 	\item Provide relational operations that manipulate the data in the tables, for example, joining tables together and aligning them using an attribute.
 \end{itemize}
 
-\mync{SQL}, a domain-specific language, can be used in managing RDB and interfacing relational DBMS.  Most commercialized \myabb{RDB management systems}{RDBMS} adopt SQL as the query language. There are alternatives, but they are rarely used compared to SQL. There is a evolving standard on what operations should an RDBMS support using SQL. The latest version as of this writing is \verb|SQL:2023|.
+\mync{Structured Query Language}[SQL], a domain-specific language, can be used in managing RDB and interfacing relational DBMS.  Most commercialized \myabb{RDB management systems}{RDBMS} adopt SQL as the query language. There are alternatives, but they are rarely used compared to SQL. There is an evolving standard on what operations should an RDBMS support using SQL. The latest version as of this writing is \verb|SQL:2023|.
 
-Examples of relational databases include \textit{Oracle}, \textit{MySQL}, \textit{Microsoft SQL Server}, \textit{MariaDB}, \textit{IBM Db2}, \textit{Amazon Redshift}, \textit{Amazon Aurora} and \textit{PostgreSQL}.
+Examples of relational databases include Oracle, MySQL, Microsoft SQL Server, MariaDB, IBM Db2, Amazon Redshift, Amazon Aurora and PostgreSQL, and many more.
 
 An example of a table used in RDB is given in Table \ref{ch:db:tab:relationaldbexample}. The table has a name \verb|user| and 4 attributes \verb|user_id|, \verb|user_email|, \verb|membership| and \verb|referee_id|. A table should have an attribute (or a set of attributes) defined as the primary key. In this example, \verb|user_id| is assigned to be the primary key as denoted by the asterisk. The primary key is used to uniquely identify a row in the table. A primary key can consist a single column or multiple columns. When a primary key is composed of multiple columns, it is called a composite key. A table should have one and only one primary key.
 
@@ -57,9 +57,9 @@ Notice that a table can have multiple foreign keys. The foreign key can not only
 
 \section{Non-Relational Database}
 
-Non-relational databases (NoSQL databases) gained their popularity in the $2000$s. In contrast to RDBs, NoSQL databases do not store data in tables like an RDB, but in key-value pairs, graphs, documents, or other formats. They are more flexible, efficient and easier to use in some applications than an RDB. Examples of NoSQL databases include \textit{Redis}, \textit{Azure CosmosDB}, \textit{Oracle NoSQL Database}, \textit{Amazon DynamoDB}, \textit{MongoDB}, \textit{AllegroGraph} and many more.
+\mync{Non-relational database}[NoSQL database] gained popularity in the $2000$s. In contrast to RDBs, NoSQL databases do not store data in tables, but in key-value pairs, graphs, documents or other formats. Compared with RDBs, they are more flexible, efficient and easier to use in certain types of applications. Examples of NoSQL databases include Redis, Azure CosmosDB, Oracle NoSQL Database, Amazon DynamoDB, MongoDB, AllegroGraph, ChromaDB and many more.
 
-Unlike SQL which applies to almost all RDBMS, there is no universally adopted language for NoSQL DBMS. Each NoSQL DBMS often has its unique query language tailored to its specific data model. We use ``NoSQL'' to refer to a collective set of (very different and not interchangeable) languages used for NoSQL databases management. It is impossible to cover all the different types of NoSQL databases and their corresponding DBMS manipulation languages in this notebook. Only brief introductions to some example databases are given in later chapters.
+Unlike SQL which applies to almost all RDBMSes, there is no universally adopted language for NoSQL DBMSes. This is mainly because NoSQL databases have different data structures, hence each of which requiring distinct query language. We use ``NoSQL'' to refer to a collective set of (very different and not interchangeable) languages used for NoSQL databases management. It is impossible to cover all the different types of NoSQL databases and their corresponding DBMS manipulation languages in this notebook. Only selected NoSQL databases are briefly introduced in later chapters as examples.
 
 Database services, both RDB and NoSQL, have become critical to our daily life and they are massively deployed on servers. In many applications they work together to deliver the service.
 
@@ -110,7 +110,7 @@ It is recommended that the following naming conventions be applied to databases,
 
 \subsection{General Introduction to SQL}
 
-SQL is the most widely used language for interacting with DBMS for data query and maintenance. SQL is very powerful and flexible in its full capability, and it is hardly possible to cover everything in one section. Hence, in this section only the basic SQL operations are introduced.
+SQL is the most widely used language for interacting with DBMS for data query and maintenance. SQL is very powerful and flexible in its full capability, and it is hardly possible to cover everything concisely. Hence, in this section only the basic SQL operations are introduced.
 
 Notice that the support of different DBMS to SQL may differ slightly. This is because an DBMS may (in fact, very likely) fail to adopt everything in the latest SQL standard. However, most of the commands especially the widely used ones such as creating tables, inserting rows and most of the querying, shall be universally consistent.
 
@@ -122,9 +122,9 @@ SQL is a hybrid language consisting of the following 4 sub-languages.
   \item Data manipulation language: insert, update and delete data from a database.
 \end{itemize}
 
-SQL supports variety of data types, and different DBMS may cover slightly different data types. Some of the most commonly used data types are summarized in Table \ref{ch:db:tab:sqldatatypes}. Nowadays, many DBMS supports more complicated types such as objects (the associated database is also known as the object-relational database), and many more. For the full list of data types that a DBMS supports, check the manuals and documents of that DBMS.
+SQL supports variety of data types, and different DBMS may cover slightly different data types. Some of the most commonly used data types are summarized in Table \ref{ch:db:tab:sqldatatypes}. Nowadays, many DBMS supports more complicated types such as objects (the associated database is also known as the object-relational database). For the full list of data types that a DBMS supports, check the manuals and documents of that DBMS.
 
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{Widely used SQL data types.}\label{ch:db:tab:sqldatatypes}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
@@ -144,12 +144,12 @@ SQL supports variety of data types, and different DBMS may cover slightly differ
 
 SQL defines reserved keywords for database manipulation. The keywords have specific meanings and cannot be used as user-defined variable names. Commonly used SQL keywords are summarized in Tables \ref{ch:db:tab:sqlkeywords1}, \ref{ch:db:tab:sqlkeywords2} and \ref{ch:db:tab:sqlkeywords3}.
 
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{Widely used SQL keywords (part 1: names).}\label{ch:db:tab:sqlkeywords1}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
 		Keyword & Description \\ \hline
-		CONSTRAINT & A constraint that limits the value of a column. \\ 
+		CONSTRAINT & A constraint that can be setup for a column. \\ 
 		DATABASE & A database. \\ 
 		TABLE & A table. \\ 
 		COLUMN & A column (attribute, field) of a table. \\ 
@@ -161,7 +161,7 @@ SQL defines reserved keywords for database manipulation. The keywords have speci
 	\end{tabularx}
 \end{table}
 
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{Widely used SQL keywords (part 2: actions).}\label{ch:db:tab:sqlkeywords2}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
@@ -180,7 +180,7 @@ SQL defines reserved keywords for database manipulation. The keywords have speci
 	\end{tabularx}
 \end{table}
 
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{Widely used SQL keywords (part 3: queries).}\label{ch:db:tab:sqlkeywords3}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
@@ -273,15 +273,15 @@ where in this demonstrative table, 2 columns and 2 constraints are defined.
 
 The \verb|<constraint>| that comes after the data type of a column is used to set an additional restriction to the data in the table. When such restriction is violated, an error would raise to stop the operation. For example, if \verb|NOT NULL| is set as a constraint, then when inserting a row to the table later, the user cannot input NULL for that specific column. Notice that the ``primary key'' can also be set as a constraint named \verb|PRIMARY KEY| using this syntax, although it is a better practice to use \verb|PRIMARY KEY (<column-name>)|.
 
-Commonly used such constraints are summarized into Table \ref{ch:db:tab:constraints}.
-\begin{table}
+Commonly used constraints are summarized in Table \ref{ch:db:tab:constraints}.
+\begin{table}[!htb]
 	\centering \caption{Commonly used constraints.}\label{ch:db:tab:constraints}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
 		Constraint & Description \\ \hline
 		\verb|NOT NULL| & Not allowed to be NULL. \\ 
 		\verb|UNIQUE| & Not allowed to have duplicated values. \\ 
-        \verb|PRIMARY KEY| & Set as primary key, thus, must be not NULL and must remain unique. \\ 
+        \verb|PRIMARY KEY| & Set as primary key, thus, must be unique and not NULL. \\ 
         \verb|FOREIGH KEY| & Set as foreign key. \\ 
         \verb|DEFAULT <value>| & Set a default value. \\ 
         \verb|AUTO_INCREMENT = <value>| & Each time a new row is inserted and NULL or 0 is set for this column, instead of set the column to NULL or 0, automatically generate the next sequence number. The starting value is defined by \verb|<value>| which by default is 1. \\
@@ -321,7 +321,7 @@ ADD CONSTRAINT <constraint-name> CHECK(<constraint-rule>); -- add constraint
 ALTER TABLE <table-name>
 DROP CONSTRAINT <constraint-name>; -- drop constraint
 \end{lstlisting}
-Notice that it is possible to change the primary key using the above syntax because essentially the primary key is treated as a constraint named ``primary''. It is not recommended to do so in general.
+Notice that it is possible to change the primary key using the above syntax because essentially the primary key is treated as a constraint named ``primary''. It is not recommended to do so in practice.
 
 The foreign key is a key used to point to another table, in many cases other table's primary key. Therefore, the foreign key can be nominated only after the other table has been created. Declare foreign key upon creation of a table as follows. As mentioned, to do this, the other tables must be created beforehand. Two methods to declare a foreign key are shown below.
 \begin{lstlisting}
