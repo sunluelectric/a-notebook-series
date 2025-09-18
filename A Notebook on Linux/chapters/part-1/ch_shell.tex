@@ -6,13 +6,13 @@ Notice that the shell is not compulsory for casual users when graphical desktop 
 
 Linux shell will be used rapidly in the remaining of this notebook.
 
-\section{Shell}
+\section{Shell Basics}
 
-Linux's default \mync{Command Line Interface}[CLI], known as the \mync{shell}, was invented before the graphical tools, and it has been more powerful and flexible than the graphical tools from the first day. On those machines where no graphical desktops are installed, the use of shell is critical.
+Linux's default \mync{Command Line Interface}[CLI], known as the \mync{shell} or \mync{terminal}, was invented before the graphical tools, and it has been more powerful and flexible than the graphical tools from the first day. On those machines where no graphical desktops are installed, the use of shell is critical.
 
 Notice that different Linux distributions may have different default configurations or built-in tools for the shell. That said, the majority shell commands introduced in this notebook can be used across commonly seen Linux distributions.
 
-\subsection{Shell Types}
+\subsection{Types}
 
 There are different types of shells for Linux. The most widely used shell across commonly seen Linux distributions is \mync{Bourne Again Shell}, also known as \mync{bash}. It is derived from the ``Bourne Shell'' used in UNIX. Unless otherwise mentioned, the shell we refer to in the remaining of the notebook is bash. 
 
@@ -48,7 +48,7 @@ or make the file executable and call it directly using
 $chmod +x <filename>
 $<filename>
 \end{lstlisting}
-The result is shown below.
+The result is shown below. Here $10$ in entered when it prompts for input.
 \begin{lstlisting}
 Enter a number: 10
 Fibonacci sequence up to 10 terms:
@@ -71,10 +71,10 @@ such as
 The above string is called a \mync{command prompt}, indicating the start of a user command. By default, for regular users the ending of the prompt is \verb|$|, while for the root user the ending is \verb|#|. The prompt can be customized by changing the environment variable \verb|PS1|. See Sections \ref{ch:sb:subsec:shellenvvar} and \ref{ch:sb:subsec:customizeshell} for details about environment variables and shell customization methods respectively. Commonly seen items are summarized in Table \ref{ch:sb:tab:promptvariable}.
 
 \begin{table}
-	\centering \caption{Commonly seen items in shell prompt, and their corresponding variable symbols in \texttt{PS1}.}\label{ch:sb:tab:promptvariable}
+	\centering \caption{Commonly seen items in shell prompt as in \texttt{PS1}.}\label{ch:sb:tab:promptvariable}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
-		Variable & Description \\ \hline
+		Variable Symbol & Description \\ \hline
 		\verb|\!| & Command number of the current command in the command history. \\ 
 		\verb|\#| & Command number of the current command in the active shell. \\ 
 		\verb|\$| & User prompt ``\verb|$|'' for a regular user, or ``\verb|#|'' for the root user. \\
@@ -99,7 +99,7 @@ root@<hostname>:/home/<username>#
 \end{lstlisting}
 More about sudo privilege are introduced in Chapter \ref{ch:usermanagement}.
 
-\subsection{Basic Shell Commands}
+\subsection{Basic Commands}
 
 A typical Linux shell command looks like the following
 \begin{lstlisting}
@@ -191,7 +191,7 @@ Use \verb|history| to check history commands. Use \verb|!<history command index>
 
 Use \verb|\| to break a single-line command into multiple rows when the command is very long.
 
-\subsection{Command Chain}
+\subsection{Command Pipeline}
 
 A truly power feature of the shell is its ability to redirect inputs and outputs of commands, thus to chain the commands together. Meta-characters pipe (\verb?|?), ampersand (\verb|&|), semicolon (\verb|;|), dollar (\verb|$|), parenthesis (\verb|()|), square bracket (\verb|[]|), less than sign (\verb|<|), greater than sign (\verb|>|), double greater than sign (\verb|>>|) and error greater than sign (\verb|2>|) are commonly used special characters in shell commands that directs the outputs of commands. Details are given below.
 
@@ -285,26 +285,26 @@ The error greater sign \verb|2>|, \verb|2>>| works similarly with \verb|>|, \ver
 
 \mync{Shell Environmental Variable} is either a system-defined or user-defined variable that the shell can access and keep track. Commonly used environmental variables are introduced below.
 
-Variable PATH is one of the most important shell environmental variables. To execute a command by its name, the OS needs to know where the command is located at. Commonly used commands shall be included in PATH, the environment variable that traces the locations of commands, so that they can be executed anytime from any working directory. The PATH environment variable is a collection of directories in the system, and it is initialized automatically when a shell is started. Check PATH by
+Variable \verb|PATH| is one of the most important shell environmental variables. To execute a command by its name, the OS needs to know where the command is located at. Commonly used commands shall be included in \verb|PATH|, the environment variable that traces the locations of commands, so that they can be executed anytime from any working directory. The \verb|PATH| environment variable is a collection of directories in the system, and it is initialized automatically when a shell is started. Check \verb|PATH| by
 \begin{lstlisting}
 $ echo $PATH
 <directory 1>:<directory 2>:<directory 3>: ...
 \end{lstlisting}
-where \verb|$PATH| gives the PATH environment of the current shell. The dollar sign \verb|$| is used to retrieve the content of an environment variable. 
+where \verb|$PATH| gives the \verb|PATH| environment of the current shell. The dollar sign \verb|$| is used to retrieve the content of an environment variable. 
 
-The default PATH environment variable often contains the following directories. 
+The default \verb|PATH| environment variable often contains the following directories. 
 \begin{itemize}
 \item \verb|/bin|, \verb|/usr/bin|: Commonly used Linux built-in commands.
 \item \verb|/sbin|, \verb|/usr/sbin|: Commonly used Linux built-in commands for administrators.
 \item \verb|/home/<username>/bin|: Commands defined by a user.
 \end{itemize}
-To determine the location of a particular command, use \verb|type| if the command can be found in the PATH environment. Alternatively, use \verb|locate|, \verb|mlocate| to search all the accessible files in the system to find a command. The syntax is demonstrated below.
+To determine the location of a particular command, use \verb|type| if the command can be found in the \verb|PATH| environment. Alternatively, use \verb|locate|, \verb|mlocate| to search all the accessible files in the system to find a command. The syntax is demonstrated below.
 \begin{lstlisting}
 $ type <command>
 <command-location>
 \end{lstlisting}
 
-There are many useful environment variables just like PATH. A summary is given in Table \ref{ch:sb:tab:shellenvironmentvars}.Command \verb|echo $<variable name>| can be used to check the values of these variables. Use command \verb|env| to check a list of environment variables in the shell.
+There are many useful environment variables just like \verb|PATH|. A summary is given in Table \ref{ch:sb:tab:shellenvironmentvars}.Command \verb|echo $<variable name>| can be used to check the values of these variables. Use command \verb|env| to check a list of environment variables in the shell.
 
 \begin{table}[!htb]
 	\centering \caption{Commonly used shell environment variables.}\label{ch:sb:tab:shellenvironmentvars}
@@ -335,11 +335,11 @@ For example,
 \begin{lstlisting}
 PATH = $PATH:/getstuff/bin ; export PATH
 \end{lstlisting}
-adds a new directory \verb|/getstuff/bin| to the \verb|PATH| environmental variable. This allows temporary change to the PATH environment variable. Notice that each time the shell is restarted, the environmental variables are also reset. 
+adds a new directory \verb|/getstuff/bin| to the \verb|PATH| shell environmental variable, and export that variable to the current shell. This allows temporary change to the \verb|PATH| environment variable. Notice that each time the shell is restarted, the environmental variables are also reset. 
 
 To permanently change the value of an environmental variable, consider customizing the shell. Shell customization is introduced in Section~\ref{ch:sb:subsec:customizeshell}.
 
-\section{Customization of Shell} \label{ch:sb:subsec:customizeshell}
+\section{Customization} \label{ch:sb:subsec:customizeshell}
 
 Shell configuration files are loaded each time a new shell starts. User-defined permanent configurations (such as useful alias) can be put into these files so that the configurations can be implemented automatically. Some useful files are summarized in Table \ref{ch:sb:tab:shellconfig}.
 
@@ -358,11 +358,13 @@ Shell configuration files are loaded each time a new shell starts. User-defined 
 
 To customize the shell behavior for a user, the most commonly method is to edit his \verb|~/.bashrc| which is executed automatically each time he starts a shell. The file is human-readable and self-explanatory.
 
-\section{Basic Shell Script Programming}
+\section{Basic Shell Script}
 
 We have been discussing one-time shell commands so far. This section briefly introduces shell script programming, which is a collection of reusable shell commands to serve a specific purpose. Shell script can be used both as a standalone commands pipeline and a function that takes into arguments, processes them, and generates results.
 
-\subsection{Typical Shell Script Structure}
+In practice, shell scripts are mainly used for system configuration and software management. It is rarely used for data processing, as there are more handy tools such as C/C++ and Python.
+
+\subsection{Script Structure}
 
 A typical shell script looks like the following
 \begin{lstlisting}
@@ -377,7 +379,7 @@ A typical shell script looks like the following
 \end{lstlisting}
 where \verb|#!/bin/bash| is known as the \mync{shebang}, which tells the shell what program to interpret the script with. Shebang is useful when the script is made executable and it is started by its name. In this example, \verb|/bin/bash| is used as the interpreter of the script. Item \verb|# <comment>| gives a brief explanation to the script. Items \verb|<VARIABLE>=<value>| assigns global variables of the script.
 
-\subsection{Conditional Statements and Loops}
+\subsection{Basic Syntax}
 
 Conditional statements in bash shell script include \verb|if| and \verb|case|, the syntax of which is given below.
 
@@ -443,8 +445,6 @@ do
 done
 \end{lstlisting}
 loops over all the files in the current directory, with the regular expression used to filter the applicable files.
-
-\subsection{Function}
 
 A user-defined function can be created as follows:
 \begin{lstlisting}
