@@ -70,7 +70,6 @@
 
 \NewDocumentCommand{\myabb}{m m}
  {
-  % Check if the full name has already been used
   \seq_if_in:NnTF \g_used_abbreviations_seq {#2}
    {
     #2

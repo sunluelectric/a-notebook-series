@@ -2,7 +2,9 @@
 
 This appendix chapter collects the example scripts used in this notebook.
 
-\section{\textit{Vim} Configuration \texttt{vimrc} Used in Section \ref{ch:tfe}}
+\section{Vim User Profile}
+
+An example of a Vim user profile is given below. Such Vim user profile is often stored at \verb|~/.vimrc|.
 
 \begin{lstlisting}
 call plug#begin()
@@ -53,7 +55,114 @@ set scrolloff=3
 noremap sc :set spell!<CR>
 \end{lstlisting}
 
-\section{\textit{Neovim} Configuration Files}
+\section{NeoVim User Profile in Lua}
 
-\textit{Neovim} is fork from \textit{Vim} and it has gained popularity in the past years. Just like \textit{Vim}, \textit{Neovim} can be customized by user-defined configuration files. These configuration files are usually packed into \textit{lua} file tree, where \textit{lua} is a computer programming language that \textit{Neovim} supports by nature.
+Neovim is a fork from Vim and it has gained popularity in the past years. Just like Vim, Neovim can be customized by user-defined configuration files. These configuration files are usually packed into Lua file tree, where Lua is a computer programming language that Neovim supports by nature.
+
+An example of \verb|init.lua| file is given below. Such file can be saved at \verb|~/.config/nvim/|
+
+\begin{lstlisting}
+-- 0) Leader (not used here, but good to set early)
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrePlugin = 1
+
+-- 1) Bootstrap lazy.nvim (plugin manager)
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+vim.fn.system({
+	"git", "clone", "--filter=blob:none",
+	"https://github.com/folke/lazy.nvim.git",
+	"--branch=stable", lazypath
+})
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+	-- Plugins from your .vimrc
+	{ "vim-airline/vim-airline" },
+	{ "joshdick/onedark.vim" },  -- colorscheme onedark
+	{ "nvim-tree/nvim-tree.lua" },
+	{ "nvim-tree/nvim-web-devicons" },
+	{ "github/copilot.vim" },
+	
+	-- (Optional but harmless QoL: allows :Lazy command UI)
+}, {
+	ui = { border = "rounded" },
+})
+
+require("nvim-tree").setup({
+	sort_by = "case_sensitive",
+	view = { width = 32, signcolumn = "yes"},
+	renderer = { group_empty = false },
+	filters = { dotfiles = false },
+	git = { enable = true, ignore = false },
+	actions = { open_file = { quit_on_open = false } },
+})
+
+-- 2) Options (translated 1:1 where applicable)
+vim.opt.number = true           -- set number
+vim.opt.cursorline = true       -- set cursorline
+vim.opt.wrap = true             -- set wrap
+vim.opt.wildmenu = true         -- set wildmenu
+
+vim.opt.hlsearch = true         -- set hlsearch
+vim.cmd("nohlsearch")           -- exec "nohlsearch" (clear any highlight at startup)
+vim.opt.incsearch = true        -- set incsearch
+vim.opt.ignorecase = true       -- set ignorecase
+
+vim.opt.scrolloff = 3           -- set scrolloff=3
+
+-- 3) Colorscheme (after plugins are loaded)
+vim.cmd.colorscheme("onedark")
+
+-- 4) Keymaps (noremap/inoremap equivalents)
+local map = vim.keymap.set
+local ns = { noremap = true, silent = true }
+
+-- inoremap jj <Esc>
+map("i", "jj", "<Esc>", ns)
+
+-- noremap s <nop>
+map({ "n", "x", "o" }, "s", "<Nop>", ns)
+
+-- noremap S :w<CR>
+map({ "n", "x", "o" }, "S", ":w<CR>", ns)
+
+-- noremap Q :q<CR>
+map({ "n", "x", "o" }, "Q", ":q<CR>", ns)
+
+-- noremap <Space> :nohlsearch<CR>
+map({ "n", "x", "o" }, "<Space>", ":nohlsearch<CR>", ns)
+
+-- Search navigation w/ recenter (Nzz / nzz)
+map({ "n", "x", "o" }, "-", "Nzz", ns)  -- noremap - Nzz
+map({ "n", "x", "o" }, "=", "nzz", ns)  -- noremap = nzz
+
+-- Split helpers (match your :set split{right,below} + split/vsplit)
+map("n", "sh", ":set nosplitright<CR>:vsplit<CR>", ns)
+map("n", "sl", ":set splitright<CR>:vsplit<CR>", ns)
+map("n", "sk", ":set nosplitbelow<CR>:split<CR>", ns)
+map("n", "sj", ":set splitbelow<CR>:split<CR>", ns)
+
+-- Window navigation (Ctrl-h/j/k/l)
+map("n", "<C-h>", "<C-w>h", ns)
+map("n", "<C-l>", "<C-w>l", ns)
+map("n", "<C-k>", "<C-w>k", ns)
+map("n", "<C-j>", "<C-w>j", ns)
+
+-- Resize windows
+map("n", "H", ":vertical resize-2<CR>", ns)
+map("n", "L", ":vertical resize+2<CR>", ns)
+map("n", "K", ":resize +2<CR>", ns)
+map("n", "J", ":resize -2<CR>", ns)
+
+-- Toggle spell with sc
+map("n", "sc", ":set spell!<CR>", ns)
+
+-- Toggle tree with <leader>e
+map("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true, desc = "Toggle file tree" })
+
+\end{lstlisting}
 
