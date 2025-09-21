@@ -921,7 +921,7 @@ result = await <tool>.arun(<input>)
 \end{lstlisting}
 to execute it in synchronous or asynchronous mode respectively.
 
-The LangChain community provides a variety of tools. An example is shown below:
+The LangChain community provides a variety of tools out of the box. An example is shown below:
 \begin{lstlisting}
 from langchain_community.utilities import GoogleSerperAPIWrapper
 
@@ -954,6 +954,7 @@ def update_state(state: State) -> State:
     }
     return new_state
 \end{lstlisting}
+By using \verb|.bind_tools()|, the LLM learns the use of those tools. The user does not need to prepare JSON documents to introduce the tools for the LLM.
 
 Add the set of tools as a ``tool node'' to the graph. Use conditional edges so that the LLM determines whether to call a tool. A typical pattern is as follows.
 \begin{lstlisting}
@@ -963,6 +964,26 @@ from langgraph.prebuilt import ToolNode, tools_condition
 <builder name>.add_conditional_edges("<llm node>", tools_condition, "<tool node>")
 \end{lstlisting}
 Notice that when using \verb|tools_condition|, if the LLM decides to not use any tool, the edge is routed to \verb|END|. Hence, there is no need to specifically connect the LLM node to the end node.
+
+\vspace{0.1in}
+\noindent \textbf{Structured Output}
+\vspace{0.1in}
+
+The nodes in a graph take the state as input and output. Therefore, there is no need to structure the output of a graph. When comes to individual LLMs, it is possible to enforce the output as follows.
+\begin{lstlisting}
+from pydantic import BaseModel, Field
+
+class <pydantic model>(BaseModel):
+    <field>:<type> = Field(description="<description>")
+    <field>:<type> = Field(description="<description>")
+    ...
+
+from langchain_openai import ChatOpenAI
+
+<llm> = ChatOpenAI(model="<model name>")
+<llm>.with_structured_output(<pydantic model>)
+\end{lstlisting}
+where \verb|.with_structured_output()| function is used to associate a Pydantic model with an LLM's output.
 
 \vspace{0.1in}
 \noindent \textbf{Memory Sharing across Super Steps}

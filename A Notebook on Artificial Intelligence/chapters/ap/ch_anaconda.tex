@@ -264,14 +264,3 @@ In addition to \verb|uv add|, \verb|uv| provides:
 uv pip install <package>
 \end{lstlisting}
 which behaves like \verb|pip install| inside the project virtual environment, and adds libraries to \verb|.venv|. Unlike \verb|uv add|, it does not modify the \verb|pyproject.toml| or \verb|uv.lock| files. This makes \verb|uv pip install| suitable for local (usually experimental) installations that should not be traced as part of the project permanent dependencies. (Notice that \verb|.venv| is in \verb|.gitignore| by default, and it is not meant to share across platforms.) For reproducible dependencies, \verb|uv add| is the recommended command.
-
-
-
-
-
-
-
-
-
-
-
