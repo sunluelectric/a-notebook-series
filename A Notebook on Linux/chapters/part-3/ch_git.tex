@@ -10,7 +10,7 @@ Git-based version control is widely used in association with \myabb{Continuous I
 
 Git introduces \mync{Git repository}, which refers to the ``ecosystem'' Git uses to manage a project. This refers to the \verb|.git| file associated with each Git-managed project, using which Git traces the development of the project. 
 
-With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and they can synchronize with centralized remote servers. It introduces \mync{branch}, namely ``main'' (also known as ``master'') and ``child'' branches, to manage the concurrent development of different features of the project, where the main branch is the stable and shared repository among everyone, and the child branches are copies of the main branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the main branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
+With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and they can synchronize with centralized remote servers. It introduces \mync{branch} to manage the concurrent development of different features of the project, where the main branch (also known as master branch) is the stable and shared repository among everyone, and the child branches (also known as feature branches) are copies of the main branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the main branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-3/figures/gitflow.png}
@@ -21,7 +21,7 @@ CLI is often used to manage a Git repository. Some commonly used commands are sh
 
 \section{Git Setup}
 
-Git and its relevant documents can be obtained from its official website \textit{https://git-scm.com/}. In many Linux distributions, Git is pre-installed. If Git is missing, follow the instructions on the official website to install it. The installation procedure may differ with different Linux distributions.
+Git and its relevant documents can be obtained from its official website \cite{git2025}. In many Linux distributions, Git is pre-installed. If Git is missing, follow the instructions on the official website to install it. The installation procedure may differ with different Linux distributions.
 
 To install Git on RHEL, simply use
 \begin{lstlisting}
@@ -186,7 +186,7 @@ Command \verb|git reset| erases the past commits in the local branch. This shoul
 
 The command \verb|git reset| is often used as follows.
 \begin{lstlisting}
-	$ git reset <option> <commit ID>
+$ git reset <option> <commit ID>
 \end{lstlisting}
 where \verb|<option>| is often \verb|--hard|, \verb|--mixed| or \verb|--soft|, and \verb|<commit ID>| can be the ID of any commit in the git log, or for shortcut \verb|HEAD| the current position of the HEAD (commit pointer), usually the latest commit.
 

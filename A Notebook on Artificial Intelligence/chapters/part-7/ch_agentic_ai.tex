@@ -871,6 +871,10 @@ To invoke a graph once with an initial state, use the following. This will trigg
 \begin{lstlisting}
 <graph name>.invoke(<initial state>)
 \end{lstlisting}
+It is also possible to run a invoke a graph in asynchronous mode as follows.
+\begin{lstlisting}
+<graph name>.ainvoke(<initial state>)
+\end{lstlisting}
 Alternatively, the graph can be executed step by step using \verb|.stream()|, which yields intermediate states and outputs at each stage of the execution.
 
 \begin{mdframed}
@@ -899,8 +903,23 @@ from langchain.agents import Tool
     func=<function name>,
     description="<description>"
 )
-# to test the tool, use <tool>.invoke(<input>)
 \end{lstlisting}
+
+To test the tool, use
+\begin{lstlisting}
+result = <tool>.invoke(<input>)
+\end{lstlisting}
+which should directly triggers the function defined in the tool.
+
+To run a tool in AI agents, use either
+\begin{lstlisting}
+result = <tool>.run(<input>)
+\end{lstlisting}
+or
+\begin{lstlisting}
+result = await <tool>.arun(<input>)
+\end{lstlisting}
+to execute it in synchronous or asynchronous mode respectively.
 
 The LangChain community provides a variety of tools. An example is shown below:
 \begin{lstlisting}
