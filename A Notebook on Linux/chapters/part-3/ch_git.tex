@@ -6,7 +6,7 @@ Git-based version control is widely used in association with \myabb{Continuous I
 
 \section{Introduction}
 
-\mync{Git}, initially created by Linus Trovalds in 2005, is a distributed version control system for tracking changes in source code and files. It is helpful with maintaining data integrity during the collaborative development of software in distributed non-linear workflows. Git is free and open-source under GNU general public license.
+\mync{Git}, initially created by Linus Torvalds in 2005, is a distributed version control system for tracking changes in source code and files. It is helpful with maintaining data integrity during the collaborative development of software in distributed non-linear workflows. Git is free and open-source under GNU general public license.
 
 Git introduces \mync{Git repository}, which refers to the ``ecosystem'' Git uses to manage a project. This refers to the \verb|.git| file associated with each Git-managed project, using which Git traces the development of the project. 
 
@@ -63,7 +63,7 @@ Navigate to the project directory. Use the following command to create a new Git
 \begin{lstlisting}
 $ git init
 \end{lstlisting}
-When the above command is applied, Git creates \verb|.git| directory in the working directory. From this point onward, Git monitors everything that happens inside this directory and its sub-directories and tries to track any change to the files, unless otherwise configured specifically. Many Git commands such as \verb|git status| become available. More details are introduced in the remaining of the section.
+When the above command is applied, Git creates \verb|.git| directory in the working directory. From this point onward, Git monitors everything that happens inside this directory and its sub-directories and tries to track any change to the files, unless otherwise configured specifically. Many Git commands such as \verb|git status| become available. More details are introduced in the remainder of the section.
 
 \subsection{Version Tracking}
 
@@ -192,7 +192,7 @@ where \verb|<option>| is often \verb|--hard|, \verb|--mixed| or \verb|--soft|, a
 
 The options \verb|--hard|, \verb|--mixed| and \verb|--soft| work differently. All these options move HEAD to the specified commit, and remove all commits afterwards from the repository. The \verb|--hard| option reverts the workspace back to when the specified commit happened (meaning that there would be no way to undo the reset command). Both \verb|--mixed| and \verb|--soft| do not change the workspace. The \verb|--mixed| option leaves all the changes from the specified commit to today as unstaged, while \verb|--soft| leaves them as staged. If no \verb|--hard|, \verb|--mixed| or \verb|--soft| is given, \verb|--mixed| will be used as the default option.
 
-Notice that \verb|git reset| may pose an issue if the commits to be erased have already spread to the upstreams. This is because the erased commits in the local repository by \verb|git reset| will be reverted back the next time the local repository synchronizes with its upstream, where the commits in the upstream will be considered more up to the date, hence pulled to the local repository.
+Notice that \verb|git reset| may pose an issue if the commits to be erased have already spread to the upstreams. This is because the erased commits in the local repository by \verb|git reset| will be reverted back the next time the local repository synchronizes with its upstream, where the commits in the upstream will be considered more up to date, hence pulled to the local repository.
 
 In such cases, consider using \verb|git revert| instead. Syntax wise they work similarly. Instead of erase the history, \verb|git revert| creates a new commit whose content is copied and pasted from a past commit.
 

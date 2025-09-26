@@ -4,7 +4,7 @@
 
 Many text editors are supported in Linux, to name a few, Vim, Emacs, gedit, Visual Studio Code. These text editors come with different features. Some of the text editors even provide integrated development environment for a large set of programming languages.
 
-Among the vast number of choices, Vim and its variations are probably the most popular text editors. Vim works perfectly in a shell environment without relying on graphical desktops, thus is adopted by many Linux distributions as the built-in default text editor. NeoVim is a popular fork of Vim, and it is introduced briefly in the end of the chapter. The majority features introduced about Vim also adopt to NeoVim.
+Among the vast number of choices, Vim and its variations are probably the most popular text editors. Vim works perfectly in a shell environment without relying on graphical desktops, thus is adopted by many Linux distributions as the built-in default text editor. NeoVim is a popular fork of Vim, and it is introduced briefly in the end of the chapter. The majority of features introduced about Vim also apply to NeoVim.
 
 \section{General Introduction to Vim}
 
@@ -18,11 +18,11 @@ Some people claim Vim to be the most powerful text file editor and \myabb{Integr
 \begin{itemize}
   \item Vim is usually built-in to Linux during the operating system installation, making it the most available and cost-effective text editor.
   \item Vim can work on machines where graphical desktop is not supported. It is light in size and is suitable to run even on an embedded system.
-  \item Vim operations are done mostly via mode switch and shortcut keys without requirements on moving mouses, and hence the operation efficiency can be improved.
+  \item Vim operations are done mostly via mode switching and shortcut keys without requiring mouse movement, and hence the operation efficiency can be improved.
   \item Vim is highly flexible and can be customized according to the user's habit, and can be integrated with third-party tools (for example, GitHub Copilot) which boost its capability.
 \end{itemize}
 
-Vim can become very powerful and convenient for the user if he is very used to it. However, Vim is not as intuitive as other text editors with graphical interfaces, and there might be a learning curve for the beginners.
+Vim can become very powerful and convenient for the user if the user becomes proficient with it. However, Vim is not as intuitive as other text editors with graphical interfaces, and there might be a learning curve for the beginners.
 
 \subsection{Vim Modes} \label{ch:tfe:subsec:vimgeneralintro}
 
@@ -49,7 +49,7 @@ to create a file named ``testvim'' and open the file using Vim. Notice that in s
 
 In the opened file, use \verb|Esc| and \verb|i|/\verb|a| (insert/append) to switch between normal mode and insert mode. Notice that in the normal mode, the cursor is on a character. When using the insert command, the insertion cursor is put to the left of that character, whereas when using the append command, the insertion cursor is put to the right of that character. In the normal mode, use \verb|h|, \verb|j|, \verb|k|, \verb|l| to navigate the position of the cursor. If a modern keyboard is used, the left, right, up and down arrows can also be used to navigate the position of the cursor in both normal and insert modes. Finally, in the normal mode, use \verb|:w| to save the file, and \verb|:q| to quit Vim, or use \verb|:wq| to save and quit Vim.
 
-The above basic commands and their relationships are summarized in Fig.~\ref{ch:tfe:fig:vimbasicmodeswitching}. A flowchart to create/open, edit, save, and quit a text file using the aforementioned commands are given in Fig.~\ref{ch:tfe:fig:vimbasicoperationflowchart}.
+The above basic commands and their relationships are summarized in Fig.~\ref{ch:tfe:fig:vimbasicmodeswitching}. A flowchart for creating/opening, editing, saving, and quitting a text file using the aforementioned commands is given in Fig.~\ref{ch:tfe:fig:vimbasicoperationflowchart}.
 
 \begin{figure}[!htb]
 \centering
@@ -143,7 +143,7 @@ where \verb|sc| can be used to quickly turn on and off the spell check function.
 
 \subsection{Search Highlight}
 
-The following customization in \verb|vimrc| shall give a better searching experience. When searching in the text for a particular word or phrase (more about searching in the text will be will be introduced in later sections), to make the searching result highlighted, add the following line to the user profile \verb|vimrc|.
+The following customization in \verb|vimrc| shall give a better searching experience. When searching in the text for a particular word or phrase (more about searching in the text will be introduced in later sections), to make the search results highlighted, add the following line to the user profile \verb|vimrc|.
 \begin{lstlisting}
 set hlsearch
 exec "nohlsearch"
@@ -161,11 +161,11 @@ To quit searching, use \verb|:nohlsearch| in cmdline mode. For convenience, cons
 
 Set \verb|ignorecase| to ignore case-sensitive during the searching.
 
-Keys \verb|n| and \verb|N| is used to navigate through the searching result, and \verb|zz| is used to pin cursor position in the central of the screen. For convenience, they are mapped to \verb|=| and \verb|-|.
+Keys \verb|n| and \verb|N| are used to navigate through the search results, and \verb|zz| is used to center the cursor position on the screen. For convenience, they are mapped to \verb|=| and \verb|-|.
 
 \subsection{Screen Splitting}
 
-Screen splitting and resizing can be done in command line mode, and more details are introduced in the remaining of the chapter. Useful mappings are given below.
+Screen splitting and resizing can be done in command line mode, and more details are introduced in the remainder of the chapter. Useful mappings are given below.
 
 Use \verb|:split| and \verb|:vsplit| for horizontal and vertical screen splitting, respectively. A second split window would show up with the same text file opened. For simplicity, these commands can be mapped in \verb|vimrc| as follows.
 \begin{lstlisting}

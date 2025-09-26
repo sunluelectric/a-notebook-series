@@ -2,14 +2,14 @@
 %\chapterauthor{Second Author}{Second Author Affiliation}
 \chapter{Process Management} \label{ch:pm}
 
-A process refers to an instance of a computer program that is running in the system. Managing processes is one of the essential tasks of an OS. In a Windows system, the user can use the task manager, a graphical tool, to check and manage all the running processes. In a Linux system, the user can manage process in the prompt console using bash commands.
+A process refers to an instance of a computer program that is running in the system. Managing processes is one of the essential tasks of an OS. In a Windows system, the user can use the task manager, a graphical tool, to check and manage all the running processes. In a Linux system, the user can manage processes in the prompt console using bash commands.
 
 \section{General Introduction to Process}
 
 A \mync{process}, also known as \mync{task}, represents an instance of a program or an application that is being executed on the machine. The OS manages the applications and their corresponding required resources by managing the processes.
 \subsection{Process}
 
-To improve the efficiency of the system, especially \myabb{Central Processing Unit}{CPU}, the OS allows multiple processes to share the computational capability and memory of the system, each thinking that it is exclusively using the all machine resources, as shown in Fig. \ref{ch:pm:fig:processflow}.
+To improve the efficiency of the system, especially \myabb{Central Processing Unit}{CPU}, the OS allows multiple processes to share the computational capability and memory of the system, each thinking that it is exclusively using all machine resources, as shown in Fig. \ref{ch:pm:fig:processflow}.
 
 \begin{figure}[!htb]
 	\centering
@@ -33,7 +33,7 @@ The status and context of a process are stored in its \mync{Process Control Bloc
 	\end{tabularx}
 \end{table}
 
-Fig.~\ref{ch:pm:fig:processstatetransfer} shows the possible states that a process might be at. Note the differences between ``blocked'' and ``suspended''. ``Block'' indicates that the process is waiting for other inputs to carry out the remaining part of the program, and ``suspended'' indicates that the process is put on hold for some reasons. When a process is offloaded from the CPU, its context is moved from the CPU registers to the PCB of the progress.
+Fig.~\ref{ch:pm:fig:processstatetransfer} shows the possible states that a process might be at. Note the differences between ``blocked'' and ``suspended''. ``Block'' indicates that the process is waiting for other inputs to carry out the remaining part of the program, and ``suspended'' indicates that the process is put on hold for some reasons. When a process is offloaded from the CPU, its context is moved from the CPU registers to the PCB of the process.
 
 \begin{figure}[!htb]
 	\centering
@@ -41,9 +41,9 @@ Fig.~\ref{ch:pm:fig:processstatetransfer} shows the possible states that a proce
 	\caption{Fundamental states of a process and their transferring.} \label{ch:pm:fig:processstatetransfer}
 \end{figure}
 
-There are different types of processes. For example, based on the source of the processes, there are OS triggered processes and user triggered processes, the first of which usually have a higher priority. Based on the running environment, there are front-ground processes and background processes. Based on the resources used, there are CPU processes and I/O processes.
+There are different types of processes. For example, based on the source of the processes, there are OS triggered processes and user triggered processes, the first of which usually have a higher priority. Based on the running environment, there are foreground processes and background processes. Based on the resources used, there are CPU processes and I/O processes.
 
-A process usually has a relatively isolated environment, and it does not share memory storage with other processes. Special inter process communication mechanism, which is often referred as ``pipe'', is required for processes to talk to each other. Inter-process communication requires OS level controls.
+A process usually has a relatively isolated environment, and it does not share memory storage with other processes. Special inter-process communication mechanisms, which are often referred to as ``pipes'', are required for processes to talk to each other. Inter-process communication requires OS level controls.
 
 \subsection{Thread}
 
@@ -121,7 +121,7 @@ The \verb|kill| command offers different options to kill a process. Use \verb|ki
 
 Commonly used \verb|kill| options are \verb|kill -9| (SIGKILL) and \verb|kill -15| (SIGTERM) followed by the PID. It is mostly recommended to use \verb|kill -15| over \verb|kill -9|, as it allows the process to clean up and terminate properly. Most well designed software defines the protocol to terminate the process in a safe way. This is also the default termination option. Command \verb|kill -9|, on the other hand, force the OS to terminate the process immediately. It is used mostly when the process is not responding and cannot be terminated using \verb|kill -15|.
 
-Another command \verb|killall| runs similarly as \verb|kill|, except that it kills signals based on the command, not the process ID. As a result, it is possible to use it to kill multiple signals with the same command at a time. Use it with cautions.
+Another command \verb|killall| runs similarly to \verb|kill|, except that it sends kill signals based on the command name, not the process ID. As a result, it is possible to use it to kill multiple processes with the same command name at a time. Use it with cautions.
 
 Notice that in Linux the process is arranged in a tree structure; killing a parent process will automatically terminate its children processes, and killing a child process may result in its parent process to restart a new child process.
 

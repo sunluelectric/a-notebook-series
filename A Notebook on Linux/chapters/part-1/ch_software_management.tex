@@ -4,7 +4,7 @@ Linux as an OS monitors and maintains the software installed on the system. Diff
 
 \section{Tasks and Approaches}
 
-When comes to software management, an OS should support at least the following tasks.
+When it comes to software management, an OS should support at least the following tasks.
 \begin{itemize}
 	\item Install software
 		\begin{itemize}
@@ -21,7 +21,7 @@ When comes to software management, an OS should support at least the following t
 	\item Update software
 \end{itemize}
 
-In Linux, software information (dependencies, version, instruction to installation, etc.) are stored in special data structures known as packages. When installing a software, the OS locates the packages and install them according to the instructions that comes with the packages. The OS also traces the software it has installed, monitors their behaviors, performs updates or uninstalls per requested by the user. Different Linux distributions may use different package formats and package management tools. The most well-known ones include:
+In Linux, software information (dependencies, version, installation instructions, etc.) is stored in special data structures known as packages. When installing software, the OS locates the packages and installs them according to the instructions that come with the packages. The OS also tracks the software it has installed, monitors their behavior, and performs updates or uninstalls as requested by the user. Different Linux distributions may use different package formats and package management tools. The most well-known ones include:
 \begin{itemize}
 	\item RPM
 	\item \myabb{Debian Package Manager}{DEB}
@@ -32,7 +32,7 @@ Linux kernel is also a software and needs to be monitored and updated from time 
 
 \section{RPM Package}
 
-RPM (\verb|.rpm|) is the preferred package format for Red-Hat-based distributions such as RHEL, Fedora, CentOS and Oracle Linux. It uses \verb|rpm| command to mange RPMs. In a later stage, other tools such as \verb|yum| and \verb|dnf| have been added to the library for better user experience and enhanced RPM facility. 
+RPM (\verb|.rpm|) is the preferred package format for Red-Hat-based distributions such as RHEL, Fedora, CentOS and Oracle Linux. It uses \verb|rpm| command to manage RPMs. In a later stage, other tools such as \verb|yum| and \verb|dnf| have been added to the library for better user experience and enhanced RPM facility. 
 
 \subsection{Brief Introduction}
 
@@ -98,7 +98,7 @@ where \verb|<operation>| include
 	\item \verb|install|: install a package
 	\item \verb|remove|: remove a package
 	\item \verb|search|: search the repositories for a package
-	\item \verb|autoremove|: remove dependencies packages irrelevant to currently installed program
+	\item \verb|autoremove|: remove dependency packages not relevant to currently installed programs
 	\item \verb|check-update|: check updates of packages from the repositories without downloading or installing the updates
 	\item \verb|downgrade|: revert to a previous version
 	\item \verb|info|: provide the basic information of a package
@@ -151,7 +151,7 @@ More details about DEB as well as the use of \verb|apt*| can be found at \cite{d
 
 \section{Linux Kernel Management}
 
-Different Linux distributions, though essentially using the same OS kernel, may differ when comes to how they update and maintain the kernel. In the scope of this notebook, only RHEL is introduced in a very brief manner. A more detailed explanation to how RHEL manages kernel can be found at \cite{redhat2022kernel}, which is not only a handbook of how RHEL manages Linux kernel, but also a good learning material for OS kernels in general.
+Different Linux distributions, though essentially using the same OS kernel, may differ when it comes to how they update and maintain the kernel. In the scope of this notebook, only RHEL is introduced in a very brief manner. A more detailed explanation to how RHEL manages kernel can be found at \cite{redhat2022kernel}, which is not only a handbook of how RHEL manages Linux kernel, but also a good learning material for OS kernels in general.
 
 Notice that RHEL kernel is a modified version of the upstream Linux kernel by Red Hat engineers. Therefore, it may differ from kernels used in other Linux distributions.
 

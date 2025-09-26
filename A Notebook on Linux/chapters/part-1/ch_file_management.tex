@@ -106,7 +106,7 @@ to create a soft link for a file.
 
 Some of the most widely used file exploring and managing commands are summarized in Table \ref{ch:fm:tab:commonfilecommands}. 
 
-In Table \ref{ch:fm:tab:commonfilecommands}, \verb|chmod| and \verb|chown| are administration related commands that change the accessibility of a directory or a file and they will be introduced in details in Sections \ref{sec:chown} and \ref{sec:chmod} as part of Linux permission system. The rest commands are categorized into two types, query (read only) and manipulation (read and write), and are introduced in the remaining of the section.
+In Table \ref{ch:fm:tab:commonfilecommands}, \verb|chmod| and \verb|chown| are administration related commands that change the accessibility of a directory or a file and they will be introduced in detail in Sections \ref{sec:chown} and \ref{sec:chmod} as part of Linux permission system. The rest of the commands are categorized into two types, query (read only) and manipulation (read and write), and are introduced in the remainder of the section.
 
 \begin{table}[!htb]
   \centering \caption{Commonly used commands to navigate in the Linux file system.}\label{ch:fm:tab:commonfilecommands}
@@ -238,7 +238,7 @@ Different from the conventional cut-and-paste, while moving the item, it is poss
 \begin{lstlisting}
 $ mv ~/dog.png ~/Pictures/puppy.png
 \end{lstlisting}
-will not only move the file \verb|dog.png| in the home directory to the subdirectory \verb|Pictures|, but also chance the file name to \verb|puppy.png|. For this reason, \verb|mv| can also be used to rename an item rather than moving the item, just by ``move'' it to the same directory but with a different name.
+will not only move the file \verb|dog.png| in the home directory to the subdirectory \verb|Pictures|, but also change the file name to \verb|puppy.png|. For this reason, \verb|mv| can also be used to rename an item rather than moving the item, just by ``move'' it to the same directory but with a different name.
 
 Some commonly used arguments of \verb|mv| is summarized in Table \ref{ch:fm:tab:mvcpcommandargument}, many of which handling existing file with the same name in the destination directory.
 
@@ -255,7 +255,7 @@ Some commonly used arguments of \verb|mv| is summarized in Table \ref{ch:fm:tab:
   \end{tabularx}
 \end{table}
 
-The copy-and-paste command \verb|cp| works similar with the move command \verb|mv|, except that it will not remove the item from the source path. Similar syntax applies to \verb|cp| as follows, and arguments in Table \ref{ch:fm:tab:mvcpcommandargument} also apply to \verb|cp|.
+The copy-and-paste command \verb|cp| works similarly to the move command \verb|mv|, except that it will not remove the item from the source path. Similar syntax applies to \verb|cp| as follows, and arguments in Table \ref{ch:fm:tab:mvcpcommandargument} also apply to \verb|cp|.
 \begin{lstlisting}
 $ cp [<option>] <source> <target>
 \end{lstlisting}
@@ -279,7 +279,7 @@ For safety, when using \verb|rm| the OS will keep prompting messages asking user
   \end{tabularx}
 \end{table}
 
-It is possible though, that removed items using \verb|rm| be recovered by expertise. For greater assurance that the deleted contents are truly unrecoverable, consider using \verb|shred| which can physically overwrite the portion of hardware drive where the item is located. More details of \verb|shred| can be found by
+It is possible, though, that items removed using \verb|rm| can be recovered by experts. For greater assurance that the deleted contents are truly unrecoverable, consider using \verb|shred| which can physically overwrite the portion of hardware drive where the item is located. More details of \verb|shred| can be found by
 \begin{lstlisting}
 $ shred --help
 \end{lstlisting}
