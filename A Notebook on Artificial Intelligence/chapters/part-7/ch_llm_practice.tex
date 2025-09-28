@@ -4,7 +4,7 @@ This chapter studies the selection, deployment and use of LLMs in production env
 
 \section{Python Environment Setup}
 
-LLM provides APIs to interact with many different programming languages or platforms such as Python, JavaScript, and many more. In the scope of this chapter, we focus on Python-based LLM interaction, as Python is one of the most widely used language for ANN and LLM studies and applications development.
+LLM provides APIs to interact with many different programming languages or platforms such as Python, JavaScript, and many more. In the scope of this chapter, we focus on Python-based LLM interaction, as Python is one of the most widely used languages for ANN and LLM studies and applications development.
 
 It is recommended to collect all the necessary libraries in a file, such as \texttt{environment.yml}, and use
 \begin{lstlisting}
@@ -65,13 +65,13 @@ dependencies:
     - pydub
 \end{lstlisting}
 
-Among the libraries shown above, some are commonly used across all Python and machine learning projects such as \verb|numpy|, \verb|pandas| and \verb|scikit-learn|, while others are LLM specific packages such as \verb|transformer|, \verb|ollama| and \verb|langchain|.
+Among the libraries shown above, some are commonly used across all Python and machine learning projects such as \verb|numpy|, \verb|pandas| and \verb|scikit-learn|, while others are LLM-specific packages such as \verb|transformers|, \verb|ollama| and \verb|langchain|.
 
 
 \begin{shortbox}
 \Boxhead{Environment Solutions of Anaconda Versus PyPA}
 
-Anaconda is a Python distribution developed and maintained by Anaconda Inc. It provides \verb|conda|, a useful tool, to manage packages and environments. Anaconda provides reliable services to professional data scientists, cooperations as well as the free-of-charge services to the community. Python also has its native packages and environments management tools known as \verb|pip| and \verb|venv| developed and maintained by \myabb{Python Packaging Authority}{PyPA}.
+Anaconda is a Python distribution developed and maintained by Anaconda Inc. It provides \verb|conda|, a useful tool, to manage packages and environments. Anaconda provides reliable services to professional data scientists, corporations as well as free-of-charge services to the community. Python also has its native packages and environments management tools known as \verb|pip| and \verb|venv| developed and maintained by \myabb{Python Packaging Authority}{PyPA}.
 
 Both \verb|conda| and \verb|pip| allow users to create an environment and install packages from a file. The commands are
 \begin{lstlisting}
@@ -84,7 +84,7 @@ pip install -r <filename>
 \end{lstlisting}
 respectively.
 
-It is of the user's choice whether to use \verb|conda| (from Anaconda, or its light version, Miniconda) or \verb|pip|/\verb|venv| to manage the packages. Under the scope of this notebook, both of them should fulfill the needs. As of this writing, the trend seems to be that data scientists, researchers and lectures would more often use \verb|conda|, while software engineers, \verb|pip|/\verb|venv|.
+It is of the user's choice whether to use \verb|conda| (from Anaconda, or its light version, Miniconda) or \verb|pip|/\verb|venv| to manage the packages. Under the scope of this notebook, both of them should fulfill the needs. As of this writing, the trend seems to be that data scientists, researchers and lecturers would more often use \verb|conda|, while software engineers use \verb|pip|/\verb|venv|.
 \end{shortbox}
 
 \section{LLM Local Deployment}
@@ -93,7 +93,7 @@ Ollama and Langflow are introduced. Ollama allows fast deployment of an open-sou
 
 \subsection{Quick LLM Deployment with Ollama}
 
-Nowadays it is convenient to quickly deploy an open-source LLM on a PC with necessary hardware. One of the simplest way of doing that is to leverage on \mync{Ollama}, an open-source tool that allows the deployment of commonly seen open-source LLMs such as LLaMA, DeepSeek, etc., on a local machine. Notice that the usable LLMs are limited by the hardware power of the machine. During the installation of Ollama, it automatically detects and configures the GPU of the machine accordingly.
+Nowadays it is convenient to quickly deploy an open-source LLM on a PC with necessary hardware. One of the simplest ways of doing that is to leverage \mync{Ollama}, an open-source tool that allows the deployment of commonly seen open-source LLMs such as LLaMA, DeepSeek, etc., on a local machine. Notice that the usable LLMs are limited by the hardware power of the machine. During the installation of Ollama, it automatically detects and configures the GPU of the machine accordingly.
 
 Once Ollama is installed, use
 \begin{lstlisting}

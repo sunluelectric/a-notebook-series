@@ -2,7 +2,7 @@
 
 This chapter serves as an overview of the large language model from the theory and technical perspective. LLM is a successful practice of NLP and beyond. It can not only process human languages but also generate new contents based on human language written requirements. The introduction of multimodal LLM further allows LLM to understand and generate not just writings but also pictures and videos.
 
-Nowadays, it is possible for a regular user to leverage on commercialized models to develop his own applications. Given a powerful machine, a user can even deploy LLMs locally in a few steps. Open-source LLMs are available so that the user does not need to train a model from scratch. The deployment of LLMs and the interaction with them are introduced in the next Chapter \ref{ch:llmpractice}.
+Nowadays, it is possible for a regular user to leverage commercialized models to develop their own applications. Given a powerful machine, a user can even deploy LLMs locally in a few steps. Open-source LLMs are available so that the user does not need to train a model from scratch. The deployment of LLMs and the interaction with them are introduced in the next Chapter \ref{ch:llmpractice}.
 
 Modern LLMs are built on top of Transformer framework which has been introduced in earlier Chapter \ref{ch:transformer}. It is worth emphasizing the relationship between the Transformer and LLM. Transformer is an ANN framework designed for processing any sequential data so long as it can be encoded, and apparently NLP is an important use case of it. LLM is a practice of Transformer on NLP.
 
@@ -16,9 +16,9 @@ There have been variety of ways to model natural languages. For example, conside
 \begin{center}
 	\textit{``I am thirsty. Please give me a bottle of \rule{1cm}{0.15mm}.''}
 \end{center}
-It is quite natural that a human would likely to put ``water'' or ``tea'' in the blank. This is obvious because human has a dictionary of words that he can choose in his mind, and he has been reinforced of learning ``a bottle of water'' expression in many occasions. In addition, it makes sense to a human that when someone is thirsty, he would look for water.
+It is quite natural that a human would be likely to put ``water'' or ``tea'' in the blank. This is obvious because humans have a dictionary of words that they can choose from in their mind, and they have been reinforced by learning the ``a bottle of water'' expression on many occasions. In addition, it makes sense to a human that when someone is thirsty, they would look for water.
 
-The challenge using AI on the above task is to build the ``dictionary'' in the machine and quantitatively analyze what word or phrase would make the most sense to be filled into the blank. Many models have been proposed to solve this problem, some of which have been evolving over time in the past decades since $1990$th.
+The challenge using AI on the above task is to build the ``dictionary'' in the machine and quantitatively analyze what word or phrase would make the most sense to be filled into the blank. Many models have been proposed to solve this problem, some of which have been evolving over time in the past decades since the 1990s.
 
 \vspace{0.1in}
 \noindent \textbf{Statistical Language Models}
@@ -26,7 +26,7 @@ The challenge using AI on the above task is to build the ``dictionary'' in the m
 
 In the early days when AI and ANN were not popular, \mync{statistical language models}[SLM] have been the most popular tool to model natural languages. SLM assumes that a sentence is a Markov process, and the last word depends on the context created by the most recent $n$ words. SLM with a fixed context length of $n$ is also called an $n$-gram language model.
 
-Conventionally, the paring information from $n$ words to the next word is obtained from data corpus and stored in a table-like structure. When running the model, it looks up the table for the most probable next word based on the earlier $n$ words. Smoothing technologies are used to handle zeros, i.e., when the record is not found in the table.
+Conventionally, the pairing information from $n$ words to the next word is obtained from data corpus and stored in a table-like structure. When running the model, it looks up the table for the most probable next word based on the earlier $n$ words. Smoothing technologies are used to handle zeros, i.e., when the record is not found in the table.
 
 An obvious issue of SLM is that the computation and storage of the model increase exponentially with the size of $n$. This limits the context information that the model can use for prediction, hence setting a low performance ceiling. Not to mention that even with a large data corpus, zeros can still happen and the model performance is always an issue in such occasions.
 
@@ -64,7 +64,7 @@ ICL plays an important part in LLM implementation, as it is the basis of prompt 
 
 Supervised learning is commonly used in training and fine-tuning a model. In the training set, we need to provide the model ``examples''. An example includes the input, some good responses, and some bad responses. 
 
-When comes to LLM, it is possible to fine-tune a model for a specific task without using the aforementioned examples. Instead, just give it step-by-step instructions. LLM is able to perform well with these tasks described only by instructions. This is known as instruction tuning.
+When it comes to LLM, it is possible to fine-tune a model for a specific task without using the aforementioned examples. Instead, just give it step-by-step instructions. LLM is able to perform well with these tasks described only by instructions. This is known as instruction tuning.
 
 It is worth mentioning that instruction following is also possible in ICL. Give the LLM instructions in prompt engineering without examples, and the LLM is likely to be able to finish the tasks.
 
@@ -76,7 +76,7 @@ When a model is asked to complete a complicated task that involves multiple step
 
 It has been observed that an LLM with at least $100B$ parameters is likely to have good step-by-step reasoning abilities.
 
-The performance of an LLM, usually referring to its capability in accurately and correctly complete a task, is affect by many factors such as the model architecture, model size, training data set size and quality, etc. Though it is clear that with the scaling up of the system the performance is usually improved, there is no analytical expression that gives full insights about how these factors affect the performance quantitatively.
+The performance of an LLM, usually referring to its capability to accurately and correctly complete a task, is affected by many factors such as the model architecture, model size, training data set size and quality, etc. Though it is clear that with the scaling up of the system the performance is usually improved, there is no analytical expression that gives full insights about how these factors affect the performance quantitatively.
 
 A \mync{scaling law} tries to quantitatively describe the performance of an LLM as a function of model size and other factors. Many scaling laws have been proposed, many of which obtained from empirical experiments and they may work only within a given range of model size.
 
@@ -130,7 +130,7 @@ This section looks back into the progression tree of LLM, and lists down milesto
 
 The performance of LLM relies on both the modal size and the training data size. It is the advent in internet, Web 3.0, Industry 4.0, IoT and cloud computing/storage that makes collection and aggregation of big data possible.
 
-Almost every large-size enterprise, both IT companies and conventional industrial companies, have their internal databases. The database can be used to train domain-knowledge LLM. Nowadays, there are many open data sources of community LLMs. Such examples include BookCorpus, CommonCrawl, Reddit posts (with high upvotes), Wikipedia, and many more. These open-source datasets make training LLM for community projects possible.
+Almost every large-size enterprise, both IT companies and conventional industrial companies, has its internal databases. The database can be used to train domain-knowledge LLM. Nowadays, there are many open data sources of community LLMs. Such examples include BookCorpus, CommonCrawl, Reddit posts (with high upvotes), Wikipedia, and many more. These open-source datasets make training LLM for community projects possible.
 
 \vspace{0.1in}
 \noindent \textbf{Large Model and Efficient Training}
@@ -138,7 +138,7 @@ Almost every large-size enterprise, both IT companies and conventional industria
 
 The invention of CPU-based neural networks and transformer architecture making creating and training large scale LLM possible. Both closed and open-source LLMs have been proposed, including GPT series by OpenAI and LLaMA family by Meta AI and the community.
 
-Manly libraries have been released to the public to help building, training and fine-tuning LLMs, such as \verb|transformers|, a Python library for building transformer models. Many such libraries are tying up with PyTorch and TensorFlow to provide LLM related functions.
+Many libraries have been released to the public to help with building, training and fine-tuning LLMs, such as \verb|transformers|, a Python library for building transformer models. Many such libraries are integrating with PyTorch and TensorFlow to provide LLM-related functions.
 
 More about these models and libraries are introduced in later sections.
 

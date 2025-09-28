@@ -4,7 +4,7 @@
 
 Modern LLM is built on top of Transformer, an AI framework proposed in the landmark paper ``Attention Is All You Need'' \cite{vaswani2017attention}. Transformer is introduced in this chapter. 
 
-A brief review of RNN, the state-of-the-art framework priori to Transformer, is given, and its shortages are addressed. Transformer framework and its key components are introduced. Lastly, the development trend of Transformer is discussed.
+A brief review of RNN, the state-of-the-art framework prior to Transformer, is given, and its shortages are addressed. Transformer framework and its key components are introduced. Lastly, the development trend of Transformer is discussed.
 
 \section{RNN and Its Limitations}
 
@@ -12,11 +12,11 @@ RNN has been introduced in earlier Chapter \ref{ch:rnn}. A brief review is given
 
 \subsection{A Brief Review of RNN}
 
-Comparing with a dense ANN, RNN is more efficient in building up correlation between consecutive inputs, and hence it becomes a powerful framework when comes to sequential data processing. 
+Compared with a dense ANN, RNN is more efficient in building up correlation between consecutive inputs, and hence it becomes a powerful framework when it comes to sequential data processing. 
 
 In a conventional dense ANN, the correlation cannot be captured efficiently. In contrast, a dense ANN would treat all the inputs ``equally'' in a symmetric manner. To enforce the ANN to ``address'' the correlation, it would require a lot more layers and nodes (which is often considered low-efficient), and requires more data points during the training. Other problems of conventional dense ANN include, for example, the lack of ability in handling data with arbitrary length.
 
-CNN and RNN try to tackle the above problems by implementing a ``pre-processing'' stage, where the correlation of the spacial and sequential data is first abstracted using some mechanism, and the correlation information is sent as (additional) inputs to the followed dense ANN.
+CNN and RNN try to tackle the above problems by implementing a ``pre-processing'' stage, where the correlation of the spatial and sequential data is first abstracted using some mechanism, and the correlation information is sent as (additional) inputs to the following dense ANN.
 
 \subsection{Limitations of RNN}
 
@@ -78,7 +78,7 @@ The advantages of word-based mapping include:
 
 However, word-based tokenization sacrifices flexibility. Unseen or misspelled words provide no meaningful signal other than ``unknown''. 
 
-Additionally, word-based schemes often ignore the semantic structure within a word. For example, consider the word ``handcraft''. It is clearly composed of two recognizable words ``hand'' and ``craft''. Semantically, ``handcraft'' relates to both. Yet, in the word-based mapping, ``hand'', ``craft'' and``handcraft'' are treated as entirely unrelated tokens. In such cases, it would be more effective to break the word into meaningful segments and tokenize those instead.
+Additionally, word-based schemes often ignore the semantic structure within a word. For example, consider the word ``handcraft''. It is clearly composed of two recognizable words ``hand'' and ``craft''. Semantically, ``handcraft'' relates to both. Yet, in the word-based mapping, ``hand'', ``craft'' and ``handcraft'' are treated as entirely unrelated tokens. In such cases, it would be more effective to break the word into meaningful segments and tokenize those instead.
 
 \vspace{0.1in}
 \noindent \textbf{Subword-Based Tokenization}

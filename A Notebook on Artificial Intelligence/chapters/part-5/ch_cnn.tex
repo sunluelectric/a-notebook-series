@@ -2,9 +2,9 @@
 
 \section{Brief Review of CNN}
 
-CNN is a type of ANN structure designed to handle grid-like data. It is effective when dealing when data spatially correlated, thus becomes very popular in computer vision. It defines ``kernel'' that aggregates nearby pixels information before sending it to a dense network.
+CNN is a type of ANN structure designed to handle grid-like data. It is effective when dealing with spatially correlated data, thus it has become very popular in computer vision. It defines ``kernel'' that aggregates nearby pixels information before sending it to a dense network.
 
-A CNN kernel, also known as a filter, is a small matrix of weights that slides across the input image or feature map to perform a mathematical operation called convolution. An demonstration of CNN kernel is given in Fig. \ref{ch:cnn:fig:cnn_kernel}. Multiple kernels can be defined on the same layer to handle the same feature map, each kernel associated with an output channel. In practice, each kernel or channel is designed to detect a specific features in the feature map. For example, there might be a kernel detecting edges, while a second kernel detect color codes.
+A CNN kernel, also known as a filter, is a small matrix of weights that slides across the input image or feature map to perform a mathematical operation called convolution. A demonstration of CNN kernel is given in Fig. \ref{ch:cnn:fig:cnn_kernel}. Multiple kernels can be defined on the same layer to handle the same feature map, each kernel associated with an output channel. In practice, each kernel or channel is designed to detect specific features in the feature map. For example, there might be a kernel detecting edges, while a second kernel detects color patterns.
 
 \begin{figure}
 	\centering
