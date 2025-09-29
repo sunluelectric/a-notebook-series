@@ -1,12 +1,12 @@
 \chapter{Basic Statistics} \label{ch:statisticsandsampling}
 
-Statistics is widely used in science and engineering. Broadly speaking, any attempt to estimate an unknown property of a system using direct or indirect measurements can be considered as an application of statistics. Due to factors such as measurement errors and limited sample sizes, we cannot determine the exact value of the unknown property. Instead, statistics provides methodologies for efficiently estimating the most probable value of the unknown, given the available data and its limitations. It also offers tools to quantify the estimation error and the confidence level of the result.
+Statistics is widely used in science and engineering. Broadly speaking, any attempt to estimate an unknown property of a system using direct or indirect measurements can be considered an application of statistics. Due to factors such as measurement errors and limited sample sizes, the exact value of the unknown property cannot be determined. Instead, statistics provides methodologies for efficiently estimating the most probable value of the unknown, given the available data and its limitations. It also offers tools to quantify the estimation error and the confidence level of the result.
 
 This chapter introduces various sampling methods and demonstrates how to use samples to solve basic statistical problems.
 
 \section{Two Types of Statistical Problems}
 
-There are at least two common types of problems in science and engineering where statistics is widely used.
+At least two common types of problems in science and engineering involve the widespread use of statistics.
 
 \begin{enumerate}
 	\item There is a property of the system whose true value exists but is unknown. We have either direct or indirect measurements of this value, subject to measurement noise. The goal is to estimate the true value from the measurements, while minimizing the effect of noise.
@@ -25,7 +25,7 @@ Following that convention, the majority of this notebook focuses on problems of 
 
 \section{Sampling}
 
-When selecting samples from the population, it is critical to ensure that the selection is done randomly, and all elements in the population have an equal probability to be selected. 
+When selecting samples from the population, it is critical to ensure that the selection is done randomly, and all elements in the population have an equal probability of being selected. 
 
 Depending on whether an element can be selected multiple times, we have
 \begin{itemize}
@@ -34,7 +34,7 @@ Depending on whether an element can be selected multiple times, we have
 \end{itemize}
 Sampling with replacement is applicable in many engineering problems, such as measuring a physical property of a system. Sampling without replacement is applicable in many social science problems, such as conducting a survey to estimate the average income of the population. They do have some subtle differences and they are explained using the following example.
 
-Let a set of $N$ random variables be the population. Sample the population $M$ times using sampling with/without replacement. Calculate the mean and variance of the samples, and compare them with their counterparties of the population.
+Let a set of $N$ random variables be the population. Sample the population $M$ times using sampling with/without replacement. Calculate the mean and variance of the samples, and compare them with their counterparts in the population.
 
 Let $N=100$ and $M=500$. Figures \ref{ch:sampling:fig:sample-wr-n100} and \ref{ch:sampling:fig:sample-nwr-n100} give the cumulative mean and variance of sampling with and without replacement, respectively. The mean and variance are given by red and blue curves, respectively. The statistics obtained from the cumulative samples and from the population are given by the solid and dashed curves, respectively. Notice that in Fig. \ref{ch:sampling:fig:sample-nwr-n100}, after number of samples exceeding $100$, the entire population has been sampled, and thus the sampling stops. This explains why its mean and variance stop fluctuating and converge to the population mean and variance respectively.
 
@@ -61,14 +61,14 @@ In practice, however, the population size is often orders of magnitudes larger t
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-2/figures/sample-nwr-n10000.eps}
-	\caption{Sample without replacement,population size $N=10000$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-nwr-n10000}
+	\caption{Sample without replacement, population size $N=10000$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-nwr-n10000}
 \end{figure}
 
 \section{Moments Estimation}
 
-It is fair to assume that the samples statistical properties are connected with those of the population. The statistics of the population can be estimated using the samples. The larger size of the sample set, the more likely this statement is true.
+It is reasonable to assume that the statistical properties of the samples are connected with those of the population. The statistics of the population can be estimated using the samples. The larger the sample size, the more likely this statement holds true.
 
-In practice, we often assume certain types of distributions of the population based on priori knowledge or common sense, for example, Gaussian distribution for the salaries of people living in a city. Samples are taken from the population and used to estimate the properties of the distribution, such as its mean and variance.
+In practice, certain types of distributions of the population are often assumed based on prior knowledge or common sense, for example, Gaussian distribution for the salaries of people living in a city. Samples are taken from the population and used to estimate the properties of the distribution, such as its mean and variance.
 
 More details are given below.
 
@@ -97,7 +97,7 @@ From \eqref{eq:sample_variance},
 	&=& \dfrac{1}{m-1}\left(m\sigma^2 + m\mu^2 - \sigma^2 - m\mu^2\right) \nonumber \\
 	&=& \sigma^2 \nonumber
 \end{eqnarray}
-where notice that in \eqref{eq:proof_samplevar_1} 
+where note that in \eqref{eq:proof_samplevar_1} 
 \begin{eqnarray}
 	\sum_{i=1}^{m}X_i &=& m\bar{X} \nonumber
 \end{eqnarray}
@@ -119,17 +119,17 @@ This estimator would also be unbiased for $\sigma^2$, and does not require the $
 
 Recall from Section \ref{sec:moments} that the mean and the variance are the $1$st order moment and the $2$nd order central moment respectively. The mean and variance obtained from the samples are closely related their correspondents in the population. It is natural to expand the idea to other moments. This is known as the \mync{method of moments} in population estimation.
 
-Commonly used moments and central of moments are $4$th order or lower. Notice that bias might be introduced when using central of moments and the central is obtained from the samples, just like illustrated earlier for the sample variance.
+Commonly used moments and central moments are of $4$th order or lower. Note that bias might be introduced when using central moments where the center is obtained from the samples, as illustrated earlier for the sample variance.
 
 \section{Parameter Estimation} \label{sec:mlemap}
 
-Assume that the distribution of the population follows PDF $f(x;\theta)$ where $\theta$ is the collection of parameters in the distribution. For example, if $f(x)$ follows normal distribution, $\theta=[\mu, \sigma^2]$ is the collection of the mean and variance of the normal distribution.  In the case where the population is discrete and finite, it is assumed that the population are populated from $f(x)$.
+Assume that the distribution of the population follows PDF $f(x;\theta)$ where $\theta$ is the collection of parameters in the distribution. For example, if $f(x)$ follows a normal distribution, $\theta=[\mu, \sigma^2]$ is the collection of the mean and variance of the normal distribution. In the case where the population is discrete and finite, it is assumed that the population is sampled from $f(x)$.
 
 The objective is to estimate $\theta$ given samples $X_1, \ldots, X_m$.
 
 \subsection{Unbiased Estimation}
 
-The samples are used to estimate the statistics properties of the population. Estimation error is almost always unavoidable due to the limited size of the samples. However, we would wish that with appropriate estimation method, the estimates are unbiased from the true value of the population, i.e., the expectation of the estimates shall equal to the corresponding values of the population. In that case, the estimation is known as \mync{unbiased estimation}. 
+The samples are used to estimate the statistical properties of the population. Estimation error is almost always unavoidable due to the limited size of the samples. However, it is desirable that with an appropriate estimation method, the estimates are unbiased from the true value of the population, i.e., the expectation of the estimates should equal the corresponding values of the population. In that case, the estimation is known as \mync{unbiased estimation}. 
 
 Examples of unbiased estimation include \eqref{eq:sample_mean} and \eqref{eq:sample_variance} for the estimation of the mean and variance of the population respectively, and the proof has been given in the earlier section.
 

@@ -1,26 +1,26 @@
 \chapter{Semantic Web Basics} \label{ch:briefintrosemanticweb}
 
-Ontology is the philosophical study of the nature of being, existence, or reality. It concerns about ``what is everything'' and ``how to define everything'' in the context of inductive and deductive reasoning. It discusses how we as human abstract and preserve knowledge.
+Ontology is the philosophical study of the nature of being, existence, or reality. It concerns ``what is everything'' and ``how to define everything'' in the context of inductive and deductive reasoning. It discusses how humans abstract and preserve knowledge.
 
-Ontology inspires people in computer science about how we can store and exchange information efficiently using the internet. The solution is known as the semantic web, an internet-based knowledge base schema. The internet powered by semantic web (together with other technologies) defines Web 3.0, a new-generation internet framework.
+Ontology inspires computer scientists regarding how information can be stored and exchanged efficiently using the internet. The solution is known as the semantic web, an internet-based knowledge base schema. The internet powered by the semantic web (together with other technologies) defines Web 3.0, a new-generation internet framework.
 
-Notice that there are subtle differences between ``internet'' and ``Internet''. The lower case ``internet'' refers to the technology that bridges machines to form a network of any size, and the upper case ``Internet'' refers to the specific internet that links the entire world together. In this part of the notebook, however, they are used interchangeably.
+Note that there are subtle differences between ``internet'' and ``Internet''. The lowercase ``internet'' refers to the technology that bridges machines to form a network of any size, while the uppercase ``Internet'' refers to the specific internet that links the entire world together. In this part of the notebook, however, they are used interchangeably.
 
 \section{Web of Data}
 
-The internet is a technology that enables information exchange among machines. With the power of the internet, a user can obtain the information he needs from remote servers, databases, or knowledge bases.
+The internet is a technology that enables information exchange among machines. With the power of the internet, users can obtain needed information from remote servers, databases, or knowledge bases.
 
-In the early days, the use of internet required professional skills. Nowadays, everyone can access the internet using a graphical-interface browser that he can easily find on a computer or a mobile device. Public knowledge bases such as Wikipedia has made obtaining information much easier.
+In the early days, using the internet required professional skills. Nowadays, everyone can access the internet using a graphical-interface browser that can be easily found on a computer or mobile device. Public knowledge bases such as Wikipedia have made obtaining information much easier.
 
 \subsection{Web 1.0 and 2.0}
 
-Under the \mync{Web 1.0} framework which was popular in the early stage of internet development, information is stored on individual servers in a static manner. A user can browse the contents, but he cannot edit them. It is essentially a one-way data transmission. The ``authority'' such as a news company provides the information, and the users consume it. Examples of Web 1.0 implementations include news websites, static web gallery, etc.
+Under the \mync{Web 1.0} framework, which was popular in the early stage of internet development, information is stored on individual servers in a static manner. Users can browse the contents, but cannot edit them. It is essentially one-way data transmission. Authorities such as news companies provide the information, and users consume it. Examples of Web 1.0 implementations include news websites, static web gallery, etc.
 
-One-way data transmission in Web 1.0 cannot meet the expectation from the users who want to share their information to other users on the internet. Thanks to the advent in information science and communication, under the \mync{Web 2.0} framework users can interact with the internet bidirectionally. A user can search and filter data from the servers and even upload his own data and share it with others. The internet became far more powerful in terms of information exchange. The source of information does not necessarily come from the authority. The users are generators and consumers of information at the same time. Examples of Web 2.0 implementations include Blog, Twitter, YouTube and Weibo.
+One-way data transmission in Web 1.0 cannot meet the expectations of users who want to share their information with other users on the internet. Thanks to advances in information science and communication, under the \mync{Web 2.0} framework users can interact with the internet bidirectionally. A user can search and filter data from the servers and even upload his own data and share it with others. The internet became far more powerful in terms of information exchange. The source of information does not necessarily come from the authority. The users are generators and consumers of information at the same time. Examples of Web 2.0 implementations include Blog, Twitter, YouTube and Weibo.
 
 Web 2.0 is extremely popular and successful even to date. Yet, under the background of industry 4.0, big data and data-driven modeling of almost everything, there are still limitations and downsides to Web 2.0 that we would wish to improve.
 
-One of the biggest challenges that we encounter with Web 2.0 is how to quickly locate the information we want among the vast amount of irrelevant data. Conventionally in Web 2.0, keyword-based searching engines are used. These searching engines do not comprehend the contextual knowledge of the contents, and as a result they may fail to return what a user truly expects. The user often needs to further manually pick up relevant information from the searching results. Nowadays searching engines are becoming smarter, and they can sometimes pre-filter the results. Nevertheless, it is still quite common that many returned results are useless to the user. Keyword-based engines also struggle with polysemous, synonyms and implicit information from pictures in the searching range, again due to the lack of understanding of the contents.
+One of the biggest challenges encountered with Web 2.0 is how to quickly locate desired information among the vast amount of irrelevant data. Conventionally in Web 2.0, keyword-based search engines are used. These search engines do not comprehend the contextual knowledge of the contents, and as a result may fail to return what a user truly expects. Users often need to manually pick up relevant information from the search results. Nowadays search engines are becoming smarter, and can sometimes pre-filter results. Nevertheless, it is still quite common that many returned results are useless to the user. Keyword-based engines also struggle with polysemy, synonyms, and implicit information from pictures in the search range, again due to the lack of understanding of the contents.
 
 The problem here, however, is not caused by the searching engines alone.  It is rather that the information stored on the internet does not come with its corresponding semantics in the first place. Today most of the information on the internet is stored in HTML format. HTML tells only the contents but not the meaning behind them. It is difficult for a machine to understand the meaning of the information from HTML corpus. This potentially makes it difficult for a machine to retrieve data efficiently. Even with the recent breakthrough in LLM enabling the machine to summarize articles, it is still unpractical for it to go through all the returned contents of a searching engine which sometimes contains hundreds of pages of information.
 
@@ -28,7 +28,7 @@ Structure determines functions. To solve the problem once for all, new data stor
 
 \subsection{Web 3.0}
 
-The goal of \mync{Web 3.0} is to allow more efficient information retrieval and sharing using the internet. Ideally, we would want the searching engine to truly understand the user's demand, and return only the most relevant information summarized in a nice manner. If there is no readily available response on the internet, the searching engine shall derive the response based on existing information, i.e., it should be capable of doing simple reasoning. 
+The goal of \mync{Web 3.0} is to allow more efficient information retrieval and sharing using the internet. Ideally, the search engine should truly understand the user's demand and return only the most relevant information summarized in a clear manner. If there is no readily available response on the internet, the search engine should derive the response based on existing information, i.e., it should be capable of simple reasoning. 
 
 For this purpose, there are at least the following two development trends:
 \begin{itemize}
@@ -60,7 +60,7 @@ This notebook discusses the technologies used in semantic web such as \mync{reso
 
 \subsection{Semantic Web Vision}
 
-Semantic web database is ``semantic'' due to its data model. Semantic web data model not only stores objects and their properties, but also the relationships among objects and properties. The relationships, often represented by graphs, can be used for descriptive logic reasoning. The logic reasoning allows new information to be derived based on existing facts. In addition, semantic web is more scalable, reusable and reader-friendly for both humans and machines comparing with AI methods.
+Semantic web database is ``semantic'' due to its data model. Semantic web data model not only stores objects and their properties, but also the relationships among objects and properties. The relationships, often represented by graphs, can be used for descriptive logic reasoning. The logic reasoning allows new information to be derived based on existing facts. In addition, the semantic web is more scalable, reusable, and reader-friendly for both humans and machines compared to AI methods.
 
 Many research institutes and organizations have tried building semantic webs of different scales. An example is DBPedia (\textit{dbpedia.org}). The goal of DBPedia is to create something like Wikipedia, but using semantic web.
 
@@ -103,9 +103,9 @@ The layers and components in each layer are briefly introduced as follows.
 
 The knowledge and semantics are stored using the RDF/RDFS model. The RDF/RDFS is often further powered by OWL. RDF serves as the foundation with the basic structure. RDFS expands the capability of RDF by introducing new vocabularies such as ``class'', ``subclass'', ``property''. And finally OWL enables a set of tools to define complex ontologies and create rigorous and complex semantics. As an analogy, think of RDF as the paper and pencil, RDFS the 24-color crayon set, and OWL the painting skills. Together they make a sophisticated and richly structured picture.
 
-It is worth mentioning that many syntax such as RDF/XML can be used as the markup languages to describe RDF/RDFS/OWL used in a semantic web. More details are introduced in later chapters.
+It is worth mentioning that many syntaxes such as RDF/XML can be used as markup languages to describe RDF/RDFS/OWL used in a semantic web. More details are introduced in later chapters.
 
-\mync{SPARQL Protocol and RDF Query Language}[SPARQL] is the recommended query language for querying and manipulating the semantic web. It allows a user to search, retrieve, and modify information stored in the RDF model. The syntax of SPARQL is designed to look similar with SQL, and many commands in SPARQL have counterparts in SQL, such as \verb|SELECT|, \verb|WHERE|, \verb|GROUP BY|, and \verb|ORDER BY|. However, the backend technologies of a semantic web engine (known as triplestore or RDF management system) and a relational database management system differ largely. For example, triplestore relies heavily on graph theory and graph pattern mapping when searching through the semantic web.
+\mync{SPARQL Protocol and RDF Query Language}[SPARQL] is the recommended query language for querying and manipulating the semantic web. It allows users to search, retrieve, and modify information stored in the RDF model. The syntax of SPARQL is designed to look similar to SQL, and many commands in SPARQL have counterparts in SQL, such as \verb|SELECT|, \verb|WHERE|, \verb|GROUP BY|, and \verb|ORDER BY|. However, the backend technologies of a semantic web engine (known as triplestore or RDF management system) and a relational database management system differ largely. For example, triplestore relies heavily on graph theory and graph pattern mapping when searching through the semantic web.
 
 An example of semantic web is given below.
 \begin{mdframed}

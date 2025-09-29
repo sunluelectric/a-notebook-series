@@ -1,14 +1,14 @@
 \chapter{Python (Part I: Basics)} \label{ch:numpyscipy}
 
-Python has been increasingly popular for data science in the past few years. Many libraries and tools have been developed for Python to enhance its data analysis and visualization capabilities, just to name a few, \verb|numpy|, \verb|scipy|, \verb|scikit-learn|, \verb|pandas|, \verb|matplotlib| \verb|tensorflow| and \verb|pytorch|.
+Python has become increasingly popular for data science in recent years. Many libraries and tools have been developed for Python to enhance its data analysis and visualization capabilities, including \verb|numpy|, \verb|scipy|, \verb|scikit-learn|, \verb|pandas|, \verb|matplotlib|, \verb|tensorflow|, and \verb|pytorch|.
 
-This chapter together with a few consequent chapters introduces commonly used tools that data science adopts using Python. This part of the notebook is more application driven, and only the basic implementations are introduced. We are not digging into the theory supporting machine learning and artificial intelligence.
+This chapter, together with subsequent chapters, introduces commonly used tools that data science adopts using Python. This part of the notebook is more application-driven, and only basic implementations are introduced. The theory supporting machine learning and artificial intelligence is not explored in depth.
 
-It has been increasingly popular today to use Python together with Conda and jupyter-lab/jupyter notebook. Conda is an open-source language-agnostic package and environment management system. Jupyter notebook is an interactive computing platform for Python and other computer programming languages. The detailed introduction to the installation and usage of Conda and Jupyter notebook is not covered here. They are used when demonstrating the examples in this chapter and the consequent chapters.
+It has become increasingly popular to use Python together with Conda and Jupyter Lab/Jupyter Notebook. Conda is an open-source, language-agnostic package and environment management system. Jupyter Notebook is an interactive computing platform for Python and other programming languages. A detailed introduction to the installation and usage of Conda and Jupyter Notebook is not covered here. They are used when demonstrating examples in this chapter and subsequent chapters.
 
 \section{NumPy}
 
-When comes to any sort of numerical computation, one of the most popular Python packages is definitely NumPy. NumPy allows quickly deployment of numerical vectors, matrices and tensors, as well as associated efficient numerical calculations. It is the ``MATLAB'' package in Python.
+When it comes to any sort of numerical computation, one of the most popular Python packages is NumPy. NumPy allows quick deployment of numerical vectors, matrices, and tensors, as well as associated efficient numerical calculations. It is the ``MATLAB'' equivalent package in Python.
 
 Details of NumPy can be found at \textit{numpy.org}.
 
@@ -105,13 +105,13 @@ NumPy supports both element-by-element or vector-level operations, including \ve
 
 \section{SciPy}
 
-SciPy is a library collections of ``comprehensive'' algorithms widely used in scientific and technical calculations. Notice that NumPy also has built in basic and commonly algorithms in the library, such as FFT. For those algorithms not included in NumPy, there is a chance that it is in SciPy, such as K-means clustering.
+SciPy is a collection of libraries containing comprehensive algorithms widely used in scientific and technical calculations. Note that NumPy also has built-in basic and commonly used algorithms in the library, such as FFT. For algorithms not included in NumPy, there is a chance they can be found in SciPy, such as K-means clustering.
 
 A detailed documentation of SciPy functions put into different categories are given here \textit{docs.scipy.org/doc/scipy/reference/}.
 
 \section{Matplotlib and Seaborn}
 
-Data visualization is important through out the entire data analysis process. It is about not only demonstrating the results to the audiences, but also helping the developers to understand the data and improving the inefficient designs in the pipeline. Matplotlib and Seaborn are two important data visualization libraries. They are briefly introduced in this section.
+Data visualization is important throughout the entire data analysis process. It involves not only demonstrating results to audiences, but also helping developers understand the data and improve inefficient designs in the pipeline. Matplotlib and Seaborn are two important data visualization libraries. They are briefly introduced in this section.
 
 \subsection{Matplotlib}
 
@@ -148,7 +148,7 @@ The presentation of the plot can be customized. For example, use \verb|plt.xlim(
 
 \subsection{Seaborn}
 
-Seaborn is another visualization library built on top of the Matplotlib library. It tries to standardize the plots with a simple function call. It scarifies some flexibility that Matplotlib offers, but makes plotting easier.
+Seaborn is another visualization library built on top of Matplotlib. It attempts to standardize plots with simple function calls. It sacrifices some flexibility that Matplotlib offers, but makes plotting easier.
 
 An example of using Seaborn to plot a histogram is given below. The result is given in Fig. \ref{fig:normhistexp}.
 \begin{lstlisting}[language=Python]
@@ -172,7 +172,7 @@ plt.ylabel("Count")
 	\label{fig:normhistexp}
 \end{figure}
 
-An example of using Seaborn to plot a count plot for discrete values (usually category values) is given below. Notice that the attribute whose values are put into categories is assigned to $x$ of \verb|seaborn.countplot()|. The result is given in Fig. \ref{fig:countplot}.
+An example of using Seaborn to plot a count plot for discrete values (usually categorical values) is given below. Note that the attribute whose values are put into categories is assigned to $x$ in \verb|seaborn.countplot()|. The result is given in Fig. \ref{fig:countplot}.
 \begin{lstlisting}[language=Python]
 import numpy as np
 import pandas as pd
@@ -194,7 +194,7 @@ plt.ylabel("Count")
 	\label{fig:countplot}
 \end{figure}
 
-Bot plot gives the maximum, minimum, and interquartile range (IQR) of the data. In the box plot, the data is split into 4 parts, namely $x<Q_1$ ($0\%-25\%$), $Q_1<x<Q_2$ ($25\%-50\%$), $Q_2<x<Q_3$ ($50\%-75\%$), and $Q_3<x$ ($75\%-100\%$). The IQR gives the range between $Q_1$ and $Q_3$, i.e., the half in the middle $25\%-75\%$. An example is given below. The result is given in Fig. \ref{fig:boxplot}.
+Box plots give the maximum, minimum, and interquartile range (IQR) of the data. In the box plot, the data is split into 4 parts, namely $x<Q_1$ ($0\%-25\%$), $Q_1<x<Q_2$ ($25\%-50\%$), $Q_2<x<Q_3$ ($50\%-75\%$), and $Q_3<x$ ($75\%-100\%$). The IQR gives the range between $Q_1$ and $Q_3$, i.e., the half in the middle $25\%-75\%$. An example is given below. The result is given in Fig. \ref{fig:boxplot}.
 \begin{lstlisting}[language=Python]
 import numpy as np
 import pandas as pd

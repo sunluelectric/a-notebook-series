@@ -4,29 +4,29 @@ This chapter introduces the basic concepts, axioms and theorems in probability t
 
 \section{Randomness and Stochasticity}
 
-People use \mync{random} and \mync{stochastic} to describe a variable or a model whose measurements or outcomes are not precisely predictable.
+The terms \mync{random} and \mync{stochastic} are used to describe variables or models whose measurements or outcomes are not precisely predictable.
 
-By saying \mync{randomness}, we often refer to the case where a variable (as in ``random variable'') is not predictable. Its value is not known precisely until it is measured. The chance of it taking particular values may follow some patterns known as the statistic property of the variable. For example, the result of tossing a coin is a random variable with the following statistic property. It is either head ($X=1$) or tail ($X=0$), each with a $50\%$ chance. The precise value remains unknown until the coin is tossed.
+\mync{Randomness} typically refers to the case where a variable (as in ``random variable'') is not predictable. Its value is not known precisely until it is measured. The chance of it taking particular values may follow some patterns known as the statistical properties of the variable. For example, the result of tossing a coin is a random variable with the following statistic property. It is either head ($X=1$) or tail ($X=0$), each with a $50\%$ chance. The precise value remains unknown until the coin is tossed.
 
-By saying \mync{stochasticity}, we often refer to the case where the outcome of a process (as in ``stochastic process'') is not predictable. This is likely caused by the incomplete modeling or random disturbance of the system. As a result, the process becomes non-deterministic, i.e., the output of the system cannot be precisely determined by the model and the input. A stochastic process can still be described by a parametric model, but with some unknowns (usually in the form of random variables) in the equations.
+\mync{Stochasticity} typically refers to the case where the outcome of a process (as in ``stochastic process'') is not predictable. This is likely caused by the incomplete modeling or random disturbance of the system. As a result, the process becomes non-deterministic, i.e., the output of the system cannot be precisely determined by the model and the input. A stochastic process can still be described by a parametric model, but with some unknowns (usually in the form of random variables) in the equations.
 
 This part of the notebook mainly studies random variables. Stochastic process and control of stochastic systems are introduced elsewhere in control system related notebooks.
 
 \subsection{Random Experiment}
 
-``Experiment'' is one of the most important activities in science and engineering. Very often, experiments are used to verify a theory. In these cases, experiments are carefully designed so that its outcome is deterministic and predictable as long as the theory is correct. By observing the results of the experiments matching the prediction of the theory, we build confidence in the theory.
+Experiments are among the most important activities in science and engineering. Very often, experiments are used to verify theories. In these cases, experiments are carefully designed so that their outcomes are deterministic and predictable as long as the theory is correct. By observing the results of the experiments matching the prediction of the theory, we build confidence in the theory.
 
-However, this notebook concerns with another type of experiments where the result of an experiment contains randomness due to the lack of information or incomplete modeling. Such experiments include tossing a coin, predicting the GDP of a country next year, etc. These experiments are known as \mync{random experiments}. The result of a random experiment can still be meaningful because it reflects some insights of the system. The challenge is to design the experiments so that useful information can be revealed from the result efficiently.
+However, this notebook is concerned with another type of experiment where the result contains randomness due to the lack of information or incomplete modeling. Such experiments include tossing a coin, predicting the GDP of a country next year, etc. These experiments are known as \mync{random experiments}. The result of a random experiment can still be meaningful because it reflects some insights of the system. The challenge is to design the experiments so that useful information can be revealed from the result efficiently.
 
 \subsection{Sample Space}
 
 A set $S$ that consists of all possible outcomes of a random experiment is called a \mync{sample space}.
 
-\mync{Cardinality} refers to the number of elements in a set. Depending on the cardinality of a sample space, it can be categorized as follows. If a sample space has a finite number of elements, it is called a \mync{finite sample space}. Otherwise, it is called an \mync{infinite sample space}. If the elements in an infinite sample space can be mapped to natural numbers, the sample space is also called a \mync{countably infinite sample space}. Otherwise, the sample space is called a \mync{uncountably infinite sample space}. Examples are given below.
+\mync{Cardinality} refers to the number of elements in a set. Depending on the cardinality of a sample space, the space can be categorized as follows. If a sample space has a finite number of elements, it is called a \mync{finite sample space}. Otherwise, it is called an \mync{infinite sample space}. If the elements in an infinite sample space can be mapped to natural numbers, the sample space is also called a \mync{countably infinite sample space}. Otherwise, the sample space is called a \mync{uncountably infinite sample space}. Examples are given below.
 \begin{itemize}
-	\item Finite sample space. Randomly pick 5 balls out of a bag that contains 50 red balls and 50 green balls. The number of red balls in the picked 5 balls forms a finite sample space, $S = \{0, 1, 2, 3, 4, 5\}$.
-	\item Countably infinite sample space. The number of continuous ``heads'' when tossing a coin before the first ``tail'' forms a countably infinite sample space, $S = \mathbb{N}$.
-	\item Uncountably infinite sample space. Randomly drop a ball into a circle with radius of $1$. The distance of the ball to the center of the circle, $S=[0,1]$.
+	\item Finite sample space. Randomly pick 5 balls from a bag that contains 50 red balls and 50 green balls. The number of red balls in the 5 picked balls forms a finite sample space, $S = \{0, 1, 2, 3, 4, 5\}$.
+	\item Countably infinite sample space. The number of consecutive ``heads'' when tossing a coin before the first ``tail'' forms a countably infinite sample space, $S = \mathbb{N}$.
+	\item Uncountably infinite sample space. Randomly drop a ball into a circle with radius $1$. The distance from the ball to the center of the circle forms the sample space $S=[0,1]$.
 \end{itemize}
 
 \begin{mdframed}
@@ -41,7 +41,7 @@ Larger infinity quantities such as $\aleph_2, \aleph_3, \ldots$ are also defined
 Deeper discussion of this topic requires advanced set theory and is not given in this notebook.
 \end{mdframed}
 
-Finite sample space and countably infinite sample space are also known as \mync{discrete sample space}, whereas non-countably infinite sample space, \mync{non-discrete sample space}.
+Finite sample spaces and countably infinite sample spaces are also known as \mync{discrete sample spaces}, whereas uncountably infinite sample spaces are known as \mync{continuous sample spaces}.
 
 \subsection{Event}
 
@@ -55,7 +55,7 @@ There are different ways to calculate the probability of events. A rigorous math
 
 \subsection{Classical and Empirical Probabilities}
 
-In the \mync{classical approach}, it is assumed that all elementary events have the same chance of occurrence, and the total number of the elementary events is a finite and known number, $n$. Define an event that contains $h$ elementary events. The \mync{classical probability} of the event is given by $h/p$.
+In the \mync{classical approach}, it is assumed that all elementary events have the same chance of occurrence, and the total number of elementary events is a finite and known number, $n$. Define an event that contains $h$ elementary events. The \mync{classical probability} of the event is given by $h/n$.
 
 Calculating the cardinality of event $A$ and sample space $S$ is the key to solving the classical probability. Permutation and combination are widely used for such calculations. Suppose that there are $n$ distinct objects, and we would like to select $r\leq n$ objects from them and put them into a sequence. The \mync{permutation} defined by
 \begin{eqnarray}
@@ -79,11 +79,11 @@ is used to calculate the total number of outcomes. Notice that $nCr$ is also den
                                                                                            r
                                                                                          \end{array}\right)$.
 
-In the \mync{frequency approach}, we can repeat the experiment $n$ times where $n$ is a large number, and record the number of instants where the event happened as $h$. The \mync{empirical probability} of the event is obtained by calculating $h/n$ which should converge to the true probability as $n$ grows.
+In the \mync{frequency approach}, the experiment can be repeated $n$ times where $n$ is a large number, and the number of instances where the event occurred is recorded as $h$. The \mync{empirical probability} of the event is obtained by calculating $h/n$, which should converge to the true probability as $n$ increases.
 
 \subsection{Geometric Probability}
 
-\mync{Geometric probability} is an extension of the classical probability to infinite sample space. Similar with classical probability, it assumes that all elementary events share the same probability. The probability of an event can be obtained by measuring the area or volume associated with the event. An example is used to illustrate the use of geometric probability.
+\mync{Geometric probability} is an extension of classical probability to infinite sample spaces. Similar to classical probability, it assumes that all elementary events share the same probability. The probability of an event can be obtained by measuring the area or volume associated with the event. An example is used to illustrate the use of geometric probability.
 
 \begin{shortbox}
 \Boxhead{Geometric Probability Example}
@@ -100,16 +100,16 @@ Divide the shared area by the total sample space area to get $P=7/16=43.75\%$ wh
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.5\textwidth]{chapters/part-1/figures/geometricprobexp.png}
-	\caption{Sample space of two people arriving at part from 8:00 AM to 9:00 AM.} \label{fig:geometricprobexp}
+	\caption{Sample space of two people arriving at the park from 8:00 AM to 9:00 AM.} \label{fig:geometricprobexp}
 \end{figure}
 
-Note that in the problem description, the two people arrive at the part between $8:00$ AM and $9:00$ AM with equal chance. Here ``equal chance'' is an important prerequisite to use geometric probability. Otherwise, the probability of the event would have not been proportional to the area given in Fig.~\ref{fig:geometricprobexp}. This applies to most use cases of geometric probability.
+Note that in the problem description, the two people arrive at the park between $8:00$ AM and $9:00$ AM with equal probability. Here ``equal probability'' is an important prerequisite for using geometric probability. Otherwise, the probability of the event would not be proportional to the area given in Fig.~\ref{fig:geometricprobexp}. This applies to most use cases of geometric probability.
 
 \subsection{Axioms} \label{subsec:probability_axioms}
 
-The \mync{axiomatic approach} puts things into mathematical prospective. 
+The \mync{axiomatic approach} puts probability theory into mathematical perspective. 
 
-Let the sample space be denoted by $S$, and events by $A_i$. For simplicity of illustration, assume that $S$ is discrete. Define $P(\cdot)$ as the \mync{probability function} and $P(A_i)$ the probability of the event $A_i$, subject to the following axioms:
+Let the sample space be denoted by $S$, and events by $A_i$. For simplicity of illustration, assume that $S$ is discrete. Define $P(\cdot)$ as the \mync{probability function} and $P(A_i)$ as the probability of event $A_i$, subject to the following axioms:
 \begin{enumerate}
   \item For every event $A_i$, $P(A_i)\geq 0$.
   \item For the certain event $S$, $P(S)=1$.
@@ -153,7 +153,7 @@ As will be introduced in a later Section \ref{subsec:largenumbers}, the law of l
 
 \subsection{Conditional Probability}
 
-Assume two events $A$ and $B$. The \mync{conditional probability} $P(B|A)$ describes the probability of $B$ given that $A$ has occurred. The definition is given below. Think of this definition as $S$ replaced by $A$ since $A$ is confirmed occurred.
+Consider two events $A$ and $B$. The \mync{conditional probability} $P(B|A)$ describes the probability of $B$ given that $A$ has occurred. The definition is given below. This definition can be thought of as replacing $S$ with $A$ since $A$ is confirmed to have occurred.
 \begin{eqnarray}
   P(B|A) &\equiv& \frac{P(A\cap B)}{P(A)} \nonumber
 \end{eqnarray}
@@ -182,11 +182,11 @@ A couple has an equal chance of giving birth to a boy or a girl. Gather a group 
 
 \end{shortbox}
 
-In this example, the total sample space of a couple is 
+In this example, the sample space for a couple is 
 \begin{eqnarray}
 S &=& \left\{\left[\textup{Boy Boy}\right], \left[\textup{Boy Girl}\right], \left[\textup{Girl Boy}\right], \left[\textup{Girl Girl}\right]\right\} \label{eq:probsetexp}
 \end{eqnarray}
-each with a equal chance of $25\%$. For the convenience of illustration, define the following events.
+each with an equal probability of $25\%$. For convenience of illustration, define the following events.
 \begin{itemize}
 	\item Event $A$: both children are girls
 	\item Event $B$: at least one child is a girl
@@ -212,7 +212,7 @@ P(A|B) &=& \dfrac{P\left(A \cap B\right)}{P(B)} \nonumber \\
 &=& \dfrac{P(A)}{P(B)} \nonumber \\
 &=& \dfrac{1}{3} \nonumber
 \end{eqnarray}
-where notice that $P\left(A \cap B\right) = P(A)$ as $A\subset B$. Intuitively, this makes sense. From the interview, we are able to drop $\left[\textup{Boy Boy}\right]$ from the probable space for this couple. As a result, the chance of them having two girls, $\dfrac{1}{3}$, is higher than the case of the first question, $\dfrac{1}{4}$, where no priori information were available. In this example, the priori information is useful with getting a more precise answer.
+where note that $P\left(A \cap B\right) = P(A)$ since $A\subset B$. Intuitively, this makes sense. From the interview, it is possible to drop $\left[\textup{Boy Boy}\right]$ from the sample space for this couple. As a result, the probability of them having two girls, $\dfrac{1}{3}$, is higher than in the first question, $\dfrac{1}{4}$, where no prior information was available. In this example, the prior information is useful for obtaining a more precise answer.
 
 Consider the third question. Using Bayes' rule,
 \begin{eqnarray}
@@ -220,6 +220,6 @@ P(D|C) &=& \dfrac{P\left(D \cap C\right)}{P(C)} \nonumber \\
 &=& \dfrac{P(A)}{P(C)} \nonumber \\
 &=& \dfrac{1}{2} \nonumber
 \end{eqnarray}
-Notice that from \eqref{eq:probsetexp}, $P(D) = \dfrac{1}{2}$. Therefore, $P(D|C) = P(D)$. In this example, the prior information whether $C$ happens is not helpful with calculating the chance that $D$ happens. This makes sense. The gender of both children are independent. The fist child, either being a boy or a girl, does not affect the likelihood of the gender of the second child.
+Note that from \eqref{eq:probsetexp}, $P(D) = \dfrac{1}{2}$. Therefore, $P(D|C) = P(D)$. In this example, the prior information about whether $C$ occurs is not helpful for calculating the probability that $D$ occurs. This makes sense. The genders of both children are independent. The first child, whether a boy or a girl, does not affect the likelihood of the gender of the second child.
 
-If $P(B|A)=P(B)$, or equivalently $P(A\cap B) = P(A)P(B)$, the two events $A$ and $B$ are known as \mync{independent events}. In this case, the priori knowledge of whether $A$ has occurred or not does not affect the probability of event $B$, and vice versa.
+If $P(B|A)=P(B)$, or equivalently $P(A\cap B) = P(A)P(B)$, the two events $A$ and $B$ are known as \mync{independent events}. In this case, the prior knowledge of whether $A$ has occurred does not affect the probability of event $B$, and vice versa.

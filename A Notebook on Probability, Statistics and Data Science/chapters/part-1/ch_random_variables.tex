@@ -1,6 +1,6 @@
 \chapter{Distributions of Random Variables} \label{ch:rv}
 
-The definition of random variable has been introduced in the previous chapter. This chapter digs deeper into the different types of random variables, their properties, and how the they are described mathematically.
+The definition of random variables has been introduced in the previous chapter. This chapter explores the different types of random variables, their properties, and how they are described mathematically.
 
 \section{Discrete and Continuous Random Variables}
 
@@ -8,8 +8,8 @@ A random variable may be discrete or continuous depending on the sample space of
 
 \subsection{Discrete Random Variable}
 
-If a random variable $X$ takes only discrete values $x_1, x_2, ...$, it is called a \mync{discrete random variable}.
-The probability of $X$ taking a particular value $x$ is denoted by $P(X=x)$ or simply $f(x)=P(X)$ if no ambiguity. In this case, $P(X=x)$ and $f(x)$ are the \mync{probability function} (also known as \mync{probability mass function}) of $X$.
+If a random variable $X$ takes only discrete values $x_1, x_2, \ldots$, it is called a \mync{discrete random variable}.
+The probability of $X$ taking a particular value $x$ is denoted by $P(X=x)$ or simply $f(x)$ if no ambiguity exists. In this case, $P(X=x)$ and $f(x)$ are the \mync{probability function} (also known as \mync{probability mass function}) of $X$.
 
 Furthermore, define $P(X\leq x)$ or $F(x)$ as the \mync{cumulative distribution function} of $x$. It is easy to prove that $F(x)$ is nondecreasing, and $\lim_{x\rightarrow -\infty}F(x)=0$, $\lim_{x\rightarrow \infty}F(x)=1$. Also, $F(x)$ ``jumps'' at each $P(X=x_k)>0$ and it is continuous from the right.
 
@@ -17,7 +17,7 @@ Furthermore, define $P(X\leq x)$ or $F(x)$ as the \mync{cumulative distribution 
 
 A random variable $X$ may also take continuous values in many applications. For example, let $X$ denote the time consumption to finish a task, in which case $X$ is a random variable whose value can be any positive number.
 
-In this case, the chance for $X$ to take a precise value, say for the student to finish his homework using precisely 25 minutes 13 seconds 750 milliseconds, is very small (in fact, zero, if the precision goes towards infinity). The probability function $P(X=x)$ becomes pointless. The cumulative distribution function $F(x) = P(X\leq x)$ still makes sense, as it calculates the probability of $X$ given by not a precise value but within a range.
+In this case, the probability for $X$ to take a precise value, say finishing a task using precisely 25 minutes 13 seconds 750 milliseconds, is very small (in fact, zero, if the precision approaches infinity). The probability function $P(X=x)$ becomes meaningless. The cumulative distribution function $F(x) = P(X\leq x)$ still makes sense, as it calculates the probability of $X$ within a range rather than at a precise value.
 
 Inspired by this, define \mync{probability density function}[PDF] or $f(x)$ for continuous random variable as follows. 
 \begin{eqnarray}
@@ -38,13 +38,13 @@ In science and engineering problems, continuous random variables are more common
 
 \section{Joint Distribution}
 
-\mync{Joint distribution} describes the distribution of multiple random variables combination. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. 
+\mync{Joint distribution} describes the distribution of multiple random variable combinations. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. 
 
 For example, in a system identification problem the unknown system parameters are correlated with the measurements and their correlations are described by their joint PDF. System identification tries to estimate the unknown system parameters given the measurements.
 
 \subsection{Joint Probability}
 
-\mync{Joint probability} describes the distribution of two or more random variables. For simplicity, in the remaining of this section, two random variables $X$ and $Y$ are considered. The same idea can be expanded to more variables.
+\mync{Joint probability} describes the distribution of two or more random variables. For simplicity, in the remainder of this section, two random variables $X$ and $Y$ are considered. The same concepts can be extended to more variables.
 
 In the case of discrete variables $X$ and $Y$, define joint probability function and joint cumulative distribution function as follows.
 \begin{eqnarray}
@@ -83,20 +83,20 @@ Equation \eqref{eq:jointpdfdowngrade} can be interpreted as follows. If $(X_i, Y
 
 \subsection{Conditional Distribution}
 
-Equation \eqref{eq:jointpdfdowngrade} gives the distribution of $X$ regardless of the value of its corresponding $Y$. Conditional distribution, on the other hand, tries to find the distribution of $X$ when $Y$ is measured. For example, in \eqref{eq:jointpdf}, calculate $f_{X|Y}(x |Y=y)$, i.e., the PDF of $X$ given $Y=y$. In many literatures, $f_{X|Y}(x |Y=y)$ is denoted by $f_{X|Y}(x|y)$ for simplicity.
+Equation \eqref{eq:jointpdfdowngrade} gives the distribution of $X$ regardless of the value of its corresponding $Y$. Conditional distribution, on the other hand, determines the distribution of $X$ when $Y$ is observed. For example, in \eqref{eq:jointpdf}, calculate $f_{X|Y}(x |Y=y)$, i.e., the PDF of $X$ given $Y=y$. In many literatures, $f_{X|Y}(x |Y=y)$ is denoted by $f_{X|Y}(x|y)$ for simplicity.
 
 The conditional PDF $f_{X|Y}(x|y)$ can be obtained as follows. It is essentially Bayes' rule applied on continuous variables.
 \begin{eqnarray}
   f_{X|Y}(x|y) &=& \dfrac{f(x, y)}{f_Y(y)} \label{eq:conditionalpdf1}
 \end{eqnarray}
-where $f_Y(y)$ is obtained using \eqref{eq:jointpdfdowngrade}. Equation \eqref{eq:conditionalpdf1} is a function of both $x$ and $y$. Substitute the measured value of $y$ into \eqref{eq:conditionalpdf1} and it reduces to the PDF of $x$ alone. Its integration w.r.t. $x$ from $-\infty$ to $\infty$, like any PDF, is $1$. This can be easily verified as follows.
+where $f_Y(y)$ is obtained using \eqref{eq:jointpdfdowngrade}. Equation \eqref{eq:conditionalpdf1} is a function of both $x$ and $y$. Substituting the observed value of $y$ into \eqref{eq:conditionalpdf1} reduces it to the PDF of $x$ alone. Its integration with respect to $x$ from $-\infty$ to $\infty$, like any PDF, equals $1$. This can be verified as follows.
 \begin{eqnarray}
   \int_{x=-\infty}^{\infty}f_{X|Y}(x|y)dx &=& \int_{x=-\infty}^{\infty}\dfrac{f(x, y)}{f_Y(y)}dx \nonumber \\
   &=& \dfrac{\int_{x=-\infty}^{\infty}f(x, y)dx}{f_Y(y)} \nonumber \\
   &=& \dfrac{f_Y(y)}{f_Y(y)} \nonumber \\
   &=& 1 \nonumber
 \end{eqnarray}
-Notice that given a particular value of $y$, $f_Y(y)$ is a constant value independent of $x$, hence can be taken out from the integration in the above derivation.
+Note that given a particular value of $y$, $f_Y(y)$ is a constant value independent of $x$, and hence can be taken out of the integration in the above derivation.
 
 If $X$ and $Y$ are independent variables, $f(x,y) = f_X(x)f_Y(y)$. In this case, \eqref{eq:conditionalpdf1} becomes
 \begin{eqnarray}
