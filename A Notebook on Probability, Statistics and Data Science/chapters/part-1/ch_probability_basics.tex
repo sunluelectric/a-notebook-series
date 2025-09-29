@@ -16,21 +16,22 @@ This part of the notebook mainly studies random variables. Stochastic process an
 
 ``Experiment'' is one of the most important activities in science and engineering. Very often, experiments are used to verify a theory. In these cases, experiments are carefully designed so that its outcome is deterministic and predictable as long as the theory is correct. By observing the results of the experiments matching the prediction of the theory, we build confidence in the theory.
 
-However, as far as what this notebook concerns, we are interested in another type of experiments where we do not have full control over their results due to the lack of information or incomplete modeling. Such experiments include tossing a coin, predicting the GDP of a country next year, etc. These experiments are known as \mync{random experiments}. The result of a random experiments can still be meaningful because it reflects some insights of the system. The challenge is to design the experiments so that useful information can be revealed from the result efficiently.
+However, this notebook concerns with another type of experiments where the result of an experiment contains randomness due to the lack of information or incomplete modeling. Such experiments include tossing a coin, predicting the GDP of a country next year, etc. These experiments are known as \mync{random experiments}. The result of a random experiment can still be meaningful because it reflects some insights of the system. The challenge is to design the experiments so that useful information can be revealed from the result efficiently.
 
 \subsection{Sample Space}
 
 A set $S$ that consists of all possible outcomes of a random experiment is called a \mync{sample space}.
 
-If a sample space has a finite number of elements, it is called a \mync{finite sample space}. Otherwise, it is called an \mync{infinite sample space}. If the elements in an infinite sample space can be mapped to natural numbers, the sample space is also called a \mync{countably infinite sample space}. Otherwise, the sample space is called a \mync{noncountably infinite sample space}. Examples are given below.
+\mync{Cardinality} refers to the number of elements in a set. Depending on the cardinality of a sample space, it can be categorized as follows. If a sample space has a finite number of elements, it is called a \mync{finite sample space}. Otherwise, it is called an \mync{infinite sample space}. If the elements in an infinite sample space can be mapped to natural numbers, the sample space is also called a \mync{countably infinite sample space}. Otherwise, the sample space is called a \mync{uncountably infinite sample space}. Examples are given below.
 \begin{itemize}
 	\item Finite sample space. Randomly pick 5 balls out of a bag that contains 50 red balls and 50 green balls. The number of red balls in the picked 5 balls forms a finite sample space, $S = \{0, 1, 2, 3, 4, 5\}$.
 	\item Countably infinite sample space. The number of continuous ``heads'' when tossing a coin before the first ``tail'' forms a countably infinite sample space, $S = \mathbb{N}$.
-	\item Noncountably infinite sample space. Randomly drop a ball into a circle with radius of $1$. The distance of the ball to the center of the circle, $S=[0,1]$.
+	\item Uncountably infinite sample space. Randomly drop a ball into a circle with radius of $1$. The distance of the ball to the center of the circle, $S=[0,1]$.
 \end{itemize}
 
-\begin{shortbox}
-\Boxhead{Countable Infinity VS Uncountable Infinity}
+\begin{mdframed}
+\noindent \textbf{Countable Infinity VS Uncountable Infinity}
+
 Though both infinity, the total number of natural numbers, i.e., the cardinality of $\mathbb{N}$, is less than the total number of real numbers, i.e., the cardinality of $\mathbb{R}$.
 
 The cardinality of $\mathbb{N}$ is known as $\aleph_0$. It is also the cardinality of all rational numbers. In computing, it is also the cardinality of all computable numbers (i.e., numbers that can be computed to any desired precision by a finite terminating algorithm) and computable functions (i.e., algorithms). The total number of real numbers is known as $\aleph_1$. It is also the cardinality of all irrational numbers and complex numbers, the number of points on a line or in a high dimensional space $\mathbb{R}^n$ where $n$ is a finite integer.
@@ -38,7 +39,7 @@ The cardinality of $\mathbb{N}$ is known as $\aleph_0$. It is also the cardinali
 Larger infinity quantities such as $\aleph_2, \aleph_3, \ldots$ are also defined, though they may not have an intuitive explanation as $\aleph_0$ and $\aleph_1$.
 
 Deeper discussion of this topic requires advanced set theory and is not given in this notebook.
-\end{shortbox}
+\end{mdframed}
 
 Finite sample space and countably infinite sample space are also known as \mync{discrete sample space}, whereas non-countably infinite sample space, \mync{non-discrete sample space}.
 
@@ -98,9 +99,11 @@ Divide the shared area by the total sample space area to get $P=7/16=43.75\%$ wh
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-1/figures/geometricprobexp.png}
+	\includegraphics[width=0.5\textwidth]{chapters/part-1/figures/geometricprobexp.png}
 	\caption{Sample space of two people arriving at part from 8:00 AM to 9:00 AM.} \label{fig:geometricprobexp}
 \end{figure}
+
+Note that in the problem description, the two people arrive at the part between $8:00$ AM and $9:00$ AM with equal chance. Here ``equal chance'' is an important prerequisite to use geometric probability. Otherwise, the probability of the event would have not been proportional to the area given in Fig.~\ref{fig:geometricprobexp}. This applies to most use cases of geometric probability.
 
 \subsection{Axioms} \label{subsec:probability_axioms}
 
@@ -123,7 +126,7 @@ Using the above axioms, a bunch of well-known theorems can be derived, such as
   \item For two events $A_1$ and $A_2$, $P\left(A_1\cup A_2\right) = P(A_1)+P(A_2)-P\left(A_1\cap A_2\right)$.
 \end{itemize}
 
-With the above axioms, we can revisit classical probability as follows. Assume that a discrete and finite sample space $S$ consists of the following elementary events (elementary events are always mutually exclusive) $A_i, i=1,...,n$, i.e.,
+With the above axioms, we can revisit classical probability as follows. Assume that a discrete and finite sample space $S$ consists of the following elementary events $A_i, i=1,...,n$, i.e.,
 \begin{eqnarray}
   S &=& \bigcup_{i=1}^{n} A_i \nonumber
 \end{eqnarray}
@@ -139,14 +142,14 @@ where $h$, $n$ are the cardinality of $A$ and $S$ with respect to the elementary
 
 Recall the definition of a certain event. A certain event must have a probability of $1$. However, an event with probability $1$ is not necessarily a certain event. For example, consider dropping a ball in a circle. The probability of it landing precisely in the center of the circle is $0$ (yet possible), and the probability of otherwise is $1$ (yet not certain).
 
-\begin{shortbox}
-\Boxhead{Axiomatic approach Versus Frequency Approach}
+\begin{mdframed}
+\noindent \textbf{Axiomatic approach Versus Frequency Approach}
 
 Our intuitive understanding of probability should align with the frequency approach, where the probability of an event should describe how frequently an event occurs if the experiment is repeated many times. The axiomatic approach, though very clearly defined mathematically, seems to disconnect from the intuition.
 
 As will be introduced in a later Section \ref{subsec:largenumbers}, the law of large numbers actually bridges the axiomatic approach and frequency approach, and guarantees the consistency of the two. As a result, the probability defined in axiomatic approach can also reflect the likelihood of an event happening the similar way the frequency approach does, and there is no gap in between.
 
-\end{shortbox}
+\end{mdframed}
 
 \subsection{Conditional Probability}
 
@@ -162,7 +165,7 @@ From the above,
 \begin{eqnarray}
   P(B|A) &=& \dfrac{P(B)P(A|B)}{P(A)} \nonumber
 \end{eqnarray}
-which is known as the Bayes' rule.
+which is known as the \mync{Bayes' rule}.
 
 An example of implementing Bayes' rule is given below.
 
@@ -173,37 +176,50 @@ A couple has an equal chance of giving birth to a boy or a girl. Gather a group 
 
 \begin{enumerate}
 	\item Without further information, what is the chance of them having two girls?
-	\item It is known that their first child is a girl. What is the chance of them having two girls?
-	\item It is known that their first child is a girl. What is the chance of their second child being a girl?
+	\item From an earlier interview, we know that they have at least one girl. What is the chance of them having two girls?
+	\item From an earlier interview, we know that their first child is a girl. What is the chance of their second child being a girl as well?
 \end{enumerate}
 
 \end{shortbox}
 
 In this example, the total sample space of a couple is 
 \begin{eqnarray}
-S &=& \{\textup{Boy Boy}, \textup{Boy Girl}, \textup{Girl Boy}, \textup{Girl Girl}\} \nonumber
+S &=& \left\{\left[\textup{Boy Boy}\right], \left[\textup{Boy Girl}\right], \left[\textup{Girl Boy}\right], \left[\textup{Girl Girl}\right]\right\} \label{eq:probsetexp}
 \end{eqnarray}
-each with a equal chance of $25\%$. Let events $A$ and $B$ be ``the first child is a girl'' and ``both children are girls'' respectively. The chances of the events happening are
-\begin{eqnarray}
-P(A) &=& \dfrac{1}{2} \nonumber \\
-P(B) &=& \dfrac{1}{4} \nonumber
-\end{eqnarray}
-respectively. Hence, the answer to the first question is $\dfrac{1}{4}$.
+each with a equal chance of $25\%$. For the convenience of illustration, define the following events.
+\begin{itemize}
+	\item Event $A$: both children are girls
+	\item Event $B$: at least one child is a girl
+	\item Event $C$: the first child is a girl
+	\item Event $D$: the second child is a girl
+\end{itemize}
 
-Substitute the above to the Bayes' rule to get
+Intuitively, we can see that the events are correlated in the following manner.
 \begin{eqnarray}
-P(B|A) &=& \dfrac{P\left(A \cap B\right)}{P(A)} \nonumber \\
-&=& \dfrac{P(B)}{P(A)} \nonumber \\
+	A &=& C \cap D \nonumber \\
+	A, C, D &\subset& B \nonumber
+\end{eqnarray}
+
+Consider the first question. From \eqref{eq:probsetexp}, the chances of the event $A$ happening is obviously
+\begin{eqnarray}
+P(A) &=& \dfrac{1}{4} \nonumber
+\end{eqnarray}
+which is the answer to the first question.
+
+Consider the second question. Using Bayes' rule,
+\begin{eqnarray}
+P(A|B) &=& \dfrac{P\left(A \cap B\right)}{P(B)} \nonumber \\
+&=& \dfrac{P(A)}{P(B)} \nonumber \\
+&=& \dfrac{1}{3} \nonumber
+\end{eqnarray}
+where notice that $P\left(A \cap B\right) = P(A)$ as $A\subset B$. Intuitively, this makes sense. From the interview, we are able to drop $\left[\textup{Boy Boy}\right]$ from the probable space for this couple. As a result, the chance of them having two girls, $\dfrac{1}{3}$, is higher than the case of the first question, $\dfrac{1}{4}$, where no priori information were available. In this example, the priori information is useful with getting a more precise answer.
+
+Consider the third question. Using Bayes' rule,
+\begin{eqnarray}
+P(D|C) &=& \dfrac{P\left(D \cap C\right)}{P(C)} \nonumber \\
+&=& \dfrac{P(A)}{P(C)} \nonumber \\
 &=& \dfrac{1}{2} \nonumber
 \end{eqnarray}
-where notice that $P\left(A \cap B\right) = P(B)$ as $B$ is a subset of $A$. This meets our intuition well. If we only look at those couples with their first child being a girl, then there is a 50-to-50 chance that their second child is also a girl, making them couples with 2 girls. Hence, the answer to the second question is $\dfrac{1}{2}$.
-
-Let $C$ be ``the second child is a girl''. Obviously by looking at $S$, $P(C)=\dfrac{1}{2}$. Substitute the above to the Bayes' rule to get
-\begin{eqnarray}
-P(C|A) &=& \dfrac{P\left(A \cap C\right)}{P(A)} \nonumber \\
-&=& \dfrac{P(B)}{P(A)} \nonumber \\
-&=& \dfrac{1}{2} \nonumber
-\end{eqnarray}
-where notice that $A \cap C = B$, i.e., if both the first child and the second child are girls, then the couple has two girls. The answer to the second question, therefore, is $\dfrac{1}{2}$. Notice that in this example $P(C|A)=P(C)$, and the priori knowledge of $A$ does not contribute to any changes in the likelihood whether $C$ shall happen or not.
+Notice that from \eqref{eq:probsetexp}, $P(D) = \dfrac{1}{2}$. Therefore, $P(D|C) = P(D)$. In this example, the prior information whether $C$ happens is not helpful with calculating the chance that $D$ happens. This makes sense. The gender of both children are independent. The fist child, either being a boy or a girl, does not affect the likelihood of the gender of the second child.
 
 If $P(B|A)=P(B)$, or equivalently $P(A\cap B) = P(A)P(B)$, the two events $A$ and $B$ are known as \mync{independent events}. In this case, the priori knowledge of whether $A$ has occurred or not does not affect the probability of event $B$, and vice versa.

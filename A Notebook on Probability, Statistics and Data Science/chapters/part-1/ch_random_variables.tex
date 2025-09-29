@@ -9,7 +9,7 @@ A random variable may be discrete or continuous depending on the sample space of
 \subsection{Discrete Random Variable}
 
 If a random variable $X$ takes only discrete values $x_1, x_2, ...$, it is called a \mync{discrete random variable}.
-The probability of $X$ taking a particular value $x$ is denoted by $P(X=x)$ or simply $f(x)=P(X)$ if no ambiguity. In this case, $P(X=x)$ and $f(x)$ are the probability function (also known as probability mass function) of $X$.
+The probability of $X$ taking a particular value $x$ is denoted by $P(X=x)$ or simply $f(x)=P(X)$ if no ambiguity. In this case, $P(X=x)$ and $f(x)$ are the \mync{probability function} (also known as \mync{probability mass function}) of $X$.
 
 Furthermore, define $P(X\leq x)$ or $F(x)$ as the \mync{cumulative distribution function} of $x$. It is easy to prove that $F(x)$ is nondecreasing, and $\lim_{x\rightarrow -\infty}F(x)=0$, $\lim_{x\rightarrow \infty}F(x)=1$. Also, $F(x)$ ``jumps'' at each $P(X=x_k)>0$ and it is continuous from the right.
 
@@ -17,17 +17,17 @@ Furthermore, define $P(X\leq x)$ or $F(x)$ as the \mync{cumulative distribution 
 
 A random variable $X$ may also take continuous values in many applications. For example, let $X$ denote the time consumption to finish a task, in which case $X$ is a random variable whose value can be any positive number.
 
-In this case, the chance for $X$ to take a precise value, say for the student to finish his homework using precisely 25 minutes 13 seconds and 750 milliseconds, is very small (in fact, zero). The probability function $P(X=x)$ becomes pointless. The cumulative distribution function $F(x) = P(X\leq x)$ still makes sense, as it calculates the probability of $X$ given by not a precise value but within a range.
+In this case, the chance for $X$ to take a precise value, say for the student to finish his homework using precisely 25 minutes 13 seconds 750 milliseconds, is very small (in fact, zero, if the precision goes towards infinity). The probability function $P(X=x)$ becomes pointless. The cumulative distribution function $F(x) = P(X\leq x)$ still makes sense, as it calculates the probability of $X$ given by not a precise value but within a range.
 
 Inspired by this, define \mync{probability density function}[PDF] or $f(x)$ for continuous random variable as follows. 
 \begin{eqnarray}
 f(x) &=& \dfrac{d}{dx}F(x) \nonumber
 \end{eqnarray}
-Therefore, $f(x)$ is such that
+With this definition, $f(x)$ is such a function that
 \begin{eqnarray}
   P(a < X < b) &=& \int_{a}^{b}f(x)dx \nonumber
 \end{eqnarray}
-and
+gives the probability of $X$ in a range, and
 \begin{eqnarray}
   F(x) &=& P(X\leq x) \nonumber \\
   &=& \int_{-\infty}^{x} f(\epsilon)d\epsilon \nonumber
@@ -38,15 +38,15 @@ In science and engineering problems, continuous random variables are more common
 
 \section{Joint Distribution}
 
-\mync{joint distribution} describes the distribution of multiple random variables combination. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. 
+\mync{Joint distribution} describes the distribution of multiple random variables combination. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. 
 
 For example, in a system identification problem the unknown system parameters are correlated with the measurements and their correlations are described by their joint PDF. System identification tries to estimate the unknown system parameters given the measurements.
 
 \subsection{Joint Probability}
 
-Joint probability considers two or more random variables. For simplicity, consider only two random variables $X$ and $Y$. The same idea can be expanded to more variables.
+\mync{Joint probability} describes the distribution of two or more random variables. For simplicity, in the remaining of this section, two random variables $X$ and $Y$ are considered. The same idea can be expanded to more variables.
 
-In the case of discrete variables, define joint probability function and joint cumulative distribution function as follows.
+In the case of discrete variables $X$ and $Y$, define joint probability function and joint cumulative distribution function as follows.
 \begin{eqnarray}
   f(x, y) &=& P\left(X=x, Y=y\right) \nonumber \\
   F(x, y) &=& P\left(X\leq x, Y\leq y\right) \nonumber \\
@@ -89,7 +89,7 @@ The conditional PDF $f_{X|Y}(x|y)$ can be obtained as follows. It is essentially
 \begin{eqnarray}
   f_{X|Y}(x|y) &=& \dfrac{f(x, y)}{f_Y(y)} \label{eq:conditionalpdf1}
 \end{eqnarray}
-where $f_Y(y)$ is obtained using \eqref{eq:jointpdfdowngrade}. Equation \eqref{eq:conditionalpdf1} is a function of both $x$ and $y$. Substitute the measured value of $y$ into \eqref{eq:conditionalpdf1} and it reduces to the PDF of $x$ alone. Its integration w.r.t. $x$ from $-\infty$ to $\infty$, therefore, is $1$. This can be easily verified as follows.
+where $f_Y(y)$ is obtained using \eqref{eq:jointpdfdowngrade}. Equation \eqref{eq:conditionalpdf1} is a function of both $x$ and $y$. Substitute the measured value of $y$ into \eqref{eq:conditionalpdf1} and it reduces to the PDF of $x$ alone. Its integration w.r.t. $x$ from $-\infty$ to $\infty$, like any PDF, is $1$. This can be easily verified as follows.
 \begin{eqnarray}
   \int_{x=-\infty}^{\infty}f_{X|Y}(x|y)dx &=& \int_{x=-\infty}^{\infty}\dfrac{f(x, y)}{f_Y(y)}dx \nonumber \\
   &=& \dfrac{\int_{x=-\infty}^{\infty}f(x, y)dx}{f_Y(y)} \nonumber \\
@@ -133,8 +133,8 @@ Equation \eqref{eq:conditionalpdf2} is essentially
 
 Terms \textit{priori} and \textit{prior} can be used interchangeably, and so are \textit{posteriori} and \textit{posterior}.
 
-\begin{shortbox}
-\Boxhead{Other Parameter Estimation Methods}
+\begin{mdframed}
+\noindent \textbf{Other Parameter Estimation Methods}
 
 Alternative to \eqref{eq:posterioriestimation}, there are at least two other types of commonly seen estimations, namely \mync{Maximum Likelihood Estimation}[MLE] and \mync{Maximum A Posteriori}[MAP].
 
@@ -149,7 +149,7 @@ whereas MAP is given by
 
 MLE, MAP and \eqref{eq:posterioriestimation} have their advantages and disadvantages, and all of them are widely used in different engineering problems. More about them can be found in Section \ref{sec:mlemap}.
 
-\end{shortbox}
+\end{mdframed}
 
 \section{Distribution of Derived Variable}
 
@@ -241,7 +241,7 @@ In mathematics, the \mync{$r$-th moment} of a continuous function $f(x)$ about $
 	\mu_n &=& \int_{-\infty}^{\infty}(x-c)^nf(x)dx \nonumber
 \end{eqnarray}
 
-By simply saying ``moment'' without specifying $c$, it is by default that $c=0$. Let $f(x)$ be a PDF. In this sense, the $0$-th order and the $1$st order moment of a probability density function can be calculated as follows.
+By simply saying ``moment'' without specifying $c$, $c=0$ by default. Let $f(x)$ be a PDF. In this sense, the $0$-th order and the $1$st order moment of a probability density function can be calculated as follows.
 \begin{eqnarray}
 	&& \mu_0 = \int_{-\infty}^{\infty}f(x)dx = 1 \nonumber \\
 	&& \mu_1 = \int_{-\infty}^{\infty}xf(x)dx = \textup{E}(X) \nonumber
