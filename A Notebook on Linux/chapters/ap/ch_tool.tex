@@ -1,0 +1,70 @@
+\chapter{Commonly Used Tools and APIs for Application Development}
+
+Linux is widely used for application development. In this chapter, the scope of the notebook is extended to cover commonly used tools and APIs that support a wide range of applications. Note that the tools and APIs introduced here may also be used in applications hosted on Windows and macOS. Many APIs are chargeable based on usage.
+
+Unless otherwise specified, examples are given in Python.
+
+\section{Web Query}
+
+Web query tools and APIs allow applications to retrieve up-to-date information from the Internet. Queries generally fall into two broad categories:
+
+\begin{itemize}
+	\item Keyword-based query. The tool or API accepts keywords from the application, performs a web search (similar to Google search), and returns the most relevant results.
+	\item Browser-based query. The tool or API accepts a URL, loads the page in a browser environment, and returns the page contents to the application.
+\end{itemize}
+
+Examples from each category are introduced in the remainder of this section.
+
+\subsection{Google Custom Search}
+
+With \mync{Google Custom Search JSON API}, an application is able to retrieve searching result from Google Programmable Search Engines programmatically. The API can be used in conventional applications or agentic AI systems. 
+
+Note that Google Custom Search is part of Google Cloud Platform. To use the API, the user needs to register an account with Google Cloud Platform, and setup a billing account and a project. The user needs to create an Google Custom Search API key associated with the project. The API key is used for the application to connect to Google. 
+
+Cost may apply and it varies based on the number of queries carried out. As of this writing, each Google Custom Search JSON API has 100 queries free-of-charge per day, and USD \$5 per 1000 queries afterwards.
+
+More details about Google Custom Search JSON API are given in \cite{google2025customsearch}. A brief introduction is given below.
+
+\subsection{Serper Query}
+
+\mync{Serper} is claimed to be the cheapest and fastest Google search API, and it is very easy to use. Notice that Serper is not a client of Google and they are not official collaborators. It is up to the user whether and how to user Serper API.
+
+To use Serper API, register an account with Serper and purchase some credits. As of this writing, free credits come with the first registration, and it should be enough for quick testing. Generate an API key with Serper.
+
+Many Python libraries provides tools to link to Serper. An example is given below.
+
+\begin{lstlisting}
+import json
+import requests
+	
+SERPER_API_KEY = "<KEY>"
+
+url = "https://google.serper.dev/search"
+payload = json.dumps({
+	"q": "<query>",
+	"num": <number of returns>
+})
+headers = {
+	"X-API-KEY": SERPER_API_KEY,
+	"Content-Type": 'application/json'
+}
+response = requests.request("POST", url, headers=headers, data-payload)
+if response.status_code == 200:
+    print(response.json())
+\end{lstlisting}
+
+\subsection{Playwright}
+
+\mync{Playwright} is primarily a web automation and testing framework developed by Microsoft. Its main purpose is to let developers write end-to-end tests that simulate how a real user would interact with a web application. However, since Playwright controls a real browser, it can also be used for programmatic browsing tasks.
+
+\section{Database Query}
+
+\section{Code Execution}
+
+An application may want to execute a small of piece of user script in a dedicated environment with an interpreter.
+
+\section{Push Notification}
+
+\section{Email}
+
+\section{User Interface}
