@@ -109,48 +109,6 @@ Equation \eqref{eq:conditionalpdf1} can be recurrently re-written as
 f_{X|Y}(x|y) &=& \dfrac{f_{Y|X}(y|x)f_X(x)}{f_Y(y)} \label{eq:conditionalpdf1a}
 \end{eqnarray}
 
-\subsection{Parameter Estimation with Conditional Distribution}
-
-Equations \eqref{eq:conditionalpdf1} and \eqref{eq:conditionalpdf1a} are widely used in parameter estimation. Let $\theta$ be the parameter to be estimated, and $x$ the measurement that reflects $\theta$ via measurement model $f(\theta, x)$ which is given in the form of joint PDF. Both $\theta$ and $x$ can be vectors.
-
-Without measurement $x$, the estimate of $\theta$ is given by
-\begin{eqnarray}
-	\hat{\theta} &=& \int_{-\infty}^{\infty} f_\theta(\theta) d\theta \nonumber
-\end{eqnarray}
-where $f_\theta(\theta)$ is obtained using \eqref{eq:jointpdfdowngrade}. This is known as the \mync{priori estimation} of $\theta$. 
-
-Given measurement $x$, the \mync{posteriori estimation} of $\theta$ can be obtained as follows. From \eqref{eq:conditionalpdf1a},
-\begin{eqnarray}
-  f_{\theta|X}(\theta|x) &=& \dfrac{f_{X|\theta}(x|\theta)f_\theta(\theta)}{f_X(x)} \label{eq:conditionalpdf2} \\
-  \hat{\theta} &=& \int_{-\infty}^{\infty} f_{\theta|X}(\theta|x) d\theta \label{eq:posterioriestimation}
-\end{eqnarray}
-where $f_{X|\theta}(x|\theta)$ is known as the \mync{likelihood function} that describes the likelihood of measuring $x$ if the actual parameter(s) is $\theta$. The PDF $f_\theta(\theta)$ is from the priori estimation of $\theta$. Finally, $f_X(x)$ is known as the \mync{evidence}. With fixed $x$, $f_X(x)$ becomes a constant.
-
-Equation \eqref{eq:conditionalpdf2} is essentially
-\begin{eqnarray}
-  \textup{posteriori} &=& \dfrac{\textup{likelihood}\times\textup{priori}}{\textup{evidence}} \label{eq:posteriorimemo}
-\end{eqnarray} 
-
-Terms \textit{priori} and \textit{prior} can be used interchangeably, and so are \textit{posteriori} and \textit{posterior}.
-
-\begin{mdframed}
-\noindent \textbf{Other Parameter Estimation Methods}
-
-Alternative to \eqref{eq:posterioriestimation}, there are at least two other types of commonly seen estimations, namely \mync{Maximum Likelihood Estimation}[MLE] and \mync{Maximum A Posteriori}[MAP].
-
-MLE is given by
-\begin{eqnarray}
-  \hat{\theta} &=& \argmax_\theta f_{X|\theta}(x|\theta) \nonumber
-\end{eqnarray}
-whereas MAP is given by
-\begin{eqnarray}
-  \hat{\theta} &=& \argmax_\theta f_{\theta|X}(\theta|x) \nonumber
-\end{eqnarray}
-
-MLE, MAP and \eqref{eq:posterioriestimation} have their advantages and disadvantages, and all of them are widely used in different engineering problems. More about them can be found in Section \ref{sec:mlemap}.
-
-\end{mdframed}
-
 \section{Distribution of Derived Variable}
 
 This section discusses the distribution of a random variable that is formulated as a function of other random variables.
@@ -356,6 +314,111 @@ The \mync{correlation} of two variables is defined and calculated as follows.
 \end{eqnarray}
 From \eqref{eq:covlemma}, apparently $-1\leq \rho \leq 1$. When two variables are uncorrelated or independent, $\rho=0$. If $\rho=1$, the two variables $X$ and $Y$ are said to be \mync{perfect positive correlated}. This happens usually because the two variables are positively linearly depended, for example, $X=2Y$ or $X=Y+1$. If $\rho=-1$, they are said to be \mync{perfect negative correlated}, and the similar idea applies.
 
+\section{Parameter Estimation}
+
+Parameter estimation is an important use case of conditional distribution. Let $\theta$ be the parameter to be estimated, and $x$ the measurement that reflects $\theta$ via measurement model $f(\theta, x)$ which is given in the form of joint PDF. Both $\theta$ and $x$ can be vectors.
+
+\subsection{Posteriori Mean}
+
+Without measurement $x$, the estimate of $\theta$ is given by
+\begin{eqnarray}
+	\hat{\theta} &=& \int_{-\infty}^{\infty} \theta f_\theta(\theta) d\theta \nonumber
+\end{eqnarray}
+where $f_\theta(\theta)$ is obtained using \eqref{eq:jointpdfdowngrade}. This is known as the \mync{priori estimation} of $\theta$. 
+
+Given measurement $x$, the \mync{posteriori estimation} of $\theta$ can be obtained as follows. From \eqref{eq:conditionalpdf1a},
+\begin{eqnarray}
+	f_{\theta|X}(\theta|x) &=& \dfrac{f_{X|\theta}(x|\theta)f_\theta(\theta)}{f_X(x)} \label{eq:conditionalpdf2} \\
+	\hat{\theta} &=& \int_{-\infty}^{\infty} \theta f_{\theta|X}(\theta|x) d\theta \label{eq:posterioriestimation}
+\end{eqnarray}
+where $f_{X|\theta}(x|\theta)$ is known as the \mync{likelihood function} that describes the likelihood of measuring $x$ if the actual parameter(s) is $\theta$. The PDF $f_\theta(\theta)$ is from the priori estimation of $\theta$. Finally, $f_X(x)$ is known as the \mync{evidence}. With fixed $x$, $f_X(x)$ becomes a constant.
+
+Equation \eqref{eq:conditionalpdf2} is essentially
+\begin{eqnarray}
+	\textup{posteriori} &=& \dfrac{\textup{likelihood}\times\textup{priori}}{\textup{evidence}} \label{eq:posteriorimemo}
+\end{eqnarray} 
+
+Notice that all the components in \eqref{eq:conditionalpdf2} and \eqref{eq:posteriorimemo} are derived from the joint distribution $f(\theta, x)$. With known analytical $f(\theta, x)$ and a set of measurement $x$, \eqref{eq:conditionalpdf2} can be used to calculate the estimate. However, in practice $f(\theta, x)$ is often unknown and other estimation methods need to be used.
+
+\subsection{MLE and MAP}
+
+Alternative to \eqref{eq:posterioriestimation}, there are at least two other types of commonly seen estimations, namely \mync{Maximum Likelihood Estimation}[MLE] and \mync{Maximum A Posteriori}[MAP] estimation. MLE and MAP are widely used in system identification. Hence, more details of them can be found in control system relevant notebooks. A brief introduction is given below.
+
+In many occasions, the joint distribution $f(\theta, x)$ is unknown. Instead, the measurement $x$ can be formulated as a function of $\theta$ plus noise. In this case, only $f_{X|\theta}(x|\theta)$ the likelihood function can be derived, whereas the priori estimation and evidence are unknown. As a result, \eqref{eq:conditionalpdf2} and \eqref{eq:posterioriestimation} cannot be used to calculate the estimate.
+
+In this case, consider maximizing the likelihood function to obtain the estimate as follows.
+\begin{eqnarray}
+	\hat{\theta} &=& \argmax_\theta f_{X|\theta}(x|\theta) \nonumber
+\end{eqnarray}
+This is known as MLE. MLE is useful when only the output model is known.
+
+
+There are many ways to solve an MLE problem. In the special cases where $f_{X|\theta}(x|\theta)$ is a special distribution, such as Gaussian, Laplace, etc., the MLE becomes \mync{Weighted Least Squares}[WLS] estimator, \mync{Least Absolute Value}[LAV] estimator, etc., respectively.
+
+A general way of solving MLE is given below. Let cost function
+\begin{eqnarray}
+	J &=& -\sum_{i=1}^{m}\textup{ln}f_{X|\theta}(x|\theta) \nonumber \\
+	\hat{\theta} &=& \arg\min_{x} J \nonumber
+\end{eqnarray}
+which can be solved using commonly used optimization algorithms such as Newton-Raphson Method.
+
+MAP estimation is also known as the Bayesian estimation. Like the posteriori mean method, MAP also calculates the posteriori distribution \eqref{eq:conditionalpdf2}. But instead of \eqref{eq:posterioriestimation}, the estimate is calculated using
+\begin{eqnarray}
+	\hat{\theta} &=& \argmax_\theta f_{\theta|X}(\theta|x) \nonumber \\
+	&=&  \argmax_\theta \dfrac{f_{X|\theta}(x|\theta)f_\theta(\theta)}{f_X(x)} \label{eq:mapestimate1}
+\end{eqnarray}
+
+Notice that \eqref{eq:mapestimate1} is equivalent to
+\begin{eqnarray}
+	\hat{\theta} &=& \argmax_\theta f_{X|\theta}(x|\theta)f_\theta(\theta) \label{eq:mapestimate2}
+\end{eqnarray}
+as $f_X(x)$ becomes constant for a given set of $x$. In this sense, comparing with the posteriori mean method, MAP does not require $f_X(x)$ nor the joint distribution $f(\theta, x)$ in the calculation. Comparing with MLE, MAP further requires $f_\theta(\theta)$ the priori estimate.
+
+Equation \eqref{eq:mapestimate2} can be solved as follows.
+\begin{eqnarray}
+	J &=& -\sum_{i=1}^{m}\textup{ln}f_{X|\theta}(x|\theta) - \textup{ln}f_\theta(\theta) \nonumber \\
+	\hat{\theta} &=& \arg\min_{x} J \nonumber
+\end{eqnarray}
+likewise.
+
+\begin{mdframed}
+	\noindent \textbf{MLE versus MAP versus Posteriori Mean}
+	
+	It is clear that MLE require the least information among the three to carry out the calculation. MAP requires more information. Posteriori mean method requires the most information.
+	
+	MLE maximizes the likelihood function $f_{X|\theta}(x|\theta)$ only. MAP maximizes the product of likelihood function and the priori estimation, $f_{X|\theta}(x|\theta)f_\theta(\theta)$. From that sense, MLE can be taken as a special case of MAP where $f_\theta(\theta)$ is constant for all $\theta$.
+	
+\end{mdframed}
+
+\subsection{Parameter Estimation Benchmark}
+
+Estimation error is almost always unavoidable due to the limited size of the samples. However, it is desirable that with an appropriate estimation method, the estimates are unbiased from the true value of the population, i.e., the expectation of the estimates should equal the corresponding values of the population. In that case, the estimation is known as \mync{unbiased estimation}. 
+
+Consider unbiased estimation. The accuracy of an estimation method can be evaluated as follows.
+
+The maximum information contained in the samples can be described by \mync{Fisher Information Matrix} named after Sir Ronald Fisher. The following equation describes the relation between $\textup{Var}(\hat{\theta})$ and Fisher Information Matrix $I(\theta)$ for a scalar unbiased estimator.
+\begin{eqnarray}
+	\textup{Var}(\hat{\theta}) &\geq& I(\theta)^{-1} \label{eq:crlb}
+\end{eqnarray}
+which is known as the \mync{Cram\'{e}r–Rao lower bound}[CRLB] of the estimator. From \eqref{eq:crlb}, it can be seen that the ``larger'' $I(\theta)$, the lower $\textup{Var}(\hat{\theta})$  can possibly reach.
+
+It is possible (although in many cases difficult) to check and prove whether an estimator hits the bound and provides the smallest possible $\textup{Var}(\hat{\theta})$ by comparing it with its corresponding CRLB. If its variance equals to CRLB, the estimator an \mync{optimal estimator}. A more general CRLB for biased estimator can also be derived. The detailed derivations of Fisher Information Matrix and general CRLB are not given in this notebook.
+
+The magnitude of the estimation error can be evaluated using \mync{Mean Squared Error}[MSE] and \mync{Root Mean Squared Error}[RMSE] as defined below. 
+
+Let $\theta$ be a parameter and $\hat{\theta}_i$ its estimation in the $i$th Monte-Carlo run. Let $n$ be the total number of Monte-Carlo runs. Define MSE and RMSE over the $n$ Monte-Carlo runs as follows.
+\begin{eqnarray}
+	\textup{MSE} &=& \dfrac{1}{n}\sum_{i=1}^{n}\left(\hat{\theta}_i-\theta\right)^2 \nonumber \\
+	\textup{RMSE} &=& \sqrt{\textup{MSE}} \nonumber
+\end{eqnarray}
+Notice that in practice, MSE and RMSE are meaningful only when $n$ is large enough so that their values converge. Let $n$ approaches infinity and we can observe that
+\begin{eqnarray}
+	\textup{Var}(\hat{\theta}) = E\left[\left(\hat{\theta}-E\left[\hat{\theta}\right]\right)^2\right] = E\left[\left(\hat{\theta}-\theta\right)^2\right] = \textup{MSE} \nonumber
+\end{eqnarray}
+for unbiased estimation because $E\left[\hat{\theta}\right]=\theta$, and the MSE approaches the variance of the estimate. From this point of view, we can use the variance of the estimate, $\textup{Var}(\hat{\theta})$, interchangeably with MSE as an evaluation of the performance of the estimation. In most literatures, $\textup{Var}(\hat{\theta})$ is used, implying that the result is theoretical and derived under the assumption of ``infinite runs''.
+
+The smaller $\textup{Var}(\hat{\theta})$, the more precise the estimation. There is a limitation to how small $\textup{Var}(\hat{\theta})$ can be regardless of the design of the estimator. This is intuitive because there is only so much information contained in the samples, given limited sample size and measurement error. So long as the estimation is done using those samples, its precision is limited. 
+
 \section{Important Theorems}
 
 There are a few important theorems frequently used in the study of probability and statistics. They are introduced here.
@@ -483,7 +546,7 @@ Notice that the sum of two Poisson distribution with shape parameters $\lambda_1
 
 Poisson distribution is often used to describe the probability of an event happening a particular number of times in a given window, assuming each occurrence of the event is independent. The parameter $\lambda$ reflects the average number of occurrence. For example, it can model the number of times a machine fails in a year, assuming each failure is independent from another (the failures are completely random and independent). 
 
-Binomial distribution is closely connected with Poisson distribution. Poisson distribution can be taken a limiting case of binomial distribution when $n\rightarrow\infty$, $p\rightarrow 0$ is small, and $\lambda = np$ a decent value. A demonstration is given in Fig. \ref{fig:poisson_vs_b}.
+Binomial distribution is closely connected with Poisson distribution. Poisson distribution can be taken as a limiting case of binomial distribution when $n\rightarrow\infty$, $p\rightarrow 0$ is small, and $\lambda = np$ a decent value. A demonstration is given in Fig. \ref{fig:poisson_vs_b}.
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-1/figures/poisson_vs_b.eps}

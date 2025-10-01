@@ -1,4 +1,4 @@
-\chapter{Basic Statistics} \label{ch:statisticsandsampling}
+\chapter{Basic Empirical Estimation} \label{ch:statisticsandsampling}
 
 Statistics is widely used in science and engineering. Broadly speaking, any attempt to estimate an unknown property of a system using direct or indirect measurements can be considered an application of statistics. Due to factors such as measurement errors and limited sample sizes, the exact value of the unknown property cannot be determined. Instead, statistics provides methodologies for efficiently estimating the most probable value of the unknown, given the available data and its limitations. It also offers tools to quantify the estimation error and the confidence level of the result.
 
@@ -19,9 +19,7 @@ Example: Suppose a factory produces a large number of light bulbs. The objective
 
 \end{enumerate}
 
-Many introductory statistics textbooks primarily focus on problems of type 2. However, statistics is just as essential in problems of type 1 which are common in control systems and signal processing. Although these problems are not always labeled as ``statistics'' in traditional textbooks, they rely heavily on statistical reasoning and tools. 
-
-Following that convention, the majority of this notebook focuses on problems of type 2. Type 1 problems are discussed elsewhere in notebooks related to system identification.
+The two types of problems, though sound different, are deeply connected in the essence. Specifically, the first type will be introduced with greater details in control system relevant notebooks.
 
 \section{Sampling}
 
@@ -29,10 +27,10 @@ When selecting samples from the population, it is critical to ensure that the se
 
 Depending on whether an element can be selected multiple times, we have
 \begin{itemize}
-  \item Sampling with replacement. In this scenario, a member can be chosen more than once, and the samples are i.i.d.
-  \item Sampling without replacement. In this scenario, a member can be chosen no more than once, and the samples distribution is slightly affected by earlier samples.
+  \item Sampling with replacement. In this scenario, a member can be chosen more than once, and the samples are \mync{independent and identically distributed}[i.i.d.]
+  \item Sampling without replacement. In this scenario, a member can be chosen no more than once, and the later samples distribution is slightly affected by earlier samples.
 \end{itemize}
-Sampling with replacement is applicable in many engineering problems, such as measuring a physical property of a system. Sampling without replacement is applicable in many social science problems, such as conducting a survey to estimate the average income of the population. They do have some subtle differences and they are explained using the following example.
+Sampling with replacement is applicable in many engineering problems, such as measuring a physical property of a system and calculating the mean. Sampling without replacement is applicable in many social science problems, such as conducting a survey to estimate the average income of the population. They do have some subtle differences and they are explained using the following example.
 
 Let a set of $N$ random variables be the population. Sample the population $M$ times using sampling with/without replacement. Calculate the mean and variance of the samples, and compare them with their counterparts in the population.
 
@@ -120,98 +118,6 @@ This estimator would also be unbiased for $\sigma^2$, and does not require the $
 Recall from Section \ref{sec:moments} that the mean and the variance are the $1$st order moment and the $2$nd order central moment respectively. The mean and variance obtained from the samples are closely related their correspondents in the population. It is natural to expand the idea to other moments. This is known as the \mync{method of moments} in population estimation.
 
 Commonly used moments and central moments are of $4$th order or lower. Note that bias might be introduced when using central moments where the center is obtained from the samples, as illustrated earlier for the sample variance.
-
-\section{Parameter Estimation} \label{sec:mlemap}
-
-Assume that the distribution of the population follows PDF $f(x;\theta)$ where $\theta$ is the collection of parameters in the distribution. For example, if $f(x)$ follows a normal distribution, $\theta=[\mu, \sigma^2]$ is the collection of the mean and variance of the normal distribution. In the case where the population is discrete and finite, it is assumed that the population is sampled from $f(x)$.
-
-The objective is to estimate $\theta$ given samples $X_1, \ldots, X_m$.
-
-\subsection{Unbiased Estimation}
-
-The samples are used to estimate the statistical properties of the population. Estimation error is almost always unavoidable due to the limited size of the samples. However, it is desirable that with an appropriate estimation method, the estimates are unbiased from the true value of the population, i.e., the expectation of the estimates should equal the corresponding values of the population. In that case, the estimation is known as \mync{unbiased estimation}. 
-
-Examples of unbiased estimation include \eqref{eq:sample_mean} and \eqref{eq:sample_variance} for the estimation of the mean and variance of the population respectively, and the proof has been given in the earlier section.
-
-Unbiased estimation is often considered a good feature of the estimation. However, it is difficult to make the estimation unbiased in reality. For those estimators claimed to be unbiased, rigorous mathematical proof is often required. There are several factors that may contribute to the bias:
-\begin{itemize}
-	\item Samples are not selected randomly. This is often not as much of a concern in science and engineering as compared with social science.
-	\item Measurement noise is skewed. We often assume normal distribution for the measurement noise of sensors, which is non-skewed. However, normal distribution is only an approximation to the reality. The actual measurement noise may be skewed and not zero-mean.
-	\item The estimator is biased.
-\end{itemize}
-
-\subsection{Maximum Likelihood Estimation}
-
-In MLE, we assume that there is no priori knowledge of the possible value of $\theta$. The estimation is to ``guess'' $\theta$ that maximizes $P(x|\theta)$, hence the name, maximum likelihood.
-
-There are many ways to solve an MLE problem. In the special cases where $f(x)$ is a special distribution, such as Gaussian, Laplace, etc., the MLE becomes weighted least squares (WLS) estimator, least absolute value (LAV) estimator, etc., respectively.
-
-A general way of solving MLE is given below. Let cost function
-\begin{eqnarray}
-	J &=& -\sum_{i=1}^{m}\textup{ln}f(X_i) \label{eq:mlecostfunc}
-\end{eqnarray}
-and the solution is given by
-\begin{eqnarray}
-	\hat{\theta} &=& \arg\min_{x} J \nonumber
-\end{eqnarray}
-which can be solved using commonly used optimization algorithms such as Newton-Raphson Method.
-
-\subsection{Maximum a Posteriori Estimation}
-
-Maximum a Posteriori (MAP) estimation is also known as the Bayesian estimation. Unlike MLE which maximizes $P(x|\theta)$ using \eqref{eq:conditionalpdf2} and \eqref{eq:posteriorimemo}. To summarize, MLP finds such $\theta$ that maximizes the following posteriori probability
-\begin{eqnarray}
-	P(\theta|x) &=& \dfrac{P(x|\theta)P(\theta)}{P(x)} \nonumber
-\end{eqnarray}
-or in PDF form,
-\begin{eqnarray}
-	g(\theta) &=& \dfrac{f(x)f_{\theta}(\theta)}{f_{X}(x)} \label{eq:mappdf}
-\end{eqnarray}
-where $f_{\theta}(\theta)$ and $f_{X}(x)$ is the ground truth distribution of $\theta$ and $x$, respectively. Notice that $f_{X}(x)$ is not affected by the guess of $\theta$. Hence, maximizing \eqref{eq:mappdf} is essentially maximizing $f(x)f_{\theta}(\theta)$.
-
-A general way of solving MAP is given below. Modify the cost function of MLE in \eqref{eq:mlecostfunc} as follows to consider the priori knowledge $f_\theta(\theta)$
-\begin{eqnarray}
-	J &=& -\sum_{i=1}^{m}\textup{ln}f(X_i) - \textup{ln}f_\theta(\theta) \label{eq:mapcostfunc}
-\end{eqnarray}
-and \eqref{eq:mapcostfunc} can be solved likewise.
-
-\subsection{Relation of MLE and MAP}
-
-MLE and MAP differ in the objective function. MLE maximizes $f(x)$ while MAP maximizes $f(x)f_{\theta}(\theta)$. The difference lies on the priori knowledge of $f_{\theta}(\theta)$, i.e., how $\theta$ is distributed without taking into account the samples. MAP requires the priori knowledge of $f_{\theta}(\theta)$ while MLE does not.
-
-When $f_{\theta}(\theta)$ is unknown, MLE is the preferred choice. MLE can also be taken as a special case of MAP where $f_\theta(\theta)$ is constant, i.e., in the priori knowledge, $\theta$ is distributed evenly for all its possible values. When $f_{\theta}(\theta)$ is known, MAP can be used.
-
-In some literatures, $f_{\theta}(\theta)$ is considered as part of the MLE cost function as given by \eqref{eq:mapcostfunc}. Though it is called an MLE in those literatures, it is effectively an MAP estimator.
-
-With the same set of samples, different methods (methods of moments, MLE and MAP with different likelihood functions, etc.) will give different results. There is no universally best way to estimate the statistical features of the population. It is important to choose the appropriate estimation method case by case depending on the problem.
-
-With that been said, there are benchmarks to evaluate the performance of an estimation method. One of them is bias, which has been briefly mentioned in the previous section. Other benchmarks include efficiency, robustness, etc. Commonly seen ones are introduced in this section.
-
-\subsection{Parameter Estimation Benchmarks}
-
-Consider unbiased estimation. The magnitude of the estimation error can be evaluated using \mync{Mean Squared Error}[MSE] and \mync{Root Mean Squared Error}[RMSE] as defined below. 
-
-Let $\theta$ be a parameter and $\hat{\theta}_i$ its estimation in the $i$th Monte-Carlo run. Let $n$ be the total number of Monte-Carlo runs. Define MSE and RMSE over the $n$ Monte-Carlo runs as follows.
-\begin{eqnarray}
-	\textup{MSE} &=& \dfrac{1}{n}\sum_{i=1}^{n}\left(\hat{\theta}_i-\theta\right)^2 \nonumber \\
-	\textup{RMSE} &=& \sqrt{\textup{MSE}} \nonumber
-\end{eqnarray}
-Notice that in practice, MSE and RMSE are meaningful only when $n$ is large enough so that their values converge. Let $n$ approaches infinity and we can observe that
-\begin{eqnarray}
-	\textup{Var}(\hat{\theta}) = E\left[\left(\hat{\theta}-E\left[\hat{\theta}\right]\right)^2\right] = E\left[\left(\hat{\theta}-\theta\right)^2\right] = \textup{MSE} \nonumber
-\end{eqnarray}
-for unbiased estimation because $E\left[\hat{\theta}\right]=\theta$, and the MSE approaches the variance of the estimate. From this point of view, we can use the variance of the estimate, $\textup{Var}(\hat{\theta})$, interchangeably with MSE as an evaluation of the performance of the estimation. In most literatures, $\textup{Var}(\hat{\theta})$ is used, implying that the result is theoretical and derived under the assumption of ``infinite runs''.
-
-The smaller $\textup{Var}(\hat{\theta})$, the more precise the estimation. There is a limitation to how small $\textup{Var}(\hat{\theta})$ can be regardless of the design of the estimator. This is intuitive because there is only so much information contained in the samples, given limited sample size and measurement error. So long as the estimation is done using those samples, its precision is limited. 
-
-The maximum information contained in the samples can be described by \textit{Fisher Information Matrix} named after Sir Ronald Fisher. The following equation describes the relation between $\textup{Var}(\hat{\theta})$ and Fisher Information Matrix $I(\theta)$ for a scalar unbiased estimator.
-\begin{eqnarray}
-	\textup{Var}(\hat{\theta}) &\geq& I(\theta)^{-1} \label{eq:crlb}
-\end{eqnarray}
-which is known as the \textit{Cram\'{e}r–Rao lower bound} (CRLB) of the estimator. From \eqref{eq:crlb}, it can be seen that the ``larger'' $I(\theta)$, the lower $\textup{Var}(\hat{\theta})$  can possibly reach.
-
-It is possible (although in many cases difficult) to check and prove whether an estimator hits the bound and provides the smallest possible $\textup{Var}(\hat{\theta})$ by comparing it with its corresponding CRLB. If its variance equals to CRLB, the estimator is said to be \textit{optimal}.
-
-A more general CRLB for biased estimator can also be derived. The detailed derivations of Fisher Information Matrix and general CRLB are not given in this notebook.
 
 \section{Confidence Interval Estimation}
 
