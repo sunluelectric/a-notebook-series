@@ -16,7 +16,7 @@ This part of the notebook mainly studies random variables. Stochastic process an
 
 Experiments are among the most important activities in science and engineering. Very often, experiments are used to verify theories. In these cases, experiments are carefully designed so that their outcomes are deterministic and predictable as long as the theory is correct. By observing the results of the experiments matching the prediction of the theory, we build confidence in the theory.
 
-However, this notebook is concerned with another type of experiment where the result contains randomness due to the lack of information or incomplete modeling. Such experiments include tossing a coin, predicting the GDP of a country next year, etc. These experiments are known as \mync{random experiments}. The result of a random experiment can still be meaningful because it reflects some insights of the system. The challenge is to design the experiments so that useful information can be revealed from the result efficiently.
+However, this notebook is concerned with another type of experiment where the result contains randomness due to the lack of information or incomplete modeling. Such experiments include tossing a coin, predicting the GDP of a country next year, etc. These experiments are known as \mync{random experiments}. The result of a random experiment can still be meaningful because it reflects some insights of the system. The challenge is to design the experiments so that useful information can be revealed from the experiment results efficiently.
 
 \subsection{Sample Space}
 
@@ -53,11 +53,11 @@ Given an experiment and an event, it is unsure whether the event will occur, and
 
 There are different ways to calculate the probability of events. A rigorous mathematical definition of probability, known as axiomatic approach, is introduced in Section \ref{subsec:probability_axioms}. But before that, classical approach, empirical approach and geometric probability are introduced. One may get confused with which is the ``true'' definition of probability. As will be shown later, though defined from different angles, they all point to essentially the same concept.
 
-\subsection{Classical and Empirical Probabilities}
+\subsection{Classical Probability}
 
-In the \mync{classical approach}, it is assumed that all elementary events have the same chance of occurrence, and the total number of elementary events is a finite and known number, $n$. Define an event that contains $h$ elementary events. The \mync{classical probability} of the event is given by $h/n$.
+In the \mync{classical approach}, as a prerequisite all elementary events have the same chance of occurrence, and the total number of elementary events is $n$. Define an event that contains $h$ elementary events. The \mync{classical probability} of the event is given by $h/n$.
 
-Calculating the cardinality of event $A$ and sample space $S$ is the key to solving the classical probability. Permutation and combination are widely used for such calculations. Suppose that there are $n$ distinct objects, and we would like to select $r\leq n$ objects from them and put them into a sequence. The \mync{permutation} defined by
+Calculating $h$, the cardinality of event $A$, and $n$, the cardinality of the sample space $S$, is the key to solving the classical probability. Permutation and combination are widely used for such calculations. Suppose that there are $n$ distinct objects, and we would like to select $r\leq n$ objects from them and put them into a sequence. The \mync{permutation} defined by
 \begin{eqnarray}
   nPr &=& n(n-1)(n-2)\cdots (n-r+1) \label{eq:permutation}
 \end{eqnarray}
@@ -78,8 +78,6 @@ is used to calculate the total number of outcomes. Notice that $nCr$ is also den
                                                                                            n \\
                                                                                            r
                                                                                          \end{array}\right)$.
-
-In the \mync{frequency approach}, the experiment can be repeated $n$ times where $n$ is a large number, and the number of instances where the event occurred is recorded as $h$. The \mync{empirical probability} of the event is obtained by calculating $h/n$, which should converge to the true probability as $n$ increases.
 
 \subsection{Geometric Probability}
 
@@ -104,6 +102,10 @@ Divide the shared area by the total sample space area to get $P=7/16=43.75\%$ wh
 \end{figure}
 
 Note that in the problem description, the two people arrive at the park between $8:00$ AM and $9:00$ AM with equal probability. Here ``equal probability'' is an important prerequisite for using geometric probability. Otherwise, the probability of the event would not be proportional to the area given in Fig.~\ref{fig:geometricprobexp}. This applies to most use cases of geometric probability.
+
+\subsection{Empirical Probability}
+
+In the \mync{frequency approach}, the experiment can be repeated $n$ times where $n$ is a large number, and the number of instances where the event occurred is recorded as $h$. The \mync{empirical probability} of the event is obtained by calculating $h/n$, which should converge to the true probability as $n$ increases.
 
 \subsection{Axioms} \label{subsec:probability_axioms}
 
