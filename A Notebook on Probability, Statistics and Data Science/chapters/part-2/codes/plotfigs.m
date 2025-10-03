@@ -12,6 +12,6 @@ plot(ax,x,y,'k-', 'linewidth', 2)
 patch([x2 fliplr(x2)], [zeros(size(x2)) fliplr(y2)], 'g')
 patch([x1 fliplr(x1)], [zeros(size(x1)) fliplr(y1)], 'r')
 xline(2.58)
-xlabel('$\mu-\mu^*$','interpreter','latex')
-ylabel('$\mathcal{N}\left(\mu; \mu^*, {\sigma}^2\right)$','interpreter','latex')
+xlabel('$\mu-\bar{X}$','interpreter','latex')
+ylabel('$\mathcal{N}\left(\mu; \bar{X}, {\sigma}^2\right)$','interpreter','latex')
 grid on

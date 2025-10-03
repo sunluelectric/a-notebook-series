@@ -1,4 +1,4 @@
-\chapter{Basic Empirical Estimation} \label{ch:statisticsandsampling}
+\chapter{Basic Statistics} \label{ch:statisticsandsampling}
 
 Statistics is widely used in science and engineering. Broadly speaking, any attempt to estimate an unknown property of a system using direct or indirect measurements can be considered an application of statistics. Due to factors such as measurement errors and limited sample sizes, the exact value of the unknown property cannot be determined. Instead, statistics provides methodologies for efficiently estimating the most probable value of the unknown, given the available data and its limitations. It also offers tools to quantify the estimation error and the confidence level of the result.
 
@@ -80,7 +80,7 @@ The \mync{sample mean} and \mync{sample variance} are calculated as follows. Let
 
 Do not confuse the sample mean in \eqref{eq:sample_mean} and sample variance in \eqref{eq:sample_variance} with the true population mean and variance, typically denoted by $\mu$ and $\sigma^2$. Although they are closely related, they are not the same.
 
-According to LLN, the sample mean $\bar{X}$ converges to the population mean $\mu$ as the number of samples $m$ increases. Similarly, we can show that the sample variance $S^2$ converges to the population variance $\sigma^2$ by proving that $E[S^2] = \sigma^2$. The proof is given below.
+According to LLN, the sample mean $\bar{X}$ converges to the population mean $\mu$ as the number of samples $m$ increases. It can be proved that the sample variance $S^2$ converges to the population variance $\sigma^2$ as well. The proof is given below.
 
 From \eqref{eq:sample_variance},
 \begin{eqnarray}
@@ -121,48 +121,59 @@ Commonly used moments and central moments are of $4$th order or lower. Note that
 
 \section{Confidence Interval Estimation}
 
-The estimation obtained from empirical data may bias from its true value due to the randomness introduced by the samples. From CLT, we know that the more samples, the more confident we are that the true value is close to the estimate. 
+The estimation obtained from empirical data often differs from the true value due to the randomness introduced by the samples. From CLT, we know that the more samples, the more confident we are that the true value is close to the estimate. 
 
-To put it into perspective, we can derive the probability of the true value $\theta$ actually lying with a given interval $\left[\hat{\theta}_{\textup{min}},\hat{\theta}_{\textup{max}}\right]$, $P\left(\hat{\theta}_{\textup{min}} \leq \theta \leq \hat{\theta}_{\textup{max}}\right)$, as a function of estimation algorithm, measurement noise and samples number. The interval is known as the Confidence Interval (CI). Each CI is corresponding with a probability.
+To put it into perspective, we can derive the probability of the true value $\theta$ actually lying with a given interval $\left[\hat{\theta}_{\textup{min}},\hat{\theta}_{\textup{max}}\right]$, $P\left(\hat{\theta}_{\textup{min}} \leq \theta \leq \hat{\theta}_{\textup{max}}\right)$, as a function of estimation algorithm, measurement noise and samples number. The interval is known as the \mync{Confidence Interval}[CI]. Each CI corresponds with a probability. CI estimation tries to find the probability of a CI, or find the smallest CI for a given probability.
 
-The purpose of interval estimation is to obtain the probability of a CI or find the CI for a specific probability given the samples.
+As an example, consider estimating the CI of the mean of a normal distribution using samples taken from that distribution. Let $\mathcal{N}(\mu,\sigma^2)$ be a normal distribution, and $X_1, \ldots, X_m$ a set of $m$ samples generated from the distribution. From the samples, the sample mean $\bar{X}$ and sample variance $S^2$ are calculated.
 
-As an example, consider estimating the CI of a normal distribution using samples taken from that distribution. Notice that this is only one of the many scenarios of interval estimation.
-
-Let $\mathcal{N}(\mu,\sigma^2)$ be a normal distribution, and $X_1, \ldots, X_m$ a set of $m$ samples generated from the distribution. Let $\mu^*$, ${\sigma^2}^*$ be the mean and variance estimate of the distribution respectively. The objective is to calculate the CI of $\mu$ using $\bar{X}$, ${\sigma^2}^*$ and $m$.
-
-Apparently, $\mu$ does not necessarily equal to $\mu^*$. The smaller $\sigma^2$ and larger $m$, the more likely that $\mu$ is close to $\mu^*$. The error $\mu - \mu^*$ is a random variable, with variance
+Apparently, $\mu$ does not necessarily equal to $\bar{X}$. The smaller $\sigma^2$ and larger $m$, the more likely that $\bar{X}$ is close to $\mu$. The error $\tilde{\mu} = \mu - \bar{X}$ is a random variable with
 \begin{eqnarray}
-	\textup{Var}[\mu-\mu^*] &=& E\left[\left(\mu-\dfrac{1}{m}\sum_{i=1}^{m} X_i\right)^2\right] \nonumber \\
+	E[\tilde{\mu}] &=& 0 \nonumber \\
+	\textup{Var}[\tilde{\mu}] &=& E\left[\left(\mu-\dfrac{1}{m}\sum_{i=1}^{m} X_i\right)^2\right] \nonumber \\
+	&=& E\left[\left(\dfrac{1}{m}\sum_{i=1}^{m}\mu-\dfrac{1}{m}\sum_{i=1}^{m} X_i\right)^2\right] \nonumber \\
+	&=& \dfrac{1}{m^2}E\left[\left(\sum_{i=1}^{m}\left(\mu-X_i\right)\right)^2\right] \label{eq:sample_mean_var0} \\
 	&=& \dfrac{1}{m^2}E\left[\sum_{i=1}^{m}\left(\mu-X_i\right)^2\right] \label{eq:sample_mean_var1} \\
 	&=& \dfrac{1}{m}\sigma^2 \label{eq:sample_mean_var2}
 \end{eqnarray}
-Though \eqref{eq:sample_mean_var2} can be used to derive the CI, it is useless in the empirical approach because the statistics of the original distribution, $\mu$ and $\sigma$, is not known exactly. Therefore, \eqref{eq:sample_mean_var2} needs to be reformulated to include $\mu^*$ and ${\sigma^2}^*$.
+where notice that in \eqref{eq:sample_mean_var0},
+\begin{eqnarray}
+	E\left[\left(\mu-X_i\right)\left(\mu-X_j\right)\right] &=& 0 \nonumber
+\end{eqnarray}
+for $i\neq j$.
 
-Denote $\tilde{\mu} = \mu-\mu^*$. Note that 
+Though \eqref{eq:sample_mean_var2} can be used to derive the CI, it is useless in the empirical approach because the statistics of the original distribution, $\mu$ and $\sigma$, is not known exactly. Therefore, \eqref{eq:sample_mean_var2} needs to be reformulated to include $\bar{X}$ and $S^2$. Rewrite \eqref{eq:sample_mean_var1} as follows.
 \begin{eqnarray}
-	\textup{Var}[\mu-\mu^*] = E\left[\left(\tilde{\mu}-E[\tilde{\mu}]\right)^2\right] = E[\tilde{\mu}^2] \nonumber
+	\textup{Var}[\tilde{\mu}] &=& \dfrac{1}{m^2}E\left[\sum_{i=1}^{m}\left(\bar{X}+\tilde{\mu}-X_i\right)^2\right] \nonumber \\
+	&=& \dfrac{1}{m^2}E\left[\sum_{i=1}^{m}\left(\bar{X}-X_i\right)^2\right] + \dfrac{2}{m^2}E\left[\sum_{i=1}^{m}\left(\bar{X}-X_i\right)\tilde{\mu}\right] + \dfrac{1}{m^2}E\left[\sum_{i=1}^{m}\tilde{\mu}^2\right] \nonumber \\
+	&=& \dfrac{m-1}{m^2}S^2 + \dfrac{1}{m}\textup{Var}[\tilde{\mu}] \label{eq:sample_mean_var3}
 \end{eqnarray}
-because $E[\tilde{\mu}]=E[\mu]-E[\mu^*]=0$. Rewrite \eqref{eq:sample_mean_var1} as follows.
+where notice that
 \begin{eqnarray}
-	\textup{Var}[\mu-\mu^*] &=& E[\tilde{\mu}^2] \nonumber \\
-	 &=& \dfrac{1}{m^2}E\left[\sum_{i=1}^{m}\left(\mu^*+\tilde{\mu}-X_i\right)^2\right] \nonumber \\
-	&=& \dfrac{1}{m^2}E\left[\sum_{i=1}^{m}\left(\mu^*-X_i\right)^2\right] + \dfrac{2}{m^2}E\left[\sum_{i=1}^{m}\left(\mu^*-X_i\right)\tilde{\mu}\right] + \dfrac{1}{m^2}E\left[\sum_{i=1}^{m}\tilde{\mu}^2\right] \nonumber \\
-	&=& \dfrac{m-1}{m^2}{\sigma^2}^* + \dfrac{1}{m}E[\tilde{\mu}^2] \label{eq:sample_mean_var3}
+    E\left[\sum_{i=1}^{m}\left(\bar{X}-X_i\right)\tilde{\mu}\right] &=& 0 \nonumber
 \end{eqnarray}
+
 Solving \eqref{eq:sample_mean_var3} for $E[\tilde{\mu}^2]$ gives
 \begin{eqnarray}
-	\textup{Var}[\mu-\mu^*] &=& \dfrac{1}{m}{\sigma^2}^* \label{eq:sample_mean_var4}
+	\textup{Var}[\tilde{\mu}] &=& \dfrac{1}{m}S^2 \label{eq:sample_mean_var4}
 \end{eqnarray}
-Equations \eqref{eq:sample_mean_var2} and \eqref{eq:sample_mean_var4} look similar except that $\sigma^2$ is replaced by ${\sigma^2}^*$. Notice that \eqref{eq:sample_mean_var4} gives the variance. For the standard deviation,
+Equations \eqref{eq:sample_mean_var2} and \eqref{eq:sample_mean_var4} look similar except that $\sigma^2$ is replaced by $S^2$. Notice that \eqref{eq:sample_mean_var4} gives the variance. For the standard deviation,
 \begin{eqnarray}
-	\textup{Std}(\mu-\mu^*) = \dfrac{1}{\sqrt{m}}\sqrt{{\sigma^2}^*} = \dfrac{1}{\sqrt{m}}\sigma^* \label{eq:sample_mean_var5}
+	\textup{Std}(\tilde{\mu}) = \dfrac{1}{\sqrt{m}}\sqrt{S^2} = \dfrac{1}{\sqrt{m}}S \label{eq:sample_mean_var5}
 \end{eqnarray} 
-where $\sigma^*$ is the estimate of the standard deviation using the samples. Given the confidence, CI can be determined using \eqref{eq:sample_mean_var5} as
+where $S$ is the estimate of the standard deviation using the samples. Let the interval be $\left[\bar{X}-\textup{CI}, \bar{X}+\textup{CI}\right]$ where from \eqref{eq:sample_mean_var5},
 \begin{eqnarray}
-	\left[\mu^*-\dfrac{u_{\alpha}}{\sqrt{m}}\sigma^*, \mu^*+\dfrac{u_{\alpha}}{\sqrt{m}}\sigma^*\right] \label{eq:intervalci}
+	\textup{CI} &=& \dfrac{u_{\alpha}}{\sqrt{m}}S \label{eq:intervalci}
 \end{eqnarray}
-where $u_{\alpha}$ is a gain determined by the desired confidence, i.e., $P\left(\hat{\theta}_{\textup{min}} \leq \theta \leq \hat{\theta}_{\textup{max}}\right)$. The gain $u_{\alpha}$ can be derived from the CDF of the noise assumption. The higher $P$, the larger $u_{\alpha}$. Some commonly used $u_{\alpha}$ and confidence pairs are listed below for normal distribution noise assumption:
+and $u_{\alpha}$ a gain factor determines the range of CI. Each $u_{\alpha}$ corresponds with a CI and a probability. The relation can be derived from the CDF. The result is given below.
+\begin{eqnarray}
+	\textup{F}(u_\alpha) = \dfrac{P+1}{2} = \dfrac{1}{2}\left(1+\textup{erf}\left(\dfrac{u_\alpha}{\sqrt{2}}\right)\right) \nonumber
+\end{eqnarray}
+where $F(\cdot)$ is the CDF of the standard normal distribution and $\textup{erf}(\cdot)$ the error function. This is equivalent with
+\begin{eqnarray}
+	\textup{erf}\left(\dfrac{u_\alpha}{\sqrt{2}}\right) &=& P \nonumber
+\end{eqnarray}
+Some commonly used $u_{\alpha}$ and confidence pairs are listed below for normal distribution noise assumption:
 \begin{itemize}
 	\item $u_{\alpha}=1$, $P=0.683$;
 	\item $u_{\alpha}=1.96$, $P=0.95$;
@@ -171,16 +182,6 @@ where $u_{\alpha}$ is a gain determined by the desired confidence, i.e., $P\left
 	\item $u_{\alpha}=3$, $P=0.997$;
 	\item $u_{\alpha}=3.29$, $P=0.999$.
 \end{itemize}
-
-In general, $u_{\alpha}$ can be derived from the CDF of the normal distribution as follows.
-\begin{eqnarray}
-	\textup{F}(u_\alpha) = \dfrac{1}{2}\left(1+\textup{erf}\left(\dfrac{u_\alpha}{\sqrt{2}}\right)\right) = \dfrac{P+1}{2} \nonumber
-\end{eqnarray}
-or equivalently
-\begin{eqnarray}
-	\textup{erf}\left(\dfrac{u_\alpha}{\sqrt{2}}\right) &=& P \nonumber
-\end{eqnarray}
-where $F(\cdot)$ is the CDF of the standard normal distribution and $\textup{erf}(\cdot)$ the error function.
 
 In the previous example, the problem is to estimate the CI of the mean of a normal distribution. In practice, there are many other problems. 
 

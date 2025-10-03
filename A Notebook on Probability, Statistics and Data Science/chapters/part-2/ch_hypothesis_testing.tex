@@ -13,7 +13,7 @@ Two motivating examples are considered.
 \begin{shortbox}
 \Boxhead{Example: Verify the Probability of a Coin Tossing ``Head''}
 
-Consider tossing a coin. The result follows Bernoulli distribution with the chance of head $p$ and tail $1-p$. For a normally designed coin, it is fair to assume that $p=0.5$. Toss the coin multiple times. Consider the following events:
+Consider tossing a coin. The result follows Bernoulli distribution with the chance of head $p$ and tail $1-p$. It is fair to assume that $p=0.5$. Toss the coin multiple times. Consider the following events:
 \begin{enumerate}
 	\item Toss the coin 1 time and the result is ``head'';
 	\item Toss the coin 5 times and all the results are ``head'';
@@ -31,15 +31,15 @@ To verify whether $p=0.5$ or $p>0.5$, we can make an hypothesis $H_0:p=0.5$ as w
 \begin{shortbox}
 \Boxhead{Example: Interview People for Average Annual Income}
 
-Consider another example of estimating the average monthly income of the population in a city. It is too costly to interview all the $n=1000000$ citizens in the city. Therefore, only $1\%$ of the population, $m=10000$ people, are randomly selected and interviewed.
+Consider estimating the average monthly income of the population in a group. It is too costly to interview all the $100,000$ (a very large number) citizens in the city to get the precise average income $\mu$. Therefore, only $1,000 = 1\%\times 100,000$ of the population are randomly selected and interviewed. The sample mean $\bar{X} = 2900$ and variance $S^2=100^2$ are calculated from the interview results.
 
-The purpose is to evaluate whether the average income is at least $\$3,000$. 
+The purpose is to use the above information to evaluate the probability that $\mu$ is at least $\mu_0=3000$. 
 
 \end{shortbox}
 
-In this example, the hypothesis is $H_0: \bar{X} \geq 3000$ where $\bar{X}$ is the mean of income of the entire population. Its alternative hypothesis is $H_1: \bar{X}<3000$. The interview results obtained from the $m$ samples are used to support or reject the hypothesis.
+In this example, the hypothesis is $H_0: \mu \geq \mu_0$. Its alternative hypothesis is $H_1: \mu<\mu_0$. The interview results obtained from the $m$ samples are used to support or reject the hypothesis.
 
-Both the above two examples verify the aggregated mean of a parameter using hypothesis testings. It is possible to use hypothesis testing for other figures as well, including variance and many more. An example is given below. In the first coin tossing example, the coin manufacture has claimed that the probability of head $p$ follows a normal distribution of $\mathcal{N}(0.5,0.01^2)$. We can use hypothesis testing to verify whether $H_0:\sigma^2=0.01^2$ or $H_1:\sigma^2>0.01^2$.
+Both the above two examples verify the aggregated mean of a parameter using hypothesis testings. It is possible to use hypothesis testing for other figures as well, including variance and many more.
 
 \subsection{Hypothesis Categories}
 
@@ -53,7 +53,7 @@ Depending on the statement made in the null hypothesis, it can be divided into t
 
 \subsection{Acceptance Region and Rejection Region}
 
-A hypothesis is tested using the samples. Since the samples are randomly picked form the population, the result of a hypothesis test, could be random to some extent.
+A hypothesis is tested using the samples. Since the samples are randomly picked form the population, the result of a hypothesis test is to some extent random. One set of samples may support the hypothesis, while the other set disapprove it.
 
 Let $X_1, \ldots, X_m$ be the $m$ samples taken in the trail. It may just so happen that this particular set of samples passes or fails the hypothesis test. Define
 \begin{eqnarray}
@@ -62,24 +62,22 @@ Let $X_1, \ldots, X_m$ be the $m$ samples taken in the trail. It may just so hap
 \end{eqnarray}
 as the \mync{acceptance region} and \mync{rejection region} respectively. Notice that the rejection region is also known as the \mync{critical region}. 
 
-The probability of the null hypothesis being rejected relates to the cardinality of the acceptance and rejection regions. The \mync{power function} is used to describe the probability that the samples reject the null hypothesis $H_0$. The denotation is given below.
+The probability of the null hypothesis being rejected relates to the cardinality of the acceptance and rejection regions. The \mync{power function} is used to describe the probability that the samples reject the null hypothesis. The denotation is given below.
 \begin{eqnarray}
 	\beta_\Phi(\theta) &=& P\left(\left(\begin{array}{ccc}
 		X_1, & \ldots, & X_m
 	\end{array}\right)\in R\right) \nonumber
 \end{eqnarray}
-where $\theta$ is the true value of the parameter under testing, and $\Phi$ the hypothesis testing method.
+where $\theta$ is the true value and $\Phi$ the hypothesis testing method. If $\theta$ supports the null hypothesis, a good hypothesis testing method $\Phi$ should make $\beta_\Phi(\theta)$ close to $0$. If $\theta$ fails the null hypothesis, a good hypothesis testing method $\Phi$ should make $\beta_\Phi(\theta)$ close to $1$. The value of $\beta_\Phi(\theta)$ under these two scenarios can be used to evaluate the effectiveness of a hypothesis testing method.
 
-When $\theta$ is such that $H_0$ is actually true, there is still a possibility that by unlucky sampling $H_0$ is rejected, and the probability is given by $\beta_\Phi(\theta)$. In that scenario, we would like $\beta_\Phi(\theta)$ to be small. On the contrary, when $\theta$ is such that $H_0$ is actually false, there is still a possibility that by unlucky sampling $H_0$ is accepted, and the probability is given by $1-\beta_\Phi(\theta)$. In that scenario, we would like $\beta_\Phi(\theta)$ to be large. The value of $\beta_\Phi(\theta)$ under these two scenarios can be used to evaluate the effectiveness of a hypothesis testing method.
-
-Consider the case where $H_0$ is true. In this case, the power function describes the probability of the hypothesis test making a \mync{type I error}: reject a true null hypothesis. The probability is described by
+Consider the case where $\theta$ is such that $H_0$ is true. In this case, $\beta_\Phi(\theta)$ describes the probability of the hypothesis test making a \mync{type I error}: reject a true null hypothesis. The probability is described by
 \begin{eqnarray}
 	\alpha_{1\Phi}(\theta) &=& \left\{\begin{array}{cc}
 		\beta_\Phi(\theta) & H_0 \textup{~is true} \\
 		0 & H_0 \textup{~is false}
 	\end{array}\right. \label{eq:hypotestalpha1}
 \end{eqnarray}
-On the other hand, when $H_0$ is false, the power function describes (the compensation of) the probability of the hypothesis test making a \mync{type II error}: fail to reject a false null hypothesis. The probability is described by
+Consider the case where $\theta$ is such that $H_0$ is false. In this case, $1-\beta_\Phi(\theta)$ describes the probability of the hypothesis test making a \mync{type II error}: fail to reject a false null hypothesis. The probability is described by
 \begin{eqnarray}
 	\alpha_{2\Phi}(\theta) &=& \left\{\begin{array}{cc}
 		0 & H_0 \textup{~is true} \\
@@ -87,7 +85,7 @@ On the other hand, when $H_0$ is false, the power function describes (the compen
 	\end{array}\right. \label{eq:hypotestalpha2}
 \end{eqnarray}
 
-Ideally, a good hypothesis test shall ensure that both \eqref{eq:hypotestalpha1} and \eqref{eq:hypotestalpha2} are small. However, notice that there is a trade-off. An very small \eqref{eq:hypotestalpha1}, for example by acting extremely conservative and not rejecting any hypothesis regardless of the samples, may lead to a very large \eqref{eq:hypotestalpha2}, and vise versa. In a common practice, a \mync{significance level}, $\alpha$, is defined for \eqref{eq:hypotestalpha1}. The target to minimize \eqref{eq:hypotestalpha2} while keeping \eqref{eq:hypotestalpha1} equal or below $\alpha$. Typical values of $\alpha$ include $0.05$, $0.01$, etc. 
+Ideally, a good hypothesis test shall ensure that both \eqref{eq:hypotestalpha1} and \eqref{eq:hypotestalpha2} are small. However, notice that there is a trade-off. A very small \eqref{eq:hypotestalpha1}, for example by acting extremely conservative and hardly rejecting any hypothesis, may lead to a very large \eqref{eq:hypotestalpha2}, and vise versa. In a common practice, a \mync{significance level}, $\alpha$, is defined for \eqref{eq:hypotestalpha1}. The target to minimize \eqref{eq:hypotestalpha2} while keeping \eqref{eq:hypotestalpha1} equal or below $\alpha$. Typical values of $\alpha$ include $0.05$, $0.01$, etc. 
 
 For two hypothesis testing methods $\Phi_1$ and $\Phi_2$ that both satisfy the same significance level, their $\alpha_{2\Phi}(\theta)$ decide which one is more reliable. The lower $\alpha_{2\Phi}(\theta)$, the better the quality of the hypothesis testing. Among all the hypothesis testing methods that satisfies the same significance level $\alpha$, if there is a hypothesis testing method $\Phi$ that gives the smallest $\alpha_{2\Phi}(\theta)$ in \eqref{eq:hypotestalpha2}, $\Phi$ is known as the uniformly optimal hypothesis testing method at significance level $\alpha$. Notice that it is challenging to find and prove the uniform optimal of a hypothesis testing method which usually requires a lot of statistics expertise.
 
@@ -105,23 +103,23 @@ Two types of null hypothesis are considered:
 	\item Particular value. $H_0$: $\mu = \mu_0$; $H_1$: $\mu \neq \mu_0$
 \end{itemize}
 
-Consider $H_0$: $\mu \geq \mu_0$ and  $H_1$: $\mu < \mu_0$. Given samples $X_1,\ldots,X_m$, it is intuitive to survey the mean of the samples $\mu^*=\dfrac{1}{m}\sum_{i=1}^{m}X_i$, and let
+Consider $H_0$: $\mu \geq \mu_0$ and  $H_1$: $\mu < \mu_0$. Given samples $X_1,\ldots,X_m$, it is intuitive to survey the mean of the samples $\bar{X}=\dfrac{1}{m}\sum_{i=1}^{m}X_i$, and let
 \begin{eqnarray}
 	\Phi : \left\{\begin{array}{cc}
-		\textup{fail to reject~} H_0 & \mu^* \geq C \\
-		\textup{reject~} H_0 & \mu^* < C
+		\textup{fail to reject~} H_0 & \bar{X} \geq C \\
+		\textup{reject~} H_0 & \bar{X} < C
 	\end{array}\right. \label{eq:hypotest_normal_1}
 \end{eqnarray}
 The choice of $C$ influences the power function $\beta_{\Phi}(\theta)$. Details are discussed as follows.
 
-Recall from \eqref{eq:sample_mean_var2} and \eqref{eq:sample_mean_var4} that given the samples mean $\mu^*$ and the variance $\sigma^2$, the true value of $\mu$ follows a normal distribution centered at $\mu^*$ and with standard deviation $\dfrac{1}{\sqrt{m}}\sqrt{\sigma^2}$. The distribution of $\mu$ is given by the red line in Fig. \ref{ch:hypothesis_normal_mean}. Notice that Fig. \ref{ch:hypothesis_normal_mean} is shifted by $\mu^*$ in the horizontal axis so that it is centered at zero.
+Recall from \eqref{eq:sample_mean_var2} and \eqref{eq:sample_mean_var4} that given the samples mean $\bar{X}$ and the variance $\sigma^2$, the true value of $\mu$ follows a normal distribution centered at $\bar{X}$ and with standard deviation $\dfrac{1}{\sqrt{m}}\sqrt{\sigma^2}$. The distribution of $\mu$ is given by Fig. \ref{ch:hypothesis_normal_mean}. Notice that Fig. \ref{ch:hypothesis_normal_mean} is shifted by $\bar{X}$ in the horizontal axis so that it is centered at zero.
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-2/figures/hypothesis_normal_mean.eps}
-	\caption{Distribution of $\mu$ as a function of $\mu^*$ and $\sigma^2$.} \label{ch:hypothesis_normal_mean}
+	\includegraphics[width=0.6\textwidth]{chapters/part-2/figures/hypothesis_normal_mean.eps}
+	\caption{Distribution of $\mu$ as a function of $\bar{X}$ and $\sigma^2$.} \label{ch:hypothesis_normal_mean}
 \end{figure}
 
-Draw a vertical bar at $\mu-\mu^*=C\textprime$ in Fig. \ref{ch:hypothesis_normal_mean} so that the area of the red zone equals to $\alpha$ and green zone $1-\alpha$. From \eqref{eq:intervalci},
+Draw a vertical bar at $\mu-\bar{X}=C\textprime$ in Fig. \ref{ch:hypothesis_normal_mean} so that the area of the red zone equals to $\alpha$ and green zone $1-\alpha$. From \eqref{eq:intervalci},
 \begin{eqnarray}
 	C\textprime &=& \dfrac{u_\alpha}{\sqrt{m}}\sigma \nonumber
 \end{eqnarray}
@@ -134,8 +132,8 @@ For example, if $\alpha = 0.005$, $u_\alpha=2.58$.
 Consider a hypothesis test method where
 \begin{eqnarray}
 	\Phi : \left\{\begin{array}{cc}
-		\textup{fail to reject~} H_0 & \mu_0 - \mu^* \leq C\textprime \\
-		\textup{reject~} H_0 & \mu_0 - \mu^* > C\textprime
+		\textup{fail to reject~} H_0 & \mu_0 - \bar{X} \leq C\textprime \\
+		\textup{reject~} H_0 & \mu_0 - \bar{X} > C\textprime
 	\end{array}\right. \label{eq:hypotest_normal_2}
 \end{eqnarray}
 The hypothesis test \eqref{eq:hypotest_normal_2} can be interpreted as follows. From the empirical samples, $\mu$ is unlikely to be so large that it falls in the red zone in Fig. \ref{ch:hypothesis_normal_mean}. If the criterion $\mu_0$ is in the red zone, it is unlikely that $H_0: \mu > \mu_0$ is true. Therefore, the samples would reject $H_0$. On the other hand, if the criterion $\mu_0$ stays in the green zone, the samples fail to reject $H_0: \mu > \mu_0$ because it is fairly probable. 
@@ -149,8 +147,8 @@ Comparing \eqref{eq:hypotest_normal_1} and \eqref{eq:hypotest_normal_2} gives
 and \eqref{eq:hypotest_normal_1} becomes
 \begin{eqnarray}
 	\Phi : \left\{\begin{array}{cc}
-		\textup{fail to reject~} H_0 & \mu^* \geq \mu_0 - \dfrac{u_\alpha}{\sqrt{m}}\sigma \\
-		\textup{reject~} H_0 & \mu^* < \mu_0 - \dfrac{u_\alpha}{\sqrt{m}}\sigma
+		\textup{fail to reject~} H_0 & \bar{X} \geq \mu_0 - \dfrac{u_\alpha}{\sqrt{m}}\sigma \\
+		\textup{reject~} H_0 & \bar{X} < \mu_0 - \dfrac{u_\alpha}{\sqrt{m}}\sigma
 	\end{array}\right. \nonumber
 \end{eqnarray}
 which is a hypothesis test of the mean of a normal distribution at significance level of $\alpha$.
@@ -158,7 +156,7 @@ which is a hypothesis test of the mean of a normal distribution at significance 
 Consider $H_0$: $\mu = \mu_0$ and  $H_1$: $\mu \neq \mu_0$. The idea is similar except that there would have been two red zones in Fig. \ref{ch:hypothesis_normal_mean} at both tails. The hypothesis test is given by
 \begin{eqnarray}
 	\Phi : \left\{\begin{array}{cc}
-		\textup{fail to reject~} H_0 & \mu_0 - \dfrac{u_\alpha}{\sqrt{m}}\sigma \leq \mu^* \leq  \mu_0 + \dfrac{u_\alpha}{\sqrt{m}}\sigma \\
+		\textup{fail to reject~} H_0 & \mu_0 - \dfrac{u_\alpha}{\sqrt{m}}\sigma \leq \bar{X} \leq  \mu_0 + \dfrac{u_\alpha}{\sqrt{m}}\sigma \\
 		\textup{reject~} H_0 & \textup{otherwise}
 	\end{array}\right. \nonumber
 \end{eqnarray}
@@ -184,7 +182,7 @@ The evaluation of the difference of two parameters is useful. It is widely used 
 
 Let $X_i$ be $m$ samples taken from $\mathcal{N}(\mu_x, \sigma_x^2)$, and $Y_i$, $n$ samples from $\mathcal{N}(\mu_y, \sigma_y^2)$. The means $\mu_x$ and $\mu_y$ are unknown. The objective is to use the samples to reject the following null hypothesis
 \begin{enumerate}
-	\item $H_0$: $\mu_x - \mu_y \geq \mu_0$; $H_1$: $\mu_x - \mu_y < \mu^*$
+	\item $H_0$: $\mu_x - \mu_y \geq \mu_0$; $H_1$: $\mu_x - \mu_y < \bar{X}$
 	\item $H_0$: $\mu_x = \mu_y$; $H_1$: $\mu_x \neq \mu_y$
 \end{enumerate} 
 where $\mu_0$ is a given constant.

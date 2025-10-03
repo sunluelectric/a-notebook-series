@@ -36,114 +36,33 @@ Notice that $f(x)$ itself is not probability. It is $f(x)dx$ accumulating in ran
 
 In science and engineering problems, continuous random variables are more common than discrete random variables. In engineering, discrete random variables can sometimes be described by impulse PDF.
 
-\section{Joint Distribution}
-
-\mync{Joint distribution} describes the distribution of multiple random variable combinations. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. 
-
-For example, in a system identification problem the unknown system parameters are correlated with the measurements and their correlations are described by their joint PDF. System identification tries to estimate the unknown system parameters given the measurements.
-
-\subsection{Joint Probability}
-
-\mync{Joint probability} describes the distribution of two or more random variables. For simplicity, in the remainder of this section, two random variables $X$ and $Y$ are considered. The same concepts can be extended to more variables.
-
-In the case of discrete variables $X$ and $Y$, define joint probability function and joint cumulative distribution function as follows.
-\begin{eqnarray}
-  f(x, y) &=& P\left(X=x, Y=y\right) \nonumber \\
-  F(x, y) &=& P\left(X\leq x, Y\leq y\right) \nonumber \\
-  &=& \sum_{u\leq x}\sum_{v\leq y}f(u, v) \nonumber
-\end{eqnarray}
-
-In the case of continuous random variables, let
-\begin{eqnarray}
-  F(x, y) &=& P(X \leq x, Y \leq y) \nonumber
-\end{eqnarray}
-be the cumulative distribution function, and joint PDF of $X$ and $Y$ is defined by
-\begin{eqnarray}
-	f(x, y) &=& \dfrac{d^2}{dxdy}F(x, y) \nonumber
-\end{eqnarray}
-Therefore,
-\begin{eqnarray}
-  \int_{x=a}^{b}\int_{y=c}^{d} f(x, y) dxdy &=& P\left(a < X < b, c < y < d \right) \label{eq:jointpdf} \\
-  F(x, y) &=& \int_{u=-\infty}^{x}\int_{v=-\infty}^{y}f(u, v)dudv \nonumber
-\end{eqnarray}
-
-The cumulative distribution function and PDF of one of the variables, for example $X$, can be derived from the joint PDF as follows. By definition, 
-\begin{eqnarray}
-	F_X(x) &=& P(X \leq x) \nonumber \\
-	&=& \int_{u=-\infty}^{x}\int_{v=-\infty}^{\infty}f(u, v)dudv \nonumber
-\end{eqnarray}
-Thus,
-\begin{eqnarray}
-	f_X(x) &=& \dfrac{d}{dx}F_X(x) \nonumber \\
-	&=& \int_{y=-\infty}^{\infty} f(x, y) \label{eq:jointpdfdowngrade}
-\end{eqnarray}
-which is the integration of \eqref{eq:jointpdf} w.r.t. all other variables from $-\infty$ to $\infty$. 
-
-Equation \eqref{eq:jointpdfdowngrade} can be interpreted as follows. If $(X_i, Y_i)$ samples are generated from $f(x, y)$ in \eqref{eq:jointpdf}, and we only look at the $X_i$ of these samples, they should follow \eqref{eq:jointpdfdowngrade}.
-
-\subsection{Conditional Distribution}
-
-Equation \eqref{eq:jointpdfdowngrade} gives the distribution of $X$ regardless of the value of its corresponding $Y$. Conditional distribution, on the other hand, determines the distribution of $X$ when $Y$ is observed. For example, in \eqref{eq:jointpdf}, calculate $f_{X|Y}(x |Y=y)$, i.e., the PDF of $X$ given $Y=y$. In many literatures, $f_{X|Y}(x |Y=y)$ is denoted by $f_{X|Y}(x|y)$ for simplicity.
-
-The conditional PDF $f_{X|Y}(x|y)$ can be obtained as follows. It is essentially Bayes' rule applied on continuous variables.
-\begin{eqnarray}
-  f_{X|Y}(x|y) &=& \dfrac{f(x, y)}{f_Y(y)} \label{eq:conditionalpdf1}
-\end{eqnarray}
-where $f_Y(y)$ is obtained using \eqref{eq:jointpdfdowngrade}. Equation \eqref{eq:conditionalpdf1} is a function of both $x$ and $y$. Substituting the observed value of $y$ into \eqref{eq:conditionalpdf1} reduces it to the PDF of $x$ alone. Its integration with respect to $x$ from $-\infty$ to $\infty$, like any PDF, equals $1$. This can be verified as follows.
-\begin{eqnarray}
-  \int_{x=-\infty}^{\infty}f_{X|Y}(x|y)dx &=& \int_{x=-\infty}^{\infty}\dfrac{f(x, y)}{f_Y(y)}dx \nonumber \\
-  &=& \dfrac{\int_{x=-\infty}^{\infty}f(x, y)dx}{f_Y(y)} \nonumber \\
-  &=& \dfrac{f_Y(y)}{f_Y(y)} \nonumber \\
-  &=& 1 \nonumber
-\end{eqnarray}
-Note that given a particular value of $y$, $f_Y(y)$ is a constant value independent of $x$, and hence can be taken out of the integration in the above derivation.
-
-If $X$ and $Y$ are independent variables, $f(x,y) = f_X(x)f_Y(y)$. In this case, \eqref{eq:conditionalpdf1} becomes
-\begin{eqnarray}
-  f_{X|Y}(x|y) &=& f_X(x) \nonumber
-\end{eqnarray}
-which implies that the information of $Y=y$ does not affect our understanding of $X$, just as if the information is absent.
-
-Equation \eqref{eq:conditionalpdf1} can be recurrently re-written as
-\begin{eqnarray}
-f_{X|Y}(x|y) &=& \dfrac{f_{Y|X}(y|x)f_X(x)}{f_Y(y)} \label{eq:conditionalpdf1a}
-\end{eqnarray}
-
-\section{Distribution of Derived Variable}
-
-This section discusses the distribution of a random variable that is formulated as a function of other random variables.
-
-\subsection{Function of a Random Variable}
+\subsection{Distribution of Derived Variable}
 
 Let $X$ be a random variable with PDF $f_X(x)$. Let $U$ be another random variable which is a function of $X$, $U=\phi(X)$. The PDF of $U$ can be calculated from $f_X$ and $\phi$. Details are given below.
 
 For simplicity, assume that $U=\phi(X)$ is an injective function (one-to-one function), and $X=\phi^{-1}(U)=\psi(U)$. In that case, the PDF of $U$, $g(u)$, can be obtained as follows.
 \begin{eqnarray}
-  g(u) &=& \left|\psi\textprime(u)\right|f\left(\psi(u)\right) \nonumber
+	g(u) &=& \left|\psi\textprime(u)\right|f\left(\psi(u)\right) \nonumber
 \end{eqnarray}
 For example, let $U=aX$, $X=\frac{U}{a}$.
 \begin{eqnarray}
-  g(u) &=& \left|\dfrac{1}{a}\right|f\left(\dfrac{u}{a}\right) \nonumber
+	g(u) &=& \left|\dfrac{1}{a}\right|f\left(\dfrac{u}{a}\right) \nonumber
 \end{eqnarray}
-
-\subsection{Sum of Multiple Random Variables}
 
 Let $X$, $Y$ be two random variables with joint distribution $f(x, y)$. Let $U=X+Y$. The PDF of $U$ can be obtained as follows.
 \begin{eqnarray}
-  g(u) &=& \int_{-\infty}^{\infty} f(x, u-x)dx \label{eq:conditionalpdf3}
+	g(u) &=& \int_{-\infty}^{\infty} f(x, u-x)dx \label{eq:conditionalpdf3}
 \end{eqnarray}
 In the special case where $X$ and $Y$ are independent, $f(x, y) = f_X(x)f_Y(y)$, and \eqref{eq:conditionalpdf3} becomes
 \begin{eqnarray}
-  g(u) &=& \int_{-\infty}^{\infty} f_X(x)f_Y(u-x)dx \nonumber \\
-  &=& f_X * f_Y \nonumber
+	g(u) &=& \int_{-\infty}^{\infty} f_X(x)f_Y(u-x)dx \nonumber \\
+	&=& f_X * f_Y \nonumber
 \end{eqnarray}
 where $*$ denotes the convolution operator.
 
-\section{Measure of Distribution}
-
-Given the probability function of a discrete random variable or the PDF of a continuous random variable, a lot of insights can be extracted. Commonly seen measures of a random variable are introduced in this section. Usually, they can be calculated from their associated probability functions or PDFs.
-
 \subsection{Expectation}
+
+Given the probability function of a discrete random variable or the PDF of a continuous random variable, a lot of insights can be extracted. Commonly seen measures of a random variable are introduced in this section and the following sections. Usually, they can be calculated from their associated probability functions or PDFs.
 
 In probability and statistics sense, \mync{expectation} (also known as \mync{mean}) describes the average value of a random variable, if the variable is generated many times. For discrete random variable $X$, the expectation is given below.
 \begin{eqnarray}
@@ -244,6 +163,80 @@ The kurtosis $\gamma_2$ measures the ``tailedness'' of a probability distributio
 	\includegraphics[width=250pt]{chapters/part-1/figures/kurtosis_demo.eps}
 	\caption{Demonstration of PDF with different excess kurtosis.} \label{fig:kurtosis_demo}
 \end{figure}
+
+\section{Joint Distribution}
+
+\mync{Joint distribution} describes the distribution of multiple random variable combinations. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. 
+
+For example, in a system identification problem the unknown system parameters are correlated with the measurements and their correlations are described by their joint PDF. System identification tries to estimate the unknown system parameters given the measurements.
+
+\subsection{Joint Probability}
+
+\mync{Joint probability} describes the distribution of two or more random variables. For simplicity, in the remainder of this section, two random variables $X$ and $Y$ are considered. The same concepts can be extended to more variables.
+
+In the case of discrete variables $X$ and $Y$, define joint probability function and joint cumulative distribution function as follows.
+\begin{eqnarray}
+  f(x, y) &=& P\left(X=x, Y=y\right) \nonumber \\
+  F(x, y) &=& P\left(X\leq x, Y\leq y\right) \nonumber \\
+  &=& \sum_{u\leq x}\sum_{v\leq y}f(u, v) \nonumber
+\end{eqnarray}
+
+In the case of continuous random variables, let
+\begin{eqnarray}
+  F(x, y) &=& P(X \leq x, Y \leq y) \nonumber
+\end{eqnarray}
+be the cumulative distribution function, and joint PDF of $X$ and $Y$ is defined by
+\begin{eqnarray}
+	f(x, y) &=& \dfrac{d^2}{dxdy}F(x, y) \nonumber
+\end{eqnarray}
+Therefore,
+\begin{eqnarray}
+  \int_{x=a}^{b}\int_{y=c}^{d} f(x, y) dxdy &=& P\left(a < X < b, c < y < d \right) \label{eq:jointpdf} \\
+  F(x, y) &=& \int_{u=-\infty}^{x}\int_{v=-\infty}^{y}f(u, v)dudv \nonumber
+\end{eqnarray}
+
+The cumulative distribution function and PDF of one of the variables, for example $X$, can be derived from the joint PDF as follows. By definition, 
+\begin{eqnarray}
+	F_X(x) &=& P(X \leq x) \nonumber \\
+	&=& \int_{u=-\infty}^{x}\int_{v=-\infty}^{\infty}f(u, v)dudv \nonumber
+\end{eqnarray}
+Thus,
+\begin{eqnarray}
+	f_X(x) &=& \dfrac{d}{dx}F_X(x) \nonumber \\
+	&=& \int_{y=-\infty}^{\infty} f(x, y) \label{eq:jointpdfdowngrade}
+\end{eqnarray}
+which is the integration of \eqref{eq:jointpdf} w.r.t. all other variables from $-\infty$ to $\infty$. 
+
+Equation \eqref{eq:jointpdfdowngrade} can be interpreted as follows. If $(X_i, Y_i)$ samples are generated from $f(x, y)$ in \eqref{eq:jointpdf}, and we only look at the $X_i$ of these samples, they should follow \eqref{eq:jointpdfdowngrade}.
+
+\subsection{Conditional Distribution}
+
+Equation \eqref{eq:jointpdfdowngrade} gives the distribution of $X$ regardless of the value of its corresponding $Y$. Conditional distribution, on the other hand, determines the distribution of $X$ when $Y$ is observed. For example, in \eqref{eq:jointpdf}, calculate $f_{X|Y}(x |Y=y)$, i.e., the PDF of $X$ given $Y=y$. In many literatures, $f_{X|Y}(x |Y=y)$ is denoted by $f_{X|Y}(x|y)$ for simplicity.
+
+The conditional PDF $f_{X|Y}(x|y)$ can be obtained as follows. It is essentially Bayes' rule applied on continuous variables.
+\begin{eqnarray}
+  f_{X|Y}(x|y) &=& \dfrac{f(x, y)}{f_Y(y)} \label{eq:conditionalpdf1}
+\end{eqnarray}
+where $f_Y(y)$ is obtained using \eqref{eq:jointpdfdowngrade}. Equation \eqref{eq:conditionalpdf1} is a function of both $x$ and $y$. Substituting the observed value of $y$ into \eqref{eq:conditionalpdf1} reduces it to the PDF of $x$ alone. Its integration with respect to $x$ from $-\infty$ to $\infty$, like any PDF, equals $1$. This can be verified as follows.
+\begin{eqnarray}
+  \int_{x=-\infty}^{\infty}f_{X|Y}(x|y)dx &=& \int_{x=-\infty}^{\infty}\dfrac{f(x, y)}{f_Y(y)}dx \nonumber \\
+  &=& \dfrac{\int_{x=-\infty}^{\infty}f(x, y)dx}{f_Y(y)} \nonumber \\
+  &=& \dfrac{f_Y(y)}{f_Y(y)} \nonumber \\
+  &=& 1 \nonumber
+\end{eqnarray}
+Note that given a particular value of $y$, $f_Y(y)$ is a constant value independent of $x$, and hence can be taken out of the integration in the above derivation.
+
+If $X$ and $Y$ are independent variables, $f(x,y) = f_X(x)f_Y(y)$. In this case, \eqref{eq:conditionalpdf1} becomes
+\begin{eqnarray}
+  f_{X|Y}(x|y) &=& f_X(x) \nonumber
+\end{eqnarray}
+which implies that the information of $Y=y$ does not affect our understanding of $X$, just as if the information is absent.
+
+Equation \eqref{eq:conditionalpdf1} can be recurrently re-written as
+\begin{eqnarray}
+f_{X|Y}(x|y) &=& \dfrac{f_{Y|X}(y|x)f_X(x)}{f_Y(y)} \label{eq:conditionalpdf1a}
+\end{eqnarray}
+
 
 \subsection{Covariance and Correlation}
 
@@ -445,272 +438,3 @@ CLT states that $\bar{X}_n$ follows normal distribution when $n$ is large. The m
 	\dfrac{\bar{X}_n-\mu}{\dfrac{\sigma}{\sqrt{n}}} \nonumber
 \end{eqnarray}
 follows standard normal distribution. 
-
-\section{Commonly Seen Distributions}
-
-Commonly seen special distributions are introduced here. Some of them are very useful in statistics analysis and are introduced in more details in later part of the notebook. Both discrete and continuous distributions are considered.
-
-\subsection{Bernoulli and Binomial Distributions}
-
-\mync{Bernoulli distribution} is a discrete probability distribution of random variable $X$ that can take only 2 values, $0$ or $1$. The probability of $X$ taking $1$ is denoted by $p$, while $0$ is $q=1-p$ as shown below.
-\begin{eqnarray}
-  && f(x) = P(X=x) = \left\{\begin{array}{cc}
-                           p & x=1 \\
-                           q & x=0
-                         \end{array}\right. \nonumber
-\end{eqnarray}
-subject to $0\leq p \leq 1$, $0\leq q \leq 1$ and $p+q=1$. Each test is also called a \mync{Bernoulli trail}.
-
-The expectation, variance, skewness and excess kurtosis of the distribution are $p$, $pq$, $\dfrac{q-p}{\sqrt{pq}}$ and $\dfrac{1-6pq}{pq}$, respectively.
-
-Run Bernoulli trails repeatedly. Each Bernoulli trail has a probability of $p$ to take value $1$, and $q=1-p$ to take value $0$. The test is carried out $n$ times. The number of the tests with outcome $1$ is a discrete random variable $0\leq X \leq n$. In this case, $X$ follows \mync{binomial distribution}, whose probability function is given by
-\begin{eqnarray}
-  f(x) &=& P(X=x) \nonumber \\
-  &=& \left(\begin{array}{c}
-              n \\
-              x
-            \end{array}\right)p^x(1-p)^{n-x} \nonumber \\
-  &=& \dfrac{n!}{x!(n-x)!}p^x(1-p)^{n-x}
-\end{eqnarray}
-
-Bernoulli distribution can be taken as a special case of binomial distribution with $n=1$, $x=1$. The expectation, variance, skewness and excess kurtosis of the binomial distribution are $np$, $npq$, $\dfrac{q-p}{\sqrt{npq}}$ and $\dfrac{1-6pq}{npq}$, respectively.
-
-If $n$ is large, Binomial distribution becomes a verification of CLT on Bernoulli trail. Indeed, when $n$ is large, binomial distribution approaches normal distribution.
-
-Binomial distribution can be extended to \mync{multinomial distribution}, where instead of a single event $A$ happening with probability $p$ or not happening with probability $q$, s.t. $p+q=1$, consider multiple events $A_1$, $A_2$, ..., $A_m$, each with probability $p_1$, $p_2$, ..., $p_m$, respectively, s.t. $p_1+p_2+\ldots+p_m=1$. Consider a total of $n$ tests. The number of $A_1$ occurring is a random variable $X_1$, event $A_2$, $X_2$, and so on. Multinomial distribution studies the probability of
-\begin{eqnarray}
-  P(X_1=x_1, X_2=x_2,\ldots, X_m = x_m) &=& \dfrac{n!}{x_1!x_2!\ldots x_m!}p_1^{x_1}p_2^{x_2}\ldots p_m^{x_m} \nonumber \\
-  \textup{s.t.} && \sum x_i = n \nonumber
-\end{eqnarray}
-
-Binomial distribution is different from \mync{hypergeometric distribution}. Binomial distribution is used to model ``sampling with replacement'' process: each Bernoulli trail backing up the binomial distribution is i.i.d. and one's result is not affected by its previous trails. Consider picking up a marbles from a bag containing mixture of red and blue marbles whose numbers are given by $r$ and $b$ respectively. Repeat the test $n$ times. After each test, put the marble back to the bag. The number of blue marbles collected is a random variable $X$ that follows binomial distribution
-\begin{eqnarray}
-f(x) &=& \left(\begin{array}{c}
-                        n \\
-                        x
-                      \end{array}\right)\left(\dfrac{b}{b+r}\right)^x\left(\dfrac{r}{b+r}\right)^{n-x} \nonumber \nonumber
-\end{eqnarray}
-
-On the other hand, if after each test the marble is not returned to the bag, it becomes a hypergeometric distribution and the probability follows
-\begin{eqnarray}
-f(x) = P(X=x) = \dfrac{\left(\begin{array}{c}
-                               b \\
-                               x
-                             \end{array}\right)\left(\begin{array}{c}
-                                                       r \\
-                                                       n-x
-                                                     \end{array}\right)}{\left(\begin{array}{c}
-                                                                                 b+r \\
-                                                                                 n
-                                                                               \end{array}\right)} \nonumber
-\end{eqnarray}
-with $\textup{max}(0, n-r) \leq x \leq \textup{min}(n, b)$.
-
-When $b$, $r$ are far larger than $n$, the hypergeometric distribution can be approximated by the binomial distribution. When $b$ and $r$ approaches infinity with constant ratio $b/(b+r)$ and $r/(b+r)$, hypergeometric distribution converges to binomial distribution.
-
-\subsection{Normal Distribution}
-
-\mync{Normal distribution}, also known as \mync{Gaussian distribution}, is a continuous distribution. It is one of the most widely used distributions to model random noise. One of the explanations is given as follows. Many measurements such as sensor readings are in fact aggregated values. For example, consider a sensor whose reading refreshes at $1Hz$. Behind the screen, it might be sampling the signal at $1000Hz$, and the reading is the average of every $1000$ samples. According to CLT, the reading shall follow normal distribution.
-
-We will discuss single normal distribution first, followed by joint multivariate normal distribution.
-
-The PDF of the normal distribution is given by
-\begin{eqnarray}
-  f(x) &=& \dfrac{1}{\sigma\sqrt{2\pi}}e^{-\dfrac{(x-\mu)^2}{2\sigma^2}} \nonumber
-\end{eqnarray}
-where $\mu$, $\sigma^2$ are the mean and variance of the distribution respectively. The skewness and excess kurtosis of normal distribution are zero.
-
-Let $X$ be a random variable following normal distribution with mean $\mu$ and variance $\sigma^2$. This can be denoted by $X\sim\mathcal{N}(\mu, \sigma^2)$. Let $Z=\dfrac{X-\mu}{\sigma}$, and $Z$ would be a standard normal distribution with mean $0$ and variance $1$.
-
-For a random variable $X$ following normal distribution, the probabilities of its value falling between $\pm \sigma$, $\pm 2\sigma$ and $\pm 3\sigma$ are $0.6827$, $0.9545$ and $0.9973$ respectively. In statistics, sometimes we will take samples with residuals larger than $|3\sigma|$ as outliers.
-
-Multivariate normal distribution describes a vector of random variables $X = \left[X_1, \ldots, X_m\right]$ that follows joint normal distribution. The joint PDF is given by
-\begin{eqnarray}
-  f(x) &=& \dfrac{1}{\sqrt{(2\pi)^m|\Sigma|}}e^{-\dfrac{(x-\mu)^T\Sigma^{-1}(x-\mu)}{2}} \nonumber
-\end{eqnarray}
-where $\mu \in \mathbb{R}^m$ is the mean of $x$ and $\Sigma \in \mathbb{R}^{m\times m}$ the covariance matrix. The off diagonal elements in $\Sigma$ describes the correlation of elements in $X$. The $|\Sigma|$ is the determinant of $\Sigma$.
-
-\subsection{Poisson Distribution}
-
-\mync{Poisson distribution} is a discrete probability distribution that takes non-negative integer values $0$, $1$, $2$, $\ldots$. The probability function of poisson distribution is given by
-\begin{eqnarray}
-  f(x) = P(X=x) = \dfrac{\lambda^xe^{-\lambda}}{x!} \nonumber
-\end{eqnarray}
-where $\lambda >0$ is the shape parameter as shown in Fig. \ref{fig:poisson_pmf}.
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=250pt]{chapters/part-1/figures/poisson_pmf.eps}
-	\caption{Poisson distribution with different $\lambda$.} \label{fig:poisson_pmf}
-\end{figure}
-Notice that the sum of two Poisson distribution with shape parameters $\lambda_1$ and $\lambda_2$ is also Poisson distribution with $\lambda = \lambda_1 + \lambda_2$.
-
-Poisson distribution is often used to describe the probability of an event happening a particular number of times in a given window, assuming each occurrence of the event is independent. The parameter $\lambda$ reflects the average number of occurrence. For example, it can model the number of times a machine fails in a year, assuming each failure is independent from another (the failures are completely random and independent). 
-
-Binomial distribution is closely connected with Poisson distribution. Poisson distribution can be taken as a limiting case of binomial distribution when $n\rightarrow\infty$, $p\rightarrow 0$ is small, and $\lambda = np$ a decent value. A demonstration is given in Fig. \ref{fig:poisson_vs_b}.
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=250pt]{chapters/part-1/figures/poisson_vs_b.eps}
-	\caption{Poisson distribution approximation using binomial distribution.} \label{fig:poisson_vs_b}
-\end{figure}
-
-An intuitive explanation is given using the following example. Consider studying the number of failure of a machine in one year. In each second, the machine has a failure rate of $p$, which of course is very small. The total number of seconds in a year is $31,536,000$, which is a large number and it is associated with the number of trails. The number of failure of the machine in a year can be approximately described by binomial distribution with $n=31536000$. The underlying assumption is that the machine can either fail or survive every second with the probability of $p$ and $1-p$ respectively, and its status in each second are independent, ignoring the downtime of the machine.
-
-Another example of Poisson distribution is the number of visitors of a website in a given period of time. Each internet user has a small probability $p$ to visit the website. The total number of internet users is $n$ which is a large number. The number of visitors to the website follows Poisson distribution with $\lambda=np$ being the expected visitor number.
-
-The expectation, variance, skewness and excess kurtosis of the distribution are $\lambda$, $\lambda$, $\dfrac{1}{\sqrt{\lambda}}$ and $\dfrac{1}{\lambda}$, respectively.
-
-\subsection{Exponential Distribution} \label{sec:exponential_distribution}
-
-\mync{Exponential distribution} can be used to model the duration of time between two events in a Poisson distribution. For example, it can model the operating time of a machine between two failures, assuming that the failures are independent and random.
-
-Exponential distribution is an important special case of the $\Gamma$ distribution. More about $\Gamma$ distribution will be introduced in more details later.
-
-The PDF is the exponential distribution is given by
-\begin{eqnarray}
-	f(x) &=& \left\{\begin{array}{cc}
-		\lambda e^{-\lambda x} & x \geq 0 \\
-		0 & \textup{otherwise}
-	\end{array}\right. \label{eq:exponential_pdf}
-\end{eqnarray}
-where $\lambda$ is the shape parameter that reflects the average occurrence rate of the event within a unit time window. Exponential distributions with different choice of $\lambda$ is plotted in Fig. \ref{fig:exponential}.
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=250pt]{chapters/part-1/figures/exponential_pdf.eps}
-	\caption{Exponential distributions with different $\lambda$.} \label{fig:exponential}
-\end{figure}
-
-The expectation, variance, skewness and excess kurtosis of the distribution are $\dfrac{1}{\lambda}$, $\dfrac{1}{\lambda^2}$, $2$ and $6$, respectively.
-
-\subsection{Uniform Distribution}
-
-Uniform distribution can be either continuous or discrete. Under the scope of this discussion, continuous uniform distribution is studied.
-
-The PDF of continuous uniform distribution is given by
-\begin{eqnarray}
-  f(x) &=& \left\{\begin{array}{cc}
-                    \dfrac{1}{b-a} & a \leq x \leq b \\
-                    0 & \textup{otherwise}
-                  \end{array}\right. \nonumber
-\end{eqnarray}
-
-The expectation, variance, skewness and excess kurtosis of the distribution are $\dfrac{a+b}{2}$, $\dfrac{(b-a)^2}{12}$, $0$ and $-\dfrac{6}{5}$, respectively.
-
-\subsection{Cauchy Distribution}
-
-Cauchy distribution, named after Augustin Cauchy, is a continuous distribution. The PDF is given by
-\begin{eqnarray}
-  f(x) &=& \dfrac{1}{\pi\gamma\left(1+\left(\dfrac{x-x_0}{\gamma}\right)^2\right)} \nonumber \\ &=& \dfrac{1}{\pi}\dfrac{\gamma}{(x-x_0)^2+\gamma^2} \nonumber
-\end{eqnarray}
-and it is plotted in Fig. \ref{fig:cauchy_pdf}.
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=250pt]{chapters/part-1/figures/cauchy_pdf.eps}
-	\caption{Cauchy Distribution.} \label{fig:cauchy_pdf}
-\end{figure}
-
-From mathematics perspective, Cauchy distribution describes the ratio of two independent normal distributed random variables with mean zero. It is a useful distribution in physics.
-
-\subsection{$\Gamma$, $\chi^2$ and $\beta$ Distributions}
-
-The \mync{$\Gamma$}[gamma], \mync{$\chi^2$}[chi-square] and \mync{$\beta$}[beta] distributions are introduced as follows.
-
-The $\Gamma$ distribution is a continuous distribution with the following PDF
-\begin{eqnarray}
-  f(x) &=& \left\{\begin{array}{cc}
-                    \dfrac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x} & x > 0 \\
-                    0 & \textup{otherwise}
-                  \end{array}\right. \label{eq:gammapdf}
-\end{eqnarray}
-where $\alpha>0$ and $\beta>0$ are the shape parameters (some literatures uses scale parameter $\theta = 1/\beta$ in the equation), and $\Gamma(\cdot)$ denotes the Gamma function
-\begin{eqnarray}
-  \Gamma(\alpha) &=& \int_{0}^{\infty}t^{\alpha-1}e^{-t}dt \nonumber
-\end{eqnarray}
-for $\alpha > 0$. $\Gamma$ distribution is the superset of many distributions. For example, the exponential distribution introduced in the earlier section is a special case of $\Gamma$ distribution with $\alpha=1$, and it is used to model the time interval between two events in the Poisson distribution.
-
-The plot of the PDF of Gamma distribution is given in Fig. \ref{fig:gamma_pdf}.
-\begin{figure}
-	\centering
-	\includegraphics[width=350pt]{chapters/part-1/figures/gamma_pdf.eps}
-	\caption{Gamma Distribution.} \label{fig:gamma_pdf}
-\end{figure}
-
-\begin{shortbox}
-\Boxhead{A Little Bit about Gamma Function}
-
-Gamma function is given by
-\begin{eqnarray}
-  \Gamma(\alpha) &=& \int_{0}^{\infty}t^{\alpha-1}e^{-t}dt \nonumber
-\end{eqnarray}
-
-It is obvious that $\Gamma(1)=1$. If $\alpha > 1$, an integration by parts shows that
-\begin{eqnarray}
-  \Gamma(\alpha) &=& (\alpha-1)\Gamma(\alpha-1) \nonumber
-\end{eqnarray}
-Therefore, $\Gamma(\alpha)=(\alpha-1)(\alpha-2)\ldots \times 3 \times 2 \times 1 \times \Gamma(1) = (\alpha-1)!$ for $\alpha \in \mathbb{N}^+$, with $0!=1$.
-
-\end{shortbox}
-
-The expectation, variance, skewness and excess kurtosis of the distribution are $\dfrac{\alpha}{\beta}$, $\dfrac{\alpha}{\beta^2}$, $\dfrac{2}{\sqrt{\alpha}}$ and $\dfrac{6}{\alpha}$, respectively.
-
-The $\chi^2$ estimation is a special case of Gamma distribution. In \eqref{eq:gammapdf}, let $\alpha = \dfrac{r}{2}$ and $\beta=\dfrac{1}{2}$ to get the PDF of $\chi^2$ distribution as follows.
-\begin{eqnarray}
-  f(x) &=& \left\{\begin{array}{cc}
-                    \dfrac{1}{\Gamma(r/2)2^{r/2}}x^{r/2-1}e^{-x/2} & x > 0  \\
-                    0 & \textup{otherwise}
-                  \end{array}\right. \label{eq:chi2pdf}
-\end{eqnarray}
-Equation \eqref{eq:chi2pdf} is also denoted by $\chi^2(r)$, where $r$ is known as the degrees of freedom. The plots of PDFs with different $\gamma$ are shown in Fig. \ref{fig:chi2_pdf}.
-\begin{figure}
-	\centering
-	\includegraphics[width=250pt]{chapters/part-1/figures/chi2_pdf.eps}
-	\caption{The $\chi^2$ Distribution.} \label{fig:chi2_pdf}
-\end{figure}
-
-The $\chi^2$ distribution can be used to model the sum of the squares of $r$ independent standard normal distributions, making it an important distribution is statistics, such as in outlier test. 
-
-The expectation, variance, skewness and excess kurtosis of the distribution are $r$, $2r$, $\sqrt{\dfrac{8}{r}}$ and $\dfrac{12}{r}$, respectively.
-
-Let $X_1$ and $X_2$ be two independent random variables following Gamma distributions with shape parameters $\alpha_1$ and $\alpha_2$ respectively and with $\beta = 1$ in the PDF \eqref{eq:gammapdf}. Denote $X=\dfrac{X_1}{X_1+X_2}$. In this case, $X$ would be a random variable following $\beta$ distribution whose PDF can be derived from \eqref{eq:gammapdf} and it is given by
-\begin{eqnarray}
-  f(x) &=& \left\{\begin{array}{cc}
-                    \dfrac{\Gamma(\alpha_1 + \alpha_2)}{\Gamma(\alpha_1)\Gamma(\alpha_2)}x^{\alpha_1-1}(1-x)^{\alpha_2-1} & 0 < x < 1 \\
-                    0 & \textup{otherwise}
-                  \end{array}\right. \label{eq:betapdf}
-\end{eqnarray}
-In some literatures, notation $(a, b)$ or $(\alpha, \beta)$ are used to denote $(\alpha_1, \alpha_2)$ in \eqref{eq:betapdf}.
-
-\subsection{Student's $t$-Distribution}
-
-The zero-mean \mync{Student's $t$-distribution} (also referred as $t$-distribution for simplicity) PDF is given by
-\begin{eqnarray}
-	f(x) &=& \dfrac{\Gamma\left(\dfrac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\sigma\Gamma\left(\dfrac{\nu}{2}\right)}\left(1+\dfrac{x^2}{\nu\sigma^2}\right)^{-\dfrac{\nu+1}{2}} \label{eq:tpdf}
-\end{eqnarray}
-where $\nu$ and $\sigma$ are known as the shape and scale parameters respectively. When $\nu\rightarrow\infty$, \eqref{eq:tpdf} reduces to normal distribution. 
-
-The $t$-distribution can also be derived from normal and $\chi^2$ distributions as follows. Let $X_1$ and $X_2$ be two random variables following standard normal distribution and $\chi^2$ distribution with degree of freedom $\nu$. Let
-\begin{eqnarray}
-	X &=& \dfrac{X_1}{\sqrt{\dfrac{X_2}{\nu}}} \nonumber
-\end{eqnarray}
-then $X$ follows $t$-distribution \eqref{eq:tpdf}.
-
-Student's $t$-distribution is famous for its heavy-tail characteristics, and it is good at emulating noise with outliers.
-
-The expectation, variance, skewness and excess kurtosis of the $t$-distribution given by \eqref{eq:tpdf} are $0$, $\dfrac{\nu}{\nu-2}$ $(\nu>2)$, $0$ $(\nu>3)$ and $\dfrac{6}{\nu-4}$ $(\nu>4)$ respectively.
-
-\subsection{$F$-Distribution}
-
-Let $X_1$, $X_2$ be two random variables following $\chi^2$ distribution with degree of freedom $\nu_1$ and $\nu_2$ respectively. Let
-\begin{eqnarray}
-	X &=& \dfrac{\dfrac{X_1}{\nu_1}}{\dfrac{X_2}{\nu_2}} \nonumber
-\end{eqnarray}
-then $X$ follows $F$-distribution, named after R.A. Fisher.
-
-The PDF of the $F$-distribution is given by
-\begin{eqnarray}
-	f(x) &=& \left\{\begin{array}{cc}
-		\dfrac{\Gamma\left(\dfrac{\nu_1+\nu_2}{2}\right)}{\Gamma\left(\dfrac{\nu_1}{2}\right)\Gamma\left(\dfrac{\nu_2}{2}\right)}\nu_1^{\dfrac{\nu_1}{2}}\nu_2^{\dfrac{\nu_2}{2}}x^{\left(\dfrac{\nu_1}{2}-1\right)}\left(\nu_2+\nu_1 x\right)^{-\dfrac{\nu_1+\nu_2}{2}} & x > 0 \\
-		0 & \textup{otherwise}
-	\end{array}\right. \nonumber
-\end{eqnarray}
-where $\nu_1$, $\nu_2$ are the shape parameters of the distribution. 
