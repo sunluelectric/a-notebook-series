@@ -48,30 +48,24 @@ which does not follow \eqref{eq:covbasiceq} and it is a non-local functional.
 
 \subsection{Finite Differences Approximation}
 
-With the localization property, an intuitive way of solving the calculus of variation is to use the following finite differences to approximate functional \eqref{eq:covbasiceq} as follows.
+An intuitive way of solving the calculus of variation is as follows. Let $x_i$, $i=0,...,n+1$ be samples uniformly taken from $[a,b]$ where $x_0 = a$ and $x_{n+1}=b$, and $y_i = y(x_i)$. With localization property, \eqref{eq:covbasiceq} can be approximated by the following finite differences
 \begin{eqnarray}
-	J[y] &\approx& J(y_1, \ldots y_n) \nonumber \\
-	&=& \sum_{i=1}^{n+1} F\left(x_i, y_i, \frac{y_i-y_{i-1}}{h}\right) \label{eq:covapprox} \\
-	\textup{s.t.} && \left\{\begin{array}{ccc}
-		y_i &=& y(x_i) \\
-		h &=& x_i - x_{i-1} \\
-		a &=& x_0 \\
-		b &=& x_{n+1}
-	\end{array}\right. \nonumber
+	J[y] &\approx&  \sum_{i=1}^{n+1} F\left(x_i, y_i, \frac{y_i-y_{i-1}}{h}\right) \label{eq:covapprox}
 \end{eqnarray}
-and when $n\rightarrow\infty$, \eqref{eq:covapprox} converges to \eqref{eq:covbasiceq}. The above converts the calculus of variation problem into a finite differences problem. Instead of looking for a continuous curve $y(x)$, the problem is now looking for a vector $[y_1, y_2, \ldots, y_n]$ that maximizes or minimizes $ J(y_1, \ldots y_n)$. Of course, $y_i$ cannot be any manually selected value. Restrictions apply, specifically $y_i = y(x_i)$, which limits the value of $y_i$ by physical laws.
+where $h=x_{i+1}-x_i$. When $n\rightarrow\infty$, \eqref{eq:covapprox} converges to \eqref{eq:covbasiceq}. The above converts the calculus of variation problem into a finite differences problem. Instead of looking for a continuous curve $y(x)$, the problem is now looking for a vector $[y_1, y_2, \ldots, y_n]$ that maximizes or minimizes $J$. Each $y(x)$ in the domain of the functional corresponds with a vector $[y_1, y_2, \ldots, y_n]$ which can be taken as a coordinate in the $n$-dimensional space.
 
-\section{Function Space}
 
-A function $y(x)$ has a domain that defines the set of possible input variables of $x$. Similarly, a functional $J[y]$ has a function space that defines the set of possible choice of curves of $y$. Each probably choice of $y$ is represented as a ``dot'' in the function space.
+\subsection{Function Space}
 
-\subsection{Function Space of a Functional}
+A function $y(x)$ has a domain that defines the set of possible input variables of $x$. Similarly, a functional $J[y]$ has a function space that defines the set of possible choice of curves of $y$. 
 
-The function space is a functional is determined by both the physical law behind the problem as well as the formulation of the functional. For example, consider functional
+The function space is determined by both the physical law behind the problem as well as the formulation of the functional. For example, consider functional
 \begin{eqnarray}
-	J = \int_{a}^{b} F\left(x, y, y\prime\right)dx \nonumber
+	J[y] &=& \int_{a}^{b} F\left(x, y, y\textprime\right)dx \nonumber
 \end{eqnarray}
-It is rather natural to assume the function space to be at least a continuous function defined in $[a,b]$ that is first-order derivable.
+It is rather natural to assume the function space to be any function defined on the closed interval $[a,b]$ that is continuous and has (continuous) $1$-st order derivative.
+
+Notice that with \eqref{eq:covapprox} each $y$ in the function space corresponds with a ``dot'' in the $n$-dimensional space. This may help with understanding the concept of norm which will me introduced in the remaining of this section. 
 
 \subsection{Normed Linear Space and Norm of Function}
 
@@ -101,16 +95,38 @@ Further more, $A$ is normed if for $\forall x \in A$, there is a non-negative nu
 
 In a normed linear space, the distance between two elements $x$, $y$ is defined as $\norm{x-y}$.
 
+Using norm, the following distances are defined based on the property of the function space.
 
+Consider function space $\mathcal{C}(a,b)$ that consists of all continuous $y(x)$ defined on a closed interval $[a,b]$. Let $y^1$, $y^2$ be two functions in the function space. The following norm is often used to define the difference of $y^1$ and $y^2$.
+\begin{eqnarray}
+  \norm{y_1 - y_2} &=& \max_{a\leq x \leq b} |y(x)| \label{eq:functionspacenorm0}
+\end{eqnarray}
 
+Consider function space $\mathcal{D}_1(a,b)$ that consists of all continuous and have continuous first derivatives $y(x)$ defined on a closed interval $[a,b]$. Let $y^1$, $y^2$ be two functions in the function space. The following norm is often used to define the difference of $y^1$ and $y^2$.
+\begin{eqnarray}
+  \norm{y_1 - y_2} &=& \max_{a\leq x \leq b} |y(x)| + \max_{a\leq x \leq b} |y\textprime(x)| \label{eq:functionspacenorm1}
+\end{eqnarray} 
 
+Consider function space $\mathcal{D}_n(a,b)$ that consists of all continuous and have continuous $n$-th order derivatives $y(x)$ defined on a closed interval $[a,b]$. Let $y^1$, $y^2$ be two functions in the function space. The following norm is often used to define the difference of $y^1$ and $y^2$.
+\begin{eqnarray}
+  \norm{y_1 - y_2} &=& \sum_{i=0}^{n} \max_{a\leq x \leq b} |y^{(i)}(x)| \label{eq:functionspacenormn}
+\end{eqnarray} 
 
+\subsection{Functional Continuity}
 
+A function $y(x)$ is said to be continuous at $x_0$ if $y(x) - y(x_0)$ can be as small as desired provided that $x-x_0$ is small. The similar idea applies to functional continuity. 
 
+A functional $J[y]$ is said to be a \mync{continuous functional} at the point $y^0$ if for any small $\epsilon$, there is always a corresponding $\delta$, so that
+\begin{eqnarray}
+  J[y] - J[y_0] &<& \epsilon \nonumber
+\end{eqnarray}
+provided that $\norm{y-y^0} < \delta$, where $\norm{\cdot}$ is one of the norms introduced in \eqref{eq:functionspacenorm0}, \eqref{eq:functionspacenorm1} or \eqref{eq:functionspacenormn}. 
 
+Functional continuity guarantees that ``similar'' functions $y^1$ and $y^2$ in the function space result in close $J[y^1]$ and $J[y^2]$, where ``similar'' is defined by the norm of the function that reflects the maximum differences of two functions in magnitude or in differentials magnitudes.
 
-
-
+Functional continuity on functional space $\mathcal{C}$ or $\mathcal{D}_1$ is often the minimum prerequisite where calculus of variation (to be introduced in the remaining sections) can be applied.
+ 
+\section{Variation of Functional}
 
 
 
