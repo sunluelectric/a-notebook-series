@@ -53,7 +53,7 @@ Figure~\ref{fig:agenticwf1} is not the only architectural pattern for agentic AI
 	\label{fig:agenticwf2}
 \end{figure}
 
-Another key feature of LLM-based agentic AI is that it does not rely solely on the internal knowledge encoded in the model. Instead, it can be configured to interact with external tools such as databases, web browsers, calculators, etc., to enhance its problem-solving capabilities. This tool-augmented reasoning is essential for tasks that require up-to-date information, precise computation, or direct interaction with external environments. It also helps with reducing hallucination. A representative architecture is given in Fig.~\ref{fig:agenticwf3}, where the LLM autonomously decides when to invoke an external tool and generates the appropriate commands using pre-defined protocols known as the \mync{Message Communication Protocol}[MCP]. More details are given in later sections.
+Another key feature of LLM-based agentic AI is that it does not rely solely on the internal knowledge encoded in the model. Instead, it can be configured to interact with external tools such as databases, web browsers, calculators, etc., to enhance its problem-solving capabilities. This tool-augmented reasoning is essential for tasks that require up-to-date information, precise computation, or direct interaction with external environments. It also helps with reducing hallucination. A representative architecture is given in Fig.~\ref{fig:agenticwf3}, where the LLM autonomously decides when to invoke an external tool and generates the appropriate commands using pre-defined protocols known as the \myabb{Model Context Protocol}{MCP}. MCP is introduced in Section~\ref{sec:mcp}.
 
 \begin{figure}[!htb]
 	\centering
@@ -1038,19 +1038,37 @@ to retrieve all checkpointer values, i.e., the complete sequence of state snapsh
 As far as the scope of this notebook concerns, we focus on AutoGen Core, AutoGen AgentChat and AutoGen Extensions.
 
 \vspace{0.1in}
-\noindent \textbf{AutoGen Chat Agent Definition}
+\noindent \textbf{Agent}
 \vspace{0.1in}
 
 The minimum realization of an AI agent in AutoGen framework is given below.
 
 
+\vspace{0.1in}
+\noindent \textbf{Agent with Multimodal LLM}
+\vspace{0.1in}
 
 
 
 
+\vspace{0.1in}
+\noindent \textbf{Tool}
+\vspace{0.1in}
+
+AutoGen allows easy definition of a tool in the form of a function. It is also compatible with tools defined by LangChain and MCP. More details of MCP is introduced in the next Section~\ref{sec:mcp}. Syntax and examples are given below.
+
+\vspace{0.1in}
+\noindent \textbf{Team}
+\vspace{0.1in}
+
+AutoGen allows the user to define a team that consists of multiple AI agents for a task. The role of each AI agent is defined. The overall task is defined. The team tries to achieve the objective by letting the AI agents in the team communicate freely and discuss the assigned task, until the conclusion is drawn. This is to some extent similar with the idea of ``crew'' in CrewAI. 
 
 
 
+
+\section{Model Context Protocol} \label{sec:mcp}
+
+\mync{Model Context Protocol}[MCP] is a standardized protocol to connect AI agents to variety of resources and tools.
 
 
 

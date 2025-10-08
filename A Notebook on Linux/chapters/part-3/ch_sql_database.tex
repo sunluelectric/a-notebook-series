@@ -1,12 +1,12 @@
 \chapter{Database}
 
-Database and database manage systems are introduced in this and consecutive chapters. Both relational and non-relational databases are covered. Tools and languages to manipulate databases, such as structured query language for relational databases, are introduced.
+Database and database manage systems are introduced in this and the next few chapters. Both relational and non-relational databases are covered. Tools and commands to manipulate databases are introduced.
 
 \section{Relational Database}
 
-\mync{Database}, in a broad view, refers to an organized collection of data of any format. In this sense, any file format that hosts information in a meaningful and explainable way, such as CSV, XML and JSON, is a database. These file formats often work fine when the data is stored in a centralized manner and its size is small.
+\mync{Database}, in a broad view, refers to an organized collection of data of any format. In this sense, any file format that hosts information in a meaningful and explainable way, such as CSV, XML and JSON, is a database. These file formats often work fine when the data is stored in a centralized manner with small data size.
 
-As the data size grows, the robustness and efficiency of storing and retrieving data become challenging, and different database models have been proposed to tackle it. Dedicated software, namely \mync{database manage system}[DBMS], is developed to manage and maintain the database and provide an interface for the users to create, retrieve, update and delete data. Different database models require different database engines and DBMS, and different DBMS may provide different interfaces for the users.
+As the data size grows, the robustness and efficiency of storing and retrieving data become challenging, and different database models have been proposed to tackle it. Dedicated software, namely \mync{Database Manage System}[DBMS], is developed to manage and maintain the database and provide an interface for the users to create, retrieve, update and delete data. Different database models require different database engines and DBMS, and different DBMS may provide different interfaces for the users.
 
 There are many database models available on the market. The most widely seen database models can be divided into two categories, namely the \mync{Relational Database}[RDB] and the non-relational databases.
 
@@ -23,7 +23,7 @@ Examples of relational databases include Oracle, MySQL, Microsoft SQL Server, Ma
 
 An example of a table used in RDB is given in Table \ref{ch:db:tab:relationaldbexample}. The table has a name \verb|user| and 4 attributes \verb|user_id|, \verb|user_email|, \verb|membership| and \verb|referee_id|. A table should have an attribute (or a set of attributes) defined as the primary key. In this example, \verb|user_id| is assigned to be the primary key as denoted by the asterisk. The primary key is used to uniquely identify a row in the table. A primary key can consist a single column or multiple columns. When a primary key is composed of multiple columns, it is called a composite key. A table should have one and only one primary key.
 
-Depending on the meaning behind the primary key, it can be divided into two types, namely surrogate key and natural key. A surrogate key is like a serial number or an incremental ID which serves only for recording and distinguishing rows and does not have a physical meaning. In contrast, a natural key such as a timestamp, email, citizenship IC number, reflects some meaningful information in the real world.
+Depending on the meaning behind the primary key, it can be divided into two types, namely surrogate key and natural key. A \mync{surrogate key} is like a serial number or an incremental ID which serves only for recording and distinguishing rows and does not have a physical meaning. In contrast, a \mync{natural key} such as a timestamp, email, citizenship IC number, reflects some meaningful information in the real world.
 
 \begin{table}
 	\centering \caption{An example of a relational database table.} \label{ch:db:tab:relationaldbexample}
@@ -53,21 +53,33 @@ A foreign key is the attribute(s) that link a table to another table. It is ofte
 
 The introducing of foreign key helps to maintain the consistency and integrity of the database. For example, when adding a new member to Table \ref{ch:db:tab:relationaldbexample}, the DBMS will first check whether the membership type is registered in Table \ref{ch:db:tab:relationaldbexampleanother}. If not, the insert operation will be rejected. This guarantees that all registered members have valid membership types.
 
-Notice that a table can have multiple foreign keys. The foreign key cannot only relate a table to another, but can also relate a table to itself. For example, the ``referee-id'' attribute in Table \ref{ch:db:tab:relationaldbexample} could be the foreign key that links to ``user-id'' of the same table.
+Notice that a table can have multiple foreign keys. The foreign key can not only relate a table to another, but also relate a table to itself. For example, the ``referee-id'' attribute in Table \ref{ch:db:tab:relationaldbexample} could be the foreign key that links to ``user-id'' of the same table.
 
 \section{Non-Relational Database}
 
-\mync{Non-relational database}[NoSQL database] gained popularity in the $2000$s. In contrast to RDBs, NoSQL databases do not store data in tables, but in key-value pairs, graphs, documents or other formats. Compared with RDBs, they are more flexible and efficient, and easier to use in certain types of applications. Examples of NoSQL databases include Redis, Azure CosmosDB, Oracle NoSQL Database, Amazon DynamoDB, MongoDB, AllegroGraph, ChromaDB and many more.
+\mync{Non-relational database}[NoSQL database] gained popularity in the $2000$s. In contrast to RDBs, NoSQL databases do not store data in tables, but in key-value pairs, graphs, documents or other formats. Compared with RDBs, they are more flexible and may be easier to use in certain types of applications. Examples of NoSQL databases include Redis, Azure CosmosDB, Oracle NoSQL Database, Amazon DynamoDB, MongoDB, AllegroGraph, ChromaDB and many more.
 
-Unlike SQL which applies to almost all RDBMSes, there is no universally adopted language for NoSQL DBMSes. This is mainly because NoSQL databases have different data structures, hence each of which requiring distinct query language. We use ``NoSQL'' to refer to a collective set of (very different and not interchangeable) languages used for NoSQL databases management. It is impossible to cover all the different types of NoSQL databases and their corresponding DBMS manipulation languages in this notebook. Only selected NoSQL databases are briefly introduced in later chapters as examples.
+Unlike SQL which applies to almost all RDBMSes, there is no universally adopted language for NoSQL DBMSes. This is mainly because each type of NoSQL databases has a different data structure, hence each of which requiring distinct query language. We use ``NoSQL'' to refer to a collective set of (very different and not interchangeable) languages used for NoSQL databases management. It is impossible to cover all the different types of NoSQL databases and their corresponding DBMS manipulation languages in this notebook. Only selected NoSQL databases are briefly introduced in later chapters as examples.
 
 Database services, both RDB and NoSQL, have become critical to our daily life and they are massively deployed on servers. In many applications they work together to deliver the service.
 
 \section{Structured Query Language}
 
-As of this writing, RDB is the most commonly used database, and SQL is its standard manipulating and querying language. They are introduced below.
+SQL is the most widely used language for interacting with RDBMS for data query and maintenance. SQL is very powerful and flexible in its full capability, and it is hardly possible to cover everything concisely. Hence, in this section only the basic SQL operations are introduced.
 
-\subsection{RDB Naming Conventions} \label{ch:db:subsec:tables}
+Notice that the support of different DBMS to SQL may differ slightly. This is because an DBMS may (in fact, very likely) fail to adopt everything in the latest SQL standard. However, most of the commands especially the widely used ones such as creating tables, inserting rows and most of the querying, shall be universally consistent.
+
+SQL is a hybrid language consisting of the following 4 sub-languages.
+\begin{itemize}
+	\item Data query language: query information and metadata of a database.
+	\item Data definition language: define database schema.
+	\item Data control language: control user access and permission to a database.
+	\item Data manipulation language: insert, update and delete data from a database.
+\end{itemize}
+
+Details of SQL is introduced in the remaining of this section.
+
+\subsection{Naming Conventions} \label{ch:db:subsec:tables}
 
 It is recommended that the following naming conventions be applied to databases, tables and columns.
 \begin{itemize}
@@ -108,19 +120,7 @@ It is recommended that the following naming conventions be applied to databases,
 \end{itemize}
 \end{itemize}
 
-\subsection{General Introduction to SQL}
-
-SQL is the most widely used language for interacting with DBMS for data query and maintenance. SQL is very powerful and flexible in its full capability, and it is hardly possible to cover everything concisely. Hence, in this section only the basic SQL operations are introduced.
-
-Notice that the support of different DBMS to SQL may differ slightly. This is because an DBMS may (in fact, very likely) fail to adopt everything in the latest SQL standard. However, most of the commands especially the widely used ones such as creating tables, inserting rows and most of the querying, shall be universally consistent.
-
-SQL is a hybrid language consisting of the following 4 sub-languages.
-\begin{itemize}
-  \item Data query language: query information and metadata of a database.
-  \item Data definition language: define database schema.
-  \item Data control language: control user access and permission to a database.
-  \item Data manipulation language: insert, update and delete data from a database.
-\end{itemize}
+\subsection{Datatypes and General Syntax}
 
 SQL supports variety of data types, and different DBMS may cover slightly different data types. Some of the most commonly used data types are summarized in Table \ref{ch:db:tab:sqldatatypes}. Nowadays, many DBMS supports more complicated types such as objects (the associated database is also known as the object-relational database). For the full list of data types that a DBMS supports, check the manuals and documents of that DBMS.
 
@@ -203,8 +203,6 @@ SQL defines reserved keywords for database manipulation. The keywords have speci
 		 \hline
 	\end{tabularx}
 \end{table}
-
-\subsection{General Syntax}
 
 Notice that different DBMS may use slightly different syntax for the same or similar function. In the rest of the chapter, unless otherwise mentioned, MySQL/MariaDB syntax is used. 
 
@@ -743,7 +741,7 @@ DROP TRIGGER <trigger-name>;
 
 \subsection{SQL Demonstrative Example}
 
-An an example to demonstrate the use of SQL, a database is created from scratch. MariaDB is used as the DBMS in this example. More about MariaDB is introduced in later Section \ref{ch:db:sec:mariadb}. The database is used in the smart home project to track the resources obtained and consumed by the user. The resources in this context may refer to groceries bought from the supermarket, books purchased online, subscriptions of magazines and services, etc. For simplicity, the prompt is ignored in the rest of this section.
+An an example to demonstrate the use of SQL, a database is created from scratch. MariaDB is used as the DBMS in this example. The database is used in the smart home project to track the resources obtained and consumed by the user. The resources in this context may refer to groceries bought from the supermarket, books purchased online, subscriptions of magazines and services, etc. For simplicity, the prompt is ignored in the rest of this section.
 
 Check the existing databases as follows.
 \begin{lstlisting}
@@ -966,7 +964,7 @@ where \verb|'<ip-address>'| is the remote machine that runs the Python program. 
 
 It might be necessary to install MariaDB database development files in the DMBS host machine for the Python libraries to be introduced to function properly. Install the development as follows.
 \begin{lstlisting}
-	$ sudo apt install libmariadb-dev
+$ sudo apt install libmariadb-dev
 \end{lstlisting}
 
 \vspace{0.1in}

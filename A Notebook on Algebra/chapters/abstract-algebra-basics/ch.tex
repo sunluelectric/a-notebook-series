@@ -23,13 +23,15 @@ One of the most famous applications of abstract algebra is to study the analytic
 \begin{eqnarray}
   x^n + a_1x^{n-1} + a_2x^{n-2} + \ldots + a_n &=& 0 \label{eq:polynomial_equation}
 \end{eqnarray}
-where $n\geq 1$ is the order of the polynomial and $a_1, \ldots, a_n$ are any arbitrary values. The analytical solutions to \eqref{eq:polynomial_equation} for $n=1$ and $n=2$ are obvious. With some effort, the analytical solutions for $n=3$ and $n=4$ were found in the $16$th century. Since then, people have been struggling to find the analytical solution to the fifth order and beyond $n\geq5$ polynomial equations.
+where $n\geq 1$ is the order of the polynomial and $a_1, \ldots, a_n$ are any arbitrary values. The analytical solutions to \eqref{eq:polynomial_equation} for $n=1$ and $n=2$ are obvious. With some effort, the analytical solutions for $n=3$ and $n=4$ were found in the $16$th century. Since then, people have been struggling to find the analytical solution to the polynomial with fifth order or beyond.
 
-In the $18$th and $19$th century, Euler, Lagrange and Gaussian tried to address this problem. Their conclusion was that there is no analytical solution to polynomial equations of fifth order or higher, but they could not give a very solid proof to the statement. Nevertheless, the methods they used inspired a lot of people that would work on this problem.
+In the $18$th and $19$th century, Euler, Lagrange and Gaussian attended this problem. Their conclusion was that there is no analytical solution to polynomial equations of fifth order or higher, but they could not give a very solid proof to the statement. Nevertheless, the methods they used inspired a lot of people that would work on this problem.
 
-In the $19$th century, Abel was able to prove that there is no solution in radicals to general polynomial equations of fifth degree or higher with arbitrary coefficients (see Abel–Ruffini theorem). Furthermore, he discussed a set of special cases (with non-arbitrary coefficients in the polynomial equation) that can have analytical solutions. These special cases form a set of sufficient condition for a fifth order polynomial equation to have the analytical solution. 
+In the $19$th century, Abel was able to prove that there is no analytical solution to general polynomial equations of fifth degree or higher with arbitrary coefficients (see Abel–Ruffini theorem). Furthermore, he discussed a set of special cases with specific coefficient patterns that can have analytical solutions. These special cases form a set of sufficient condition for a fifth order polynomial equation to have the analytical solution. 
 
 The necessary and sufficient condition for a fifth or higher order polynomial to have an analytical solution is finally fully discovered by the genius Galois at a remarkably young age. Galois was able to create his theorem (known as the Galois theorem) and use it to find the ultimate answer to this problem that people have been studied for centuries. His theorem goes far beyond that. Galois theorem will find its usefulness in many areas to come, and eventually it becomes an important building block of abstract algebra. 
+
+In the remaining of this part of the notebook, abstract algebra including the contribution from Abel, Galois and other mathematicians are introduced.
 
 \section{General Algebraic System}
 
@@ -39,7 +41,7 @@ Abstract algebra studies the properties of different algebraic systems. Dependin
 
 \subsection{Set and Mapping}
 
-Set is one of the most commonly used terms across different mathematical subjects. It is also one of the fundamental concepts in abstract algebra. A set usually refers to a collection of distinct objects. Given a set $U$ and an object $x$, one and only one of the following two statements must be true:
+Set is one of the most commonly used terms across different mathematical subjects. It is also one of the fundamental concepts in abstract algebra. A \mync{set} usually refers to a collection of distinct objects. Given a set $U$ and an object $x$, one and only one of the following two statements must be true:
 \begin{itemize}
   \item Object $x$ is a member of set $U$, denoted by $x \in U$;
   \item Object $x$ is not a member of set $U$, denoted by $x \notin U$.
@@ -56,9 +58,9 @@ where
 \begin{eqnarray}
   i(x) &=& x \nonumber
 \end{eqnarray}
-In this case, mapping $i$ is called the \textbf{embedding mapping} from $A_0$ to $A$.
+In this example, mapping $i$ is called the \textbf{embedding mapping} from $A_0$ to $A$.
 
-Let $A$, $B$ be two sets, and $A_0 \subset A$ as subset of $A$. Let $f: A\rightarrow B$, and $g: A_0\rightarrow B$. Let $x\in A_0$. If $f(x)=g(x)$, function $f$ is known as an \textbf{extension} of function $g$, and function $g$ a \textbf{restriction} of function $f$ (on $A_0$). This is denoted by $g=f|_{A_0}$.
+Let $A$, $B$ be two sets, and $A_0 \subset A$ a subset of $A$. Let $f: A\rightarrow B$, and $g: A_0\rightarrow B$. If $\forall x\in A_0$, $f(x)=g(x)$, function $f$ is known as an \textbf{extension} of function $g$, and function $g$ a \textbf{restriction} of function $f$ (on $A_0$). This is denoted by $g=f|_{A_0}$.
 
 Mappings can be chained together. For example, consider several mappings
 \begin{eqnarray}
@@ -90,19 +92,19 @@ Multiple sets can be ``combined'' and ``augmented'' to form new sets. For exampl
 \begin{eqnarray}
 	A_1 \times A_2 = \left\{(a,b) \middle| a \in A_1, b\in A_2\right\} \nonumber
 \end{eqnarray}
-where the tuple $(a,b)$ can be interpreted as a probable ordered combination of elements in $A_1$ and $A_2$. The idea can be applied similarly to more sets.
+where the tuple $(a,b)$ can be interpreted as an ordered combination of elements in $A_1$ and $A_2$. The idea can be applied similarly to more sets.
 
 \subsection{Operation}
 
 Summation, multiplication, etc., are operations. In abstract algebra, we are more interested in the broad definition of operations from set perspective, instead of listing down individual operations and study how they work.
 
-An operation essentially describes the rule of deriving or mapping from one or multiple elements to a new element, each element belongs to some non-empty set. Take binary operation as an example which maps two elements to one element. Let $A$, $B$, $D$ be three non-empty sets. Let $f$ be a mapping
+An \mync{operation} essentially describes the rule of deriving or mapping from one or multiple elements to a new element, each element belongs to some non-empty set. Take binary operation as an example which maps two elements to one element. Let $A$, $B$, $D$ be three non-empty sets. Let $f$ be a mapping
 \begin{eqnarray}
 	f &:& A \times B \rightarrow D \label{eq:operation_general_def}
 \end{eqnarray}
-Then $f$ is called a algebraic operation from $A$, $B$ to $D$. The operation can be denoted by $f(a,b)$ where $a\in A$ and $b\in B$. For convenience, binary operation is often denoted by $a\oplus b$, $a\otimes b$, or something similar from the writer preference. Notice that there are conventions to follow when using the symbols. For example, $+$, $-$, $\times$, etc., already have clear meanings.
+Then $f$ is called an \mync{algebraic operation} from $A$, $B$ to $D$. The operation can be denoted by $f(a,b)$ where $a\in A$ and $b\in B$. For convenience, binary operation is often denoted in the form of $a\oplus b$, $a\otimes b$, etc. Notice that there are conventions to follow when using the symbols. For example, $+$, $-$, $\times$, etc., already have clear meanings.
 
-The following is an example of operations. Let the domain of interest be $\mathbb{R}$, which is the real number set. Let $v$ be a vector space (a set that contains a bunch of vectors) defined under $\mathbb{R}^n$. We can then define summation $+$ as a binary operation
+The following is an example of operations. Let the domain of interest be $\mathbb{R}$, which is the real number set. Let $v$ be a vector space (a formal definition of vector space will be given later; for now, take vector space as a set of vectors with summation operation defined on it) defined under $\mathbb{R}^n$. We can then define summation $+$ as a binary operation
 \begin{eqnarray}
 	+ &:& v\times v \rightarrow v \nonumber
 \end{eqnarray} 
@@ -120,29 +122,29 @@ then the operation is said to have \textbf{commutative property}. If
 \end{eqnarray}
 then the operation is said to have \textbf{associative property}, and \eqref{eq:associative_property} can be simply denoted by $a \oplus b \oplus c$. Let two binary operations defined on $A$, denoted by $\oplus$ and $\otimes$ respectively. If
 \begin{eqnarray}
-	a \oplus (b \otimes c) &=& (a \oplus b) \otimes (a \oplus c) \nonumber
+	a \otimes (b \oplus c) &=& (a \otimes b) \oplus (a \otimes c) \nonumber
 \end{eqnarray}
-then the operation $\oplus$ is said to have the left-hand \textbf{distributive property} on operation $\otimes$. Similarly, right-hand distributive property can also be defined.  
+then the operation $\otimes$ is said to have the left-hand \textbf{distributive property} on operation $\oplus$. Similarly, right-hand distributive property can also be defined.  
 
 Commutative property, associative property and distributive property are commonly seen and widely discussed properties of operations. When operations have some of the three properties, simplified notation may apply. For example, if $\oplus$ operation has associative property, then
 \begin{eqnarray}
 	a^n &\equiv& \overbrace{a \oplus \cdots \oplus a}^{n} \nonumber
 \end{eqnarray}
-can be used. If both commutative and associative properties hold, then it can be easily proved that
+can be used when there is no ambiguity. With this notation, it can be easily proved that for an operation that has both commutative and associative properties,
 \begin{eqnarray}
 	a^nb^n & = & (ab)^n \nonumber 
 \end{eqnarray}
 
 There are several different ways to present the result of an operation. When the cardinal number of the input sets are finite, a simple way is to list all the input-output associations in a table. An example is given in Fig. \ref{fig:logical_and_mapping} which exhaustively lists down ``and'' logical operation results.
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=150pt]{chapters/abstract-algebra-basics/figures/logical_and_mapping.png}
+	\includegraphics[width=0.4\textwidth]{chapters/abstract-algebra-basics/figures/logical_and_mapping.png}
 	\caption{Result of ``and'' logical operation.} \label{fig:logical_and_mapping}
 \end{figure}
 
 \subsection{Relation}
 
-Consider the relation of two elements $a$ and $b$. In mathematics, relation essentially describes a property that the tuple made from the two elements, i.e. $(a,b)$, may or may not have. Therefore, a straight forward way of defining a relation is to construct a set that contains some tuples, and if the specified tuple $(a,b)$ is in the set, we say $a$, $b$ have that relation, and equivalently $(a,b)$ has that associated property.
+Consider the relation of two elements $a$ and $b$. In mathematics, relation essentially describes a property that the tuple made from the two elements, i.e. $(a,b)$, may or may not have. Therefore, a straight forward way of defining a relation is to construct a set that contains some tuples, and if the specified tuple $(a,b)$ is in the set, we say that $a$, $b$ have that relation, and equivalently $(a,b)$ has that associated property.
 
 For example, consider $a,b\in\mathbb{Z}$. Define relation
 \begin{eqnarray}
@@ -153,7 +155,7 @@ where $\mathbb{Z}$ denotes the integer set. If $a$, $b$ are such that $(a,b)\in 
 	a &\equiv& b~(\textup{mod}~n) \nonumber
 \end{eqnarray}
 
-To summarize, let $a\in A$, $b\in B$. Let $R\subset A\times B$ be a subset of $A\times B$. the following statements can be considered equivalent:
+To summarize, let $a\in A$, $b\in B$. Let $R\subset A\times B$ be a subset of $A\times B$. the following statements can be considered equivalent.
 \begin{itemize}
 	\item Two elements $a$ and $b$ have relation $R$;
 	\item Tuple $(a,b)$ has the property associated with relation $R$;
@@ -185,7 +187,9 @@ If a relation is simultaneously reflexive, symmetric and transitive, it is calle
 
 We can define a \textbf{partition of a (non-empty) set} by grouping its elements into non-empty subsets in such a way that every element is included in exactly one subset, i.e.
 \begin{eqnarray}
-	A &=& \bigcup_{i\in I}A_i, \forall i, j \in I, i\neq j, A_i \neq \varnothing, A_i \bigcap A_j = \varnothing \nonumber
+	A &=& \bigcup_{i\in I}A_i \nonumber \\
+	\mathrm{s.t.} && A_i \neq \varnothing \nonumber \\
+	&& \forall i, j \in I, i\neq j, A_i \bigcap A_j = \varnothing \nonumber
 \end{eqnarray}
 A partition of a set can form a new set $\{A_i\}$. Furthermore, we can define a relation $R\subset A \times A$ on top of that partition as follows
 \begin{eqnarray}
@@ -201,7 +205,7 @@ With the definition of equivalence class, a partition of a set $A$ can then deri
 \begin{eqnarray}
 	A/R &=& \left\{[a] | a \in A \right\} \textup{(remove duplication)} \label{eq:quotient_set}
 \end{eqnarray}
-where $A/R$ is the partition of set $A$ (this can be proved easily) derived from equivalence relation $R$. Notice that $[a]$ derived from different $a$ yet in the same equivalence class will duplicate. When putting duplicated $[a]$ into a set, duplication should be removed, hence the note ``remove duplication''. It is not compulsory to add that note because it is inherently addressed by the fundamental properties of a set. The partition of set obtained using the above method is known as the \textbf{quotient set}. There is a one-to-one correspondence between an equivalent relation and its quotient set.
+where $A/R$ is the partition of set $A$ (this can be proved easily) derived from equivalence relation $R$. The partition of set obtained using the above method is known as the \textbf{quotient set}. There is a one-to-one correspondence between an equivalent relation and its quotient set.
 
 Given an equivalence relation, the following mappings can be defined.
 \begin{eqnarray}
@@ -217,13 +221,13 @@ The concept of congruent modulo can be further generalized in the context of ope
 \begin{eqnarray}
 	a_1Ra_2, ~b_1Rb_2 &\Rightarrow& (a_1\oplus b_1)R(a_2\oplus b_2) \label{eq:relation_congruent_modulo_operation}
 \end{eqnarray}
-then we say that $R$ is congruent modulo $\oplus$. This is demonstrated by Fig. \ref{fig:congruent_modulo_relation} the left plot.
+then we say that $R$ is \mync{congruent modulo} $\oplus$. This is demonstrated by Fig. \ref{fig:congruent_modulo_relation} the left plot.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=350pt]{chapters/abstract-algebra-basics/figures/congruent_modulo_relation.png}
 	\caption{A relation is congruent modulo an operation.} \label{fig:congruent_modulo_relation}
 \end{figure}
-From Fig. \ref{fig:congruent_modulo_relation} the left plot, it can be intuitively interpreted that when two elements $a_1$, $a_2$ are equivalent, their equivalence relation persists even if operation $\oplus b_1$, $\oplus b_2$ are applied to them respectively, so long as $b_1$, $b_2$ are also equivalent.
+From Fig. \ref{fig:congruent_modulo_relation} the left plot, congruent modulo can be intuitively interpreted as follows. If elements $a_1$, $a_2$ are congruent modulo $\oplus$, their equivalence relation persists even if operation $\oplus b_1$, $\oplus b_2$ are applied to them respectively, so long as $b_1$, $b_2$ are also congruent modulo $\oplus$.
 
 If $R$ is congruent modulo $\oplus$ indeed, we can define an operation on the quotient set $A/R$ as follows. Let $[\cdot]$ denote the equivalence class of an element in $A$. Define $\bar{\oplus}$ as an operation on $A/R$ as follows.
 \begin{eqnarray}
@@ -235,11 +239,9 @@ To conclude, in the algebraic system with non-empty set $A$ and an operation $\o
 
 \section{Semi-Group and Group}
 
-In the previous section, general algebraic system is introduced. A general algebraic system shall contain sets and one or more operations defined on these sets. The operations can be unary (involving one operand), binary (involving two operands), ternary (involving three operands), etc. Relations are defined as sets of tuples, with each element of the tuple coming from the set of interest. Likewise, relation can also be binary, ternary, etc.
+As introduced earlier, a general algebraic system shall contain a set and one or more operations defined on the set. The operations can be unary (involving one operand), binary (involving two operands), ternary (involving three operands), etc. Relations are defined as sets of tuples, with each element of the tuple coming from the set of interest. Likewise, relation can also be binary, ternary, etc.
 
-Special properties can apply to both operations and relations. Binary operations, for instance, can exhibit commutativity, associativity, and distributivity. Binary relations, on the other hand, can be reflexive, symmetric, and transitive.  If a relation is simultaneously reflexive, symmetric and transitive, it is called an equivalent relation. Each equivalent relation is corresponded with a quotient set which is a partition of the original set by equivalence classes of the relation.
-
-When a relation is congruent modulo an operation (recall \eqref{eq:relation_congruent_modulo_operation} and Fig. \ref{fig:congruent_modulo_relation}), we can establish a new algebraic system. This system comprises the quotient set and a well-defined induced operation on that set. The new system retains structural properties from the original set, reflecting the consistency and compatibility of the congruence relation with the operation.
+Special properties can apply to both operations and relations. Binary operations, for instance, can exhibit commutativity, associativity, and distributivity. Binary relations, on the other hand, can be reflexive, symmetric, and transitive.  If a relation is simultaneously reflexive, symmetric and transitive, it is called an equivalent relation. Each equivalent relation is corresponded with a quotient set which is a partition of the original set by equivalence classes of the relation. When a relation is congruent modulo an operation (recall \eqref{eq:relation_congruent_modulo_operation} and Fig. \ref{fig:congruent_modulo_relation}), we can establish a new algebraic system. This system comprises the quotient set and a well-defined induced operation on that set. The new system retains structural properties from the original set, reflecting the consistency and compatibility of the congruence relation with the operation.
 
 Moving forward, our focus will shift to specialized algebraic systems characterized by distinctive properties. This exploration will pave the way to understanding the fundamental algebraic structures such as semi-groups, groups, and rings. We will see the critical impact the operation possess over the algebraic system. Even with the same set, different operations often leads to very different features of the algebraic system.
 
@@ -251,10 +253,11 @@ Examples of semi-group include $\{\mathbb{N}; +\}$, $\{\mathbb{N}; \times\}$ whe
 
 Another example is given as follows. Let $A$ be an non-empty set, $\mathcal{M}(A)$ the set of all the closed mappings defined on $A$, and $\circ$ the compound operation. Then $\{\mathcal{M}(A); \circ\}$ is also a semi-group. Additionally, $\{\mathcal{P}(A); \bigcup\}$, $\{\mathcal{P}(A); \bigcap\}$ are also semi-groups, where $\mathcal{P}(A)$ represents the power set of $A$.
 
-\begin{shortbox}
-\Boxhead{Is Zero Included in Natural Numbers?}
+\begin{mdframed}
+\noindent \textbf{Is Zero Included in Natural Numbers?}
+
 The definition of natural numbers may or may not include zero ``$0$'' depending on the context. In the context of number theory and abstract algebra, natural numbers often exclude zero.
-\end{shortbox}
+\end{mdframed}
 
 \subsection{Monoid}
 
@@ -280,7 +283,7 @@ Let $\{S; \oplus\}$ be a monoid with identity element $e$. If for $a\in S$, ther
 \end{eqnarray}
 then $a\textprime$ is called the left inverse of $a$. Likewise, right inverse can be defined. Notice that an element may have many left and right inverses.
 
-If $a\textprime$ is both the left and the right inverse of $a$, then $a\textprime$ is known as the inverse of $a$. In this case, similar to the identity element, $a\textprime$ must be unique. The proof can be obtained similarly using proof by contradiction. The inverse of $a$ is often denoted by $a^{-1}$.
+If $a\textprime$ is both the left and the right inverse of $a$, then $a\textprime$ is known as the inverse of $a$, ands $a\textprime$ must be unique. The proof can be obtained similarly using proof by contradiction. The inverse of $a$ is often denoted by $a^{-1}$.
 
 If in a monoid $\{S; \oplus\}$, there is the inverse for all its elements, the monoid is called a group, usually denoted by $\{G; \oplus\}$, or simply $G$ when without ambiguity.
 
@@ -301,7 +304,7 @@ To conclude, a group must meet the following requirement:
 	\item There is a closed binary operation $\oplus: G\times G \rightarrow G$;
 	\item The operation $\oplus$ has associative property, i.e. $\forall a, b, c \in G, (a \oplus b) \oplus c = a\oplus (b \oplus c)$;
 	\item There is the identity element, i.e. $\exists e\in G$, $\forall a \in G, e\oplus a = a \oplus e = a$;
-	\item There is the inverse for all elements, i.e., $\forall a\in G$, $\exists a^{-1}$, $a\oplus a^{-1} = a^{-1}\oplus a = e$;
+	\item There is the inverse for all elements, i.e., $\forall a\in G$, $\exists a^{-1}$, $a\oplus a^{-1} = a^{-1}\oplus a = e$.
 \end{itemize}
 Furthermore, if
 \begin{itemize}
@@ -360,13 +363,13 @@ When studying abelian groups, ``$+$'' is most commonly used to represent the ope
   0a &\equiv& e \label{eq:group_exponential_4} \\
   (-n)a &\equiv& \overbrace{(-a) + \cdots + (-a)}^{n} \nonumber
 \end{eqnarray}
-where $-a$ is used to denote the inverse of $a$. In this case, the identity element $e$ in \eqref{eq:group_exponential_4} is often denoted by ``$0$''. It might be confusing since it is visually the same with the numerical number zero, but what it really represents is the identity element of that group, not necessarily numerical zero. When the group $G$ is $\mathbb{Z}$, $\mathbb{R}$ or $\mathbb{C}$, and the operation is indeed summation, the identity element is indeed numerical zero.
+where $-a$ is used to denote the inverse of $a$. In this case, the identity element $e$ in \eqref{eq:group_exponential_4} is often denoted by ``$0$''. Note that in this context, $0$ represents the identity element of the abelian group and does not have to be the numerical number zero. When the group $G$ is $\mathbb{Z}$, $\mathbb{R}$ or $\mathbb{C}$, and the operation is indeed summation, the identity element is indeed numerical zero.
 
 The idea of group goes beyond number theory and mathematics. Generally speaking, any system that can move from states to states with movements revertible can be described by a group or something similar. When a system shows symmetry, it can probably be described by a group.
 
 \subsection{Order of Elements in a Group}
 
-Let $G$ be a group, $e$ its identity element, and $a\in G$. If there exists a smallest positive integer $n$ so that $a^n = e$, we say that the \textbf{order} of $a$ is $n$. If no such $n$ exists, the order of $a$ is infinity. The identity element $e$ is the only element that has an order of $1$. For an element with order $n$, its inverse also has the order of $n$.
+Let $G$ be a group, $e$ its identity element, and $a\in G$. If there exists a smallest positive integer $n$ so that $a^n = e$, we say that the \textbf{order} of $a$ is $n$. If no such $n$ exists, the order of $a$ is infinity. The identity element $e$ is the only element that has the order of $1$. For an element with order $n$, its inverse also has the order of $n$.
 
 Let $G$ be a group, $e$ its identity element, and $a\in G$. Consider the sequence of $a^n$ as follows.
 \begin{eqnarray}
@@ -374,7 +377,7 @@ Let $G$ be a group, $e$ its identity element, and $a\in G$. Consider the sequenc
   \ldots & a^{-3} & a^{-2} & a^{-1} & a^0 (e) & a^1 & a^2 & a^3 & \ldots \nonumber 
 \end{array}
 \end{eqnarray}
-If $a$ has the order of infinity, then $a^m \neq a^n$ for any integers $m\neq n$, and vise versa. This can be easily proved with proof by contradiction. If an element has the order of $d$, then $a^m = a^n$ repeats if and only if $m-n = kd, k\in \mathbb{Z}$.
+If $a$ has the order of infinity, then $a^m \neq a^n$ for any integers $m\neq n$, and vise versa. This can be easily proved with proof by contradiction. If $a$ has the order of $d$, then $a^m = a^n$ if and only if $m-n = kd, k\in \mathbb{Z}$.
 
 If $a \in G$ has order $d$, then $a^{k}, k\neq0$ has order $d/(d,|k|)$, where $(d,|k|)$ is the greatest common divisor of $d$ and $|k|$. This implies that $a^{k}$ has order no more than $d$, and it has order $d$ if and only if $(d,|k|)=1$.
 
