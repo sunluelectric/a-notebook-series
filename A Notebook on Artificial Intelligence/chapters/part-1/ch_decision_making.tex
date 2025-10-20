@@ -298,6 +298,10 @@ The utility of an action $a$ at state $s$ is given by
 \begin{eqnarray}
 	U(a|s) &=& \sum_{s_i \in S} P(s_i|s,a)\left(R(s,a,s_i) + \gamma U(s_i)\right) \label{eq:bellmanaction}
 \end{eqnarray}
+which describes the expected return from taking an action at a state (under a policy). Equation \eqref{eq:bellmanaction} also known as the \mync{Q-function}. Q-function \eqref{eq:bellmanaction} is related to utility of state \eqref{eq:bellman} as follows.
+\begin{eqnarray}
+	U(s) &=& R(s) + \max_{a\in A(s)} U(a|s) \nonumber
+\end{eqnarray}
  
 Equation \eqref{eq:bellman} and \eqref{eq:bellmanaction} reveals the correlation between the utility of a state and the utility of an action. The utility of state $s$ is the reward of arriving the state plus the maximum utility of action among all the actions the agent can take from the state.
 
@@ -317,6 +321,7 @@ When the optimal policy is applied, the agent choose the action with the maximum
 \begin{eqnarray}
 	\pi^*(s) = \argmax_{a\in A(s)} \sum_{s_i \in S} P(s_i|s,a)\left(R(s,a,s_i) + \gamma U(s_i)\right) \label{eq:mdpoptpolicy}
 \end{eqnarray}
+When there are multiple actions that give the same largest utility, the agent randomly choose one action from them.
 
 \subsection{Value Iteration} \label{sec:mdpvalue}
 
@@ -392,28 +397,103 @@ The reward is formulated as follows. There is no reward for actions $R(s, a, s\t
 
 Set discount rate to be $\gamma=0.8$ and success rate of action to be $P=0.9$.
 
-Looping over the entire $160$ states using \eqref{eq:bellmanupdate} is known as one iteration. After $42$ iterations, the utility of the state converges. Fig XXX gives some of the results.
+Looping over the entire $160$ states using \eqref{eq:bellmanupdate} is known as one iteration. After $42$ iterations, the utility of the state converges. Fig~\ref{fig:valueiterationexp2} gives some of the results.
 
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=\textwidth]{./chapters/part-1/figures/valueiterationexp2.png}
+	\caption{Converged utility of state at timestamps $1$,$5$,$6$ and $10$.}
+	\label{fig:valueiterationexp2}
+\end{figure}
 
+Some highlights are as follows.
+\begin{itemize}
+	\item The agent tries to stay far away from the ``traps''. There is a fail rate for a move. If the agent stay adjacent to a trap, it may fall into the trap by accident. For safety, the agent prefers to stay or move around at safer areas far away from the traps.
+	\item The utility of state is a function of timestamps. Notice that although the reward configurations at timestamp $1$ and $5$ are identical, the utility of states are different. At timestamp $5$, the agent is aware that the reward configuration is going to change, and it is preparing for it. There are several motivations. The original reward sweet point will be a trap, and the agent wants to stay away from it. There is a discount factor, which motivates the agent to move to the new reward point as quickly as possible.
+\end{itemize}
 
+When the reward configuration and transition model are known and stationary, we can use value iteration to calculate the utility of state. With utility of state known, it is straight forward to decide the optimal policy using \eqref{eq:mdpoptpolicy}.
 
-
-
-
-
-
-
-
-
-
-
-
+It can be proved that if infinite iteration is used, Bellman update will converge to the unique global optimum. Proof is not given here.
 
 \subsection{Policy Iteration}
 
+\mync{Policy iteration} is an alternative way of finding the optimal policy given the reward configuration and transition model. Unlike the value iteration where the utility of the state is first calculated, in policy iteration, it is started with assuming a policy $\pi^0(s)$ which is not necessarily optimal.
+
+With that $\pi^0(s)$, the utility of state can be calculated using \eqref{eq:rewardtoutility}. With the utility of state calculated, use \eqref{eq:mdpoptpolicy} to revise the policy to get $\pi^1(s)$. Repeat the above steps iteratively until the utility of state and the policy converge.
+
+Policy iteration and value iteration should lead to the same result. It is reported that sometimes policy iteration is easier to implement.
+
+\subsection{MDP Online Reinforcement Learning}
+
+Both value iteration and policy iteration assume known reward configuration and transition model, which is often not true. In practice, the agent needs to explore and find the transition model associated with each action at each state as well as the rewards received from each action or state. Inspired by policy iteration, the following \mync{Q-Learning} algorithm can be used.
+
+\begin{enumerate}
+	\item In the beginning when there is no information of reward and transition model, initialize utility of state \eqref{eq:bellman} with $0$ for all states. Initialize the Q-function with $0$ for all actions at all states.
+	\item Let the agent freely transition from the current state until the end of the session, either when it reaches the goal, runs into a trap, or after certain time. Notice that the action with the largest utility is not necessarily selected. It uses a exploit-explore model instead, which will be introduced later.
+	\item For each state visited in the trail, update the Q-function of the actions taken together with the utility of the state as follows, from the first state to the last state.
+	
+	\begin{eqnarray}
+		U_{k+1}(a|s) &\leftarrow& U_k(a|s) + \alpha_k\left(R(s,a,s_i) + \gamma U_k(s_i)\right) \label{eq:qlearningupdate} \\
+		U_{k+1}(s) &\leftarrow& R(s) + \max_{a\in A(s)} U_{k+1}(a|s) \nonumber
+	\end{eqnarray}
+
+\end{enumerate}
+where steps 2 and 3 are repeated so that the agent keeps learning from different trails, until the agent has gained enough information about each and every action and each and every state, and no further learning is required.
+
+In \eqref{eq:qlearningupdate}, $\alpha_k$ should fulfill the following criteria, so that the Q-function and utility of state converge to the optimum.
+\begin{eqnarray}
+	&& \sum_{k=0}^{\infty} \alpha_k^2 < \infty \nonumber \\
+	&& \sum_{k=0}^{\infty} \alpha_k \rightarrow \infty \nonumber
+\end{eqnarray}
+which implies that until everything converges, the agent must keep learning. An example of $\alpha_k$ can be $\alpha_k = 1/k \alpha_0$ with a finite $\alpha_0$.
+
+As mentioned earlier, for the agent to keep learning, it should not always stay in its comfort zone by running only the estimated optimal policy. It is encouraged to always explore new actions that is not the best action under existing estimated optimal policy. It is important to maintain a proper exploit-explore balance.
+
+The \mync{$\epsilon$-greedy exploration} model is recommended. In the $k$th trail, for each action the agent is taken, it has a $1-\epsilon_k$ probability of choosing the optimal action under the current estimated optimal policy, and a $\epsilon_k$ probability of choosing a random action, regardless of its Q-function value. The value of $\epsilon_k$ decreases as more and more trails carry out, so that the model will perform more conservative as the learned information accumulates. A common choice is $\epsilon = 1/k$.
+
+Q-Learning is similar with value iteration or policy iteration, except that it is model-free. It is assumed that the reward configuration and transition model are unknown. It uses trails and reinforcement learning to update the utility of actions and utility of states by exploring the different states and transitions of the system.
+
 \section{Partially Observable MDP} \label{sec:pomdp}
 
-\mync{Partially Observable Markov Decision Process}[POMDP] refers to ...
+\mync{Partially Observable Markov Decision Process}[POMDP] refers to the case where the agent is not always clear which state it is in. Imagine in the example given by Fig~\ref{fig:emuexp}, the agent has no sense of its location in coordinate, but can detect how many walls it is adjacent to. The problem then becomes a typical POMDP. 
+
+POMDP differs from fully observable MDP in several aspects. Though the spirit remains the same where the decision is made based on a Markov process, many details in the execution needs to be adjusted. Details are introduced in this section.
+
+\subsection{Belief of State}
+
+The agent, in this case, has a \mync{belief of state} often denoted by
+\begin{eqnarray}
+	b(s) &=& \left[p_1, \ldots, p_n\right] \nonumber
+\end{eqnarray}
+where $n$ is the total number of state and $p_i$ the belief of the agent currently in state $i$. One can think of $b(s)$ as a way to denote the state. The agent makes decisions based on $b(s)$.
+
+The evidence $e$ is the measurement available to the agent. The probability $P(e|s)$ associates the state belief with the evidence. The agent can adjust its belief as follows. Let $b(s)$ be the agent's initial belief. The agent takes action $a$, and after that it observes $e$. The new belief becomes
+\begin{eqnarray}
+	b\textprime(s\textprime) = \alpha P(e|s\textprime) \sum_{s} P(s\textprime|s,a)b(s) \nonumber
+\end{eqnarray}
+where $\alpha$ is used for probability normalization so that $\sum b_i(s) = 1$ is ensured. The decision making is Markovian just like the fully observable MDP, where the optimal action depends on only the current belief of state $b(s)$. It does not depend on past states, and it does not depend on actual state.
+
+The biggest challenge is that the $b(s)$ is a group of probability, and hence continuous and has infinite values. For example, the policy $\pi(s)$ (now $\pi(b)$) will be difficult to define, as if it were done in the conventional manner, there will be infinite possibilities. For instance, we cannot assign an action for $b(s) = [0.5,0.5]$ and another action for $b(s) = [0.501, 0.499]$. Also, the transition model which is used to be $P(s\textprime|s,a)$, is now $P(b\textprime|b,a)$ with $b$ a continuous vector.
+
+In the remainder of the section, it is introduced how POMDP defines the transition model and optimal policy in the context of belief of state.
+
+\subsection{Transition Model with Belief of State}
+
+The transition model of actual state $P(s\textprime|s,a)$ and the evidence and actual state correlation $P(e|s)$ are used to derive the transition model of state of belief $P(b\textprime|b,a)$ as follows.
+\begin{eqnarray}
+	P(b\textprime|b,a) &=& \sum_{e}P(b\textprime|e,a,b)P(e|a,b) \nonumber \\
+	&=& \sum_{e}P(b\textprime|e,a,b)\sum_{s\prime}P(e|s\textprime) \sum_{s}P(s\textprime|s,a)b(s) \nonumber
+\end{eqnarray}
+where
+\begin{eqnarray}
+	P(e|a,b) &=& \sum_{s\prime}P(e|s\textprime)P(s\textprime|a,b) \nonumber \\
+	&=& \sum_{s\prime}P(e|s\textprime) \sum_{s}P(s\textprime|s,a)b(s) \nonumber
+\end{eqnarray}
+
+\subsection{Value Iteration and Optimal Policy with Belief of State}
+
+\subsection{POMDP Online Reinforcement Learning}
 
 \section{Multi-attribute Utility Function}
 
