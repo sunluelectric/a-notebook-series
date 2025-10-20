@@ -112,7 +112,7 @@ Consider function space $\mathcal{D}_n(a,b)$ that consists of all continuous and
   \norm{y_1 - y_2} &=& \sum_{i=0}^{n} \max_{a\leq x \leq b} |y^{(i)}(x)| \label{eq:functionspacenormn}
 \end{eqnarray} 
 
-\subsection{Functional Continuity}
+\subsection{Functional Continuity and Linearity} \label{sec:functionalcontinuity}
 
 A function $y(x)$ is said to be continuous at $x_0$ if $y(x) - y(x_0)$ can be as small as desired provided that $x-x_0$ is small. The similar idea applies to functional continuity. 
 
@@ -122,18 +122,41 @@ A functional $J[y]$ is said to be a \mync{continuous functional} at the point $y
 \end{eqnarray}
 provided that $\norm{y-y^0} < \delta$, where $\norm{\cdot}$ is one of the norms introduced in \eqref{eq:functionspacenorm0}, \eqref{eq:functionspacenorm1} or \eqref{eq:functionspacenormn}. 
 
-Functional continuity guarantees that ``similar'' functions $y^1$ and $y^2$ in the function space result in close $J[y^1]$ and $J[y^2]$, where ``similar'' is defined by the norm of the function that reflects the maximum differences of two functions in magnitude or in differentials magnitudes.
+Functional continuity guarantees that ``similar'' functions $y^1$ and $y^2$ in the function space result in close $J[y_1]$ and $J[y_2]$, where ``similar'' is defined by the norm of the function that reflects the maximum differences of two functions in magnitude or in differentials magnitudes.
 
 Functional continuity on functional space $\mathcal{C}$ or $\mathcal{D}_1$ is often the minimum prerequisite where calculus of variation (to be introduced in the remaining sections) can be applied.
  
+Continuous functional $J[y]$ is said to be a continuous \mync{linear functional} if the following criteria are met.
+\begin{eqnarray}
+  J[\alpha y] &=& \alpha J[y] \nonumber \\
+  J[y_1 + y_2] &=& J[y_1] + J[y_2] \nonumber \\
+\end{eqnarray}
+Notice that the linearity of $J[y]$ depends not on how $y$ is constructed as a function of $x$, but on how $J[y]$ is constructed as a function of $y$. It can be proved that a functional of the following form
+\begin{eqnarray}
+  J[y] &=& \int_{a}^{b}\left(\alpha_0(x)y(x) + \alpha_1(x)y\textprime(x) + \ldots + \alpha_n y^{(n)}(x)\right)dx
+\end{eqnarray}
+where $\alpha_i(x)$ is a fixed function, defines a linear functional on $\mathcal{D}_n$. 
+ 
 \section{Variation of Functional}
 
+The \mync{variation of functional} (can be interpreted as the differential of functional) can be defined as follows. Let $J[y]$ be a functional defined on some normed linear space. Let
+\begin{eqnarray}
+\Delta J[h] &=& J[y + h] - J[y] \label{eq:functionaldifference} \\
+\end{eqnarray}
+be the increment corresponding to $h$ of $y$. Notice that $J[y]$ is not necessarily linear. If $J[y]$ is indeed linear, \eqref{eq:functionaldifference} gives
+\begin{eqnarray}
+  \Delta J[h] &=& \varphi(h) \nonumber
+\end{eqnarray}
+where $\varphi(h) = J[h]$ is a linear functional of $h$. If $J[y]$ is nonlinear, \eqref{eq:functionaldifference} can be formulated as
+\begin{eqnarray}
+  \Delta J[h] &=& \phi(h) + \varepsilon \norm{h} \nonumber
+\end{eqnarray}
+where $\varphi(h)$ is a linear functional of $h$, playing the \mync{principal linear part} of $J[y]$, and $\varepsilon \norm{h}$ is the remainder., and $\varepsilon \rightarrow 0$ as $\norm{h} \rightarrow 0$. In this case, $J[y]$ is said to be differentiable. The principal linear part of the increment $\phi(h)$ is ``almost'' $\Delta J[h]$ but differs from it by an infinitesimal of order higher than $1$ relative to $\norm{h}$, and it is known as the variation of functional $J[y]$, often denoted by $\delta J[h]$.
 
 
 
 
 
-
-
+ 
 
 
