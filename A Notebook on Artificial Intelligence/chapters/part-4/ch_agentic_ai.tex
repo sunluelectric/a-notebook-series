@@ -128,6 +128,17 @@ In the first approach, \verb|cx| and \verb|cy| are executed sequentially. If \ve
 
 The same principle applies to the entire event loop. If the whole event loop is paused (its ready queue is empty), it uses the OS-level selector to wait for I/O readiness, and the operating system schedules other work until new events are ready.
 
+The main program can be wrapped as follows so that .
+\begin{lstlisting}
+import asyncio
+
+async def main():
+
+	<the code to be introduced>
+if __name__ == "__main__":
+	asyncio.run(main())
+\end{lstlisting}
+
 \subsection{OpenAI Agents SDK} \label{sec:openaisgentssdk}
 
 The OpenAI Agents SDK simplifies the deployment of an agentic AI system without sacrificing flexibility. In fact, it enables more versatile agentic AI pipelines, such as chaining multiple AI agents using handoffs and nesting AI agents within tools-capabilities that would be almost impossible to implement manually due to the complexity of such systems.
@@ -156,20 +167,7 @@ Figure \ref{fig:openai_agents_sdk_pipeline} illustrates the key features of the 
 	\label{fig:openai_agents_sdk_pipeline}
 \end{figure}
 
-The basic syntax of creating an OpenAI Agents SDK framework based agentic AI system is introduced in the rest of this section. All code examples are assumed to be executed in an environment with a running event loop. One can assume a wrapper as follows. Note that \verb|OPENAI_API_KEY| is also assumed to be loaded as an environment variable.
-
-\begin{lstlisting}
-import asyncio
-from dotenv import load_dotenv
-
-async def main():
-    load_dotenv(override=True)
-    
-    <the code to be introduced>
-
-if __name__ == "__main__":
-    asyncio.run(main())
-\end{lstlisting}
+The basic syntax of creating an OpenAI Agents SDK framework based agentic AI system is introduced in the rest of this section. All code examples are assumed to be executed in an environment with a running event loop. Note that \verb|OPENAI_API_KEY| is also assumed to be loaded as an environment variable.
 
 \vspace{0.1in}
 \noindent \textbf{Agent}
@@ -698,11 +696,17 @@ It is worth mentioning the differences between LangChain and LangGraph. They are
 
 \mync{LangChain} is an open-source, composable framework that provides a standard interface for LLM models and APIs to databases and a variety of tools \cite{langchain2025}. Suppose that an agentic AI system with multiple components has been defined. If LangChain is used to connect and integrate these components, the user can switch underlying models (for example, from OpenAI to Anthropic) and tools (for example, from MySQL to PostgreSQL) with relatively little code change. This greatly enhances the portability and robustness of the agentic AI solution.
 
+From that sense, LangChain is to some extend similar with MCP, but in the LangChain ecosystem. Nowadays, some agentic AI frameworks developed by other entities, such as AutoGen, also support connectivity with LangChain.
+
 \mync{LangGraph}, on the other hand, is an agentic AI framework, broadly comparable to the OpenAI Agents SDK and CrewAI. It focuses on coordinating AI agents and reliably handling complex tasks by representing applications as stateful graphs \cite{langchain2025langgraph}. It is sufficient to use only LangChain to build an LLM application with deterministic pipeline. LangGraph, on the other hand, can be taken as an abstraction layer built on top of LangChain that provides orchestration intelligence, enriching the system with agentic AI capability.
 
 This section focuses on LangGraph, the agentic AI framework. Technologies offered by LangChain will also be introduced and used. After all, LangGraph uses LangChain under the hood.
 
 Install LangGraph as a Python package as follows.
+\begin{lstlisting}
+uv add langgraph
+\end{lstlisting}
+or
 \begin{lstlisting}
 uv pip install -U langgraph
 \end{lstlisting}

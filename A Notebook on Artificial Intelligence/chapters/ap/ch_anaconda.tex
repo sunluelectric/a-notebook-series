@@ -1,12 +1,12 @@
 \chapter{Brief Introduction to Python Package Manager}
 
-Two package managers, \verb|conda| and \verb|uv|, are introduced.
+There are many environment and package managers on the market. Two package managers that are popular in Python software development, \verb|conda| and \verb|uv|, are introduced in this appendix chapter.
 
 \section{Conda}
 
-Developed and maintained by Anaconda Inc., \verb|conda| is a free and open-source program for package and environment management. When installing and updating packages with \verb|conda|, it automatically detects the hardware of the machine and the dependencies of packages, and applies the latest compatible versions.
+Developed and maintained by Anaconda Inc., \verb|conda| is a free and open-source program for package and environment management. When installing and updating packages with \verb|conda|, it automatically resolves the dependencies issue and applies the latest compatible versions of libraries.
 
-The purpose of this chapter is not to give a detailed introduction to \verb|conda| which can be found at \cite{conda2025}. This chapter is merely a summary of commonly used configurations and commands. Majority of contents in this chapter come from \cite{conda2025cheatsheet}.
+Details of \verb|conda| can be found in \cite{conda2025}. This section is merely a summary of commonly used configurations and commands. Majority of contents in this chapter come from \cite{conda2025cheatsheet}.
 
 \subsection{Installation}
 
@@ -16,16 +16,16 @@ Miniconda is a lightweight version of Anaconda distribution. The former contains
 
 \subsection{Configuration of Channels}
 
-Channels refer to the cloud archive from where \verb|conda| downloads and upgrades packages. There are default channels coming with \verb|conda| installation, and the user can add channels or change their priorities in the list.
+Channels refer to the cloud archive from where \verb|conda| downloads and upgrades packages. There are default channels coming with \verb|conda| installation, and the user can edit channels and their priorities.
 
-The channels are stored in file \verb|.condarc|, which is usually stored in the user's directory. The user can add or remove channels by directly editing that file. Alternatively, there are commands to add channels or to check channel status. 
+The channels are stored in file \verb|.condarc| which is usually found in the user's directory. The user can add or remove channels by directly editing that file. Alternatively, there are commands to quickly list or add channels. 
 
 To list all channels, use
 \begin{lstlisting}
 conda config --show channels
 \end{lstlisting}
 
-Commonly seen channels include \verb|defaults| and \verb|conda-forge|. Notice that \verb|defaults| is a collection of three Anaconda-defined channels, and it contains proprietary packages developed by Anaconda, and it may require licensing to be used in commercial environments.
+Commonly seen channels include \verb|defaults| and \verb|conda-forge|. Notice that \verb|defaults| is a collection of three Anaconda-defined channels, and it contains proprietary packages developed by Anaconda, and it may require license if used in commercial environments.
 
 To add a channel, either use
 \begin{lstlisting}

@@ -1,1 +1,546 @@
 \chapter{Optimal and Robust State Estimation} \label{ch:orse}
+
+Optimal and robust estimation methods are introduced in this chapter, many of which Kalman filter and its variations.
+
+\section{Weighted Least Squares Estimation}
+
+
+Consider the following system with only a linear measurement model
+\begin{eqnarray}
+	y = H\theta + v \label{eq:wlsproblem}
+\end{eqnarray}
+where $y\in\mathbb{R}^{m\times 1}$, $\theta\in\mathbb{R}^{n\times 1}$ are the measurement vector and the parameter to be estimated, respectively. Matrix $H\in\mathbb{R}^{m\times n}$ is the measurement matrix, where $m\geq n$ and $H^TH$ is non-singular matrix with full rank $n$ to guarantee instantaneous observability. Vector $v\in\mathbb{R}^{m\times 1}$ is zero-mean Gaussian-distributed measurement noise with covariance matrix $R$ which is symmetric and positive-definite. 
+
+For simplicity of derivation, in the remaining of this section, we assume that each entry in $v$ follows independent and identically distributed (i.i.d.) Gaussian distribution, making $R$ a diagonal matrix. Similar conclusions can be extended to correlated measurement noise.
+
+The maximum likelihood estimation (MLE) of \eqref{eq:wlsproblem} is given by
+\begin{eqnarray}
+	\hat{\theta}_{\textup{MLE}} &=& \argmax_{\hat{\theta}} \prod_{i=1}^{m} \dfrac{1}{\sqrt{2\pi\sigma_i^2}} e^{-\dfrac{\left(y_i-H_i\hat{\theta}\right)^2}{2\sigma_i^2}} \label{eq:wlsmle}
+\end{eqnarray}
+where $\sigma_i^2 = R_{ii}$ is the variance of measurement noise $v_i$.
+
+By taking the natural logarithm, equation \eqref{eq:wlsmle} is equivalent to
+\begin{eqnarray}
+	\hat{\theta}_{\textup{MLE}} &=& \argmin_{\hat{\theta}} \sum_{i=1}^{m} - \dfrac{\left(y_i-H_i\hat{\theta}\right)^2}{2\sigma_i^2} \nonumber \\
+	&=& \argmin_{\hat{\theta}} J \nonumber
+\end{eqnarray}
+where $J$ is the cost function given by
+\begin{eqnarray}
+	J &=& - \sum_{i=1}^{m} \dfrac{\left(y_i-H_i\hat{\theta}\right)^2}{2\sigma_i^2} \label{eq:wlsmle2}
+\end{eqnarray}
+
+Cost function $J$ in \eqref{eq:wlsmle2} is a convex function of $\theta$ and it has unique global minimum. From \eqref{eq:wlsmle2}, 
+\begin{eqnarray}
+	\dfrac{\partial J}{\partial \hat{\theta}} &=& \sum_{i=1}^{m}H_i^T\dfrac{1}{\sigma_i^2} \left(y_i-H_i\hat{\theta}\right) \label{eq:wlsmle3} \\
+	&=& H^TR^{-1}\left(y-H\hat{\theta}\right) \label{eq:wlsmle4}
+\end{eqnarray}
+
+\begin{mdframed}
+	\textbf{Derivative with respect to a vector:}
+	
+	Equation \eqref{eq:wlsmle3} is a derivative of a scalar $J$ with respect to (w.r.t.) a column vector $\hat{\theta} \in \mathbb{R}^{n\times 1}$. The result can be either a $1\times n$ row vector (known as numerator layout) or a $n\times 1$ column vector (known as denominator layout). Both notations are correct so long as they are kept consistent.
+	
+	Equations \eqref{eq:wlsmle3} and \eqref{eq:wlsmle4} use denominator layout. If nominator layout were used, \eqref{eq:wlsmle3} and \eqref{eq:wlsmle4} should have been
+	\begin{eqnarray}
+		\dfrac{\partial J}{\partial \hat{\theta}} &=& \sum_{i=1}^{m}\dfrac{1}{\sigma_i^2} \left(y_i-H_i\hat{\theta}\right)H_i \nonumber \\
+		&=& \left(y-H\hat{\theta}\right)^TR^{-1}H \nonumber
+	\end{eqnarray}
+	
+	In the next step, \eqref{eq:wlsmle4} will be equating to zero, hence making no difference beyond that point no matter which layout is used. 
+\end{mdframed}
+
+Equating $\dfrac{\partial J}{\partial \hat{\theta}}=0$ in \eqref{eq:wlsmle4} gives
+\begin{eqnarray}
+	H^TR^{-1}y &=& H^TR^{-1}H\hat{\theta}_{\textup{MLE}} \nonumber \\
+	\hat{\theta}_{\textup{MLE}} &=& \left(H^TR^{-1}H\right)^{-1}H^TR^{-1}y \label{eq:wlssolution}
+\end{eqnarray}
+where notice that $\left(H^TR^{-1}H\right)$ in \eqref{eq:wlssolution} must be non-singular, which can be ensured if the system is instantaneously observable and $R$ a positive-definite covariance matrix. 
+
+The state estimate \eqref{eq:wlssolution} is non-biased provided that $v$ is zero-mean. From \eqref{eq:wlsproblem} and \eqref{eq:wlssolution}, its estimation error is given by
+\begin{eqnarray}
+	\tilde{\theta}_{\textup{MLE}} &=& \hat{\theta}_{\textup{MLE}} - \theta \nonumber \\
+	&=& \left(H^TR^{-1}H\right)^{-1}H^TR^{-1}y - \left(H^TR^{-1}H\right)^{-1}H^TR^{-1}H\theta \nonumber \\
+	&=& \left(H^TR^{-1}H\right)^{-1}H^TR^{-1}v \label{eq:wlserror}
+\end{eqnarray}
+From \eqref{eq:wlserror} and using $R=E[vv^T]$, the mean and covariance of WLS are
+\begin{eqnarray}
+	E\left[\tilde{\theta}_{\textup{MLE}}\right] &=& 0 \nonumber \\
+	\textup{Cov}\left[\tilde{\theta}_{\textup{MLE}}\right] &=& E\left[\tilde{\theta}_{\textup{MLE}}\tilde{\theta}_{\textup{MLE}}^T\right] \nonumber \\
+	&=& \left(H^TR^{-1}H\right)^{-1} \label{eq:wlscov}
+\end{eqnarray}
+
+\section{Kalman Filter}
+
+
+Consider the following system
+\begin{eqnarray}
+	x(k+1) = A(k)x(k) + G(k)w(k) \label{eq:kfprocess} \\
+	y(k) = C(k)x(k) + v(k) \label{eq:kfmeasurement}
+\end{eqnarray}
+where $k$ is the time index, $x(k)\in\mathbb{R}^{n\times 1}$ the state vector, $A(k)$ the process matrix, $G(k)$ the process noise matrix, $w(k)\in\mathbb{R}^{l\times 1}$ the process noise, $y(k)\in\mathbb{R}^{m\times 1}$ the measurement, $C(k)$ the measurement matrix, and $v(k)$ the measurement noise. Noise $w(k)$ and $v(k)$ follow zero-mean Gaussian distribution with covariance $Q(k)$ and $R(k)$ respectively.
+
+Notice that the control term $B(k)u(k)$ that could have been part of \eqref{eq:kfprocess} is neglected for simplicity as this document only studies estimation and the control effect $B(k)u(k)$ is assumed known [XXX]. All the derived results in this section can be easily extended to a model with $B(k)u(k)$ considered in the process model.
+
+The purpose of KF is to recursively estimate $\hat{x}(k)$ and its error covariance $P(k)$, given \eqref{eq:kfprocess}, \eqref{eq:kfmeasurement}, and priori knowledge of $\hat{x}(k-1)$ and $P(k-1)$.
+
+KF can be derived using variety of methods. Rigorous derivations can be found at [XXX] where Bayes theorem is used in the derivation, or [XXX] where KF is formulated as a recursive MLE and derived using Thomas algorithm. In this document, an intuitive derivation is given.
+
+The following lemma \ref{lemma:kfprepare} is introduced and will be used in later derivations.
+
+\begin{lemma} \label{lemma:kfprepare}
+	
+	Let $\hat{\theta}^-$ be an estimation of $\theta$, with estimation error covariance $P^-$. Let $y$ be a new set of measurement of system in \eqref{eq:wlsproblem}. The MLE of $\theta$, $\hat{\theta}_{\mathrm{MLE}}$, and its estimation error covariance, $P$, can be calculated as follows.
+	
+	\begin{eqnarray}
+		P &=& \textup{Cov}[\tilde{\theta}_{\textup{MLE}}] \nonumber \\
+		&=& \left({P^-}^{-1}+H^TR^{-1}H\right)^{-1} \label{eq:lemma1.2} \\
+		\hat{\theta}_{\textup{MLE}} &=& \hat{\theta}^- + PH^TR^{-1}\left(y - H\hat{\theta}^-\right) \label{eq:lemma1.1}
+	\end{eqnarray} 
+	
+	The proof is given below.
+	
+	Let the size of $\theta$ be $n$. Take the priori knowledge $\hat{\theta}^-$ as a direct measurement of $\theta$ as follows.
+	\begin{eqnarray}
+		\hat{\theta}^- &=& \theta + \varepsilon \label{eq:lemma1.3}
+	\end{eqnarray}
+	with covariance of the measurement noise $\varepsilon$ given by $P^-$. Obviously, the WLS to \eqref{eq:lemma1.3} yields state estimate $\hat{\theta}^-$ and estimation error covariance $P^-$.
+	
+	Put \eqref{eq:lemma1.3} together with the new measurements \eqref{eq:wlsproblem} in vector form as follows
+	\begin{eqnarray}
+		\left[\begin{array}{cc}
+			\hat{\theta}^- \\ y
+		\end{array}\right] &=& \left[\begin{array}{c}
+			I \\ H
+		\end{array}\right]\theta + \left[\begin{array}{cc}
+			\varepsilon \\ v
+		\end{array}\right] \label{eq:lemma1.4}
+	\end{eqnarray}
+	where $I$ is the identity matrix of rank $n$. The augmented noise $\bar{V}=[\varepsilon ~ v]^T$ has covariance
+	\begin{eqnarray}
+		\textup{Cov}\left[\bar{V}\right] &=& \textup{diag}\left(\begin{array}{cc}
+			P^- & R
+		\end{array}\right) \nonumber
+	\end{eqnarray}
+	and note that
+	\begin{eqnarray}
+		\textup{Cov}^{-1}\left[\bar{V}\right] &=& \textup{diag}\left(\begin{array}{cc}
+			{P^-}^{-1} & R^{-1}
+		\end{array}\right) \nonumber
+	\end{eqnarray}
+	due to the block diagonal structure of $\textup{Cov}\left[\bar{V}\right]$.
+	
+	From \eqref{eq:wlssolution} and \eqref{eq:wlscov}, applying WLS on \eqref{eq:lemma1.4} gives
+	\begin{eqnarray}
+		\hat{\theta}_{\textup{MLE}} &=& \left(\left[\begin{array}{cc}
+			I & H 
+		\end{array}\right]\left[\begin{array}{cc}
+			{P^-}^{-1} & 0 \\ 0 & R^{-1}
+		\end{array}\right]\left[\begin{array}{c}
+			I \\ H
+		\end{array}\right]\right)^{-1}\left[\begin{array}{cc}
+			I & H 
+		\end{array}\right]\left[\begin{array}{cc}
+			{P^-}^{-1} & 0 \\ 0 & R^{-1}
+		\end{array}\right]\left[\begin{array}{c}
+			\hat{\theta}^- \\ y
+		\end{array}\right] \nonumber \\
+		&=&\left({P^-}^{-1}+H^TR^{-1}H\right)^{-1}{P^-}^{-1}\hat{\theta}^- + \left({P^-}^{-1}+H^TR^{-1}H\right)^{-1}H^TR^{-1}y \label{eq:lemma1.8} \\
+		\textup{Cov}\left[\tilde{\theta}_{\textup{MLE}}\right] &=& \left(\left[\begin{array}{cc}
+			I & H 
+		\end{array}\right]\left[\begin{array}{cc}
+			{P^-}^{-1} & 0 \\ 0 & R^{-1}
+		\end{array}\right]\left[\begin{array}{c}
+			I \\ H
+		\end{array}\right]\right)^{-1} \nonumber \\
+		&=& \left({P^-}^{-1}+H^TR^{-1}H\right)^{-1} \label{eq:lemma1.5a} \\
+		&\triangleq& P \label{eq:lemma1.5}
+	\end{eqnarray}
+	
+	From \eqref{eq:lemma1.5},
+	\begin{eqnarray}
+		P^{-1} &=& {P^-}^{-1}+H^TR^{-1}H \label{eq:lemma1.6}
+	\end{eqnarray}
+	
+	Using \eqref{eq:lemma1.6}, \eqref{eq:lemma1.1} can be re-written as follows.
+	\begin{eqnarray}
+		\hat{\theta}_{\textup{MLE}} &=& \hat{\theta}^- + P\left({P^-}^{-1}\hat{\theta}^- + H^TR^{-1}y - P^{-1}\hat{\theta}^-\right) \nonumber \\
+		&=& \hat{\theta}^- + P\left(H^TR^{-1}y - H^TR^{-1}H\hat{\theta}^-\right) \nonumber \\
+		&=& \hat{\theta}^- + PH^TR^{-1}\left(y - H\hat{\theta}^-\right) \label{eq:lemma1.7}
+	\end{eqnarray}
+	
+	Equations \eqref{eq:lemma1.5} and \eqref{eq:lemma1.7} are \eqref{eq:lemma1.2} and \eqref{eq:lemma1.1} respectively.
+	
+\end{lemma}
+
+Denote $\hat{x}(k-1)$ to be an estimation of $x(k-1)$ with estimation error covariance $P(k-1)$. From \eqref{eq:kfprocess}, an estimate of $x(k)$ can be obtained as follows.
+\begin{eqnarray}
+	\hat{x}^-(k) &=& A(k-1)\hat{x}(k-1) \label{eq:kftimex}
+\end{eqnarray}
+and its covariance error
+\begin{eqnarray}
+	\textup{Cov}\left[\tilde{x}^-(k)\right] &=& \textup{Cov}\left[\hat{x}^-(k) - x(k)\right] \nonumber \\
+	&=& A(k-1)P(k-1)A(k-1)^T + G(k-1)Q(k-1)G(k-1)^T \nonumber \\
+	&\triangleq& P^-(k) \label{eq:kftimep}
+\end{eqnarray}
+
+Consider new measurement $y(k)$ in \eqref{eq:kfmeasurement}. Using lemma \ref{lemma:kfprepare} with $\hat{x}^-(k)$, $P^-(k)$ corresponding with $\theta^-$ and $P^-$, and \eqref{eq:kfmeasurement} corresponding with \eqref{eq:wlsproblem}, the updated state estimate, $\hat{x}(k)$, and its corresponding state estimate error covariance, $P(k)$, can be calculated using \eqref{eq:lemma1.2} and \eqref{eq:lemma1.1} as follows.
+\begin{eqnarray}
+	\hat{x}(k) &=& \hat{x}^-(k) + P(k)C(k)^TR(k)^{-1}\left(y(k)-C(k)\hat{x}^-(k)\right) \label{eq:kfmeasurementx} \\
+	P(k) &=& \left({P^-(k)}^{-1} + C(k)^TR(k)^{-1}C(k)\right)^{-1} \label{eq:kfmeasurementp}
+\end{eqnarray}
+
+Equations \eqref{eq:kftimex}, \eqref{eq:kftimep}, \eqref{eq:kfmeasurementx} and \eqref{eq:kfmeasurementp} form the recursive KF.
+
+In some literatures, $\hat{x}^-(k)$ in \eqref{eq:kftimex} is denoted by $\hat{x}(k|k-1)$ and $P^-(k)$ in \eqref{eq:kftimep} by $P(k|k-1)$. State estimate $\hat{x}(k)$ in \eqref{eq:kfmeasurementx} is denoted by $\hat{x}(k|k)$ and $P(k)$ in \eqref{eq:kfmeasurementp} by $P(k|k)$. The calculation of $\hat{x}^-(k)$ using \eqref{eq:kftimex} is known as the time update (it is a prediction of the state using only the process model, without any input from the measurement), while the calculation of $\hat{x}(k)$ on top of $\hat{x}^-(k)$ using \eqref{eq:kfmeasurementx}, the measurement update. The prediction  $\hat{x}(k|k-1)$ is known as the priori estimate, while $\hat{x}(k)$, the posteriori estimate.
+
+Define Kalman gain as follows.
+\begin{eqnarray}
+	K(k) &=& P(k)C(k)^TR(k)^{-1} \label{eq:kg}
+\end{eqnarray}
+With \eqref{eq:kg},  \eqref{eq:kfmeasurementx} can be written as
+\begin{eqnarray}
+	\hat{x}(k) &=& \hat{x}^-(k) + K(k)\left(y(k)-C(k)\hat{x}^-(k)\right) \label{eq:kfmeasurementxkg}
+\end{eqnarray}
+
+The trace of $P(k)$ in \eqref{eq:kfmeasurementp} can be used to evaluate the performance of KF. It can be proved that for system described by \eqref{eq:kfprocess} and \eqref{eq:kfmeasurement}, under white Gaussian noise assumption, KF is the optimal estimator, meaning that for any other non-biased estimator, its state estimate error covariance matrix must have a trace that is not less than that of KF. The proof is not given in this document.
+
+It is worth introducing Kalman gain a bit further, as this concept will be used in UKF as well in Section \ref{sec:ukf}. In \eqref{eq:kfmeasurementxkg}, Kalman gain plays as an artifact gain factor that bridges the measurement residual $\left(y(k)-C(k)\hat{x}^-(k)\right)$ to the state estimate $\hat{x}(k)$, balancing the influence of the residual versus the priori estimate $\hat{x}^-(k)$. 
+
+Using \eqref{eq:kfmeasurementp}, \eqref{eq:kfmeasurementxkg} can be re-written as follows.
+\begin{eqnarray}
+	K(k) &=& P(k)C(k)^TR(k)^{-1} \nonumber \\
+	&=& P(k)\left[C(k)^TR(k)^{-1}\left(R(k) + C(k)P^-(k)C(k)^T\right)\right]\left(R(k) + C(k)P^-(k)C(k)^T\right)^{-1} \nonumber \\
+	&=& P(k)\left[C(k)^T + C(k)^TR(k)^{-1}C(k)P^-(k)C(k)^T\right]\left(R(k) + C(k)P^-(k)C(k)^T\right)^{-1} \nonumber \\
+	&=& P(k)\left[{P^-(k)}^{-1}P^-(k)C(k)^T + C(k)^TR(k)^{-1}C(k)P^-(k)C(k)^T\right]\left(R(k) + C(k)P^-(k)C(k)^T\right)^{-1} \nonumber \\
+	&=& P(k)\left[{P^-(k)}^{-1} + C(k)^TR(k)^{-1}C(k)\right]P^-(k)C(k)^T\left(R(k) + C(k)P^-(k)C(k)^T\right)^{-1} \nonumber \\
+	&=&  P(k)P(k)^{-1}P^-(k)C(k)^T\left(R(k) + C(k)P^-(k)C(k)^T\right)^{-1} \nonumber \\
+	&=& P^-(k)C(k)^T\left(R(k) + C(k)P^-(k)C(k)^T\right)^{-1} \label{eq:kga} \\
+	&\triangleq& P_{xy}(k)P_{yy}(k)^{-1} \nonumber
+\end{eqnarray}
+where
+\begin{eqnarray}
+	P_{yy}(k) &=& R(k) + C(k)P^-(k)C(k)^T \label{eq:kfpyy} \\
+	P_{xy}(k) &=&  P^-(k)C(k)^T \label{eq:kfpxy}
+\end{eqnarray}
+
+Equation \eqref{eq:kga}, \eqref{eq:kfpyy} and \eqref{eq:kfpxy} give more insights to Kalman gain. From \eqref{eq:kga}, Kalman gain is composed of of two parts,  $P_{yy}(k)^{-1}$ and $P_{xy}(k)$, where $P_{yy}(k)$ is the covariance of measurement residual $\left(y(k)-C(k)\hat{x}^-(k)\right)$ (proof is straight forward), and $P_{xy}(k)$ the cross-covariance matrix that bridges measurement residual and state. Later in the introduction of UKF in Section \ref{sec:ukf}, the covariance matrices cannot be traced analytically, and sigma points are used to represent them empirically. Nevertheless, Kalman gain composed of residual covariance and cross-covariance matrix is defined and used in the posteriori estimation loop in a similar manner.
+
+Using matrix inverse lemma on \eqref{eq:kfmeasurementp} gives
+\begin{eqnarray}
+	P(k) &=& P^-(k) - P^-(k)C(k)^T\left(C(k)P^-(k)C(k)^T + R(k)\right)^{-1}C(k)P^-(k) \label{eq:kfmeasurementp2}
+\end{eqnarray}
+
+From \eqref{eq:kga} and \eqref{eq:kfpyy}, \eqref{eq:kfmeasurementp2} can be re-written as
+\begin{eqnarray}
+	P(k) &=& P^-(k) - K(k)P_{yy}(k)K(k)^T \label{eq:kfmeasurementp3}
+\end{eqnarray}
+
+The measurement update \eqref{eq:kfmeasurementx} and \eqref{eq:kfmeasurementp} are equivalent to \eqref{eq:kga}, \eqref{eq:kfmeasurementxkg} and \eqref{eq:kfmeasurementp3}.
+
+\section{Unscented Kalman Filter} \label{sec:ukf}
+
+Though being efficient, KF has at least the following limitations.
+\begin{enumerate}
+	\item Both process and measurement models \eqref{eq:kfprocess} and \eqref{eq:kfmeasurementp} must be linear, and must be known as their parameters are used in the recursive calculation.
+	\item For optimal performance, process and measurement noise $w(k)$, $v(k)$ in \eqref{eq:kfprocess} and \eqref{eq:kfmeasurementp} must follow Gaussian distribution with known scale parameters. 
+\end{enumerate}
+
+UKF was proposed to address item 1 in the above list. Notice that UKF still assumes Gaussian distributed process and measurement noise, and it is not robust to outliers. It does not look into item 2. More about this limitation is discussed in Section \ref{sec:limitation}.
+
+Consider non-linear system
+\begin{eqnarray}
+	x(k+1) &=& f_k\left(x(k), w(k)\right) \label{eq:ukfprocess} \\
+	y(k) &=& g_k\left(x(k), v(k)\right) \label{eq:ukfmeasurement}
+\end{eqnarray}
+where the dimensions of $x(k)$, $y(k)$, $w(k)$ and $v(k)$ be given by $n$, $m$, $l_w$, $l_v$ respectively. Both process noise $w(k)$ and measurement noise $v(k)$ follow Gaussian distribution $w(k)\sim \mathcal{N}\left(0,Q(k)\right)$ and $v(k)\sim \mathcal{N}\left(0,R(k)\right)$ with $Q(k)$, $R(k)$ the covariance matrices. The process model $f_k$ and $g_k$ can be time-varying, as long as their inputs and outputs dimensions remain constant.
+
+Apparently, KF given by \eqref{eq:kftimex}, \eqref{eq:kftimep}, \eqref{eq:kfmeasurementx} and \eqref{eq:kfmeasurementp} cannot be implemented on \eqref{eq:ukfprocess} and \eqref{eq:ukfmeasurement} directly for an obvious reason: Gaussian distribution does not retain in a non-linear transformation where superposition theorem does not apply.
+
+UKF uses unscented transform (UT) to trace the mean and covariance of a Gaussian (or Gaussian-like) distribution passing through a non-linear mapping. More about UT is introduced in Section \ref{sec:ut}.
+
+\subsection{Unscented Transform} \label{sec:ut}
+
+Let $f(x)$ be a non-linear function. Let $p(x)$ be the probability density function (PDF) of $X$, either Gaussian or Gaussian-like, with mean and covariance given by  $\mu$ and $\sigma^2$ respectively. For simplicity, scalar $X$ is assumed in this section unless otherwise mentioned. Let $Y=f(X)$ be another random variable derived from $X$. The target is to calculate the mean and covariance of $Y$.
+
+The following 4 approaches are introduced, and their pros and cons compared. UT is one of them and will be introduced in the last.
+\begin{itemize}
+	\item Linearization
+	\item Monte-Carlo based method
+	\item Gauss-Hermite quadrature
+	\item Unscented transform
+\end{itemize}
+
+Notice that the first 3 approaches try to compute the following integral
+\begin{eqnarray}
+	I &=& \int_{-\infty}^{\infty} f(x)p(x)dx \label{eq:ut1}
+\end{eqnarray}
+efficiently, where $f(x)$ is any general non-linear function. If that could be done, the mean and covariance of $Y$ can be obtained consequently in a straight forward manner. Different from them, UT directly approximates the mean and covariance of $Y$.
+
+\vspace{0.1in}
+\noindent \textbf{Linearization}
+\vspace{0.1in}
+
+The first-order Taylor expansion of $f(x)$ about $\mu$ is given by
+\begin{eqnarray}
+	f(x) &\approx& f(\mu) + \left.\dfrac{d}{dx}f(x)\right|_{x=\mu}(x-\mu)
+\end{eqnarray}
+where $f(\mu)$, $ \left.\dfrac{d}{dx}f(x)\right|_{x=\mu}$ are known constants. With Gaussian distributed $X\sim\mathcal{N}(\mu, \sigma^2)$, the mean and variance of $Y\approx f(\mu) + \left.\dfrac{d}{dx}f(x)\right|_{x=\mu}(X-\mu)$ can be easily calculated. The result is accurate if $f(x)$ is linear or of first-order polynomial, and it introduces approximation otherwise.
+
+The drawbacks of this approach include:
+\begin{itemize}
+	\item It is only a first-order Taylor approximation, and may perform badly even if $f(x)$ is ``a little bit'' non-linear.
+	\item It requires the calculation of $\left.\dfrac{d}{dx}f(x)\right|_{x=\mu}$. In practice, this often means that the analytical form of $f$ must be known.
+\end{itemize}
+
+\vspace{0.1in}
+\noindent \textbf{Monte-Carlo based method}
+\vspace{0.1in}
+
+Generate $N$ samples of $X$, namely $X_i$, $i=1,...,N$. Calculate $f(X_i)$. Calculate the sampled mean and covariance of $f(X_i)$, and use them as the mean and variance of $Y$.
+
+The result is accurate as $N\rightarrow\infty$ as a result of the law of large numbers and the central limit theorem, regardless of the nonlinearity of $f$. The obtained mean and variance converges with the increment of $N$. The speed of convergence can be quantified.
+
+The drawbacks include:
+\begin{itemize}
+	\item In practice, it is never accurate due to the limited size of $N$, even for linear $f$.
+	\item The computational burden is high for an practically acceptable accuracy.
+\end{itemize}
+
+\vspace{0.1in}
+\noindent \textbf{Gaussian-Hermite quadrature}
+\vspace{0.1in}
+
+Gaussian-Hermite quadrature assumes Gaussian distribution of $X$. Rewrite \eqref{eq:ut1} with $p(x)$ replaced by Gaussian distribution PDF as follows.
+\begin{eqnarray}
+	E\left[Y\right] &=& \int_{-\infty}^{\infty}f(x)\dfrac{1}{\sqrt{2\pi\sigma^2}}e^{-\dfrac{(x-\mu)^2}{2\sigma^2}}dx \label{eq:ghq1}
+\end{eqnarray}
+
+A two-step approach is used. In step 1, map random variable $X$ with $Z$ as follows.
+\begin{eqnarray}
+	x = \mu + \sqrt{2}\sigma z \Leftrightarrow z = \dfrac{x-\mu}{\sqrt{2}\sigma} \label{eq:ghq2}
+\end{eqnarray}
+which makes $Z\sim\mathcal{N}(0, 0.5^2)$ a normalized random variable derived from $X$. The purpose of this transformation will be clearer in a later stage.
+
+Substituting \eqref{eq:ghq2} into \eqref{eq:ghq1} gives
+\begin{eqnarray}
+	E\left[Y\right] &=& \dfrac{1}{\sqrt{\pi}}\int_{-\infty}^{\infty}f\left(\mu + \sqrt{2}\sigma z\right) e^{-z^2}dz \nonumber \\
+	&=& \dfrac{1}{\sqrt{\pi}}\int_{-\infty}^{\infty}\bar{f}(z)e^{-z^2}dz \label{eq:ghq3}
+\end{eqnarray}
+where
+\begin{eqnarray}
+	\bar{f}(z) &=& f\left(\mu + \sqrt{2}\sigma z\right) \nonumber
+\end{eqnarray}
+
+It turned out that $\int_{-\infty}^{\infty}\bar{f}(z)e^{-z^2}dz$ can be calculated very efficiently and accurately. This is the reason \eqref{eq:ghq2} is performed in the first place. The method to calculate $\int_{-\infty}^{\infty}\bar{f}(z)e^{-z^2}dz$ is known as Gauss-Hermite quadrature.
+
+Detailed introduction of Gauss-Hermite quadrature can be found elsewhere. It is a very-well studied subject and not the focus of this document. A brief review is given as a side note.
+
+\begin{mdframed}
+	\textbf{A brief review of Gauss-Hermite quadrature:}
+	
+	We want to calculate (an approximation of) the following integral efficiently.
+	\begin{eqnarray}
+		\int_{-\infty}^{\infty} f(x) \omega(x)dx \label{eq:ghqexp1}
+	\end{eqnarray}
+	where $f(x)$ is an arbitrary non-linear function, $\omega(x)$ a fixed known weight function (so that it does not add unknowns to the system). Gauss quadrature assumes general weight functions. Commonly seen ones include $\omega(x) = 1$, $\omega(x) = \sqrt{1-x^2}$, $\omega(x) = e^{-x}$, and a few more. As far as this document concerns, in \eqref{eq:ghq3}, $w(x)=e^{-x^2}$ is one of the commonly used weight functions. This special case of Gauss quadrature is known as the Gauss-Hermite quadrature. We will start by introducing general Gauss quadrature.
+	
+	It is worth mentioning in the beginning that we can always use numerical integral to calculate \eqref{eq:ghqexp1}, should there be sufficient computational resources. We can choose many samples of $x_i$ in the given range, evaluate $f(x_i)$, then sum the product up. We can get accurate results to any degree should there be enough samples. However, this introduces huge computational burden.
+	
+	Naturally, we want to set a benchmark for approximation accuracy, and use the least number of $f(x_i)$ evaluations to achieve that accuracy. In Gaussian quadrature problem formulation, the problem is stated as follows. For integration \eqref{eq:ghqexp1}, we want to find such $x_i$ and $w_i$ so that
+	\begin{eqnarray}
+		\int_{-\infty}^{\infty} f(x) \omega(x)dx &\approx& \sum w_i f(x_i) \label{eq:ghqexp2}
+	\end{eqnarray}
+	is an approximation of the integral, and it is exact if $f(x)$ is a polynomial of order $(2N-1)$ or less. (After all, any non-linear $f(x)$ can be assumed to be a polynomial with very high order.) The problems are: how many $x_i$ we need (the less the better), where to place them, and how to calculate $w_i$.
+	
+	From the degree of freedom perspective, a polynomial of $(2N-1)$ order has $2N$ coefficients. By adding a evaluation point, we add 2 degrees of freedom to the right side of \eqref{eq:ghqexp2}. Technically speaking, we need at least $N$ evaluation point. 
+	
+	It is not recommended to randomly choose the locations of $x_i$, as one may realize later that the corresponding $w_i$ is difficult to calculate, does not exist, not unique, or making the approximation numerically unstable. It is recommended to choose $x_i$ according to the weight function $\omega(x)$. To be more precise, $x_i$ should be the roots of the $N$-th order polynomial $\phi_N(x)$ that comes from the orthogonal system $\{\phi_i(x)\}$ where
+	\begin{eqnarray}
+		\int \phi_i(x)\phi_j(x)\omega(x)dx = 0, && \forall i \neq j \nonumber
+	\end{eqnarray} 
+	
+	In our case, $\omega = e^{-x^2}$ from \eqref{eq:ghq3}, and the orthogonal system is known as the Physicists' Hermite polynomials. The $i$-th order Physicists' Hermite polynomial is often denoted by $H_i(x)$. As aforementioned, in our case, $x_i$ should be chosen as the roots of $H_N(x)$.
+	
+	Gaussian quadrature with weight function $\omega = e^{-x^2}$ is known as Gauss-Hermite quadrature. Gauss-Hermite quadrature states that
+	\begin{eqnarray}
+		\int_{-\infty}^{\infty}f(x)e^{-x^2}dx &\approx& \sum_{1}^{N} w_if(x_i) \label{eq:ghqexp3} 
+	\end{eqnarray}
+	where $N$ is up to the user's choice, $x_i$, $i=1,...,N$ the roots to $H_N(x)=0$, and $w_i$ the weights given by
+	\begin{eqnarray}
+		w_i &=& \dfrac{2^{N-1}N!\sqrt{\pi}}{N^2\left(H_{N-1}(x_i)\right)^2} \nonumber
+	\end{eqnarray}
+	
+	The explanations why polynomials from orthogonal family should be used and how $w_i$ is calculated are out of the scope of this document.
+\end{mdframed}
+
+The covariance can be calculated similarly.
+
+\vspace{0.1in}
+\noindent \textbf{Unscented Transform}
+\vspace{0.1in}
+
+GHQ is the product of mathematicians. It is precise, elegant and optimal, with minimum user intervention. The only thing a user can decide in GHQ is to choose $N$, which controls the accuracy of the approximation when calculating the mean and covariance. UT, on the other hand, is invented by engineers. It is not as elegant or rigorous. It is sub-optimal in many occasions. It has more parameters that the user can tune, some work better than the others and it is often case-by-case. But it works in practice, especially for high-dimension systems, whereas in many such cases GHQ does not.
+
+The idea of UT can be summarized as follows. Strategically select a few sigma points of $x_i$. The number of sigma points depend on the dimension of the system. In the case of 1-D system where $x$ is a scalar, select 3 sigma points, $x_0$, $x_1$ and $x_2$, where
+\begin{eqnarray}
+	x_0 &=& \mu \nonumber \\
+	x_1 &=& x_0 + \delta \nonumber \\
+	x_2 &=& x_0 - \delta \nonumber
+\end{eqnarray}
+i.e., $x_0$ lies on the mean of its distribution and $x_1$, $x_2$ symmetrically spread to the right and left of the mean by $\delta$, a tuned parameter. Notice that $\delta$ reflects the spread of the sigma points, and it is a tune-able parameter. In practice, $\delta$ is mostly (not entirely) determined by the variance of $X$. More details will be given later.
+
+Now that the sigma points locations are determined, we want to calculate their corresponding weights, $w_0$, $w_1$ and $w_2$, so that
+\begin{eqnarray}
+	w_1 &=& w_2 \nonumber \\
+	\mu &=& \sum_{i=0}^{2} w_i x_i \label{eq:utmuconstraint} \\
+	\sigma^2 &=& \sum_{i=0}^{2} w_i\left(x_i - \mu\right)^2 \label{eq:utsigmaconstraint}
+\end{eqnarray}
+where \eqref{eq:utmuconstraint} and \eqref{eq:utsigmaconstraint} reflect the mean and variance constraints. The idea of UT is to find such sigma points and associated weights that their weighted sum can be used to reflect the original distribution's mean and variance. There are 3 weights and 3 equations, and hence the weights can be uniquely determined as follows.
+\begin{eqnarray}
+	w_0 &=& 1- \dfrac{\sigma^2}{\delta^2} \nonumber \\
+	w_1 = w_2 &=& \dfrac{\sigma^2}{2\delta^2} \nonumber
+\end{eqnarray} 
+
+Since $x_0=\mu$ is fixed, $w_0$ is not relevant in the calculation of \eqref{eq:utsigmaconstraint}. Noticing this, we can introduce another degree of freedom to the weights without violating the mean and variance constraints. Define mean weights $w_i^m$ and covariance weights $w_i^c$ as follows.
+\begin{eqnarray}
+	w_i^m &=& w_i \nonumber \\
+	w_0^c &=& w_0 + (1 - \alpha^2 + \beta) \nonumber \\
+	w_i^c &=& w_i, i\geq 1 \nonumber
+\end{eqnarray} 
+This adds additional degree of freedom to $w_0^c$, where $\alpha$ and $\beta$ are tune-able parameters with typical values $0.001$ and $2$ respectively. Good choices of $\alpha$ and $\beta$ help with mapping the skewness and kurtosis of the PDF for Gaussian-like distributions. Details are not covered here.
+
+To conclude, and to generalize the problem to $L$-dimension Gaussian-like distributed $x\in\mathbb{R}^{L\times 1}$ with mean vector $\mu\in\mathbb{R}^{L\times 1}$ covariance matrix $P_x\in\mathbb{R}^{L\times L}$, UT approximates the mean and covariance of $Y=f(X)$ as follows. It selects $(2L+1)$ sigma points at
+\begin{eqnarray}
+	x_i = \left\{\begin{array}{ll}
+		\mu & i=0 \\
+		\mu + \delta_i & i=1,...,L \\
+		\mu - \delta_{i-N} & i = L + 1, ..., 2L
+	\end{array}\right. \label{eq:utx} 
+\end{eqnarray} 
+where $\delta_i$ is a tune-able parameter (vector) mostly determined by $P_x$. In practice, we use
+\begin{eqnarray}
+	\delta_i &=& \left(\sqrt{(L+\lambda)P_x}\right)_i \nonumber
+\end{eqnarray}
+where $\sqrt{\cdot}$ is the matrix square root, usually Cholesky decomposition, and $(\cdot)_i$ the $i$-th column of a matrix. Parameter $\lambda$ is a tune-able parameter calculated by $\lambda = \alpha^2(L+\kappa)-L$. Typical values are $\alpha=0.001$ and $\kappa = 0$. Notice that $\lambda$ can be negative.
+
+The mean weights and covariance weights are denoted by $w_i^m$ and $w_i^c$, $i=0,...,2L$. They are calculated as follows.
+\begin{eqnarray}
+	w_0^m &=& \dfrac{\lambda}{L + \lambda} \label{eq:utwm0}  \\
+	w_0^c &=& \dfrac{\lambda}{L + \lambda} + \left(1-\alpha^2+\beta \right) \label{eq:utwc0} \\
+	w_i^m = w_i^c &=& \dfrac{1}{2(L+\lambda)} \label{eq:utwmc}
+\end{eqnarray}
+
+\begin{mdframed}
+	\noindent \textbf{The typical values of UT parameters:}
+	
+	If the typical values of parameters in UT sounds strange to you, you are not along. For example, in $\lambda = \alpha^2(L+\kappa)-L$, by using typical values $\alpha=0.001$ and $\kappa=0$, $\lambda \approx -L$. This makes the sigma points spread $\delta_i$ very small, and all sigma points almost collapse to $\mu$. Indeed, several studies have pointed this problem out and they tried to propose better guidance on how to select all the tune-able the parameters. The guidance works better in some cases while worse in others.
+	
+	This document does not bother the details on how to select the tune-able parameters at what conditions. Throughout the document, typical values are used. And they work.
+\end{mdframed}
+
+With the above sigma points $x_i$ and weights $w_i^m$, $w_i^c$, (notice that they purely depend on the distribution of $X$ and has nothing to do with $f(x)$), the mean and covariance of $Y=f(X)$ are approximated as follows.
+\begin{eqnarray}
+	E[Y] &\approx& \sum_{i=0}^{2L} w_i^m f(x_i) \nonumber \\
+	\textup{Cov}[Y] &\approx& \sum_{i=0}^{2L} w_i^c \left[f(x_i) - E[Y]\right]\left[f(x_i) - E[Y]\right]^T \nonumber
+\end{eqnarray}
+
+\subsection{Unscented Kalman Filter}
+
+UKF is KF with mean (state estimate) and covariance (state estimate error covariance) non-linear mapping replaced by UT. To capture the non-linear process and measurement model, state augmentation is used. Details are given below.
+
+Consider \eqref{eq:ukfprocess} and \eqref{eq:ukfmeasurement}. Assume that at $k-1$, the state estimate is given by $\hat{x}(k-1)$ with state estimate error covariance $P(k-1)$. The target is to calculate state estimate $\hat{x}(k)$ using the process model, the measurement model, and the newly measured $y(k)$. 
+
+Let augmented $\bar{X}$ be
+\begin{eqnarray}
+	\bar{X}(k-1) &=& \left[\begin{array}{ccc}
+		\hat{x}(k-1)^T & 0_{l_m} & 0_{l_v}
+	\end{array}\right]^T \label{eq:ukfstateaugment}
+\end{eqnarray}
+an $(n+l_m+l_v)\times 1$ column vector. Let augmented error covariance matrix be
+\begin{eqnarray}
+	\bar{P}(k-1) &=& \left[\begin{array}{ccc}
+		p(k-1) & 0 & 0 \\
+		0 & Q(k-1) & 0 \\
+		0 & 0 & R(k)
+	\end{array}\right] \label{eq:ukfcovaugment}
+\end{eqnarray}
+
+Generate sigma points of the above augmented states using \eqref{eq:utx}. The number of sigma points is $(2L+1)$ where $L = n+l_m+l_v$. Each sigma point is an $(n+l_m+l_v)\times 1$ column vector. Form them together into an $(n+l_m+l_v)\times (2L+1)$ matrix denoted by $\mathcal{X}$. This matrix serves as a pool of sigma points. 
+\begin{eqnarray}
+	\mathcal{X} &=& \left[\begin{array}{ccc}
+		\ldots & \mathcal{X}_i & \ldots
+	\end{array}\right]_{(n+l_m+l_v)\times (2L+1)} \label{eq:ukfsigmapoint1}
+\end{eqnarray}
+Split the matrix by rows as follows.
+\begin{eqnarray}
+	\mathcal{X} &=&\left[\begin{array}{c}
+		\mathcal{X}_{n \times (2L+1)}^x \\
+		\mathcal{X}_{l_w \times (2L+1)}^w \\
+		\mathcal{X}_{l_v \times (2L+1)}^v
+	\end{array}\right] \label{eq:ukfsigmapoint2}
+\end{eqnarray}
+where the dimensions of $\mathcal{X}^x$, $\mathcal{X}^w$ and $\mathcal{X}^v$ are $n \times (2L+1)$, $l_w \times (2L+1)$ and $l_v \times (2L+1)$ respectively. They correspond with the state vector, the process noise and the measurement noise. 
+
+Calculate the mean weights $w_i^m$ and covariance weights $w_i^c$ associated with the sigma points using \eqref{eq:utwm0}, \eqref{eq:utwc0} and \eqref{eq:utwmc}.
+
+In KF, time update is given by \eqref{eq:kftimex} and \eqref{eq:kftimep}. The corresponding UKF time update is given below. 
+\begin{eqnarray}
+	\hat{x}^-(k) &=& \sum_{i=0}^{2L-1} w_i^m f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right)  \label{eq:ukftimex}
+\end{eqnarray}
+and its covariance error
+\begin{eqnarray}
+	P^-(k) &=& \sum_{i=0}^{2L-1} w_i^c \left[\mathcal{X}_i^x -\hat{x}^-(k)\right]\left[\mathcal{X}_i^x -\hat{x}^-(k)\right]^T \label{eq:ukftimep}
+\end{eqnarray}
+
+In KF, measurement update is given by \eqref{eq:kga}, \eqref{eq:kfmeasurementxkg} and \eqref{eq:kfmeasurementp3}. The corresponding UKF measurement update is given below. Firstly, consider the calculation of $P_{yy}(k)$ and $P_{xy}(k)$ given by \eqref{eq:kfpyy} and \eqref{eq:kfpxy}. Instead of analytical calculation, they are approximated using sigma points as follows.
+\begin{eqnarray}
+	\hat{y}(k) &=& \sum_{i=0}^{2L-1} w_i^m g_k\left(f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right), \mathcal{X}_i^v\right) \label{eq:ukfyhat} \\
+	P_{yy}(k) &=& \sum_{i=0}^{2L-1} w_i^c \left[g_k\left(f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right), \mathcal{X}_i^v\right) - \hat{y}(k)\right]\left[g_k\left(f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right), \mathcal{X}_i^v\right) - \hat{y}(k)\right]^T \label{eq:ukfpyy} \\
+	P_{xy}(k) &=& \sum_{i=0}^{2L-1} w_i^c \left[\mathcal{X}_i^x -\hat{x}^-(k)\right]\left[g_k\left(f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right), \mathcal{X}_i^v\right) - \hat{y}(k)\right]^T \label{eq:ukfpxy}
+\end{eqnarray}
+Substituting \eqref{eq:ukfpyy} and \eqref{eq:ukfpxy} into \eqref{eq:kga} gives Kalman gain in UKF
+\begin{eqnarray}
+	K(k) &=& P_{xy}(k)P_{yy}(k)^{-1} \label{eq:ukfkg}
+\end{eqnarray}
+
+From \eqref{eq:kfmeasurementxkg} and \eqref{eq:kfmeasurementp3}, the state estimate and the state estimate error covariance can then be updated by
+\begin{eqnarray}
+	\hat{x}(k) &=& \hat{x}^-(k) + K(k)\left(y(k) - \hat{y}(k)\right) \label{eq:ukfmeasurementx} \\
+	P(k) &=& P^-(k) - K(k)P_{yy}(k)K(k)^T \label{eq:ukfmeasurementp}
+\end{eqnarray}
+where $\hat{y}(k)$ and $P_{yy}$ are from \eqref{eq:ukfyhat} and \eqref{eq:ukfpyy} respectively. Equations \eqref{eq:ukfkg}, \eqref{eq:ukfmeasurementx} and \eqref{eq:ukfmeasurementp} form the measurement update of UKF, and they are corresponding with \eqref{eq:kga}, \eqref{eq:kfmeasurementxkg} and \eqref{eq:kfmeasurementp3}.
+
+A flowchart for UKF is given below. Notice that $\hat{x}(0)$, $P(0)$ in the flowchart represent the initial guess of the state and the initial guess error covariance. They are the priori knowledge of the state without any measurement.
+
+\begin{tikzpicture}[node distance=0.6in]
+	\node (start) [startstop] {Start};
+	\node (pro0) [process, below of=start] {Let $k=1$};
+	\node (pro1) [process, below of=pro0] {Update process and measurement models \eqref{eq:ukfprocess} and \eqref{eq:ukfmeasurement}};
+	\node (pro1b) [process, below of=pro1] {Retrieve $\hat{x}(k-1)$, $P(k-1)$};
+	\node (pro2) [process, below of=pro1b] {Augment state and covariance using \eqref{eq:ukfstateaugment} and \eqref{eq:ukfcovaugment}};
+	\node (pro3) [process, below of=pro2] {Calculate sigma points and weights using \eqref{eq:ukfsigmapoint1}, \eqref{eq:ukfsigmapoint2}, \eqref{eq:utwm0}, \eqref{eq:utwc0} and \eqref{eq:utwmc}};
+	\node (pro4) [process, below of=pro3] {Perform time update: calculate $\hat{x}^-(k)$ and $P^-(k)$ using \eqref{eq:ukftimex} and \eqref{eq:ukftimep}};
+	\node (in1) [io, below of=pro4] {Receive $y(k)$};
+	\node (pro5) [process, below of=in1] {Perform measurement update (a): calculate Kalman gain using \eqref{eq:ukfyhat}, \eqref{eq:ukfpyy}, \eqref{eq:ukfpxy} and \eqref{eq:ukfkg}};
+	\node (pro6) [process, below of=pro5] {Perform measurement update (b): calculate $\hat{x}(k)$ and $P(k)$ using \eqref{eq:ukfmeasurementx} and \eqref{eq:ukfmeasurementp}};
+	\node (out1) [io, below of=pro6] {Output $\hat{x}(k)$};
+	\node (dec1) [decision, below of=out1, yshift=0in] {End?};
+	\node (pro2b) [process, right of=dec1, xshift=2.5in] {Update timestamp $k \leftarrow k + 1$};
+	\node (stop) [startstop, below of=dec1] {Stop};
+	
+	\draw [arrow] (start) -- (pro0);
+	\draw [arrow] (pro0) -- (pro1);
+	\draw [arrow] (pro1) -- (pro1b);
+	\draw [arrow] (pro1b) -- (pro2);
+	\draw [arrow] (pro2) -- (pro3);
+	\draw [arrow] (pro3) -- (pro4);
+	\draw [arrow] (pro4) -- (in1);
+	\draw [arrow] (in1) -- (pro5);
+	\draw [arrow] (pro5) -- (pro6);
+	\draw [arrow] (pro6) -- (out1);
+	\draw [arrow] (out1) -- (dec1);
+	\draw [arrow] (dec1) -- node[anchor=east] {yes} (stop);
+	\draw [arrow] (dec1) -- node[anchor=south] {no} (pro2b);
+	\draw [arrow] (pro2b) |- (pro1);
+	
+\end{tikzpicture}
