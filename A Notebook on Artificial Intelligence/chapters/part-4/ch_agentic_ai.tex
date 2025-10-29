@@ -770,6 +770,21 @@ from langgraph.graph import StateGraph
 builder = StateGraph(State)
 \end{lstlisting}
 
+\begin{mdframed}
+\noindent \textbf{Can I use any field name for any purpose?}
+
+For most field names, yes. The user has the flexibility to define any field names. In the custom nodes, the user can add any contents to these fields as part of the pipeline.
+
+However, there are so called ``system-managed'' fields. Some system level functions will try to use particular field names for communication. An example is the \verb|messages| field, which is used for AI agents with LLM to communicate with \verb|ToolNode|.
+
+For that reason, \verb|messages| field is almost always defined in the state as follows.
+
+\begin{lstlisting}
+messages: Annotated[list[str], add_message]
+\end{lstlisting}
+
+\end{mdframed}
+
 \vspace{0.1in}
 \noindent \textbf{Node Definition}
 \vspace{0.1in}

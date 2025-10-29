@@ -431,10 +431,10 @@ Both value iteration and policy iteration assume known reward configuration and 
 \begin{enumerate}
 	\item In the beginning when there is no information of reward and transition model, initialize utility of state \eqref{eq:bellman} with $0$ for all states. Initialize the Q-function with $0$ for all actions at all states.
 	\item Let the agent freely transition from the current state until the end of the session, either when it reaches the goal, runs into a trap, or after certain time. Notice that the action with the largest utility is not necessarily selected. It uses a exploit-explore model instead, which will be introduced later.
-	\item For each state visited in the trail, update the Q-function of the actions taken together with the utility of the state as follows, from the first state to the last state.
-	
+	\item For each state visited in the trail, update the Q-function of the actions taken together with the utility of the state as follows, whenever an action is taken.
+
 	\begin{eqnarray}
-		U_{k+1}(a|s) &\leftarrow& U_k(a|s) + \alpha_k\left(R(s,a,s_i) + \gamma U_k(s_i)\right) \label{eq:qlearningupdate} \\
+		U_{k+1}(a|s) &\leftarrow& U_k(a|s) + \alpha_k\left(R(s,a,s_i) + \gamma U_k(s_i) - U_k(a|s)\right) \label{eq:qlearningupdate} \\
 		U_{k+1}(s) &\leftarrow& R(s) + \max_{a\in A(s)} U_{k+1}(a|s) \nonumber
 	\end{eqnarray}
 
