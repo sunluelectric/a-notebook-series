@@ -12,22 +12,22 @@ To formulate a decision-making problem mathematically, the first step is to defi
 
 Intuitively, a rational AI agent should always choose the action that maximizes expected utility among all available actions. This is known as the \mync{maximum expected utility} (MEU) principle. Below, MEU is formulated as an optimization problem.
 
-When the AI agent decides to perform an action among all the actions it can take, the system transitions from one state to another. Let the \mync{transition model} be denoted by $P(s|a,e)$, where $e$ represents the evidence or observation of the system, incorporating the agent’s awareness of its current origin state, $a$ denotes the action taken, and $s$ is the destination state. The probabilistic form of $P(s|a,e)$ captures uncertainty in the system.
+When the AI agent decides to perform an action among all the actions it can take, the system transitions from one state to another. Let the \mync{transition model} be denoted by $P(s|a,e)$, where $e$ represents the evidence or observation of the system, incorporating the agent’s awareness of its current origin state, $a$ the action taken, and $s$ the destination state. Notice that $P(s|a,e)$ is given in the form of probability, which captures uncertainty in the system.
 
 The benefit of reaching a state is quantitatively described by the \mync{utility of a state} $U(s)$. The utility $U(s)$ usually includes not only the immediate reward of reaching the state $s$, but also the foreseeable future benefits that may arise from reaching $s$ as an intermediate state. For now, do not bother how $U(s)$ can be calculated. Later in Sections \ref{sec:mdp} and \ref{sec:pomdp}, the systematic calculation of $U(s)$ will be introduced.
 
 The \mync{expected utility of action} $EU(a|e)$, given evidence $e$, over possible landing states $s_i \in S$, can be expressed by
 \begin{eqnarray}
-	EU(a|e) &=& \sum_{s_i \in S} P(s_i|a,e) \left(R(s_i,a,e) + U(s_i)\right) \label{eq:expected_utility}
+	EU(a|e) &=& \sum_{s_i \in S} P(s_i|a,e) \left(R(s_i,a,e) + \gamma U(s_i)\right) \label{eq:expected_utility}
 \end{eqnarray}
-where $R(s_i,a,e)$ is the reward gained by taking the action $a$ to reach $s$ given the observation $e$, and $U(s)$ the utility of state $s$. 
+where $R(s_i,a,e)$ is the reward gained by taking the action $a$ to reach $s$ given the observation $e$, $U(s)$ the utility of state $s$, and $\gamma$ the discount factor. More about discount factor will be introduced in later sections. For now, simply assume that $\gamma = 1$. 
 
 Given the evidence $e$, an AI agent may take one of several actions $a_i \in A$. MEU suggests that the optimal action is
 \begin{eqnarray}
 	a^* &=& \argmax_{a_i \in A} EU(a_i|e) \label{eq:emu}
 \end{eqnarray}
 
-An example of MEU is given by Fig.~\ref{fig:emuexp}. Consider a maze in which a robotic AI agent is randomly placed in one of several locations (blocks). Each location corresponds to a state represented by the coordinate $(x,y)$. The agent can move horizontally or vertically one step at a time. Let the utility of a state be given by its shortest distance to the goal, as shown in Fig.~\ref{fig:emuexp}. The utility, in this example, can be interpreted as the minimum turn required to reach the goal, if optimal actions are taken everywhere. To give it physical meanings, it can be the expected battery consumption of the robot to reach the goal with the most efficient route.
+An example of MEU is given by Fig.~\ref{fig:emuexp}. Consider a maze in which a robotic AI agent is randomly placed in one of several locations (blocks). Each location corresponds to a state represented by the coordinate $(x,y)$. The agent can move horizontally or vertically one step at a time. Let the utility of a state be given by its shortest distance to the goal, as shown in Fig.~\ref{fig:emuexp}. It can be interpreted as the minimum turn required to reach the goal from its current location, if optimal actions are taken.
 
 \begin{figure}[!htb]
 	\centering
@@ -36,23 +36,29 @@ An example of MEU is given by Fig.~\ref{fig:emuexp}. Consider a maze in which a 
 	\label{fig:emuexp}
 \end{figure}
 
-Let $e$ represent the agent’s current location, assumed to be the red dot at $(2,1)$. The agent can take four actions, listed below along with their possible resulting states and associated probabilities:
+Let $e$ represent the agent’s current location, assumed to be the red dot at $(2,1)$. The agent can take four actions and they are listed below together with their possible resulting states and associated probabilities.
 \begin{eqnarray}
 	a_1 &=& \mathrm{UP} \nonumber \\
 	P((2,1)|a_1,e) &=& 0.2 \nonumber \\
 	P((2,2)|a_1,e) &=& 0.6 \nonumber \\
 	P((1,1)|a_1,e) &=& 0.1 \nonumber \\
-	P((3,1)|a_1,e) &=& 0.1 \nonumber \\
+	P((3,1)|a_1,e) &=& 0.1 \nonumber
+\end{eqnarray}
+\begin{eqnarray}
 	a_2 &=& \mathrm{LEFT} \nonumber \\
 	P((2,1)|a_2,e) &=& 0.2 \nonumber \\
 	P((2,2)|a_2,e) &=& 0.1 \nonumber \\
 	P((1,1)|a_2,e) &=& 0.6 \nonumber \\
-	P((3,1)|a_2,e) &=& 0.1 \nonumber \\
+	P((3,1)|a_2,e) &=& 0.1 \nonumber
+\end{eqnarray}
+\begin{eqnarray}
 	a_3 &=& \mathrm{DOWN} \nonumber \\
 	P((2,1)|a_3,e) &=& 0.7 \nonumber \\
 	P((2,2)|a_3,e) &=& 0.1 \nonumber \\
 	P((1,1)|a_3,e) &=& 0.1 \nonumber \\
-	P((3,1)|a_3,e) &=& 0.1 \nonumber \\
+	P((3,1)|a_3,e) &=& 0.1 \nonumber
+\end{eqnarray}
+\begin{eqnarray}
 	a_4 &=& \mathrm{RIGHT} \nonumber \\
 	P((2,1)|a_4,e) &=& 0.2 \nonumber \\
 	P((2,2)|a_4,e) &=& 0.1 \nonumber \\
@@ -60,7 +66,7 @@ Let $e$ represent the agent’s current location, assumed to be the red dot at $
 	P((3,1)|a_4,e) &=& 0.6 \nonumber
 \end{eqnarray}
 
-Note that the outcome of an action is not deterministic. In practice, this may result from signal transmission errors or environmental uncertainty. The agent cannot move downward from its current location, so when it chooses the “DOWN” action $a_3$, it will likely remain in the same place after encountering a wall.
+Note that the outcome of an action is not deterministic. In practice, this may result from signal transmission errors or environmental uncertainty. The agent cannot move downward from its current location $(2,1)$ since it is already at the bottom boundary of the maze. When it chooses the ``DOWN'' action $a_3$, it will likely remain in the same place after running into the wall.
 
 Using \eqref{eq:expected_utility}, the expected utility of $a_1$ can be computed as
 \begin{eqnarray}
@@ -69,27 +75,25 @@ Using \eqref{eq:expected_utility}, the expected utility of $a_1$ can be computed
 \end{eqnarray}
 Similarly, $EU(a_2|e) = -5.6$, $EU(a_3|e) = -5.1$, and $EU(a_4|e) = -4.6$. Therefore, according to \eqref{eq:emu}, the rational decision is to take action $a_4$, i.e., move “RIGHT.”
 
-In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and utilities $U(s_i)$ are assumed known. This is rarely the case in practical problems. Sections~\ref{sec:mdp} and~\ref{sec:pomdp} will introduce methods for estimating or learning these quantities.
+In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and utilities $U(s_i)$ are assumed known from the very beginning of the game. This is rarely the case in practical problems. Sections~\ref{sec:mdp} and~\ref{sec:pomdp} will introduce value iteration or reinforcement learning methods which become handy when the utilities are unknown.
 
 \begin{mdframed}
 	\noindent \textbf{Are there alternatives to expected utility?}
 	
-	The expected utility of an action is calculated using \eqref{eq:expected_utility}. An AI agent using \eqref{eq:expected_utility} and \eqref{eq:emu} to make decisions behaves rationally. 
-	
-	However, can we base decision making on other measures of utility? For example, consider the worst-case utility:
+	The expected utility of an action is calculated using \eqref{eq:expected_utility}. An AI agent using \eqref{eq:expected_utility} and \eqref{eq:emu} to make decisions. However, can we base decision making on other measures of utility? For example, consider the worst-case utility:
 	\begin{eqnarray}
 		WU(a|e) &=& \min\{U(s_i)\,|\,P(s_i|a,e) > 0\} \nonumber
 	\end{eqnarray}
 	Instead of maximizing expected utility, could we maximize worst-case utility?
 	
-	This question concerns the definition of a rational agent. To formalize this, the following \mync{axioms of utility theory} are defined:
+	This question concerns the definition of a rational agent. To formalize this, the following \mync{axioms of utility theory} is defined:
 	\begin{itemize}
 		\item \textbf{Orderability.} For any two actions $a_1$ and $a_2$, exactly one of the following statements must hold: “$a_1$ is preferred over $a_2$,” “$a_1$ and $a_2$ are indifferent,” or “$a_2$ is preferred over $a_1$.” Thus, any two actions can be ranked.
 		\item \textbf{Transitivity.} If $a_1$ is preferred over $a_2$ and $a_2$ is preferred over $a_3$, then $a_1$ must be preferred over $a_3$.
 		\item \textbf{Continuity.} For three actions $a_1$, $a_2$, and $a_3$, where $a_1$ is preferred over $a_2$ and $a_2$ over $a_3$, there exists a probability $p$ such that a compound action $a_{1,3,p,1-p}$ (which randomly chooses $a_1$ with probability $p$ and $a_3$ with $1-p$) is indifferent to $a_2$.
-		\item \textbf{Substitutability.} If $a_1$ and $a_2$ are indifferent and $a_3$ is any action, then for any $p$, the compound actions $a_{1,3,p,1-p}$ and $a_{2,3,p,1-p}$ must be indifferent.
+		\item \textbf{Substituability.} If $a_1$ and $a_2$ are indifferent and $a_3$ is any action, then for any $p$, the compound actions $a_{1,3,p,1-p}$ and $a_{2,3,p,1-p}$ must be indifferent.
 		\item \textbf{Monotonicity.} If $a_1$ is preferred over $a_2$, then for compound actions $a_{1,2,p_1,1-p_1}$ and $a_{1,2,p_2,1-p_2}$, if $p_1 > p_2$, then $a_{1,2,p_1,1-p_1}$ is preferred over $a_{1,2,p_2,1-p_2}$.
-		\item \textbf{Decomposability.} Compound actions can be nested or decomposed. For example, if $a_{1,2,p,1-p}$ is a compound action and $a_2$ is itself a compound action $a_2 = a_{21,22,q,1-q}$, then $a_{1,2,p,1-p}$ is indifferent to $a_{1,21,22,p,(1-p)q,(1-p)(1-q)}$.
+		\item \textbf{Decomposability.} Compound actions can be nested or decomposed. For example, in compound action $a_{1,2,p,1-p}$, if $a_2$ is itself a compound action $a_2 = a_{21,22,q,1-q}$, then $a_{1,2,p,1-p}$ is indifferent to $a_{1,21,22,p,(1-p)q,(1-p)(1-q)}$.
 	\end{itemize}
 	
 	Let $U(a|e)$ (or simply $U(a)$) denote the utility of action $a$. The specific form of $U(a)$, whether it represents expected utility or another valid measure, is acceptable as long as the following conditions are satisfied:
@@ -114,21 +118,21 @@ In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and ut
 
 \subsection{Utility Function}
 
-The utility of an action $U(a|e)$, for example $EU(a|e)$ as in \eqref{eq:expected_utility}, is an instance of a \mync{utility function} that maps actions to real numbers. As noted earlier, the expected utility formulation is not the only valid approach consistent with the axioms of utility theory. Nonetheless, it is the most widely used and is employed in the \myabb{Markov Decision Process}{MDP}, which will be introduced in Sections~\ref{sec:mdp} and~\ref{sec:pomdp}. For the remainder of this chapter, unless otherwise specified, we consider expected utility as defined in \eqref{eq:expected_utility}.
+\mync{Utility function} maps an action or a system state to a real number. The expected utility of an action $U(a|e)$ is an example of the utility function. As noted earlier, the expected utility of an action is not the only valid measure of an action. Nonetheless, it is the most widely used and is employed in the \myabb{Markov Decision Process}{MDP} which will be introduced in Sections~\ref{sec:mdp} and~\ref{sec:pomdp}. For the remainder of this chapter, unless otherwise specified, we consider expected utility c as the utility function of an action.
 
-The expected utility of an action depends on the transition model $P(s|a,e)$ and the state utility $U(s)$. State utility typically includes both its immediate reward and the anticipated future utility obtainable from using that state as an intermediate step. For example, in chess, each board configuration represents a state. Only the final checkmate state provides immediate utility, but intermediate states possess utility as they contribute to eventual victory.
+From $U(a|e)$, the expected utility of an action depends on the transition model $P(s|a,e)$ and the state utility $U(s)$. State utility typically includes both the immediate reward (from reaching that state) and the anticipated future utility obtainable from using that state as an intermediate step. For example, in chess, each board configuration represents a state. Only the final checkmate state provides immediate reward, but intermediate states possess utility as they contribute to the eventual victory.
 
-The computation of utility functions for actions and states is often referred to as \mync{preference elicitation}. Different models have different ways of defining and calibrating utility functions. As far as this notebook concerns, utility calculation of MDP will be introduced in details in Sections~\ref{sec:mdp} and \ref{sec:pomdp}. In the remainder of this section, factors and good practices of determine utilities, especially immediate reward of a state, are discussed. Notice that anticipated future utilities of states and utilities of actions can often be derived from the immediate rewards of states and the transition models.
+The computation of utility functions for actions and states is often referred to as \mync{preference elicitation}. Different models have different ways of defining and calibrating utility functions. As will be demonstrated in later Sections \ref{sec:mdp} and \ref{sec:pomdp}, utilities of actions and states can be derived from transition model and rewards by value iteration or reinforcement learning. 
 
-While the detailed calculation of utilities varies by task and will be addressed later, some general principles for assigning utility values are useful and they are given below.
+Some general principles for assigning rewards and calculating utility function values are given below.
 \begin{itemize}
-	\item Although utility is relative, it is often helpful to define global upper and lower bounds, where the lower bound represents “immediate loss” and the upper bound represents “goal achieved.”
-	\item In many real-world problems, utility is expressed in monetary terms (financial gain or cost). Rewards and penalties of various types are converted to monetary values and normalized by a scaling factor.
-	\item Decision makers may differ in risk preference. Risk-averse and risk-seeking agents can have different utility functions even under identical circumstances.
-	\item Mathematically derived utility functions sometimes contradict human intuition, as humans are not always rational and do not always conform to the axioms of utility theory.
+	\item Although rewards are relative and can take any number, it is often helpful to define global upper and lower bounds, where the lower bound represents ``immediate loss'' and the upper bound represents ``goal achieved.'' Rewards and utilities should be scaled accordingly.
+	\item In many real-world problems, reward is expressed in monetary terms (financial gain or cost). Rewards and penalties of various types are converted to monetary values and normalized by a scaling factor.
+	\item Decision makers may differ in risk preference. Risk-averse and risk-seeking agents can have different rewards even under identical circumstances.
+	\item Mathematically derived rewards and utilities sometimes contradict human intuition, as humans are not always rational and do not always conform to the axioms of utility theory.
 \end{itemize}
 
-An \mync{influence diagram} or \mync{decision network} represents the structure of a utility function. It is a graphical model illustrating the relationships between utility, its contributing attributes, and the factors influencing those attributes, as well as the entities responsible for making decisions. Understanding this structure helps decision makers identify which factors influence outcomes and should be considered when determine the utility values.
+An \mync{influence diagram} or \mync{decision network} represents the structure of rewards or utility functions. It is a graphical model illustrating the relationships between utility, its contributing attributes, and the factors influencing those attributes, as well as the entities responsible for making decisions. Understanding this structure helps decision makers identify which factors influence outcomes and should be considered when determine the utility values.
 
 An example is shown in Fig.~\ref{fig:decisionnetworkexp}, where a decision network assists a buyer in choosing a house. Here, the utility function depends on three attributes—location, construction quality, and price—each determined by several underlying factors. The entity ``buyer'' controls these attributes, selecting actions (purchase choices) that maximize utility.
 
