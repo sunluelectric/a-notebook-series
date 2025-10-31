@@ -6,24 +6,17 @@ The concept of agentic AI is not new. However, in recent years it has drawn incr
 
 \section{Introduction to Agentic AI}
 
-The term ``agent'' refers to an entity that acts on behalf of a human. By this definition, agentic AI refers to AI-based systems that can solve complex problems with limited human oversight. This idea predates LLMs. However, with the rise of LLMs, the term ``agentic AI'' has been re-contextualized and is experiencing renewed popularity.
+The term ``agent'' refers to an entity that acts like a human. By this definition, agentic AI refers to AI-based systems that can solve complex problems with limited human oversight. It is possible to build an agentic AI system without LLM and use only conventional AI frameworks such as MDP and ANN. However, with the recent rise of LLMs, the term ``agentic AI'' has been re-contextualized and is gaining increasing popularity.
 
-We explore agentic AI from two perspectives:
+In the next Sections \ref{sec:conventional_agenticai} and \ref{sec:llm_agentic_ai}, agentic AI systems with conventional AI frameworks and with LLMs are discussed respectively. The remainder of the chapter focuses mainly on agentic AI systems incorporated with LLMs.
 
-\begin{itemize}
-  \item Conventional intelligent agents. Classical agents developed in traditional AI literature before the rise of LLMs.
-  \item LLM-driven agentic AI. Modern, language-enabled agents powered by large language models.
-\end{itemize}
-
-More details are given in the rest of the section.
-
-\subsection{Conventional Intelligent Agent}
+\subsection{Agentic AI with Conventional Agents} \label{sec:conventional_agenticai}
 
 TBA
 
-\subsection{Agentic AI in the Context of LLM}
+\subsection{Agentic AI with LLM-Driven Agents} \label{sec:llm_agentic_ai}
 
-Agentic AI in the context of LLMs refers to an autonomous system in which LLMs not only perform tasks, but also participate in decision-making and workflow orchestration. In such systems, LLMs serve both as computational units that solve sub-tasks and as the high-level orchestrator that determines how the problem should be approached.
+Agentic AI in the context of LLMs refers to an autonomous system in which LLMs not only perform tasks, but also participate in decision-making and workflow orchestration. In such systems, LLMs serve both as computational units that solve sub-tasks and as the high-level orchestrator that determines how the problem should be approached. LLMs provide a general-purpose language interface that makes agentic AI significantly more scalable and cost-effective. The domain knowledge of the LLM often helps with making better decisions.
 
 An LLM in an agentic AI system may take on one or more of the following roles:
 \begin{itemize}
@@ -62,11 +55,11 @@ Another key feature of LLM-based agentic AI is that it does not rely solely on t
 	\label{fig:agenticwf3}
 \end{figure}
 
-Recall RAG which focuses on database-integrated LLMs to expand knowledge boundaries and suppress hallucinations. A fully developed agentic AI can be taken as an extension of RAG.
+Recall RAG which focuses on database-integrated LLMs to expand knowledge boundaries and suppress hallucinations. A fully developed agentic AI can be taken as an extension of RAG. Or alternatively speaking, RAG is often an important part of a fully developed agentic AI system. In addition, the LLM is equipped with a memory module, which stores historical inputs and outputs to maintain context and support long-term reasoning. This is also shown in Fig.~\ref{fig:agenticwf3}.
 
-In addition, the LLM is equipped with a memory module, which stores historical inputs and outputs to maintain context and support long-term reasoning. This is also shown in Fig.~\ref{fig:agenticwf3}.
+The remainder of the chapter will focus on LLM-driven agentic AI systems. With that said, some of the agentic AI frameworks introduced in Section \ref{sec:agentic_ai_frameworks} can be used without LLM involvement.
 
-\section{Agentic AI Framework}
+\section{Agentic AI Framework} \label{sec:agentic_ai_frameworks}
 
 Agentic AI can be understood as a form of LLM orchestration. The user specifies the overall task and provides a list of available tools, while the agentic AI system determines how to structure the workflow, which tools to invoke, how to prompt the LLMs, and how to evaluate their outputs.
 
