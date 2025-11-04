@@ -6,29 +6,25 @@ The concept of agentic AI is not new. However, in recent years it has drawn incr
 
 \section{Introduction to Agentic AI}
 
-The term ``agent'' refers to an entity that acts like a human. By this definition, agentic AI refers to AI-based systems that can solve complex problems with limited human oversight. It is possible to build an agentic AI system without LLM and use only conventional AI frameworks such as MDP and ANN. However, with the recent rise of LLMs, the term ``agentic AI'' has been re-contextualized and is gaining increasing popularity.
+The term ``agent'' refers to an entity that functions like a human. By this definition, agentic AI refers to AI-based systems that can solve complex problems with limited human oversight. It is possible to build an agentic AI system without LLM and use only conventional AI frameworks such as MDP and ANN. While being good at specific tasks, the use of such agentic AI systems often lacks of general-purpose interfaces. With the recent rise of LLMs, the term ``agentic AI'' has been re-contextualized and is gaining increasing popularity. LLMs provide a general-purpose language interface that makes agentic AI significantly more scalable and cost-effective. 
 
-In the next Sections \ref{sec:conventional_agenticai} and \ref{sec:llm_agentic_ai}, agentic AI systems with conventional AI frameworks and with LLMs are discussed respectively. The remainder of the chapter focuses mainly on agentic AI systems incorporated with LLMs.
+An LLM-incorporated agentic AI system with LLM agents is often more capable than a conventional agentic AI system at least in the following aspects.
+\begin{itemize}
+	\item An LLM-incorporated agentic AI system can understand human instructions in natural languages.
+	\item An LLM agent can take in unstructured data input and generate structured data output in a scalable manner.
+	\item An LLM agent can make decisions based on LLM's domain knowledge.
+\end{itemize}
 
-\subsection{Agentic AI with Conventional Agents} \label{sec:conventional_agenticai}
-
-TBA
-
-\subsection{Agentic AI with LLM-Driven Agents} \label{sec:llm_agentic_ai}
-
-Agentic AI in the context of LLMs refers to an autonomous system in which LLMs not only perform tasks, but also participate in decision-making and workflow orchestration. In such systems, LLMs serve both as computational units that solve sub-tasks and as the high-level orchestrator that determines how the problem should be approached. LLMs provide a general-purpose language interface that makes agentic AI significantly more scalable and cost-effective. The domain knowledge of the LLM often helps with making better decisions.
-
-An LLM in an agentic AI system may take on one or more of the following roles:
+Agentic AI in the context of LLMs refers to an autonomous system in which LLMs not only perform tasks, but also participate in decision-making and workflow orchestration. In such systems, LLMs serve both as computational units that solve sub-tasks, and as the high-level orchestrator that determines how the problem should be approached. An LLM in an agentic AI system may take on one or more of the following roles.
 \begin{itemize}
 	\item Decompose the original problem into smaller sub-problems.
 	\item Assign these sub-problems to LLM instances, either sequentially or in parallel.
 	\item Evaluate the outputs of LLMs and either accept the results or reject them with feedback and revision instructions.
 	\item Integrate the outputs from sub-problems into a final, coherent solution to the original problem.
+	\item Along the way, use ``tools'' to connect to other resources such as databases, computational units and and actuators.
 \end{itemize}
 
-In contrast, conventional LLM-integrated applications rely on humans or pre-written deterministic code to perform all of the above tasks. From this perspective, agentic AI further reduces human intervention and increases the level of automation.
-
-A comparison is illustrated in Fig.~\ref{fig:agenticwf1}. In the conventional architecture shown in (a), the workflow is either hard-coded or defined externally, and the LLM merely serves as a problem solver. In the agentic AI architecture shown in (b), the LLM autonomously orchestrates the task, determines the workflow, and governs the solution process.
+In contrast, a conventional LLM-integrated application without agentic AI relies on humans or pre-written deterministic code to perform all of the above tasks. From this perspective, agentic AI expands the use of LLM agents and further reduces human intervention and increases the level of automation. A comparison is illustrated in Fig.~\ref{fig:agenticwf1}. In the conventional architecture shown in (a), the workflow is either hard-coded or defined externally, and the LLM merely serves as a problem solver. In the agentic AI architecture shown in (b), the LLM autonomously orchestrates the task, determines the workflow, and governs the solution process.
 
 \begin{figure}[!htb]
 	\centering
@@ -37,7 +33,7 @@ A comparison is illustrated in Fig.~\ref{fig:agenticwf1}. In the conventional ar
 	\label{fig:agenticwf1}
 \end{figure}
 
-Figure~\ref{fig:agenticwf1} is not the only architectural pattern for agentic AI. Another commonly used architecture is shown in Fig.~\ref{fig:agenticwf2}. In this design, one LLM generates an output while another LLM evaluates its quality, decides whether to accept or reject it, and provides revision instructions if necessary. The two LLMs collaborate in an iterative loop, refining the solution step by step. This self-evaluative architecture has been shown to significantly reduce the likelihood of low-quality or hallucinated outputs.
+Another commonly used architecture is shown in Fig.~\ref{fig:agenticwf2}. In this design, one LLM generates an output while another LLM evaluates its quality, decides whether to accept or reject it, and provides revision instructions if necessary. The two LLMs collaborate in an iterative loop, refining the solution step by step. This self-evaluative architecture has been shown to significantly reduce the likelihood of low-quality or hallucinated outputs.
 
 \begin{figure}[!htb]
 	\centering
@@ -46,7 +42,7 @@ Figure~\ref{fig:agenticwf1} is not the only architectural pattern for agentic AI
 	\label{fig:agenticwf2}
 \end{figure}
 
-Another key feature of LLM-based agentic AI is that it does not rely solely on the internal knowledge encoded in the model. Instead, it can be configured to interact with external tools such as databases, web browsers, calculators, etc., to enhance its problem-solving capabilities. This tool-augmented reasoning is essential for tasks that require up-to-date information, precise computation, or direct interaction with external environments. It also helps with reducing hallucination. A representative architecture is given in Fig.~\ref{fig:agenticwf3}, where the LLM autonomously decides when to invoke an external tool and generates the appropriate commands using pre-defined protocols known as the \myabb{Model Context Protocol}{MCP}. MCP is introduced in Section~\ref{sec:mcp}.
+LLM agents in an agentic AI system do not rely solely on the internal knowledge encoded in the model. Instead, they can be configured to interact with external tools such as databases, web browsers, calculators, etc., to enhance their problem-solving capabilities. This tool-augmented reasoning is essential for tasks that require up-to-date information, precise computation, or direct interaction with external environments. It also helps with reducing hallucination. A representative architecture is given in Fig.~\ref{fig:agenticwf3}, where the LLM autonomously decides when to invoke an external tool and generates the appropriate commands using pre-defined protocols known as the \myabb{Model Context Protocol}{MCP}. MCP is introduced in Section~\ref{sec:mcp}.
 
 \begin{figure}[!htb]
 	\centering
@@ -55,15 +51,11 @@ Another key feature of LLM-based agentic AI is that it does not rely solely on t
 	\label{fig:agenticwf3}
 \end{figure}
 
-Recall RAG which focuses on database-integrated LLMs to expand knowledge boundaries and suppress hallucinations. A fully developed agentic AI can be taken as an extension of RAG. Or alternatively speaking, RAG is often an important part of a fully developed agentic AI system. In addition, the LLM is equipped with a memory module, which stores historical inputs and outputs to maintain context and support long-term reasoning. This is also shown in Fig.~\ref{fig:agenticwf3}.
-
-The remainder of the chapter will focus on LLM-driven agentic AI systems. With that said, some of the agentic AI frameworks introduced in Section \ref{sec:agentic_ai_frameworks} can be used without LLM involvement.
+Recall RAG which focuses on database-integrated LLMs to expand knowledge boundaries and suppress hallucinations. A fully developed agentic AI can be taken as an extension of RAG. Other than databases, agentic AI systems often adopt memory modules which store historical inputs and outputs to maintain context and support long-term reasoning. This is also shown in Fig.~\ref{fig:agenticwf3}.
 
 \section{Agentic AI Framework} \label{sec:agentic_ai_frameworks}
 
-Agentic AI can be understood as a form of LLM orchestration. The user specifies the overall task and provides a list of available tools, while the agentic AI system determines how to structure the workflow, which tools to invoke, how to prompt the LLMs, and how to evaluate their outputs.
-
-An \mync{agentic AI framework} refers to the infrastructure that supports the creation, configuration, and execution of such systems. It provides the necessary abstractions and utilities that allow users to define and deploy agentic AI pipelines more easily. While it is always possible to manually coordinate LLMs, prompts, and tool calls, using a mature agentic AI framework significantly simplifies the process of building scalable, multi-agent, or tool-augmented systems. In this sense, an agentic AI framework plays a role analogous to that of Kubernetes in the context of containerized applications. It abstracts away low-level orchestration logic and enables the declarative specification and runtime management of complex, distributed components. 
+An \mync{agentic AI framework} refers to the infrastructure that supports the creation, configuration, and execution of an agentic AI system. It provides the necessary abstractions and utilities that allow users to define and deploy agentic AI pipelines more easily. While it is always possible to manually coordinate LLMs, prompts, and tool calls, using a mature agentic AI framework significantly simplifies the process of building scalable, multi-agent, or tool-augmented systems. In this sense, an agentic AI framework plays a role analogous to that of Kubernetes in the context of containerized applications. It abstracts away low-level orchestration logic and enables the declarative specification and runtime management of complex, distributed components. 
 
 On one hand, agentic AI frameworks simplify the deployment of LLM applications, but on the other hand they add additional layers of abstraction and prompts, thus making the system behavior less controllable and sometimes more difficult to debug. The user should choose whether to use agentic AI frameworks wisely based on the need.
 
@@ -73,9 +65,9 @@ Common examples of agentic AI frameworks include the OpenAI Agents SDK, CrewAI, 
 
 Before introducing different agentic AI frameworks, it is worth reviewing asynchronous Python programming, as it is widely used across many agentic AI platforms.
 
-Asynchronous programming (often abbreviated as async programming) is a well-established concept that predates agentic AI. In a nutshell, it creates a ``multi-thread-like'' framework where functions do not necessarily run in the order they are defined, but instead follow a ``first-ready, first-served'' execution model. In the context of async Python programming, an event loop switches between tasks whenever one is waiting (typically due to I/O). It is multi-thread-like in behavior, but there is no true CPU-level parallelism and no true multithreading. By itself, \verb|asyncio| runs on a single thread and a single CPU core; true CPU-bound parallelism requires multiprocessing or native threads.
+Asynchronous programming (often abbreviated as async programming) is a well-established concept that predates agentic AI. In a nutshell, it creates a ``multi-thread-like'' framework where functions do not necessarily run in the order they are defined, but instead follow a ``first-ready, first-served'' execution model. In the context of async Python programming, an event loop switches tasks (among a group of tasks) whenever one is waiting, typically due to I/O. 
 
-Even before the emergence of agentic AI frameworks, async programming had already proven valuable in many applications, such as web servers handling HTTP requests or user interfaces monitoring human actions on dashboards. By using async programming, an application does not need to freeze while a task is waiting for inputs—usually from a user or over the internet—and can continue executing other tasks in the meantime.
+It is multi-thread-like in behavior, but there is no true CPU-level parallelism and no true multi-threading. By itself, \verb|asyncio| runs on a single thread and a single CPU core. While async Python programming does not help with reducing the total CPU time consumption, it saves overlapped waiting time of the tasks. Even before the emergence of agentic AI frameworks, async programming had already proven valuable in many applications, such as web servers handling HTTP requests or user interfaces monitoring human actions on dashboards. 
 
 The \verb|asyncio| library is the standard Python library for writing concurrent code using the \verb|async|/\verb|await| syntax, and many other async libraries are built on top of it. A detailed introduction to \verb|asyncio| can be found at \cite{python2025asyncio}. A brief review of the basic syntax is given below.
 
@@ -83,51 +75,58 @@ The basic syntax to define and run a Python \mync{coroutine function} is as foll
 \begin{lstlisting}
 import asyncio
 
-async def <coroutine_function_name>(input) -> output:
+async def <coroutine_function_name>(input)[ -> output]:
     <do something; can contain nested coroutines>
     [return <something>]
     
 [result = ]asyncio.run(<coroutine_function_name>(input))
 \end{lstlisting}
-Here, \texttt{async def} defines a coroutine function, and calling it returns a coroutine object. The function \texttt{asyncio.run()} runs the given coroutine object as the main entry point of the program. It creates and manages the event loop, runs the coroutine until it is complete, and then closes the loop. This approach is particularly useful when multiple coroutines are executed inside the main coroutine.
-
-Calling a coroutine function directly, as in the example below, does not run it immediately; instead, it returns a coroutine object:
+Here, \texttt{async def} defines a coroutine function. Calling a coroutine function directly does not run it immediately. Instead, it returns a coroutine object. The syntax is given below.
 \begin{lstlisting}
 [<coroutine_object> = ]<coroutine_function_name>(input) # does not execute
 \end{lstlisting}
-In this case, the result is a coroutine object rather than the calculation’s output. This coroutine object can then be scheduled and executed as follows:
+This coroutine object can then be scheduled and executed as follows.
 \begin{lstlisting}
 [result = ]asyncio.run(<coroutine_object>)
 \end{lstlisting}
-When executing a coroutine object like this, there is no need to pass its input arguments again. A coroutine object can be awaited only once.
+When executing a coroutine object like this, there is no need to pass its input arguments again. A coroutine object can be executed only once. The function \texttt{asyncio.run()} runs the given coroutine object as the main entry point of the program. It creates and manages the event loop, runs the coroutine until it is complete, and then closes the event loop
 
 Another way to execute a coroutine is with the \verb|await| expression:
 \begin{lstlisting}
 [result = ]await <coroutine_function_name>(input)
 \end{lstlisting}
-However, this syntax can only be used inside another coroutine. It cannot be used at the top level, because \verb|await| requires an already running event loop. What it does is suspend the current coroutine until the awaited coroutine completes, allowing the event loop to run other tasks in the meantime.
+However, this syntax can only be used inside another coroutine. It cannot be used at the top level, because \verb|await| requires an existing event loop. What it does is suspend the current coroutine until the awaited coroutine completes, allowing the event loop to run other tasks in the meantime.
 
-The \texttt{asyncio.gather()} function is another way to schedule multiple coroutines concurrently on the same event loop. For example:
+The \texttt{asyncio.gather()} function is another way to schedule multiple coroutines concurrently on the same event loop. An example is given below. Assume that there is already an event loop. The following syntax
 \begin{lstlisting}
 x = await cx()
 y = await cy()
-
+\end{lstlisting}
+will execute them in sequential manner, not the parallel-like manner. This is because \verb|await| behaves like ``there is a coroutine function running and let us pause here until it finishes.'' If \verb|cx| is delayed due to I/O, \verb|cy| must wait until \verb|cx| finishes. There are at least two ways to let the tasks run in the parallel-like manner. Consider
+\begin{lstlisting}
 x, y = await asyncio.gather(
     cx(), 
     cy()
 )
 \end{lstlisting}
-In the first approach, \verb|cx| and \verb|cy| are executed sequentially. If \verb|cx| is delayed due to I/O, \verb|cy| must wait until \verb|cx| finishes. During this time, the event loop may run other ready-to-execute tasks. In the second approach, \verb|cx| and \verb|cy| are scheduled concurrently. While \verb|cx| is waiting for inputs, \verb|cy| can still execute. If both are waiting, \verb|asyncio.gather| pauses, and the event loop switches to other tasks.
+This way, \verb|cx| and \verb|cy| are scheduled concurrently. While \verb|cx| is waiting for inputs, \verb|cy| can still execute. 
 
-The same principle applies to the entire event loop. If the whole event loop is paused (its ready queue is empty), it uses the OS-level selector to wait for I/O readiness, and the operating system schedules other work until new events are ready.
+Alternatively, we can also ``register'' the coroutine functions as background tasks.
+\begin{lstlisting}
+x_task = asyncio.create_task(cx())
+y_task = asyncio.create_task(cy())
+x = await x_task
+y = await y_task
+\end{lstlisting}
+Tasks are treated differently than coroutine functions. In the above example, when \verb|x_task| is await, the event loop will look for other pending tasks (not coroutine functions) and as a result, \verb|y_task| will be executed. This is what \verb|await| does in general. It pauses the script for the coroutine function or task, and while waiting, it checks other registered tasks and executes those that can run. The same principle applies to the entire event loop. If the whole event loop is paused (its ready queue is empty), it uses the OS-level selector to wait for I/O readiness, and the operating system schedules other work until new events are ready.
 
 The main program can be wrapped as follows so that .
 \begin{lstlisting}
 import asyncio
 
 async def main():
-
 	<the code to be introduced>
+	
 if __name__ == "__main__":
 	asyncio.run(main())
 \end{lstlisting}
@@ -136,15 +135,16 @@ if __name__ == "__main__":
 
 The OpenAI Agents SDK simplifies the deployment of an agentic AI system without sacrificing flexibility. In fact, it enables more versatile agentic AI pipelines, such as chaining multiple AI agents using handoffs and nesting AI agents within tools-capabilities that would be almost impossible to implement manually due to the complexity of such systems.
 
-The OpenAI Agents SDK offers at least the following features:
+Comparing with manually deployment, the OpenAI Agents SDK offers at least the following features.
+
 \begin{itemize}
-	\item Simplified deployment of a single AI agent or tool.
+	\item Simplified deployment of a single AI agent or tool
 	
-	For example, when defining a tool manually, the user must create a detailed “user manual” in JSON object format and pass it to the LLM. This JSON must include the tool’s name, description, and input arguments with their types—carefully specified to ensure correct behavior. With the OpenAI Agents SDK, the user can simply add a decorator to a Python function to turn it into a tool, without needing to write a separate descriptive JSON object.
+	Without an agentic AI framework, the user must create a detailed ``user manual'' in JSON object format and pass it to the LLM. With the OpenAI Agents SDK, the user can simply add a decorator to a Python function to turn it into a tool, without needing to write a separate descriptive JSON object. OpenAI Agents SDK will try to interpret the functionality and the input and output formats of the tool without additional help.
 	
-	\item Easy conversion of AI agents into tools.
+	\item Easy conversion of AI agents into tools
 	
-	A single-line command can convert an AI agent into a tool, enabling nested structures. This significantly increases the capabilities of higher-level AI agents that use these tools.
+	An AI agent can itself be converted into a tool with a single-line command. This significantly increases the capabilities of higher-level AI agents that use these tools.
 	
 	\item Chaining AI agents using handoffs. 
 	
@@ -573,7 +573,7 @@ Run the crew.
     raise Exception(f"An error occurred while running the crew: {e}")
 
 if __name__ == "__main__":
-run()
+	run()
 \end{lstlisting}
 
 The above summarizes the basic usage of the CrewAI framework. More advanced materials are introduced in the following sections.
@@ -1075,12 +1075,69 @@ AutoGen allows easy definition of a tool in the form of a function. It is also c
 
 AutoGen allows the user to define a team that consists of multiple AI agents for a task. The role of each AI agent is defined. The overall task is defined. The team tries to achieve the objective by letting the AI agents in the team communicate freely and discuss the assigned task, until the conclusion is drawn. This is to some extent similar with the idea of ``crew'' in CrewAI. 
 
-
-
-
 \section{Model Context Protocol} \label{sec:mcp}
 
 \mync{Model Context Protocol}[MCP] is a standardized protocol to connect AI agents to variety of resources and tools.
+
+In earlier Section \ref{sec:agentic_ai_frameworks}, we have seen how different agentic AI frameworks incorporate tools in their systems. The following is a summary.
+\begin{itemize}
+	\item Manual deployment
+	
+	The tools are formed as a Python function. JSON ``user manuals'' are provided to the LLM, with detailed explanation on how to call the function. The LLM agent calls the function when needed.
+	
+	\item OpenAI Agents SDK
+	
+	The tools are formed as a Python function. Decorator is used to convert the function into a function tool. A collection of function tools is provided to the LLM. The LLM learns to use the function tools using the function description and no additional user manual is required.
+	
+	Alternatively, an LLM agent can be converged into a tool with a single-line command.
+	
+	\item CrewAI
+	
+	The tools are formed as Python functions and saved at specified locations. Decorator is used. Tool names are provided to agents and tasks to specify what tool they can use.
+	
+	\item LangGraph
+	
+	The tools are formed as Python functions. Class \verb|Tool()| or \verb|StructuredTool()| are used to wrap the tools. The available tools information is provided to the LLM using \verb|bind_tools()| function. ToolNodes are used. The LangGraph graph builder automatically route the requests between LLM agents and ToolNodes.
+	
+	LangGraph has a huge community where people share tools.
+\end{itemize}
+
+From the above description, we can see that it is often easy to wrap a function and build a tool and use it privately. However, it is challenging to share tools from different applications due to the different framework requirement and personal programming habits. The LangGraph community has made some progress with how people can share tools that they have developed. However, the usage of these tools is mostly limited to LangGraph users.
+
+MCP is a standard and a solution that tries to make the sharing and recycling of tools and other resources in agentic AI systems easier across applications.  
+
+\subsection{MCP Structure}
+
+The following concepts are introduced in the context of MCP.
+\begin{itemize}
+	\item Host: the agentic AI based application.
+	\item \mync{MCP client}: the piece of program that runs in the host that provides an interface to the host of an MCP service.
+	\item \mync{MCP server}: the software corresponds with MCP client that actually provides the MCP service.
+\end{itemize}
+
+Figure \ref{fig:mcpstructure} is used to demonstrate the relationship among host, MCP client and MCP server.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./chapters/part-4/figures/mcpstructure.png}
+	\caption{Demonstration of host program, MCP client and MCP server relationship.}
+	\label{fig:mcpstructure}
+\end{figure}
+
+Some highlights are as follows.
+\begin{itemize}
+	\item Each MCP client has a corresponding MCP server. 
+	\item In most scenarios, MCP servers run on the same physical machine as the host program, and they communicate with their MCP clients using standard I/O. In rare cases, MCP servers run on different machines other than the host program, in which case they leverage on other communication protocols.
+	\item The information source for MCP servers does not have to be located on the same physical machine. For example, an MCP server may access information on the Internet or a remote database.
+\end{itemize}
+
+MCP can be used for standardizing and sharing varieties of agentic AI resources. It has been most popular for sharing tools.
+
+
+
+
+
+
 
 
 
