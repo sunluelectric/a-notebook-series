@@ -194,10 +194,10 @@ Many LLM service providers, such as OpenAI, allows the user to interact with the
 
 If the user has decided to use a commercialized LLM model via its API key, he needs to register an account with the LLM provider, such as OpenAI, and create a new API key, and added it to the project as an environmental variable. 
 
-Notice that the use of the API key often introduces costs to be paid to the LLM provider. The cost depends on the model and the number of input and output tokens in a call. To give a perspective, as of this writing the cost of OpenAI's API calls are given in Table \ref{tab:openai_api_price} as of this writing. Powerful models such as \texttt{o1} are significantly more expansive than less powerful ones such as \texttt{gpt-4o-mini}. This is different from chatbot service where the user pays a fixed monthly subscription fee and get almost unlimited access to most of the models of his choice.
+Notice that the use of the API key often introduces costs to be paid to the LLM provider. The cost depends on the model and the number of input and output tokens in a call. To give a perspective, the cost of OpenAI's API calls are given in Table \ref{tab:openai_api_price} as of this writing. Powerful models such as \texttt{o1} are significantly more expansive than less powerful ones such as \texttt{gpt-4o-mini}. This is different from chatbot service where the user pays a fixed monthly subscription fee and get almost unlimited access to most of the models of his choice.
 
 \begin{table}
-	\centering \caption{OpenAI's API Calls Pricing as of this writing, in USD per $1M$ tokens.}\label{tab:openai_api_price}
+	\centering \caption{OpenAI's API Calls Pricing as of this writing per $1M$ tokens, in USD.}\label{tab:openai_api_price}
 	\begin{tabular}{lrr}
 		\hline
 		Model & Input Cost & Output Cost \\ \hline

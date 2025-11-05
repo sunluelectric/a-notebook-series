@@ -133,9 +133,9 @@ if __name__ == "__main__":
 
 \subsection{OpenAI Agents SDK} \label{sec:openaisgentssdk}
 
-The OpenAI Agents SDK simplifies the deployment of an agentic AI system without sacrificing flexibility. In fact, it enables more versatile agentic AI pipelines, such as chaining multiple AI agents using handoffs and nesting AI agents within tools-capabilities that would be almost impossible to implement manually due to the complexity of such systems.
+OpenAI Agents SDK simplifies the deployment of an agentic AI system without sacrificing flexibility. In fact, it enables more versatile agentic AI pipelines, such as chaining multiple AI agents using handoffs and nesting AI agents within tools-capabilities that would be almost impossible to implement manually due to the complexity of such systems.
 
-Comparing with manually deployment, the OpenAI Agents SDK offers at least the following features.
+Comparing with manually deployment, the OpenAI Agents SDK offers at least the following additional features.
 
 \begin{itemize}
 	\item Simplified deployment of a single AI agent or tool
@@ -151,7 +151,7 @@ Comparing with manually deployment, the OpenAI Agents SDK offers at least the fo
 	Information processed by an upstream AI agent can be passed to a downstream agent easily via \mync{handoffs}, a mechanism for explicitly transferring control and data between agents during execution. The upstream agent decides when and where to pass the data. This allows true cooperation between AI agents and enables highly flexible agentic AI pipelines.
 \end{itemize}
 
-Figure \ref{fig:openai_agents_sdk_pipeline} illustrates the key features of the OpenAI Agents SDK compared with a manual implementation. As shown, in the SDK-based pipeline, an AI agent can be converted into a tool and respond to tool calls (red arrows). Multiple AI agents can also be chained to form an upstream–downstream pipeline via handoffs (blue arrows). When an AI agent has multiple possible downstream agents, it can decide at runtime which one to hand over data and control to.
+Figure \ref{fig:openai_agents_sdk_pipeline} illustrates the key features of OpenAI Agents SDK compared with a manual implementation. In the OpenAI Agents SDK-based pipeline, an AI agent can be converted into a tool and respond to tool calls (red arrows). Multiple AI agents can also be chained to form an upstream–downstream pipeline via handoffs (blue arrows). When an AI agent has multiple possible downstream agents, it can decide at runtime which one to hand over data and control to.
 
 \begin{figure}[!htb]
 	\centering
@@ -260,7 +260,7 @@ upstream_agent = Agent(
 
 It is recommended to include clear instructions in the \verb|instructions| (system prompt) of the upstream agent on how and when to use the downstream agents.
 
-Run the upstream agent, and it will automatically trigger the downstream agents if, based on its instructions and reasoning, it decides to do so. The return value will be the final result of the entire pipeline. Note that handoffs do not force an upstream agent to pass data. It is possible for the upstream agent to return its response directly to the user, completely bypassing the downstream pipeline. In this sense, an upstream agent determines the execution path of the pipeline from itself onward.
+Run the upstream agent, and it will automatically trigger the downstream agents if it decides to do so based on its instructions and reasoning. The return value will be the final result of the entire pipeline. Note that handoffs do not force an upstream agent to pass data. It is possible for the upstream agent to return its response directly to the user, completely bypassing the downstream pipeline. In this sense, an upstream agent determines the execution path of the pipeline from itself onward.
 
 \vspace{0.1in}
 \noindent \textbf{Guardrail}
@@ -270,7 +270,7 @@ It is recommended to double-check both the initial user input and the final outp
 
 There are several ways to achieve this. For example, OpenAI provides a moderation API that checks whether a piece of multimodal content contains material related to sexual content, hate, self-harm, and other restricted categories. More about this API will be introduced later in this section, and it will be tested in the project examples.
 
-Within the OpenAI Agents SDK, guardrails can be implemented by defining dedicated AI agents to check the input and output of the agentic AI system according to customized requirements. Such guardrail agents return a boolean flag indicating whether the guardrail was triggered, along with details about what content caused the trigger. If a guardrail is triggered, it will raise an exception.
+In the OpenAI Agents SDK framework, guardrails can be implemented by defining dedicated AI agents to check the input and output of the agentic AI system according to customized requirements. Such guardrail agents return a boolean flag indicating whether the guardrail was triggered, along with details about what content caused the trigger. If a guardrail is triggered, it will raise an exception.
 
 The following syntax demonstrates the minimum implementation of a guardrail. It involves the following steps.
 \begin{enumerate}
@@ -1077,7 +1077,7 @@ AutoGen allows the user to define a team that consists of multiple AI agents for
 
 \section{Model Context Protocol} \label{sec:mcp}
 
-\mync{Model Context Protocol}[MCP] is a standardized protocol to connect AI agents to variety of resources and tools.
+\mync{Model Context Protocol}[MCP] is an open-source standardized protocol to connect AI agents to variety of resources and tools.
 
 In earlier Section \ref{sec:agentic_ai_frameworks}, we have seen how different agentic AI frameworks incorporate tools in their systems. The following is a summary.
 \begin{itemize}
@@ -1106,7 +1106,7 @@ From the above description, we can see that it is often easy to wrap a function 
 
 MCP is a standard and a solution that tries to make the sharing and recycling of tools and other resources in agentic AI systems easier across applications.  
 
-\subsection{MCP Structure}
+\subsection{MCP Structure} \label{sec:mcpstructure}
 
 The following concepts are introduced in the context of MCP.
 \begin{itemize}
@@ -1127,20 +1127,51 @@ Figure \ref{fig:mcpstructure} is used to demonstrate the relationship among host
 Some highlights are as follows.
 \begin{itemize}
 	\item Each MCP client has a corresponding MCP server. 
-	\item In most scenarios, MCP servers run on the same physical machine as the host program, and they communicate with their MCP clients using standard I/O. In rare cases, MCP servers run on different machines other than the host program, in which case they leverage on other communication protocols.
+	\item In most scenarios, MCP servers run on the same physical machine as the host program. It is possible, though rare in practice, that MCP servers run on different machines other than the host program.
 	\item The information source for MCP servers does not have to be located on the same physical machine. For example, an MCP server may access information on the Internet or a remote database.
+	\item There are options of the connectivity channels between MCP servers and clients. In the figure, \verb|stdio| is used, which is indeed a popular choice.
 \end{itemize}
 
 MCP can be used for standardizing and sharing varieties of agentic AI resources. It has been most popular for sharing tools.
 
+\subsection{MCP Server Creation}
 
+As explained in earlier Section \ref{sec:mcpstructure}, to use MCP services, an MCP server needs to be started and it needs to be connected to the host program. As far as this notebook concerns, Python plant is assumed as the host program.
 
+Notice that an MCP server runs outside the Python host program as an independent software, and it is not necessarily a Python program. The MCP server needs to be installed and started separately inside a dedicated virtual environment, and a connectivity channel needs to be build between the MCP client in the Python host program and the MCP server. Some python libraries and tools, such as OpenAI Agents SDK, have made things easier. Though running inside Python scripts, they can call terminal commands to install, deploy and configure the MCP server and the connectivity channel.
 
+An example of using OpenAI Agents SDK to start an MCP server is given below \cite{openai2025mcp}.
 
+\begin{lstlisting}
+from pathlib import Path
+from agents import Agent, Runner
+from agents.mcp import MCPServerStdio
 
+current_dir = Path(__file__).parent
+samples_dir = current_dir / "sample_files"
 
+async with MCPServerStdio(
+	name="Filesystem Server via npx",
+	params={
+		"command": "npx",
+		"args": ["-y", "@modelcontextprotocol/server-filesystem", str(samples_dir)],
+	},
+) as server:
+	agent = Agent(
+		name="Assistant",
+		instructions="Use the files in the sample directory to answer questions.",
+		mcp_servers=[server],
+	)
+	result = await Runner.run(agent, "List the files available to you.")
+	print(result.final_output)
+\end{lstlisting}
 
-
+In this example, a filesystem managing tool is deployed using MCP. The following part
+\begin{lstlisting}
+async with MCPServerStdio(name="<name>", param=<configuration command>) as server:
+	<do something>
+\end{lstlisting}
+is used to automatically deploy the MCP server and client and build the connectivity. The MCP server configuration is formulated into a dictionary that contains the commands to start and configure the MCP server.
 
 
 
