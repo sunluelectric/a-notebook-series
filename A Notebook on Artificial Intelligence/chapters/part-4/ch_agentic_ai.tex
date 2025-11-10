@@ -1173,12 +1173,34 @@ async with MCPServerStdio(name="<name>", param=<configuration command>) as serve
 \end{lstlisting}
 is used to automatically deploy the MCP server and client and build the connectivity. The MCP server configuration is formulated into a dictionary that contains the commands to start and configure the MCP server.
 
+The LLM agent gets to know an MCP server from \verb|mcp_server| field in agent declaration as in
+\begin{lstlisting}
+async with MCPServerStdio(name="<name>", param=<configuration command>) as server:
+	agent = Agent(
+		name="<name>",
+		instructions="<instruction>",
+		mcp_servers=[server],
+	)
+\end{lstlisting}
+which is similar with tools. This way, the LLM agent automatically retrieves all the tools and APIs from the MCP server and learns how to use them.
+
+\begin{mdframed}
+\noindent \textbf{Are There Risks with MCP Servers?}
+
+Running an MCP server is essentially the same with running 3rd party software. To make it worse, MCP server runs outside the Python environment, make it even more difficult to control. There is always an operation risk. Always make sure that the software is retrieved from a legitimate source (there are multiple marketplace for MCP servers) and it is well-known and well-reviewed, in order to mitigate the risk.
+
+\end{mdframed} 
 
 
 
 
 
 
+\subsection{MCP Marketplace}
+
+Think of MCP marketplaces APP stores for MCP servers. There are many popular MCP market places. Popular MCP servers are often published on multiple MCP marketplaces.
+
+To name one MCP marketplace as an example, \textit{mcp.so}.
 
 \section{Examples}
 
