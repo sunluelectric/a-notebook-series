@@ -4,23 +4,33 @@ An AI agent should be capable of making decisions. Based on what it observes, wh
 
 This chapter studies decision making with AI. Markov Decision Process is discussed in detail, as it is one of the most widely used decision-making frameworks.
 
-\section{General Introduction to Decision Making with AI}
+\section{Utility}
 
-To formulate a decision-making problem mathematically, the first step is to define the \mync{utility} (often in the form of a function) that quantifies the value of an action or system state. Decision making is essentially the process of maximizing utility. This section introduces the concept of utility and the formulation of utility functions, and how utility is used in decision making with AI.
+To formulate a decision-making problem mathematically, the first step is to define the \mync{utility} (often in the form of a function) that quantifies the value of an action or a system state. Decision making is essentially the process of maximizing utility. This section introduces the concept of utility and its formulation, and how utility is used in decision making with AI.
 
 \subsection{Utility Theory}
 
 Intuitively, a rational AI agent should always choose the action that maximizes expected utility among all available actions. This is known as the \mync{maximum expected utility} (MEU) principle. Below, MEU is formulated as an optimization problem.
 
-When the AI agent decides to perform an action among all the actions it can take, the system transitions from one state to another. Let the \mync{transition model} be denoted by $P(s|a,e)$, where $e$ represents the evidence or observation of the system, incorporating the agent’s awareness of its current origin state, $a$ the action taken, and $s$ the destination state. Notice that $P(s|a,e)$ is given in the form of probability, which captures uncertainty in the system.
+When an AI agent decides to perform an action among all the actions it can take, the system transitions from one state to another. Let the \mync{transition model} be denoted by $P(s|a,e)$, where $e$ represents the evidence or observation of the system, incorporating the agent’s awareness of its current origin state, $a$ the action taken, and $s$ the destination state. Notice that $P(s|a,e)$ is given in the form of probability, which captures uncertainty in the system.
 
 The benefit of reaching a state is quantitatively described by the \mync{utility of a state} $U(s)$. The utility $U(s)$ usually includes not only the immediate reward of reaching the state $s$, but also the foreseeable future benefits that may arise from reaching $s$ as an intermediate state. For now, do not bother how $U(s)$ can be calculated. Later in Sections \ref{sec:mdp} and \ref{sec:pomdp}, the systematic calculation of $U(s)$ will be introduced.
 
-The \mync{expected utility of action} $EU(a|e)$, given evidence $e$, over possible landing states $s_i \in S$, can be expressed by
+The \mync{expected utility of action} $EU(a|e)$, given evidence $e$, over possible landing states $s_i \in S$, can be given by
 \begin{eqnarray}
 	EU(a|e) &=& \sum_{s_i \in S} P(s_i|a,e) \left(R(s_i,a,e) + \gamma U(s_i)\right) \label{eq:expected_utility}
 \end{eqnarray}
 where $R(s_i,a,e)$ is the reward gained by taking the action $a$ to reach $s$ given the observation $e$, $U(s)$ the utility of state $s$, and $\gamma$ the discount factor. More about discount factor will be introduced in later sections. For now, simply assume that $\gamma = 1$. 
+
+\begin{mdframed}
+\noindent \textbf{Reward versus Utility}
+
+Reward and utility are two different concepts in the context of this chapter. Reward represents the instantaneous profit gained by the system by performing an action or a transition, or by leaving or landing on a state. Utility, on the other hand, is a comprehensive evaluation of ``how much an action or a state worth'', by considering not only the instantaneous reward, but also expected reward (often with discount rate applied) to be received in the future. In that sense, utility can be derived from rewards.
+
+Both reward and utility are relative values and they can be positive, zero or negative.
+
+\end{mdframed}
+
 
 Given the evidence $e$, an AI agent may take one of several actions $a_i \in A$. MEU suggests that the optimal action is
 \begin{eqnarray}
@@ -75,18 +85,18 @@ Using \eqref{eq:expected_utility}, the expected utility of $a_1$ can be computed
 \end{eqnarray}
 Similarly, $EU(a_2|e) = -5.6$, $EU(a_3|e) = -5.1$, and $EU(a_4|e) = -4.6$. Therefore, according to \eqref{eq:emu}, the rational decision is to take action $a_4$, i.e., move “RIGHT.”
 
-In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and utilities $U(s_i)$ are assumed known from the very beginning of the game. This is rarely the case in practical problems. Sections~\ref{sec:mdp} and~\ref{sec:pomdp} will introduce value iteration or reinforcement learning methods which become handy when the utilities are unknown.
+In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and utilities $U(s_i)$ are assumed known from the very beginning of the game. This is rarely the case in practical problems. Sections~\ref{sec:mdp} and~\ref{sec:pomdp} will introduce variety of methods such as value iteration and Q-learning which will become handy when the aforementioned information is unknown from the beginning.
 
 \begin{mdframed}
 	\noindent \textbf{Are there alternatives to expected utility?}
 	
-	The expected utility of an action is calculated using \eqref{eq:expected_utility}. An AI agent using \eqref{eq:expected_utility} and \eqref{eq:emu} to make decisions. However, can we base decision making on other measures of utility? For example, consider the worst-case utility:
+	The expected utility of an action is calculated using \eqref{eq:expected_utility}. An AI agent using \eqref{eq:expected_utility} and \eqref{eq:emu} to make decisions. However, can we base decision making on other measures of utility? For example, consider the worst-case utility defined by
 	\begin{eqnarray}
-		WU(a|e) &=& \min\{U(s_i)\,|\,P(s_i|a,e) > 0\} \nonumber
+		U^{\mathrm{worst}}(a|e) &=& \min\{R(s_i,a,e) + \gamma U(s_i)\,|\,P(s_i|a,e) > 0\} \nonumber
 	\end{eqnarray}
 	Instead of maximizing expected utility, could we maximize worst-case utility?
 	
-	This question concerns the definition of a rational agent. To formalize this, the following \mync{axioms of utility theory} is defined:
+	This question concerns the definition of a rational agent. To formalize this, the following \mync{axioms of utility theory} is defined.
 	\begin{itemize}
 		\item \textbf{Orderability.} For any two actions $a_1$ and $a_2$, exactly one of the following statements must hold: “$a_1$ is preferred over $a_2$,” “$a_1$ and $a_2$ are indifferent,” or “$a_2$ is preferred over $a_1$.” Thus, any two actions can be ranked.
 		\item \textbf{Transitivity.} If $a_1$ is preferred over $a_2$ and $a_2$ is preferred over $a_3$, then $a_1$ must be preferred over $a_3$.
@@ -118,15 +128,15 @@ In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and ut
 
 \subsection{Utility Function}
 
-\mync{Utility function} maps an action or a system state to a real number. The expected utility of an action $U(a|e)$ is an example of the utility function. As noted earlier, the expected utility of an action is not the only valid measure of an action. Nonetheless, it is the most widely used and is employed in the \myabb{Markov Decision Process}{MDP} which will be introduced in Sections~\ref{sec:mdp} and~\ref{sec:pomdp}. For the remainder of this chapter, unless otherwise specified, we consider expected utility c as the utility function of an action.
+\mync{Utility function} maps an action or a system state to a real number. The expected utility of an action $U(a|e)$ is an example of the utility function. As noted earlier, the expected utility of an action is not the only valid measure of an action. Nonetheless, it is the most widely used utility measure in commonly seen decision making frameworks. For the remainder of this chapter, unless otherwise specified, we consider expected utility as the utility function of an action.
 
-From $U(a|e)$, the expected utility of an action depends on the transition model $P(s|a,e)$ and the state utility $U(s)$. State utility typically includes both the immediate reward (from reaching that state) and the anticipated future utility obtainable from using that state as an intermediate step. For example, in chess, each board configuration represents a state. Only the final checkmate state provides immediate reward, but intermediate states possess utility as they contribute to the eventual victory.
+From \eqref{eq:expected_utility}, the expected utility of an action $EU(a|e)$ depends on the transition model $P(s|a,e)$ and the state utility $U(s)$. State utility typically includes both the immediate reward (from reaching that state) and the anticipated future utility obtainable from using that state as an intermediate step. For example, in chess, each board configuration represents a state. Only the final checkmate state provides immediate reward, but intermediate states possess utility as they contribute to the eventual victory.
 
-The computation of utility functions for actions and states is often referred to as \mync{preference elicitation}. Different models have different ways of defining and calibrating utility functions. As will be demonstrated in later Sections \ref{sec:mdp} and \ref{sec:pomdp}, utilities of actions and states can be derived from transition model and rewards by value iteration or reinforcement learning. 
+The computation of utility functions for actions and states is often referred to as \mync{preference elicitation}. Different models have different ways of defining and calibrating utility functions, some of which will be introduced in later Sections \ref{sec:mdp} and \ref{sec:pomdp}.
 
 Some general principles for assigning rewards and calculating utility function values are given below.
 \begin{itemize}
-	\item Although rewards are relative and can take any number, it is often helpful to define global upper and lower bounds, where the lower bound represents ``immediate loss'' and the upper bound represents ``goal achieved.'' Rewards and utilities should be scaled accordingly.
+	\item Although rewards are relative and can take any number, it is often helpful to define global upper and lower bounds, where the lower bound represents ``immediate loss'' and the upper bound represents ``goal achieved''. Rewards and utilities should be scaled accordingly.
 	\item In many real-world problems, reward is expressed in monetary terms (financial gain or cost). Rewards and penalties of various types are converted to monetary values and normalized by a scaling factor.
 	\item Decision makers may differ in risk preference. Risk-averse and risk-seeking agents can have different rewards even under identical circumstances.
 	\item Mathematically derived rewards and utilities sometimes contradict human intuition, as humans are not always rational and do not always conform to the axioms of utility theory.
@@ -155,7 +165,7 @@ Equations \eqref{eq:expected_utility} and \eqref{eq:emu} are a realization of th
 \end{itemize}
 These factors substantially increase the difficulty of the problem.
 
-MDP provides a framework to tackle such problems. Through MDP, the agent can learn via trial and error to calibrate state utilities and the transition model. There will be failures in which the agent falls into traps and successes in which it finds the goal (or goals). Through repeated trials and reinforcement learning, it can eventually determine what action to take at each position to avoid traps and reach goals as efficiently as possible.
+MDP provides a framework to tackle such problems. Through MDP, the agent can learn via trial and error to calibrate states and actions utilities (known as \mync{value functions} in the context of MDP) and the transition model. There will be failures in which the agent falls into traps and successes in which it finds the goals. Through repeated trials and reinforcement learning, it can eventually determine what action to take at each position to avoid traps and reach goals as efficiently as possible.
 
 This section and the next Section~\ref{sec:pomdp} study MDP and discuss the calibration of state utilities and the transition model.
 
@@ -166,7 +176,7 @@ A \mync{Markov Decision Process} (MDP) refers to the following decision-making p
 	\item It defines state, which is a minimal set of information that reflects the current status of the system. 
 	\item It defines transmission models, which describe the relationship between the current state, the action taken, and the resulting next state. The transition model is often given by the stochastic model $P(s|s\textprime,a)$ (essentially the same as $P(s|a,e)$ in \eqref{eq:expected_utility}, where current-state information is incorporated into the evidence $e$). The transition model is Markovian, i.e., it depends only on the current state and action, not on the full history.
 	\item Actions are chosen sequentially until a time horizon is reached or a goal state is achieved.
-	\item A utility function is defined for the agent. The utility is an accumulation of rewards that agent gains by traveling among states. For each travel, the agent get some reward which is determined by the destination state, the action taken, the origin state, or all of them jointly.
+	\item Agent utility is defined, which is the accumulation of rewards that agent gains by traveling among states. For each travel, the agent get some reward which is determined by the destination state, the action taken, the origin state, or all of them jointly.
 	\item The objective is to determine the policy at each state. The policy maps each state to the best action that maximizes the expected agent utility.
 \end{itemize}
 
@@ -186,18 +196,23 @@ Depending on whether the agent has the full picture of the current state, the MD
 	
 	A natural question that follows is how to determine what information should be included in the state. After all, if we were to define the transition model or reward function themselves as part of the state (which we should not), a fully observable MDP would degenerate into a known MDP.
 	
-	The principle is that in an MDP, the state must be Markovian: it must contain the minimum information required to compute the probabilistic result of an action and the associated reward, assuming the transition and reward models are known. The agent should not need to refer to historical states or actions for these calculations. Importantly, the state should contain all variables necessary for the transition and reward models to be formulated in a stationary manner.
+	The state should include the minimum set of information, so that
+	\begin{itemize}
+		\item The state is Markovian. The available actions, reward and the transition model are functions of only the current state, but not any historical states or actions taken.
+		\item The reward and transition model are stationary to the state.
+	\end{itemize}
+	If the state definition cannot fulfill the above requirements, consider augment the state with additional information.
 	
-	The following examples illustrate how to decide what information should be included in the state.
+	The following examples illustrate how to decide what information should be included in the state. Consider a robot navigating a maze. It knows its current position, represented by coordinates, but it does not know the locations of walls. 
 	
-	Consider a robot navigating a maze. It knows its current position, represented by coordinates, but it does not know the locations of walls. The following cases are considered:
+	Consider the following different scenarios for the robot.
 	
 	\begin{itemize}
-		\item Case 1: Finding the goal.
+		\item Scenario 1: the robot needs to find the goal.
 		
 		In this case, the state should include only the robot’s current location. With the current position as the state, a stationary transition model can describe how each action leads to a resulting state and what reward the agent receives if it reaches the goal or a trap. The agent may not initially know which positions correspond to walls or traps, but that information is stationary in the sense that when the agent revisits the same location, the same outcomes apply. Through repeated trials, the agent can learn these relationships.
 		
-		\item Case 2: Exploring as many unique locations as possible within a time horizon.
+		\item Scenario 2: The robot needs to exploring as many unique locations as possible within a time horizon.
 		
 		Here, it is insufficient for the state to include only the current location. Although the transition model can still describe how actions lead to new positions, this information alone cannot determine the reward, since the reward depends on whether the robot visits new locations or revisits old ones.
 		
@@ -207,9 +222,9 @@ Depending on whether the agent has the full picture of the current state, the MD
 		
 		Therefore, to preserve the Markov property, the state must include the current location along with the complete history of all previously visited locations. Only then can both the transition model and the reward function be expressed in a stationary form.
 		
-		\item Case 3: Finding the goal under changing environmental conditions.
+		\item Scenario 3: The robot needs to find the goal, but the layout of the maze changes over time and other factors.
 		
-		In this scenario, the positions of walls change according to certain external conditions (e.g., time, temperature, or other factors). The wall configuration directly affects the transition model. If the state includes only the robot’s current location, the transition model becomes non-stationary, violating the MDP assumption (see note below). 
+		In this scenario, the positions of walls change according to certain external conditions (e.g., time, temperature, or other factors). The wall configuration directly affects the transition model. If the state includes only the robot’s current location, the transition model becomes non-stationary, violating the MDP assumption. 
 		
 		The state must therefore include the external conditions that influence the maze layout, ensuring that the transition model remains stationary.
 	\end{itemize}
@@ -232,18 +247,18 @@ Concepts previously introduced are here re-emphasized in the specific context of
 \noindent \textbf{Reward}
 \vspace{0.1in}
 
-A reward is the instantaneous gain or loss obtained by taking an action or reaching a state. Rewards are assumed to be stationary. If rewards vary dynamically (e.g., with time or environmental conditions), the factor causing this variation should be incorporated into the MDP state so that the reward function remains stationary.  
+A reward is the instantaneous gain or loss obtained by taking an action or staying at a state. Rewards are assumed to be stationary. If rewards vary dynamically (e.g., with time or environmental conditions), the factor causing this variation should be included into the MDP state so that the reward function remains stationary.  
 
 Rewards can take several common forms as follows.
 \begin{itemize}
-	\item Reward by reaching a state, $R(s)$
+	\item Reward by staying or reaching a state, $R(s)$
 	
-	In some problems, the agent gains a reward or penalty upon reaching a particular state. The previous state or the action taken to reach that state is irrelevant.  
+	In some problems, the agent gains a reward or penalty upon staying or reaching a particular state. The previous state or the action taken to reach that state is irrelevant.  
 	For example, in the robot-in-a-maze problem, the robot receives a positive reward when it reaches the goal and a negative reward when it reaches a trap. The reward depends only on the destination state, not on the path taken.
 	
 	\item Reward by taking an action, $R(a)$
 	
-	In other problems, rewards are associated with performing actions. For example, a robot navigating a maze may receive a small negative reward for each move to represent battery consumption.  
+	In some problems, rewards are associated with performing actions. For example, a robot navigating a maze may receive a small negative reward for each move to represent battery consumption.  
 	
 	In general, a reward can depend on both the origin and destination states, and the action taken. Such cases are denoted by $R(s, a, s\textprime)$, where the first $s$ is the origin state, $a$ the action, and $s\textprime$ the destination state.
 \end{itemize}
@@ -254,11 +269,11 @@ Rewards can take several common forms as follows.
 \noindent \textbf{Utility, Utility of State, Utility of Action}
 \vspace{0.1in}
 
-Utility differs from reward. A reward represents an immediate benefit gained at a specific step, while utility is a cumulative or comprehensive measure of value that reflects the long-term desirability of a state or an action. In other words, reward is instantaneous, whereas utility captures the expected future rewards achievable from a given state or action. Utility is typically derived or calibrated from rewards but embodies the notion of potential benefit rather than immediate gain.
+Utility, also known as value function in the context of MDP, differs from reward. While reward represents an immediate benefit gained at a specific step, utility is the cumulative or comprehensive measure of value that reflects the long-term desirability of a state or an action. In other words, utility captures both the current and the expected future rewards achievable from a given state or action. Utility is typically derived or calibrated from rewards but embodies the notion of potential benefit rather than immediate gain.
 
-The following example illustrates the distinction. Consider a game of chess. A reward is obtained only when the game ends in checkmate, positive for the winner and negative for the loser. However, checkmate cannot occur on the first move. If snapshots of the board are taken after each round, the probability of winning gradually increases for one player, from about $50\%$ at the start to nearly $100\%$ at checkmate. Although the actual reward is given only at the end, every board configuration during the game has a certain utility. The closer a configuration is to a winning position, the more likely the reward will be gained from that configuration, hence the higher its utility.
+The following example illustrates the distinction. Consider a game of chess. A reward is obtained only when the game ends in checkmate, positive for the winner and negative for the loser. However, checkmate cannot occur on the first move. If snapshots of the board are taken after each round, the probability of winning gradually increases for one player, from about $50\%$ in the beginning to nearly $100\%$ at checkmate. Although the actual reward is given only at the end, every board configuration during the game has a certain utility. The closer a configuration is to a winning position, the more likely the reward will be gained from that configuration, hence the higher its utility.
 
-The calculation of utility from rewards is introduced as follows. Before the introduction, it is worth mentioning the two types of MDPs with finite and infinite maximum allowed number of actions, as they are treated slightly differently when calculating utility.
+The calculation of utility from rewards will be introduced shortly, but before that it is worth mentioning the two types of MDPs with finite and infinite maximum allowed number of actions, as they are treated slightly differently when calculating utility.
 
 \begin{itemize}
 	\item Finite horizon
@@ -271,7 +286,7 @@ The calculation of utility from rewards is introduced as follows. Before the int
 	
 	\item Infinite horizon
 	
-	The game has no explicit time limit, and it terminates only when certain conditions are met—for example, when the agent reaches particular terminal states.
+	The game has no explicit time limit, and it can run indefinitely.
 	
 	In this case, the optimal policy is typically stationary. The optimal action at a given state remains fixed and does not depend on when the state is reached. Care must be taken in defining the utility function, however, because if rewards are unbounded or poorly scaled, the agent may loop indefinitely to accumulate infinite utility, rendering the problem ill-defined.
 \end{itemize}
@@ -282,7 +297,7 @@ The utility the agent collects can be formulated as a collective of rewards as f
 \begin{eqnarray}
 	U &=& R_0 + R_{0,1} + \gamma \left(R_1 + R_{1,2} + \gamma \left(R_2 + R_{2,3} + \gamma(\ldots)\right)\right) \label{eq:rewardtoutility}
 \end{eqnarray}
-where $0 < \gamma \leq <1$ is known as the \mync{discount factor}. The discount factor has at least two purposes. When $\gamma < 1$ is used, it guarantees that the utility is bounded even in a infinite horizon MDP, so that the agent cannot gain infinite utility by circulating around a few state. It also reflects a widely adopted assumption in finance, where a future reward of the same value is often less worthy than an immediate reward.
+where $0 < \gamma \leq 1$ is known as the \mync{discount factor}. The discount factor has at least two purposes. When $\gamma < 1$ is used, it guarantees that the utility is bounded even in an infinite horizon MDP, so that the agent cannot gain infinite utility by circulating around a few state. It also reflects a widely adopted assumption in finance, where a future reward of the same value is often less worthy than an immediate reward.
 
 Notice that one may formulate \eqref{eq:rewardtoutility} as follows
 \begin{eqnarray}
@@ -296,7 +311,7 @@ Following the spirit in \eqref{eq:rewardtoutility}, the utility of a state can b
 \end{eqnarray}
 where $s$ is the state of interest, $U(s)$ the utility of state $s$, $R(s)$ the reward received immediately when reaching the state, $a\in A(s)$ all the actions that can be taken at the state, $s_i \in S$ all the states or all the states reachable from $s$ with action $a$, $P(s_i|s,a)$ the probability of reaching $s_i$ from $s$ with action $a$, $R(s,a,s_i)$ the immediate reward obtained by action $a$ transforming state from $s$ to $s_i$, and $U(s_i)$ the utility of state $s_i$. Equation \eqref{eq:bellman} is known as the \mync{Bellman equation}. Notice that in Bellman equation, it is assumed that the agent is rational and always takes the action that maximizes the utility.
 
-Bellman equation \eqref{eq:bellman} can be used recurrently to calculate the utility of states. This is known as the value iteration, which will be introduced in more details in Section~\ref{sec:mdpvalue}.
+Bellman equation \eqref{eq:bellman} can be used recurrently to calculate the utility of states. More details will be given in Section~\ref{sec:mdpvalue}.
 
 The utility of an action $a$ at state $s$ is given by
 \begin{eqnarray}
@@ -317,9 +332,9 @@ A policy refers to a ``rule book'' that says what action to take at each and eve
 \begin{eqnarray}
 	\pi(s): && s \rightarrow a \label{eq:mdppolicy}
 \end{eqnarray}
-as a map from the state $s$ and $a$. The utility of a policy, giving an initial state, can be calculated by \eqref{eq:rewardtoutility} where the rewards are those collected rewards by an agent following that policy. With stationary reward and transmission model and with a properly chosen discount factor, the utility of a policy is always bounded. 
+as a map from the state $s$ to $a$. The utility of a policy, giving an initial state, can be calculated using \eqref{eq:rewardtoutility}. With stationary reward and transmission model and with a properly chosen discount factor, the utility of a policy is always bounded. 
 
-Among all the probable policies, the policy that gives the highest utility is known as the optimal policy, often denoted by $\pi^*(s)$. It is fairly easy to prove that with stationary reward and transmission model, the optimal policy is also stationary, meaning that when the system is at the same state, the optimal policy should always suggest the same action to do. Hence in the scope of MDP, we only studies stationary policy.
+Among all the probable policies, the policy that gives the highest utility is known as the optimal policy, often denoted by $\pi^*(s)$. It is fairly easy to prove that with stationary reward and transmission model, the optimal policy is also stationary, meaning that when the system is at the same state, the optimal policy should always suggest the same action. In the remainder, only stationary policies are considered.
 
 When the optimal policy is applied, the agent choose the action with the maximum utility from \eqref{eq:bellmanaction}, i.e.,
 \begin{eqnarray}
@@ -329,7 +344,7 @@ When there are multiple actions that give the same largest utility, the agent ra
 
 \subsection{Value Iteration} \label{sec:mdpvalue}
 
-To get the optimal policy $\pi^*(s)$ given by \eqref{eq:mdpoptpolicy}, the key is to get the utility of state $U(s)$. The Bellman equation \eqref{eq:bellman} provides a way to recursively calculate the utility of state as follows.
+To get the optimal policy $\pi^*(s)$ using \eqref{eq:mdpoptpolicy}, the key is to get the utility of state $U(s)$. The Bellman equation \eqref{eq:bellman} provides a way to recursively calculate the utility of state as follows.
 \begin{eqnarray}
 	U_{i+1}(s) &\leftarrow& R(s) + \max_{a\in A(s)}\left(\sum_{s_i \in S} P(s_i|s,a)\left(R(s,a,s_i) + \gamma U_i(s_i)\right)\right) \label{eq:bellmanupdate}
 \end{eqnarray}
