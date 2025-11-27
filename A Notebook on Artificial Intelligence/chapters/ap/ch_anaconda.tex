@@ -1,6 +1,6 @@
 \chapter{Brief Introduction to Python Package Manager}
 
-As far as this notebook concerns, almost all the codes are developed using Python. There are many environment and package managers for Python. Two popular ones, \verb|conda| and \verb|uv|, are introduced in this appendix chapter.
+As far as this notebook concerns, almost all the codes are in Python. There are many environment and package managers for Python. Two popular ones, \verb|conda| and \verb|uv|, are introduced in this appendix chapter.
 
 \section{Conda}
 
@@ -12,7 +12,7 @@ Details of \verb|conda| can be found in \cite{conda2025}. This section is merely
 
 It is recommended that the user install Miniconda, a variation of Anaconda distribution, to use \verb|conda|.
 
-Miniconda is a lightweight version of Anaconda distribution. The former contains only \verb|conda|, \verb|python| and a small number of other packages, while the latter contains more than three hundred packages, some of which are proprietary to Anaconda and may require a license for use in production environments.
+Miniconda is a lightweight version of Anaconda distribution. The former contains only \verb|conda|, \verb|python| and a small number of other packages, while the latter contains more than three hundred packages. Some of them are proprietary to Anaconda and may require a license for use in production environments.
 
 Miniconda can be installed on varieties of operating systems. Download the installer from the official website and follow the instructions just like installing any other software.
 
@@ -57,13 +57,20 @@ To list all packages and their source channels, use
 \begin{lstlisting}
 conda list --name <env name> --show-channel-urls
 \end{lstlisting}
-where notice that the additional \verb|--show-channel-urls| displays where each package come from.
+where notice that the additional \verb|--show-channel-urls| displays where each package comes from.
 
 To create an environment, use
 \begin{lstlisting}
 conda create --name <env name> [python=<version>]
 \end{lstlisting}
-where additional \verb|--file| followed by the list of packages in TXT or YAML file can be used to create an environment and install required packages. In this case, \verb|conda| automatically checks and configures the machine setup and handles package dependencies. 
+which will create a fresh-start environment.
+
+Alternatively, if there is a file inside which details of the environment and packages are given, consider using
+\begin{lstlisting}
+conda env create -f <file>
+\end{lstlisting}
+
+where additional \verb|-f| followed by the list of packages in TXT or YAML file (conventionally, \verb|environment.yml|) can be used to create an environment and install required packages. In this case, \verb|conda| automatically checks and configures the machine setup and handles package dependencies. 
 
 To clone an environment, use
 \begin{lstlisting}
@@ -75,30 +82,27 @@ To remove an environment, use
 conda remove --name <env name> --all
 \end{lstlisting}
 
-The environment, including the platform, packages and channels information can be exported as a plain text file, usually either a YAML file or a TXT file. This file can be used to quickly setup an identical environment in a later stage.
-
-It is recommended to name the file after the environment name so that the name is preserved.
-
-To export the environment, use
+The environment, including the platform, packages and channels information can be exported as a plain text file, usually either a YAML file or a TXT file. This file can be used to quickly setup an identical environment in a later stage. It is recommended to name the file after the environment name. To export the current environment, use
 \begin{lstlisting}
-conda export --from-history><env name>.yml
+conda export > <file name>.yml
 \end{lstlisting}
+It is possible to configure the output format to be YAML, TXT or JSON using \verb|--format|, and to perform cross-platform exporting using \verb|--from-history|. Details can be found in the official website and are not given here.
 
 \subsection{Package Management}
 
 To install a package in specified environment, use
 \begin{lstlisting}
-conda install --name <environment name> <package name>
+conda install [--name <environment name>] <package name>
 \end{lstlisting}
 
 To update all packages in an environment, use
 \begin{lstlisting}
-conda update --all --name <environment name>
+conda update --all [--name <environment name>]
 \end{lstlisting}
 
 To remove a package from specific environment, use
 \begin{lstlisting}
-conda uninstall --name <environment name> <package name>
+conda uninstall [--name <environment name>] <package name>
 \end{lstlisting}
 
 If no environment name is specified in the above commands, current environment will be used.
@@ -136,22 +140,20 @@ Unlike \verb|conda|, where each virtual environment is self-contained and includ
 
 Project folders do not contain the interpreter itself. Instead, they include a \verb|.python-version| file, which specifies the version of Python required for that project. When a virtual environment is created, it links to the corresponding cached interpreter.
 
-To install the latest Python interpreter and make it available as \verb|python3.<minor>| on your \texttt{PATH}, run:
+To install the latest Python interpreter and make it available as \verb|python3.<minor>| on \texttt{PATH}, run:
 \begin{lstlisting}
 uv python install
 \end{lstlisting}
-
-To install a specific version:
+To install a specific version, use
 \begin{lstlisting}
 uv python install <version>
 \end{lstlisting}
-
-To also make this version the default \verb|python| and \verb|python3| executable in your shell, use:
+To also make this version the default \verb|python| and \verb|python3| executable in your shell, use
 \begin{lstlisting}
 uv python install <version> --default
 \end{lstlisting}
 
-With the above steps completed, the user can run basic Python scripts without creating a project or a virtual environment by using:
+With the above steps completed, the user can run basic Python scripts without creating a project or a virtual environment by
 \begin{lstlisting}
 uv run <script>.py
 \end{lstlisting}
@@ -163,7 +165,6 @@ uv tool install <tool>
 The tool will be installed in a centralized cache.
 
 Python interpreters and tools can be upgraded or removed using similar commands.
-
 
 \subsection{Environment Management}
 
@@ -209,7 +210,10 @@ Once done, a \verb|.venv| should be created as follows.
 
 Important files and subdirectories are explained below.
 \begin{itemize}
-	\item \verb|.venv| contains the actual code and binaries of the Python libraries installed for the project, along with scripts and environment-specific configuration.
+	\item \verb|.venv| contains the actual code and binaries of the Python libraries installed for the project, along with scripts and environment-specific configuration. 
+	
+	Note: \verb|.venv| may contain massive small-size files that are not suitable for cloud synchronization. It is recommended to exclude \verb|.venv| from cloud synchronization.
+	
 	\item \verb|uv.lock| is a human-readable lockfile that lists the fully resolved dependency graph for the project, including the exact names, versions, sources, and hashes of all libraries.
 	\item \verb|pyproject.toml| declares the minimum set of required libraries and dependencies for the project, without necessarily specifying exact versions or the complete dependency tree.
 	\item \verb|.python-version| specifies the required Python interpreter version for the project, which \verb|uv| uses to select the appropriate cached runtime.
@@ -243,25 +247,21 @@ By default, \verb|uv| uses the \myabb{Python Package Index}{PyPI} for dependency
 
 To install all packages specified in the \verb|uv.lock| file, use \verb|uv sync| as explained earlier.
 
-To install one or more specific packages, use:
+To install one or more specific packages, use
 \begin{lstlisting}
 uv add <package>
 \end{lstlisting}
-This command not only downloads and installs the package(s) into the project’s virtual environment, but also updates the \verb|pyproject.toml| and \verb|uv.lock| files accordingly.
-
-Similarly, use:
+This command not only downloads and installs the package(s) into the project’s virtual environment, but also updates the \verb|pyproject.toml| and \verb|uv.lock| files accordingly. Similarly, use
 \begin{lstlisting}
 uv remove <package>
 \end{lstlisting}
-to remove a package from the environment and update the dependency files.
-
-Use:
+to remove a package from the environment and update the dependency files. Use
 \begin{lstlisting}
 uv tree
 \end{lstlisting}
 to display the project’s dependency tree.
 
-In addition to \verb|uv add|, \verb|uv| provides:
+In addition to \verb|uv add|, \verb|uv| provides the following command
 \begin{lstlisting}
 uv pip install <package>
 \end{lstlisting}

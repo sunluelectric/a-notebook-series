@@ -2,30 +2,32 @@
 
 An AI agent should be capable of making decisions. Based on what it observes, what it believes, and what it desires, the agent must determine the most beneficial action or sequence of actions to take. In the case where the AI agent does not possess sufficient information in the beginning, it should be able to learn from successful and failed trails and gradually improve its performance.
 
-This chapter studies decision making with AI. Markov Decision Process is discussed in detail, as it is one of the most widely used decision-making frameworks.
+This chapter studies decision making with AI. Markov decision process is discussed in detail, as it is one of the most widely used decision-making frameworks.
 
 \section{Utility}
 
-To formulate a decision-making problem mathematically, the first step is to define the \mync{utility} (often in the form of a function) that quantifies the value of an action or a system state. Decision making is essentially the process of maximizing utility. This section introduces the concept of utility and its formulation, and how utility is used in decision making with AI.
+To formulate a decision-making problem mathematically, the first step is to define the \mync{utility function} that quantifies the value of an action or a system state. Decision making is essentially the process of maximizing utility. This section introduces the concept of utility and its formulation, and how utility is used in decision making with AI.
 
 \subsection{Utility Theory}
 
 Intuitively, a rational AI agent should always choose the action that maximizes expected utility among all available actions. This is known as the \mync{maximum expected utility} (MEU) principle. Below, MEU is formulated as an optimization problem.
 
-When an AI agent decides to perform an action among all the actions it can take, the system transitions from one state to another. Let the \mync{transition model} be denoted by $P(s|a,e)$, where $e$ represents the evidence or observation of the system, incorporating the agent’s awareness of its current origin state, $a$ the action taken, and $s$ the destination state. Notice that $P(s|a,e)$ is given in the form of probability, which captures uncertainty in the system.
+When an AI agent decides to perform an action among all the actions it can take, the system transitions from one state to another. Let the \mync{transition model} be denoted by $P(s\textprime|a,e)$, where $e$ represents the evidence or observation of the system, incorporating the agent’s awareness of its current origin state, $a$ the action taken, and $s\textprime$ the destination state. Notice that $P(s\textprime|a,e)$ is given in the form of probability, which captures uncertainty in the system.
 
-The benefit of reaching a state is quantitatively described by the \mync{utility of a state} $U(s)$. The utility $U(s)$ usually includes not only the immediate reward of reaching the state $s$, but also the foreseeable future benefits that may arise from reaching $s$ as an intermediate state. For now, do not bother how $U(s)$ can be calculated. Later in Sections \ref{sec:mdp} and \ref{sec:pomdp}, the systematic calculation of $U(s)$ will be introduced.
+The benefit of reaching a state is quantitatively described by the \mync{utility of a state} $U(s)$. The utility $U(s)$ usually includes not only the immediate reward gained from state $s$, but also the foreseeable future benefits that may arise from reaching $s$ as an intermediate state. For now, do not bother how $U(s)$ can be calculated. Later in Sections \ref{sec:mdp} and \ref{sec:pomdp}, the systematic calculation of $U(s)$ will be introduced.
 
 The \mync{expected utility of action} $EU(a|e)$, given evidence $e$, over possible landing states $s_i \in S$, can be given by
 \begin{eqnarray}
-	EU(a|e) &=& \sum_{s_i \in S} P(s_i|a,e) \left(R(s_i,a,e) + \gamma U(s_i)\right) \label{eq:expected_utility}
+	EU(a|e) &=& \sum_{s_i \in S\textprime} P(s_i|a,e) \left(R(s_i,a,e) + \gamma U(s_i)\right) \label{eq:expected_utility}
 \end{eqnarray}
-where $R(s_i,a,e)$ is the reward gained by taking the action $a$ to reach $s$ given the observation $e$, $U(s)$ the utility of state $s$, and $\gamma$ the discount factor. More about discount factor will be introduced in later sections. For now, simply assume that $\gamma = 1$. 
+where $S\textprime$ is the set of all probable destination states by taking action $a$ given observation $e$, $R(s_i,a,e)$ the reward gained by taking the action $a$ to reach $s_i$ given the observation $e$, $U(s_i)$ the utility of state $s_i$, and $\gamma \leq 1$ the discount factor. More about discount factor will be introduced in later sections. 
 
 \begin{mdframed}
 \noindent \textbf{Reward versus Utility}
 
-Reward and utility are two different concepts in the context of this chapter. Reward represents the instantaneous profit gained by the system by performing an action or a transition, or by leaving or landing on a state. Utility, on the other hand, is a comprehensive evaluation of ``how much an action or a state worth'', by considering not only the instantaneous reward, but also expected reward (often with discount rate applied) to be received in the future. In that sense, utility can be derived from rewards.
+Reward and utility are two different concepts in the context of this chapter. Reward represents the instantaneous profit gained by the system by performing an action or a transition, or by leaving or landing on a state. Utility, on the other hand, is a comprehensive evaluation of ``how much an action or a state worth'', by considering not only the instantaneous reward, but also expected maximum reward (often with discount rate applied) to be received in the future. 
+
+As will be shown later, utility can be derived from fixed rewards and transition model.
 
 Both reward and utility are relative values and they can be positive, zero or negative.
 
@@ -37,7 +39,7 @@ Given the evidence $e$, an AI agent may take one of several actions $a_i \in A$.
 	a^* &=& \argmax_{a_i \in A} EU(a_i|e) \label{eq:emu}
 \end{eqnarray}
 
-An example of MEU is given by Fig.~\ref{fig:emuexp}. Consider a maze in which a robotic AI agent is randomly placed in one of several locations (blocks). Each location corresponds to a state represented by the coordinate $(x,y)$. The agent can move horizontally or vertically one step at a time. Let the utility of a state be given by its shortest distance to the goal, as shown in Fig.~\ref{fig:emuexp}. It can be interpreted as the minimum turn required to reach the goal from its current location, if optimal actions are taken.
+An example of MEU is given by Fig.~\ref{fig:emuexp}. Consider a maze in which a robotic AI agent is randomly placed in one of several locations (blocks). Each location corresponds to a state represented by the coordinate $(x,y)$. The agent can move horizontally or vertically one step at a time. Let the utility of a state be given by its shortest distance to the goal, as shown in Fig.~\ref{fig:emuexp}. It can be interpreted as the minimum turn required to reach the goal from its current location, if optimal actions are taken. (Notice that this is not how utility of a state is often calculated. It is used only in this demonstrative example.)
 
 \begin{figure}[!htb]
 	\centering
@@ -76,7 +78,7 @@ Let $e$ represent the agent’s current location, assumed to be the red dot at $
 	P((3,1)|a_4,e) &=& 0.6 \nonumber
 \end{eqnarray}
 
-Note that the outcome of an action is not deterministic. In practice, this may result from signal transmission errors or environmental uncertainty. The agent cannot move downward from its current location $(2,1)$ since it is already at the bottom boundary of the maze. When it chooses the ``DOWN'' action $a_3$, it will likely remain in the same place after running into the wall.
+Note that the outcome of an action can be nondeterministic, as is demonstrated by this example. In practice, this may result from signal transmission errors or environmental uncertainty. The agent cannot move downward from its current location $(2,1)$ since it is already at the bottom boundary of the maze. When it chooses the ``DOWN'' action $a_3$, it will likely remain in the same place after running into the wall.
 
 Using \eqref{eq:expected_utility}, the expected utility of $a_1$ can be computed as
 \begin{eqnarray}
@@ -88,7 +90,7 @@ Similarly, $EU(a_2|e) = -5.6$, $EU(a_3|e) = -5.1$, and $EU(a_4|e) = -4.6$. There
 In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and utilities $U(s_i)$ are assumed known from the very beginning of the game. This is rarely the case in practical problems. Sections~\ref{sec:mdp} and~\ref{sec:pomdp} will introduce variety of methods such as value iteration and Q-learning which will become handy when the aforementioned information is unknown from the beginning.
 
 \begin{mdframed}
-	\noindent \textbf{Are there alternatives to expected utility?}
+	\noindent \textbf{Are there alternatives to MEU?}
 	
 	The expected utility of an action is calculated using \eqref{eq:expected_utility}. An AI agent using \eqref{eq:expected_utility} and \eqref{eq:emu} to make decisions. However, can we base decision making on other measures of utility? For example, consider the worst-case utility defined by
 	\begin{eqnarray}
@@ -128,9 +130,9 @@ In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and ut
 
 \subsection{Utility Function}
 
-\mync{Utility function} maps an action or a system state to a real number. The expected utility of an action $U(a|e)$ is an example of the utility function. As noted earlier, the expected utility of an action is not the only valid measure of an action. Nonetheless, it is the most widely used utility measure in commonly seen decision making frameworks. For the remainder of this chapter, unless otherwise specified, we consider expected utility as the utility function of an action.
+As introduced in the beginning of this chapter, the utility function maps an action or a system state to a real number. The expected utility of an action $U(a|e)$ is an example of the utility function. As noted earlier, the expected utility of an action is not the only valid measure of an action. Nonetheless, it is the most widely used utility measure in commonly seen decision making frameworks. For the remainder of this chapter, unless otherwise specified, we consider expected utility as the utility function of an action.
 
-From \eqref{eq:expected_utility}, the expected utility of an action $EU(a|e)$ depends on the transition model $P(s|a,e)$ and the state utility $U(s)$. State utility typically includes both the immediate reward (from reaching that state) and the anticipated future utility obtainable from using that state as an intermediate step. For example, in chess, each board configuration represents a state. Only the final checkmate state provides immediate reward, but intermediate states possess utility as they contribute to the eventual victory.
+From \eqref{eq:expected_utility}, the expected utility of an action $EU(a|e)$ depends on the transition model $P(s\textprime|a,e)$ and the destination state utility $U(s\textprime)$. State utility typically includes both the immediate reward (from reaching that state) and the anticipated future utility obtainable from using that state as an intermediate step.
 
 The computation of utility functions for actions and states is often referred to as \mync{preference elicitation}. Different models have different ways of defining and calibrating utility functions, some of which will be introduced in later Sections \ref{sec:mdp} and \ref{sec:pomdp}.
 
@@ -159,13 +161,19 @@ Up to this point, we have introduced the basic principles of decision making. In
 
 Equations \eqref{eq:expected_utility} and \eqref{eq:emu} are a realization of the above, with Fig.~\ref{fig:emuexp} providing an example. In that example, the utilities of all states and the transition model are assumed known, which is not always true in reality. While the example in Fig.~\ref{fig:emuexp} is simple, real-world problems are often more complex. Consider a similar setting to Fig.~\ref{fig:emuexp}, except that
 \begin{itemize}
-	\item The possible system states are unknown in advance; that is, the size, shape, and boundary of the maze are initially unknown, and the agent must explore by trial and error.
-	\item The utility of each state is unknown in advance; the agent does not know how far each state is from the goal and thus cannot use that information as guidance until it discovers the goal through exploration.
-	\item The transition model is unknown in advance. The agent does not know which actions will move it up, left, down, or right, and the effect of each action may depend on the current state. In the extreme case, the set of available actions differs across states.
+	\item The state space is unknown in advance. 
+	
+	The size, shape, and boundary of the maze are initially unknown, and the agent must explore by trial and error.
+	
+	\item The transition model is unknown in advance. 
+	
+	There will be a list of available actions provided to the agent. However, the agent does not know which and how each action will lead it into the next state, and the agent must explore by trail and error.
+	
+	\item Both the reward and the utility of states and actions are unknown in advance.
+	
+	The agent does not know the reward it will gain for each transition, until that transition is performed during the trial and error. And since both reward and transition model is unknown, the agent cannot calculate the utilities of states and actions in advance. All the information needs to be gained through exploration.
 \end{itemize}
 These factors substantially increase the difficulty of the problem.
-
-MDP provides a framework to tackle such problems. Through MDP, the agent can learn via trial and error to calibrate states and actions utilities (known as \mync{value functions} in the context of MDP) and the transition model. There will be failures in which the agent falls into traps and successes in which it finds the goals. Through repeated trials and reinforcement learning, it can eventually determine what action to take at each position to avoid traps and reach goals as efficiently as possible.
 
 This section and the next Section~\ref{sec:pomdp} study MDP and discuss the calibration of state utilities and the transition model.
 
@@ -173,11 +181,11 @@ This section and the next Section~\ref{sec:pomdp} study MDP and discuss the cali
 
 A \mync{Markov Decision Process} (MDP) refers to the following decision-making problem formulation:
 \begin{itemize}
-	\item It defines state, which is a minimal set of information that reflects the current status of the system. 
-	\item It defines transmission models, which describe the relationship between the current state, the action taken, and the resulting next state. The transition model is often given by the stochastic model $P(s|s\textprime,a)$ (essentially the same as $P(s|a,e)$ in \eqref{eq:expected_utility}, where current-state information is incorporated into the evidence $e$). The transition model is Markovian, i.e., it depends only on the current state and action, not on the full history.
-	\item Actions are chosen sequentially until a time horizon is reached or a goal state is achieved.
+	\item It defines the state, which is a minimal set of information that reflects the current status of the system. 
+	\item It defines the transmission model, which describes the relationship between the current state, the action taken, and the resulting next state. The transition model is often given by the stochastic model $P(s\textprime|s,a)$ (essentially the same as $P(s\textprime|a,e)$ in \eqref{eq:expected_utility}, where current-state information is incorporated into the evidence $e$). The transition model is Markovian, i.e., it depends only on the current state and action, not on the full history.
 	\item Agent utility is defined, which is the accumulation of rewards that agent gains by traveling among states. For each travel, the agent get some reward which is determined by the destination state, the action taken, the origin state, or all of them jointly.
-	\item The objective is to determine the policy at each state. The policy maps each state to the best action that maximizes the expected agent utility.
+	\item Actions are taken sequentially until a time horizon is reached or certain amount of utility is accumulated (often when the agent reaches a particular state).
+	\item The objective is to determine the policy at each state. The policy maps each state to the best action that maximizes the expected utility.
 \end{itemize}
 
 Depending on whether the agent has the full picture of the current state, the MDP formulations can be divided into two types, namely fully observable MDP and \myabb{partially observable MDP}{POMDP}. This section studies fully observable while the next Section ~\ref{sec:pomdp} studies POMDP. 
@@ -185,7 +193,7 @@ Depending on whether the agent has the full picture of the current state, the MD
 \begin{mdframed}
 	\noindent \textbf{Known MDP versus Fully Observable MDP}
 	
-	Notice that a fully observable MDP assumes the agent always knows its current state but does not necessarily know the transition model or reward function. It also does not need to know all possible states in advance. These quantities can be learned or calibrated through trial and error using reinforcement learning.
+	Notice that a fully observable MDP assumes that the agent always knows its current state but does not necessarily know the transition model or reward function. It does not need to know all possible states either. These quantities can be learned or calibrated through trial and error using reinforcement learning.
 	
 	If a fully observable MDP also has complete knowledge of all transition models at every state and all possible rewards for each state–action pair, it becomes a \mync{known MDP}. Figure~\ref{fig:emuexp} illustrates an example of a known MDP, where the maze layout and the goal position are both clearly marked. In this case, the agent does not need to explore, and it can compute the optimal policy before taking any action.
 	
@@ -203,7 +211,7 @@ Depending on whether the agent has the full picture of the current state, the MD
 	\end{itemize}
 	If the state definition cannot fulfill the above requirements, consider augment the state with additional information.
 	
-	The following examples illustrate how to decide what information should be included in the state. Consider a robot navigating a maze. It knows its current position, represented by coordinates, but it does not know the locations of walls. 
+	The following examples illustrate how to decide what information should be included in the state. Consider a robot navigating a maze. It knows its current position, represented by coordinates, but it does not know the maze layout. 
 	
 	Consider the following different scenarios for the robot.
 	
@@ -212,24 +220,24 @@ Depending on whether the agent has the full picture of the current state, the MD
 		
 		In this case, the state should include only the robot’s current location. With the current position as the state, a stationary transition model can describe how each action leads to a resulting state and what reward the agent receives if it reaches the goal or a trap. The agent may not initially know which positions correspond to walls or traps, but that information is stationary in the sense that when the agent revisits the same location, the same outcomes apply. Through repeated trials, the agent can learn these relationships.
 		
-		\item Scenario 2: The robot needs to exploring as many unique locations as possible within a time horizon.
+		\item Scenario 2: The robot needs to travel as many unique locations as possible within a time horizon.
 		
-		Here, it is insufficient for the state to include only the current location. Although the transition model can still describe how actions lead to new positions, this information alone cannot determine the reward, since the reward depends on whether the robot visits new locations or revisits old ones.
+		In this example, it is insufficient for the state to include only the current location. Although the transition model can still describe how actions lead to new positions, this information alone cannot determine the reward, since the reward depends on whether the robot visits new locations or revisits old ones.
 		
-		Defining the state as the current location together with the total number of moves made is still insufficient, because the reward depends on the set of unique locations visited, not just the count of moves.
+		Consider defining the state as the current location together with the total number of unique positions it has visited. Indeed, the state provides enough information to calculate the reward. However, this time it does not possess enough information to calculate the transition model. Assume that the agent takes an action and arrives at a new location. Should that number increase by one? It does not know, because the agent is not sure whether it has arrived the location earlier. The transition model is not Markovian.
 		
-		If the state is defined as the current location and the set of previously visited unique locations, the reward can indeed be computed. However, the transition model must also be able to determine the next state. Without knowledge of whether the next position has been visited, it cannot update the number of visited unique locations correctly.
-		
-		Therefore, to preserve the Markov property, the state must include the current location along with the complete history of all previously visited locations. Only then can both the transition model and the reward function be expressed in a stationary form.
+		Therefore, to preserve the Markov property, the state must include the current location along with all the unique locations it has visited. Only then can both the transition model and the reward function be expressed in a Markovian and stationary form.
 		
 		\item Scenario 3: The robot needs to find the goal, but the layout of the maze changes over time and other factors.
 		
-		In this scenario, the positions of walls change according to certain external conditions (e.g., time, temperature, or other factors). The wall configuration directly affects the transition model. If the state includes only the robot’s current location, the transition model becomes non-stationary, violating the MDP assumption. 
+		In this scenario, the positions of walls change according to certain external conditions (e.g., time, temperature, or other factors). The wall configuration directly affects the transition model. If the state includes only the current location of the robot, the transition model becomes non-stationary, violating the MDP assumption. 
 		
 		The state must therefore include the external conditions that influence the maze layout, ensuring that the transition model remains stationary.
 	\end{itemize}
 	
-Note: In practice, even if the transition model or reward function of a system is non-stationary (for example, changing with time or other external conditions), the problem can always be reformulated as a stationary MDP by augmenting the state with all relevant variables that cause the non-stationary, such as time or system mode. Therefore, in this notebook, it is assumed without loss of generality that the transition model and the reward function of an MDP are stationary. This assumption is standard in most theoretical formulations and practical implementations of MDP.
+As demonstrated by Scenario 3, even if the transition model or reward function of a system is non-stationary (for example, changing with time or other external conditions), the problem can always be reformulated as a stationary MDP by augmenting the state with all relevant variables that cause the non-stationary, such as time or system mode. Therefore, in this notebook, it is assumed without loss of generality that the transition model and the reward function of an MDP are stationary. This assumption is standard in most theoretical formulations and practical implementations of MDP.
+
+If the dynamics of the system is too complicated and there are ``unknown'' factors affecting the transition model and the reward, consider still augmenting those unknown factors in the state and formulate it as a POMDP problem.
 
 \end{mdframed}
 
@@ -241,7 +249,7 @@ The following concepts are introduced or revisited in this section:
 	\item Utility, Utility of State, Utility of Action
 	\item Policy, Utility of Policy, Optimal Policy
 \end{itemize}
-Concepts previously introduced are here re-emphasized in the specific context of MDP.
+Some of these concepts have been introduced previously. They are re-emphasized in the specific context of MDP.
 
 \vspace{0.1in}
 \noindent \textbf{Reward}
@@ -253,8 +261,8 @@ Rewards can take several common forms as follows.
 \begin{itemize}
 	\item Reward by staying or reaching a state, $R(s)$
 	
-	In some problems, the agent gains a reward or penalty upon staying or reaching a particular state. The previous state or the action taken to reach that state is irrelevant.  
-	For example, in the robot-in-a-maze problem, the robot receives a positive reward when it reaches the goal and a negative reward when it reaches a trap. The reward depends only on the destination state, not on the path taken.
+	In some problems, the agent gains a reward or penalty by reaching or staying at a particular state. The previous state or the action taken to reach that state is irrelevant.  
+	For example, in the robot-in-a-maze problem, the robot receives a positive reward when it reaches the goal and a negative reward when it reaches or stays inside a trap. The reward depends only on the destination state, not on the path taken.
 	
 	\item Reward by taking an action, $R(a)$
 	
@@ -263,13 +271,11 @@ Rewards can take several common forms as follows.
 	In general, a reward can depend on both the origin and destination states, and the action taken. Such cases are denoted by $R(s, a, s\textprime)$, where the first $s$ is the origin state, $a$ the action, and $s\textprime$ the destination state.
 \end{itemize}
 
-
-
 \vspace{0.1in}
 \noindent \textbf{Utility, Utility of State, Utility of Action}
 \vspace{0.1in}
 
-Utility, also known as value function in the context of MDP, differs from reward. While reward represents an immediate benefit gained at a specific step, utility is the cumulative or comprehensive measure of value that reflects the long-term desirability of a state or an action. In other words, utility captures both the current and the expected future rewards achievable from a given state or action. Utility is typically derived or calibrated from rewards but embodies the notion of potential benefit rather than immediate gain.
+Utility, also known as \mync{value function}[VF] in the context of MDP, differs from reward. While reward represents an immediate benefit gained at a specific step, utility is the cumulative or comprehensive measure of value that reflects the long-term desirability of a state or an action. In other words, utility captures both the current and the expected future rewards achievable from a given state or action. Utility is typically derived or calibrated from rewards but embodies the notion of potential benefit rather than immediate gain.
 
 The following example illustrates the distinction. Consider a game of chess. A reward is obtained only when the game ends in checkmate, positive for the winner and negative for the loser. However, checkmate cannot occur on the first move. If snapshots of the board are taken after each round, the probability of winning gradually increases for one player, from about $50\%$ in the beginning to nearly $100\%$ at checkmate. Although the actual reward is given only at the end, every board configuration during the game has a certain utility. The closer a configuration is to a winning position, the more likely the reward will be gained from that configuration, hence the higher its utility.
 
