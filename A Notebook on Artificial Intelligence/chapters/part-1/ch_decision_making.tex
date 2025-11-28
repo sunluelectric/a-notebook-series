@@ -177,7 +177,7 @@ These factors substantially increase the difficulty of the problem.
 
 This section and the next Section~\ref{sec:pomdp} study MDP and discuss the calibration of state utilities and the transition model.
 
-\subsection{General Review of MDP}
+\subsection{General Review of MDP} \label{sec:generalreviewmdp}
 
 A \mync{Markov Decision Process} (MDP) refers to the following decision-making problem formulation:
 \begin{itemize}
@@ -241,9 +241,15 @@ If the dynamics of the system is too complicated and there are ``unknown'' facto
 
 \end{mdframed}
 
-\subsection{Reward, Utility, and Policy}
+\subsection{Problem Formulation}
 
-The following concepts are introduced or revisited in this section:
+An MDP is often described by
+\begin{eqnarray}
+	\left(\mathcal{S}, \mathcal{A}, \mathcal{P}, \gamma, \mathcal{R}\right) \nonumber
+\end{eqnarray}
+where $\mathcal{S}$ is the set of states, $\mathcal{A}$ actions, $\mathcal{P}$ the transition kernel (denoted by $\mathcal{T}$ in some literatures), $\gamma$ the discount factor, and $\mathcal{R}$ the reward.
+
+State and actions have introduced in details in the earlier Section \ref{sec:generalreviewmdp}. The following concepts are introduced or revisited in this section.
 \begin{itemize}
 	\item Reward
 	\item Utility, Utility of State, Utility of Action
@@ -519,6 +525,87 @@ where
 \subsection{Value Iteration and Optimal Policy with Belief of State}
 
 \subsection{POMDP Online Reinforcement Learning}
+
+\section{Continuous-State Markov Decision Process}
+
+Up to this point, both the fully observable MDP and POMDP assumes that the number of states is finite. In a more general and practical control problem, however, the number of state can be infinite, mostly because the factors in the state space vector can take continuous values.
+
+\mync{Continuous-state MDP} describes an MDP formulation where the state can take continuous values and hence has infinite values. It is proposed to tackle this issue and will be introduced in this section.
+
+\subsection{Problem Formulation}
+
+Consider a control problem where the state space is given by $s\in S=\mathbb{R}^n$. While the length of the state vector $s$ is a finite number $n$, $s$ can take infinite and continuous values.
+
+The purpose is to decide $a \in A(x)$. The challenge is that there is no parametric model that describes how $a$ affects $s$, and there is no reference signal how $s$ should behave, but only a reward corresponds with each $s$. 
+
+From the above description, it is obvious that the problem can hardly formulated into a parametric model based control problem or an adaptive control problem. It is a reinforcement learning problem by nature. Therefore, consider using MDP to formulate and solve the problem.
+
+Conventional MDP assumes finite number of state. However, in this problem the state can take infinite values. Continuous-state MDP is thus proposed to solve the problem. Details are discussed below.
+
+\subsection{Discretization Approach}
+
+Intuitively, we can discretize the continuous values the state vector can take, and map them into discrete values.
+
+For small scale system where the length of state vector and the ranges each state variable can take is limited, discretization approach may work, and it is probably easier to implement than other approaches. However, it has the following problems, preventing it from being implemented in large scale systems.
+\begin{itemize}
+	\item Staircase fitting is introduced, and some information is lost in the approximation.
+	\item Curse of dimensionality. The total number of states goes exponentially high as each state is discretized. Consider a system with $n$ state variables, each discretized into $k$ values. The total number of states is $k^n$.
+\end{itemize}
+The probable solution to the above two problems, under the scope of discretization approach, conflict with each other. To reduce the information loss due to the staircase fitting, the discretization resolution for each state variable needs to be increased, which would cause more severe curse of dimensionality.
+
+In practice, discretization approach only works for small-scale system. For system with order $n\leq 3$, it is often safe to use discretization approach. For system with order $3 < n\leq 6$, there is a chance that it may work. In these cases, the user needs to choose the discretization carefully. Use low resolution to those state variables that matter less. For system with order $n>6$, discretization approach is not recommended.
+
+\subsection{Utility Function Approximation approach}
+
+Consider approximating the utility function of a state directly without discretizing it, i.e.,
+\begin{eqnarray}
+	U(s) &\approx& \theta^T\phi(s) \label{eq:vfapproximation}
+\end{eqnarray}
+where $\theta$ is the linear regression coefficient, and $\phi(s)$ the feature of state $s$. With \eqref{eq:vfapproximation}, we can then use \eqref{eq:bellmanaction} and \eqref{eq:mdpoptpolicy} to choose the optimal action and decide the optimal policy.
+
+As the first step to implement utility function approximation, consider building a model as follows.
+
+An example of a model is given in Fig. \ref{fig:csmdp_model}. It is assumed that while state vector is continuous and hence has infinite values, there are finite number of actions. This is a fair assumption in many control problems. Even if the actions are continuous, it is often much easier to discretize the action space alone.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.6\textwidth]{./chapters/part-1/figures/csmdp_model.png}
+	\caption{Model (simulator) of the continuous state MDP.}
+	\label{fig:csmdp_model}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Multi-attribute Utility Function}
 
