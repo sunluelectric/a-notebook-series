@@ -1,6 +1,6 @@
 \chapter{Decision Making}
 
-An AI agent should be capable of making decisions. Based on what it observes, what it believes, and what it desires, the agent must determine the most beneficial action or sequence of actions to take. In the case where the AI agent does not possess sufficient information in the beginning, it should be able to learn from successful and failed trails and gradually improve its performance.
+An AI agent should be capable of making decisions. Based on what it observes, what it believes, and what it desires, the agent must determine the most beneficial action or sequence of actions to take. Different from a conventional optimal control problem where the plant and the cost function are assumed known, one of the biggest challenges for the AI agent is that it does not possess sufficient prior knowledge about the plant, and in many cases it needs to learn from successful and failed trails using both offline and online data, and gradually improve its performance.
 
 This chapter studies decision making with AI. Markov decision process is discussed in detail, as it is one of the most widely used decision-making frameworks.
 
@@ -585,33 +585,43 @@ With the built model, we can then train the MDP using reinforcement learning. Th
 
 \end{mdframed}
 
-To emulate the utility of a state using \eqref{eq:vfapproximation}, we need to choose the feature of the state $\phi(s)$. This is often experience based, where $\phi(s)$ can contain the original $s$ together with nonlinear components derived from components of $s$ that may contribute to the utility and reward of the state, i.e., anything that may correlatively relate to ``how well the system is performing''. With the massive synthetic data generated from the model, the user can choose a large set of features without necessarily worrying about over-fitting.
+With the defined mode, we need to select finite number of random states $s_1,\ldots,s_m$ from the infinite continuous-value state space. Apply value iteration as follows. For each sampled state $s_i$, let $a\in A(s_i)$ be an action applicable to the state. Iteratively calculate the utility of the action and the state as follows.
+\begin{eqnarray}
+	U(a|s_i) &\leftarrow& \dfrac{1}{j}\sum_{i=1}^{j} \left[R(s_i, a, s_j) + \gamma U(s_j)\right] \label{eq:csmdpvalueiterationaction} \\
+	U(s_i) &\leftarrow& R(s_i) + \max_{a} U(a|s_i) \label{eq:csmdpvalueiteration}
+\end{eqnarray}
+where $j$ is the number of trial that action $a$ is taken, and $s_k$ the destination state. This can be emulated with the aforementioned model. Massive data is required for the training, as there is often a large number of state samples $m$ and a large number of trials of actions $j$. This is why the model can become handy. The utility $U(s_k)$ is calculated with $U(s_k) = \theta^T\phi(s_k)$ with $\theta$ from the last iteration.
 
+With $U(s_i)$ obtained through value iteration \eqref{eq:csmdpvalueiteration} for the sampled discrete states, consider mapping it with continuous function \eqref{eq:vfapproximation} via linear regression, i.e.,
+\begin{eqnarray}
+	\theta &=& \argmin_{\theta} \dfrac{1}{2} \sum_{i=1}^{m} \left(\theta^T\phi(s) - U(s_i)\right)^2 \label{eq:csmdpargtheta}
+\end{eqnarray}
+We need to choose the feature of the state $\phi(s)$. This is often experience based, where $\phi(s)$ can be a subset or an extension of the original $s$ together with nonlinear components derived from components of $s$ that may jointly contribute to the utility. With the massive synthetic data generated from the model, the user can choose a large set of features without necessarily worrying about over-fitting. This is another benefit of using a model.
 
+The number of samples $m$ required by the fitting \eqref{eq:csmdpargtheta}, which is also the number of sampled states, depends on the formulation of $\phi(s)$. For example, for a feature that contains $50$ elements in $\phi(s)$, consider $m$ of at least between $500$ and $1000$.
 
+For online application, the optimal policy is given by
+\begin{eqnarray}
+	\pi^*(s) &=& \argmax_{a} \left[R(s, a, s_j) + \gamma U(s_j)\right] \label{eq:cspolicy}
+\end{eqnarray}
+where $s_j = f(s,a)$ is obtained from the model \eqref{eq:stochasticsimulator} with $\epsilon=0$. Notice that although in the training discrete action has been used in the value iteration, \eqref{eq:cspolicy} can be formulated with continuous action space. Details are not discussed here. 
 
+Replace \eqref{eq:csmdpvalueiterationaction} and \eqref{eq:csmdpvalueiteration} with the online greedy-search based counterparts for online learning. Details are not introduced here.
 
+\begin{mdframed}
+\noindent \textbf{LQR as a Special Case of Continuous-State MDP}
 
+In a special case of continuous-state MDP where the state transition function and the model can be described by the following linear equation
+\begin{eqnarray}
+	s\textprime &=& Fs + Ga + w \nonumber
+\end{eqnarray}
+with $s\in \mathbb{R}^n$, $a\in \mathbb{R}^m$ and the reward
+\begin{eqnarray}
+	R(s,a) &=& -\left(s^TQ^ss + a^TQ^aa\right) \nonumber 
+\end{eqnarray}
+where both $Q^s$ and $Q^a$ positive definite matrices, the problem becomes a \mync{Linear Quadratic Regulator}[LQR] problem. Details of LQR can be found elsewhere in optimal control related notebooks and is are not discussed here. 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\end{mdframed}
 
 \section{Multi-attribute Utility Function}
 
