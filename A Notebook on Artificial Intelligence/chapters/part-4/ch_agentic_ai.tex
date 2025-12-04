@@ -1,30 +1,42 @@
 \chapter{Agentic AI} 
 
-Agentic AI describes a comprehensive AI system that can make decisions and perform actions for either general or specific tasks, with minimal human intervention. It is a fundamental building block of autonomous systems.
+Agentic AI describes a comprehensive AI system that can make decisions and perform actions for either general or specific tasks with minimum human intervention. It is an important and fundamental building block of AI-driven autonomous systems.
 
-The concept of agentic AI is not new. However, in recent years it has drawn increasing attention due to the rapid advancements in LLM. LLMs provide a general-purpose language interface that makes agentic AI significantly more scalable and cost-effective. As a result, agentic AI is included as a key topic in this part of the notebook.
+The concept of agentic AI is not new. However, in recent years it has drawn increasing attention due to the rapid advancements in LLM. LLMs provide a general-purpose language interface that makes agentic AI significantly more scalable and cost-effective. For this reason, agentic AI is included as a key topic in this part of the notebook.
 
 \section{Introduction to Agentic AI}
 
-The term ``agent'' refers to an entity that functions like a human. By this definition, agentic AI refers to AI-based systems that can solve complex problems with limited human oversight. It is possible to build an agentic AI system without LLM and use only conventional AI frameworks such as MDP and ANN. While being good at specific tasks, the use of such agentic AI systems often lacks of general-purpose interfaces. With the recent rise of LLMs, the term ``agentic AI'' has been re-contextualized and is gaining increasing popularity. LLMs provide a general-purpose language interface that makes agentic AI significantly more scalable and cost-effective. 
+The term ``agent'' refers to an entity that functions like a human. By this definition, \mync{agentic AI} refers to AI-based systems that can solve complex problems with minimum human oversight. It is possible to build an agentic AI system without LLM and use only conventional AI frameworks such as MDP and ANN. While being good at specific tasks, the use of such agentic AI systems often lacks of general-purpose interfaces. With the recent rise of LLMs, agentic AI has been re-contextualized and is gaining increasing popularity. LLMs provide a general-purpose language interface that makes agentic AI significantly more scalable and cost-effective. 
 
-An LLM-incorporated agentic AI system with LLM agents is often more capable than a conventional agentic AI system at least in the following aspects.
+An LLM-incorporated agentic AI system with LLM agents is often more capable than a conventional agentic AI system in the following aspects.
 \begin{itemize}
 	\item An LLM-incorporated agentic AI system can understand human instructions in natural languages.
 	\item An LLM agent can take in unstructured data input and generate structured data output in a scalable manner.
-	\item An LLM agent can make decisions based on LLM's domain knowledge.
+	\item An LLM agent can make decisions based on its built-in domain knowledge.
 \end{itemize}
 
-Agentic AI in the context of LLMs refers to an autonomous system in which LLMs not only perform tasks, but also participate in decision-making and workflow orchestration. In such systems, LLMs serve both as computational units that solve sub-tasks, and as the high-level orchestrator that determines how the problem should be approached. An LLM in an agentic AI system may take on one or more of the following roles.
+\mync{LLM-incorporated agentic AI system} refers to an autonomous system in which LLM agents not only perform tasks, but also participate in decision-making and workflow orchestration. In such systems, LLMs serve both as computational units that solve sub-tasks, and as the high-level orchestrator that determines how the solution should be approached. An LLM in an agentic AI system may take on one or more of the following roles.
 \begin{itemize}
-	\item Decompose the original problem into smaller sub-problems.
-	\item Assign these sub-problems to LLM instances, either sequentially or in parallel.
-	\item Evaluate the outputs of LLMs and either accept the results or reject them with feedback and revision instructions.
-	\item Integrate the outputs from sub-problems into a final, coherent solution to the original problem.
-	\item Along the way, use ``tools'' to connect to other resources such as databases, computational units and and actuators.
+    \item Orchestration:
+    \begin{itemize}
+    	\item Decompose the original problem into smaller sub-problems.
+    	\item Assign these sub-problems to LLM instances, either sequentially or in parallel.
+        \item Decide the path of the pipeline based on the outputs of each AI agent.
+    \end{itemize}
+    \item Sub-tasks solving:
+    \begin{itemize}
+      \item Receive and comprehend unstructured inputs.
+      \item Use ``tools'' to connect to other resources such as databases, computational units and actuators.
+      \item Generate structured outputs.
+      \item Integrate the outputs from sub-problems into a final, coherent solution to the original problem.
+    \end{itemize}
+    \item Output guardrails:
+    \begin{itemize}
+      \item Evaluate the outputs of LLMs and either accept the results or reject them with feedback and revision instructions.
+    \end{itemize}
 \end{itemize}
 
-In contrast, a conventional LLM-integrated application without agentic AI relies on humans or pre-written deterministic code to perform all of the above tasks. From this perspective, agentic AI expands the use of LLM agents and further reduces human intervention and increases the level of automation. A comparison is illustrated in Fig.~\ref{fig:agenticwf1}. In the conventional architecture shown in (a), the workflow is either hard-coded or defined externally, and the LLM merely serves as a problem solver. In the agentic AI architecture shown in (b), the LLM autonomously orchestrates the task, determines the workflow, and governs the solution process.
+In contrast, a conventional LLM-integrated application without agentic AI relies on humans or pre-written deterministic code to perform all of the above tasks. From this perspective, agentic AI expands the use of LLM agents and further reduces human intervention and increases the level of automation. A comparison is illustrated in Fig.~\ref{fig:agenticwf1}. In the conventional architecture shown in (a), the workflow is either hard-coded or defined externally, and the LLM merely serves as a sub-task solver. In the agentic AI architecture shown in (b), the LLM autonomously orchestrates the task, determines the workflow, and governs the solution process.
 
 \begin{figure}[!htb]
 	\centering
@@ -33,7 +45,7 @@ In contrast, a conventional LLM-integrated application without agentic AI relies
 	\label{fig:agenticwf1}
 \end{figure}
 
-Another commonly used architecture is shown in Fig.~\ref{fig:agenticwf2}. In this design, one LLM generates an output while another LLM evaluates its quality, decides whether to accept or reject it, and provides revision instructions if necessary. The two LLMs collaborate in an iterative loop, refining the solution step by step. This self-evaluative architecture has been shown to significantly reduce the likelihood of low-quality or hallucinated outputs.
+Another commonly used architecture is shown in Fig.~\ref{fig:agenticwf2}. In this design, one LLM generates an output while another LLM evaluates its quality, decides whether to accept or reject it, and provides revision instructions if necessary. The two LLMs collaborate in an iterative loop, refining the solution step by step. This self-evaluative architecture significantly reduces the likelihood of low-quality or hallucinated outputs.
 
 \begin{figure}[!htb]
 	\centering
