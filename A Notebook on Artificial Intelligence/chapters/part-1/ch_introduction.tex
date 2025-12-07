@@ -10,10 +10,22 @@ Depending on the application requirement and training method, there are at least
 \begin{itemize}
   \item \mync{Supervised learning}
   
-  Given 
+  A sample is given in the form of $(x,y)$, where $x$ is the input features (usually in vector form) and $y$ the label or reference. The purpose of supervised learning is to build a machine learning system that estimates $y$ when receiving input $x$.
   
-  \item Reinforcement learning.
-  \item Unsupervised learning.
+  Example: on a house price guide website, given the size and location of a house, estimate its price on the market.
+  
+  \item \mync{Reinforcement learning}
+  
+  A sample is given in the form of $(x, a, r)$ where $x$ is the state of the system, $a$ (optional) an action that the system takes, and $r$ the reward. The purpose of reinforcement learning is to build a machine learning system that determines the optimal action to take that maximizes the utility of the system. The utility often includes not only the immediate reward, but also future foreseeable benefits. Notice that different from supervised learning, the optimal action is not included directly in the sample during training. The machine needs to find out what the optimal action is by exploring the action space.
+  
+  Example: in an autonomous driving vehicle, given the current status of the road environment and the vehicle, decide what actions to take. 
+  
+  \item \mync{Unsupervised learning}
+  
+  A sample is given in the form of $x$ only the input corpus without any label, reference or rewards. The machine is expected to find the patterns hidden in $x$. The purpose of unsupervised learning is to build a machine learning system that categories a new input based on the detected patterns. 
+  
+  Example: in a auto-fill text completion tool, given the first part of a sentence, fill in the remainder of the sentence.
+  
 \end{itemize}
 
 
@@ -23,7 +35,7 @@ Depending on the application requirement and training method, there are at least
 
 The different approaches and the development trend are briefly introduced.
 
-\subsection{Scope of AI}
+\subsection{Scope}
 
 It is not easy to give a universally consistent definition to AI because our understanding of intelligence is evolving over time. 
 
@@ -37,7 +49,7 @@ As of this writing, we have not yet achieved AGI, although recent advent in \mya
 
 It is worth mentioning that although there is not yet a comprehensive AI that is comparable with a human at every aspect, we do have AIs that are very good at specific tasks, such as classifications, processing videos and audios, playing board games, autonomous driving, etc. They are not AGI, yet still useful and productive in practice, and have started playing important roles in human industry.
 
-\subsection{Approaches of AI}
+\subsection{Approaches}
 
 There are several promising approaches to build AI and hopefully some of them will eventually lead us to AGI. Joint effort of different research subjects and backgrounds is required along the journey.
 

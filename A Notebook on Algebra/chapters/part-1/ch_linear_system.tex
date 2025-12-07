@@ -1,0 +1,139 @@
+\chapter{Linear System}
+
+This chapter studies the concepts and basic properties of linear equations and linear systems. They serve as the basis of linear algebra.
+
+\section{Linear System}
+
+This section introduced linear system and its notations.
+
+\subsection{Linear System and Solution Set}
+
+A \mync{linear equation} refers to an equation of the following form.
+\begin{eqnarray}
+  a_1 x_1 + a_2 x_2 + \ldots + a_n x_n &=& b \nonumber
+\end{eqnarray}
+which is a linear equation of variables $x_i$. The number of $x_i$ is an integer denoted by $n$ and $n\geq 1$. Variables $a_i$ and $b$ real or complex numbers known in advance. Variables $a_i$ are known as the \mync{coefficients} of the equation. 
+
+A system of linear equations on the same variable set is known as a \mync{linear system}. For example,
+\begin{eqnarray}
+a_{11} x_1 + a_{12} x_2 + \ldots + a_{1n} x_n &=& b_1 \nonumber \\
+& \vdots & \nonumber \\
+a_{m1} x_1 + a_{m2} x_2 + \ldots + a_{mn} x_n &=& b_m \nonumber
+\end{eqnarray}
+is a linear system of variables $x_i$. 
+
+A linear system has solution if there is at least one set of variables $x_i$ that fulfills all the linear equations in the system. In practice, a linear system may: 
+\begin{itemize}
+  \item have no solution;
+  \item have one unique solution;
+  \item have infinite number of solutions.
+\end{itemize}
+The solution(s) to a linear system forms its \mync{solution set}. The cardinality of the solution set of a linear system can be $0$, $1$ or infinity.
+
+\begin{mdframed}
+
+\noindent \textbf{Can a linear system have $2$ or more finite number of solutions?}
+
+A linear system cannot have $2$ or more finite number of solutions. This can be proved easily by proof by contradiction.
+
+Assume that a linear system has a finite number of $N\geq 2$ solutions. From those solutions, select two distinct set of solutions $x_i^a$ and $x_i^b$. Since the solutions are distinct, at least one of them is non-zero. Without loosing generality, let us assume that $x_i^a$ is an non-zero solution.
+
+Substituting $x_i^a$ into the linear system gives
+\begin{eqnarray}
+a_{11} x_1^a + a_{12} x_2^a + \ldots + a_{1n} x_n^a &=& b_1 \nonumber \\
+& \vdots & \nonumber \\
+a_{m1} x_1^a + a_{m2} x_2^a + \ldots + a_{mn} x_n^a &=& b_m \nonumber
+\end{eqnarray}
+Multiplying $p$ on both side of the equations gives
+\begin{eqnarray}
+a_{11} px_1^a + a_{12} px_2^a + \ldots + a_{1n} px_n^a &=& pb_1 \nonumber \\
+& \vdots & \nonumber \\
+a_{m1} px_1^a + a_{m2} px_2^a + \ldots + a_{mn} px_n^a &=& pb_m \nonumber
+\end{eqnarray}
+
+Substituting $x_i^b$ into the linear system and multiplying $(1-p)$ on both side gives
+\begin{eqnarray}
+a_{11} (1-p)x_1^b + a_{12} (1-p)x_2^b + \ldots + a_{1n} (1-p)x_n^b &=& (1-p)b_1 \nonumber \\
+& \vdots & \nonumber \\
+a_{m1} (1-p)x_1^b + a_{m2} (1-p)x_2^b + \ldots + a_{mn} (1-p)x_n^b &=& (1-p)b_m \nonumber
+\end{eqnarray}
+
+Adding the two set of equations gives
+\begin{eqnarray}
+a_{11} \left[px_1^a + (1-p)x_1^b\right]  + \ldots + a_{1n} \left[px_n^a + (1-p)x_n^b\right] &=& b_1 \nonumber \\
+& \vdots & \nonumber \\
+a_{m1} \left[px_1^a + (1-p)x_1^b\right] + \ldots + a_{mn} \left[px_1^a + (1-p)x_1^b\right] &=& b_m \nonumber
+\end{eqnarray}
+
+Therefore, $px_i^a + (1-p)x_i^b$ must also be a solution to the original linear system. 
+
+Let $p \in P = \{0, \frac{1}{N}, \frac{2}{N} \ldots, \frac{N}{N}\}$. The cardinality of $P$ is $N+1$. It can be easily proved that with non-zero $x_i^a$, $px_i^a + (1-p)x_i^b$ are distinct values for each different values $p$ taken from $P$. All of these $N+1$ distinct $px_i^a + (1-p)x_i^b$ with different $p$ are solutions to the original linear system. This contradicts with the assumption that the linear system has a finite number of $N$ solutions.
+
+\end{mdframed}
+
+A linear system with one for infinite solutions is said to be \mync{consistent}, whereas a linear system with no solution is said to be \mync{inconsistent}. Two linear systems are said to be \mync{equivalent} if they have the same solution set.
+
+\subsection{Matrix Notation}
+
+A linear system
+\begin{eqnarray}
+a_{11} x_1 + a_{12} x_2 + \ldots + a_{1n} x_n &=& b_1 \nonumber \\
+& \vdots & \nonumber \\
+a_{m1} x_1 + a_{m2} x_2 + \ldots + a_{mn} x_n &=& b_m \nonumber
+\end{eqnarray}
+can be denoted by
+\begin{eqnarray}
+Ax &=& b \label{eq:linear_system_matrix}
+\end{eqnarray}
+where $x$ is a $n\times 1$ vector, $A$ a $m\times n$ \mync{coefficient matrix}, and $b$ a $m\times 1$ vector given by
+\begin{eqnarray}
+  x &=& \left[\begin{array}{ccc}x_1 & \ldots & x_n\end{array}\right]^T \nonumber \\
+  A &=& \left[\begin{array}{ccc}a_{11} & \ldots & a_{1n} \\
+  \vdots & \ddots & \vdots \\
+  a_{m1} & \ldots & a_{mn}
+  \end{array}\right] \nonumber \\
+  b &=& \left[\begin{array}{ccc}b_1 & \ldots & b_m\end{array}\right]^T \nonumber
+\end{eqnarray}
+
+\subsection{Solution to a Linear System}
+
+Matrix $A$ and vector $b$ contains all the information necessary to solve the linear system. \mync{Elimination algorithm} can be used to find the solution set of a linear system. The details are too basic hence not giving in this notebook.
+
+As mentioned earlier, a linear system may have zero, one or infinite solutions. It is interesting to see how the numbers of solutions are determined by (certain patterns) in $A$ and $b$. Detailed discussions are given in later part of this notebook. A quick review is given below.
+
+There are mainly two factors that decide the number of solutions of a linear system.
+\begin{itemize}
+  \item The number of linearly independent equations (the definition of linearly independent will be introduced in later part of the notebook) among the $m$ equations versus the number of independent variables $n$. 
+  \item The consistency of linearly dependent equations, if any.
+\end{itemize}
+
+For a linear system to be consistent, all the linear dependent equations must be consistent. For a consistent linear system to have a unique solution, the number of linearly independent equations must match the number of independent variables.
+
+An extension to the question is given below. Consider the \mync{homogeneous system} of \eqref{eq:linear_system_matrix} which is given by
+\begin{eqnarray}
+  Ax &=& 0 \nonumber
+\end{eqnarray}
+with $b=0$ substituted into the original linear system. It is obvious that the system must be consistent, and at least the zero vector $x=0$ is a solution. The question is whether $x=0$ is the unique solution. This is determined by the number of linearly independent rows of $A$, and whether it matches with the number of the independent variables. 
+
+Let $A$ be $m \times n$, where the number of equations is $m$ and the number of independent variables, $n$. 
+
+For $m<n$, even if all the equations are linearly independent, there are still fewer linearly independent equations than the number of independent variables. Therefore, the linear system has infinite solutions. For $m=n$, the linear system has a unique solution if and only if all the equations are linearly independent. For $m>n$, there must be linearly dependent rows. There can be at most $n$ linearly independent rows and at least $m-n$ rows are linearly dependent. The linear system has a unique solution if and only if the number of the linearly independent rows, after removing those linearly dependent rows, matches $n$. 
+
+The number of linearly independent rows, in this context, is denoted by the rank of the matrix. (The formal definition of the rank of a matrix will be introduced in later part of the notebook.) For matrix $A$ which is $m\times n$, $Ax=0$ has unique solution if and only if $\mathrm{rank}(A)=n$.
+
+\section{Vector and Matrix Calculations}
+
+Basic rules for calculations with vectors and matrices are introduced in this section.
+
+\subsection{Vector Calculations}
+
+
+
+
+\subsection{Matrix Calculations}
+
+
+
+
+
+
