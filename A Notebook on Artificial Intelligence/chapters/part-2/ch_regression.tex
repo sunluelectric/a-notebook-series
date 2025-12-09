@@ -1,1 +1,120 @@
 \chapter{Regression} \label{ch:regression}
+
+Regression is one of the most fundamental and important applications of AI. This chapter introduces regression and corresponding artificial neural networks structures.
+
+\section{Linear Regression}
+
+Linear regression is one of the most basic problems of AI. Though simple, it plays a significant part in the history of AI. The methodologies used in linear regression, such as gradient descent, inspire the further development of more sophisticated artificial neural networks structures.
+
+\subsection{Problem Statement}
+
+Let
+\begin{eqnarray}
+	y &=& f(x, \epsilon) \nonumber
+\end{eqnarray}
+where $y\in\mathbb{R}$ the output, $x\in\mathbb{R}^n$ the inputs in vector form (also known as the features), $n$ the number of features, $\epsilon$ the stochasticity of the model, and $f(\cdot)$ an unknown function of $x$. The purpose of linear regression is to find such $\theta \in \mathbb{R}^n$ and $\theta_0\in\mathbb{R}$ for
+\begin{eqnarray}
+	h(x) &=& \theta^T x + \theta_0 \label{eq:linear_regression}
+\end{eqnarray}
+such that $h(x)$ is an approximation of $y$ with minimum $\norm{y-h(x)}$.
+
+\begin{mdframed}
+\noindent \textbf{Linear Regression Equation with Augmented State}
+
+Technically speaking, \eqref{eq:linear_regression} is not a linear function of $x$ due to the bias term $\theta_0$. One can make it a linear function using augmented state vector as follows.
+
+Let
+\begin{eqnarray}
+	\bar{x} &=& \left[\begin{array}{cc}
+		x_0 & x^T
+	\end{array}\right]^T \nonumber \\
+	\bar{\theta} &=& \left[\begin{array}{cc}
+		\theta_0 & \theta^T
+	\end{array}\right]^T \nonumber
+\end{eqnarray}
+with $x_0=1$ a constant augmented parameter. Equation \eqref{eq:linear_regression} then becomes
+\begin{eqnarray}
+	h(x) &=& \bar{\theta}^T\bar{x} \label{eq:linear_regression_linear}
+\end{eqnarray}
+which is a linear function of $\bar{x}$.
+
+If often does not batter which notation to use, either \eqref{eq:linear_regression} or \eqref{eq:linear_regression_linear}, so long as it is used consistently.
+
+\end{mdframed}
+
+\subsection{Solution with Gradient Descent}
+
+As a first step, collect training samples. Let there be $m$ training samples denoted by $(x^{(i)}, y^{(i)})$, $i=1,\ldots,m$.
+
+With the $m$ samples, $\theta$ and $\theta_0$ can be determined as follows.
+\begin{eqnarray}
+	\theta, \theta_0 &=& \argmin_{\theta, \theta_0} J \label{eq:linear_regression_solution} \\
+	J &=& \dfrac{1}{2} \sum_{i=1}^{m} \left(h(x^i)-y^i\right)^2 \nonumber \\
+	&=& \dfrac{1}{2} \sum_{i=1}^{m} \left(\theta^T x^i + \theta_0 -y^i\right)^2 \label{eq:linear_regression_solution_j}
+\end{eqnarray}
+with $J$ the quadratic cost function.
+
+There are different ways to solve \eqref{eq:linear_regression_solution}. For example, since the analytical form of $J$ in \eqref{eq:linear_regression_solution_j} is known, we can solve $\frac{\partial J}{\partial \theta}=0$ and $\frac{\partial J}{\partial \theta_0}=0$ to get $\theta$ and $\theta_0$. The result is given by the \mync{normal equation} below.
+\begin{eqnarray}
+	X^TX\theta &=& X^TY \nonumber \\
+	X_{m\times n} &=& \left[\begin{array}{ccc}
+		x_1^1 & \ldots & x_n^1 \\
+		\vdots & \ddots & \vdots \\
+		x_1^m & \ldots & x_n^m 
+	\end{array}\right] \nonumber \\
+	Y_{m \times 1} &=& \left[\begin{array}{c}
+		y^1 \\ \vdots \\ y^m
+	\end{array}\right] \nonumber
+\end{eqnarray}
+solving which gives
+\begin{eqnarray}
+	\theta &=& \left(X^TX\right)^{-1}X^TY
+\end{eqnarray}
+which is known as the \mync{least squares estimation} of $\theta$.
+
+For the scope of this chapter, consider using gradient decent as follows. Gradient decent may seem overkill for linear regression problem, but it is so widely used in machine learning and it is worth introducing here.
+
+In \mync{gradient descent}, initialize $\theta$ and $\theta_0$ randomly or to be zero, and use them as a starting point. Iteratively do the following. Calculate the gradient of $J$ at $(\theta,\theta_0)$ and revised $\theta$ and $\theta_0$ in the inverse direction of the gradient to get a smaller value of $J$ as follows.
+\begin{eqnarray}
+	\theta &\leftarrow& \theta - \alpha \dfrac{\partial}{\partial \theta} J \nonumber \\
+	\theta_0 &\leftarrow& \theta_0 - \alpha \dfrac{\partial}{\partial \theta_0} J \nonumber
+\end{eqnarray}
+where $\alpha$ is the \mync{learning rate} which is often a small value and can by dynamic as the number of iterations increases. Iterate until $\theta$ and $\theta_0$ converge, or until a maximum iteration number is reached, or until $J$ does not decrease further.
+
+Notice that in each iteration, all the training samples are used to calculate $\dfrac{\partial}{\partial \theta}J$ and $\dfrac{\partial}{\partial \theta_0}J$ in the gradient descent. This is known as \mync{batch gradient descent}. When the total number of samples $m$ is extremely large, batch gradient descent requires large computer memory. To save computational resources in the case the training set is very large, consider using \mync{mini-batch gradient descent}, where the $m$ training samples are divided into smaller mini batches. In each iteration, one of the mini-batch is used. It will take several iterations before the entire training samples are gone through. In the special case where there is only one sample in each mini-batch, the method is known as the \mync{stochastic gradient descent}.
+
+In general, batch gradient descent consumes more computational resources in each iteration than mini-batch or stochastic gradient descent and hence it is often very slow. However, it is more robust and helps with more stable parameter converges. When using mini-batch and stochastic gradient descent, on the other hand, the parameters may never truly asymptotically converge. Instead, they may circulate in a very small zone. Nowadays for many applications the training set is often very large, making it impractical to use batch gradient descent. Mini-batch and stochastic gradient descent are more often used. Though there is the risk that they may not asymptotically converge to the minimum, the result is often acceptable.
+
+Each time the entire training set is scanned, it is called an \mync{epoch}. In batch gradient descent, each iteration corresponds with an epoch, whereas in mini-batch gradient descent, multiple iterations correspond with an epoch.
+
+It is worth mentioning that the quadratic cost function $J$ given by \eqref{eq:linear_regression_solution_j} is a convex function of $\theta$ and $\theta_0$ (proof is neglected in this notebook), and there is no local minimum. With a small learning rate $\alpha$, global minimum of $J$ can be achieved.
+
+\subsection{Locally Weighted Regression}
+
+
+
+\section{Logistic Regression}
+
+Logistic regression, though has ``regression'' in its name, is a basic and widely used classification method. Details are introduced below.
+
+\subsection{Problem Statement}
+
+Let
+\begin{eqnarray}
+	y &=& f(x, \epsilon) \nonumber
+\end{eqnarray}
+where $y \in \{0,1\}$ the label, $x\in\mathbb{R}^n$ the features, $n$ the number of features, $\epsilon$ the stochasticity of the model, and $f(\cdot)$ an unknown function of $x$. Notice that the label categories the samples into two categories, $0$ (negative) and $1$ (positive).
+
+The purpose is to find a specific non-linear mapping that can categorize a new sample with into either the negative set or the positive set.
+
+\subsection{Solution with Newton's Method}
+
+TBA
+
+
+
+
+
+
+
+

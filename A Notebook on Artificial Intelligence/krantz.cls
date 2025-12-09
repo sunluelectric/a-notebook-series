@@ -1583,7 +1583,7 @@
 \tabcolsep 5pt
 \arrayrulewidth .5pt
 \doublerulesep 1pt
-\newcounter{subtable}[table]
+% \newcounter{subtable}[table]
 \newif\if@tablerules\@tablerulestrue
 \newif\if@centertable\@centertabletrue
 \newif\if@centertabletitle\@centertabletitletrue

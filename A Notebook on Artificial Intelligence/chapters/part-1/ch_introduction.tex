@@ -2,38 +2,11 @@
 
 This chapter discusses the concept and scope of artificial intelligence and gives a brief review of its development trend. Machine learning is a broader concept than artificial intelligence. Before the introduction of artificial intelligence, machine learning is briefly reviewed.
 
-\section{Machine Learning}
-
-\mync{Machine learning} refers to the field of study that gives computers the ability to learn without being explicitly programmed to do so. It learns from the data or experience it sees, and hence it is more capable of handling complicated stuff and more robust to exceptions. 
-
-Depending on the application requirement and training method, there are at least the following $3$ types of machine learning problems.
-\begin{itemize}
-  \item \mync{Supervised learning}
-  
-  A sample is given in the form of $(x,y)$, where $x$ is the input features (usually in vector form) and $y$ the label or reference. The purpose of supervised learning is to build a machine learning system that estimates $y$ when receiving input $x$.
-  
-  Example: on a house price guide website, given the size and location of a house, estimate its price on the market.
-  
-  \item \mync{Reinforcement learning}
-  
-  A sample is given in the form of $(x, a, r)$ where $x$ is the state of the system, $a$ (optional) an action that the system takes, and $r$ the reward. The purpose of reinforcement learning is to build a machine learning system that determines the optimal action to take that maximizes the utility of the system. The utility often includes not only the immediate reward, but also future foreseeable benefits. Notice that different from supervised learning, the optimal action is not included directly in the sample during training. The machine needs to find out what the optimal action is by exploring the action space.
-  
-  Example: in an autonomous driving vehicle, given the current status of the road environment and the vehicle, decide what actions to take. 
-  
-  \item \mync{Unsupervised learning}
-  
-  A sample is given in the form of $x$ only the input corpus without any label, reference or rewards. The machine is expected to find the patterns hidden in $x$. The purpose of unsupervised learning is to build a machine learning system that categories a new input based on the detected patterns. 
-  
-  Example: in a auto-fill text completion tool, given the first part of a sentence, fill in the remainder of the sentence.
-  
-\end{itemize}
-
-
 \section{Artificial Intelligence}
 
-\mync{Artificial intelligence}[AI] refers to the intelligent entities we human have built to mimic ourselves, or part of ourselves. It is one of the many things that is achieved (or will be achieved) with machine learning.
+\mync{Artificial intelligence}[AI] refers to the intelligent entities we human have built to mimic ourselves, or part of ourselves. 
 
-The different approaches and the development trend are briefly introduced.
+The scope and commonly seen approach is introduced in this section.
 
 \subsection{Scope}
 
@@ -49,11 +22,43 @@ As of this writing, we have not yet achieved AGI, although recent advent in \mya
 
 It is worth mentioning that although there is not yet a comprehensive AI that is comparable with a human at every aspect, we do have AIs that are very good at specific tasks, such as classifications, processing videos and audios, playing board games, autonomous driving, etc. They are not AGI, yet still useful and productive in practice, and have started playing important roles in human industry.
 
-\subsection{Approaches}
+\subsection{AI with Machine Learning}
 
-There are several promising approaches to build AI and hopefully some of them will eventually lead us to AGI. Joint effort of different research subjects and backgrounds is required along the journey.
+AI can be constructed in many ways. Imagine a rule-based system with very comprehensive rules. If done correctly, it may mimic a portion of human behavior. However, this is very difficult to achieve in practice due to the complexity in human. It is more often that we use machine learning to achieve AI. 
 
-\subsection{Development Trend}
+\mync{Machine learning} refers to the field of study that gives computers the ability to learn without being explicitly programmed to do so. Instead, it systematically learns from the data it sees.  Compared with a explicitly programmed AI, machine learning is often less labor insensitive and more robust.
+
+Depending on the application requirement and training method, there are at least the following $3$ types of machine learning problems.
+
+\vspace{0.1in}
+\noindent \textbf{Supervised Learning}
+\vspace{0.1in}
+
+In \mync{supervised learning}, samples are given in the form of $(x,y)$, where $x$ is the input features (usually in vector form) and $y$ the label or reference. The purpose of supervised learning is to build a machine learning system that estimates $y$ when receiving input $x$.
+
+Example: on a house price guide website, given the size and location of a house, estimate its price on the market.
+
+There are broadly divided two types of supervised learning problem, depending on the format of output $y$. If $y$ is a continuous value , supervise learning becomes a \mync{regression} problem which tries to map $y = f(x)$ with a (non-)linear function. If $y$ is a discrete value taken from a finite set, supervised learning becomes a \mync{classification} problem which tries to find the most likely label given the input. 
+
+Example: given a picture of an animal, classify what animal it is; given the size and location of a house, estimate its price guide.
+
+\vspace{0.1in}
+\noindent \textbf{Reinforcement Learning}
+\vspace{0.1in}
+
+In \mync{reinforcement learning}, a sample is given in the form of $(x, a, r)$ where $x$ is the state of the system, $a$ (optional) an action that the system takes, and $r$ the reward. The purpose of reinforcement learning is to build a machine learning system that determines the optimal action to take that maximizes the utility of the system. The utility often includes not only the immediate reward, but also future foreseeable benefits. 
+
+Notice that different from supervised learning, the optimal action is not included directly in the sample during training. The machine needs to find out what the optimal action is by exploring the action space.
+
+Example: in an autonomous driving vehicle, given the current status of the road environment and the vehicle, decide what actions to take; given a board game (such as chess, go, etc.) and its current board configuration, decide the best next move.
+
+\vspace{0.1in}
+\noindent \textbf{Unsupervised Learning}
+\vspace{0.1in}
+
+In \mync{unsupervised learning}, a sample is given in the form of $x$ only the input corpus without any label, reference or rewards. The machine is expected to find the patterns hidden in $x$. The purpose of unsupervised learning is to build a machine learning system that categories a new input based on the detected patterns. 
+
+Example: in a auto-fill text completion tool, given the first part of a sentence, fill in the remainder of the sentence; based on the movies a user has recently viewed, recommend them new movies that they are likely to enjoy.
 
 \section{AI Agent}
 
