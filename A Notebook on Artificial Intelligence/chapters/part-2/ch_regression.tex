@@ -2,7 +2,7 @@
 
 Regression is one of the most fundamental and important applications of AI. This chapter introduces regression and corresponding artificial neural networks structures.
 
-\section{Linear Regression}
+\section{Linear Regression} \label{sec:linear_regression}
 
 Linear regression is one of the most basic problems of AI. Though simple, it plays a significant part in the history of AI. The methodologies used in linear regression, such as gradient descent, inspire the further development of more sophisticated artificial neural networks structures.
 
@@ -89,9 +89,11 @@ Each time the entire training set is scanned, it is called an \mync{epoch}. In b
 
 It is worth mentioning that the quadratic cost function $J$ given by \eqref{eq:linear_regression_solution_j} is a convex function of $\theta$ and $\theta_0$ (proof is neglected in this notebook), and there is no local minimum. With a small learning rate $\alpha$, global minimum of $J$ can be achieved.
 
-\subsection{Locally Weighted Regression}
+\section{Locally Weighted Regression}
 
+Linear regression introduced in Section \ref{sec:linear_regression} is an example of \mync{parametric learning algorithm}, which has a fixed set of parameters $\theta$, $\theta_0$ in \eqref{eq:linear_regression} and the purpose of the machine learning is to fit them with most suitable values. In parametric learning algorithm, since the number of parameters is fixed regardless of the size of the training set, the memory consumption to trace and update the parameters is more or less limited.
 
+Locally weighted regression, on the other hand, is a \mync{non-parametric learning algorithm}. The amount of parameters to be traced grows during the training process.
 
 \section{Logistic Regression}
 
