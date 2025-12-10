@@ -1,6 +1,6 @@
 % 1-d linear regression
 a = 2.5;
-b = 1;
+b = -5;
 m = 50;
 x_sample = linspace(0,10,m);
 y_sample = a*x_sample + b + normrnd(0,1,[1,m]);
@@ -8,7 +8,7 @@ y_sample = a*x_sample + b + normrnd(0,1,[1,m]);
 ahat = 0;
 bhat = 0;
 
-num_of_epoch = 30;
+num_of_epoch = 20;
 mini_batch_size = 50;
 mini_batch_num = ceil(m/mini_batch_size);
 learning_rate = 0.0001;
@@ -49,6 +49,8 @@ end
 figure
 hold on;
 plot(x_sample, y_sample, 'rx')
+plot(x_sample,audit_ahat(5)*x_sample+audit_bhat(5), 'b.')
+plot(x_sample,audit_ahat(10)*x_sample+audit_bhat(10), 'b-.')
 plot(x_sample,ahat*x_sample+bhat, 'b-')
 grid on
 xlabel('$x$', 'Interpreter', 'latex')
