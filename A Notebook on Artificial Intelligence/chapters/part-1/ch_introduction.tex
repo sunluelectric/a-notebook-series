@@ -6,25 +6,9 @@ This chapter discusses the concept and scope of artificial intelligence and give
 
 \mync{Artificial intelligence}[AI] refers to the intelligent entities we human have built to mimic ourselves, or part of ourselves. 
 
-The scope and commonly seen approach is introduced in this section.
+It is theoretically possible to explicitly program a rule-based system that can mimic human behavior, but the realization will be too expensive and very likely not robust enough. Nowadays it has reached a common sense that machine learning should be used to build AI.
 
-\subsection{Scope}
-
-It is not easy to give a universally consistent definition to AI because our understanding of intelligence is evolving over time. 
-
-We look at ourselves and try to find out what makes human intelligent. Many concepts, models and even research areas have been proposed to explain what human intelligence is composed of. For example, human has \mync{knowledge} which is a mechanism that allows us to remember facts and experience, and human can obtain new knowledge by either \mync{reasoning} which derives new knowledge from existing knowledge, or \mync{learning} which gets knowledge from examples, datasets or experiences. Human is usually \mync{rational} when making decisions, which means we do the ``right thing'' that is most beneficial to individuals or teams. Everything above, and probably many other factors that we are not aware of yet, jointly make human intelligent.
-
-We want to build a system that can mimic human behavior and complete human jobs with the same or better quality. Ideally, the system should have human-level intelligence or even beyond. This level of intelligence is often known as \mync{artificial general intelligence}[AGI]. 
-
-\mync{Turing test}, proposed by Alan Turing, is a widely accepted operational definition of (a portion of) AGI. A computer-based system passes the test if a human interrogator, after posing some questions, cannot tell whether the responses come from a computer or a human. Obviously, to pass the Turing test, the computer should be able to process natural languages, have knowledge representations, can do human-level reasoning, can make rational decisions, can learn from conversations, and can be generative and creative. A practically more useful AGI system should be able to process not just writing languages, but also audio and video.
-
-As of this writing, we have not yet achieved AGI, although recent advent in \myabb{large language model}{LLM} (see Part IV of this notebook for more details) has for a short time made us believe that we might be close to it.
-
-It is worth mentioning that although there is not yet a comprehensive AI that is comparable with a human at every aspect, we do have AIs that are very good at specific tasks, such as classifications, processing videos and audios, playing board games, autonomous driving, etc. They are not AGI, yet still useful and productive in practice, and have started playing important roles in human industry.
-
-\subsection{AI with Machine Learning}
-
-AI can be constructed in many ways. Imagine a rule-based system with very comprehensive rules. If done correctly, it may mimic a portion of human behavior. However, this is very difficult to achieve in practice due to the complexity in human. It is more often that we use machine learning to achieve AI. 
+\subsection{Machine Learning}
 
 \mync{Machine learning} refers to the field of study that gives computers the ability to learn without being explicitly programmed to do so. Instead, it systematically learns from the data it sees.  Compared with a explicitly programmed AI, machine learning is often less labor insensitive and more robust.
 
@@ -59,6 +43,24 @@ Example: in an autonomous driving vehicle, given the current status of the road 
 In \mync{unsupervised learning}, a sample is given in the form of $x$ only the input corpus without any label, reference or rewards. The machine is expected to find the patterns hidden in $x$. The purpose of unsupervised learning is to build a machine learning system that categories a new input based on the detected patterns. 
 
 Example: in a auto-fill text completion tool, given the first part of a sentence, fill in the remainder of the sentence; based on the movies a user has recently viewed, recommend them new movies that they are likely to enjoy.
+
+AI can be constructed in many ways. Imagine a rule-based system with very comprehensive rules. If done correctly, it may mimic a portion of human behavior. However, this is very difficult to achieve in practice due to the complexity in human. It is more often that we use machine learning to achieve AI. 
+
+\subsection{Scope of AI}
+
+It is not easy to draw a universally consistent line on what AI studies because our understanding of intelligence is evolving over time. 
+
+We look at ourselves and try to find out what makes human intelligent. Many concepts, models and even research areas have been proposed to explain what human intelligence is composed of. For example, human has \mync{knowledge} which is a mechanism that allows us to remember facts and experience, and human can obtain new knowledge by either \mync{reasoning} which derives new knowledge from existing knowledge, or \mync{learning} which gets knowledge from examples, datasets or experiences. Human is usually \mync{rational} when making decisions, which means we do the ``right thing'' that is most beneficial to individuals or teams. Everything above, and probably many other factors that we are not aware of yet, jointly make human intelligent.
+
+We want to build a system that can mimic human behavior and complete human jobs with the same or better quality. Ideally, the system should have human-level intelligence or even beyond. This level of intelligence is often known as \mync{artificial general intelligence}[AGI]. 
+
+\mync{Turing test}, proposed by Alan Turing, is a widely accepted operational definition of (a portion of) AGI. A computer-based system passes the test if a human interrogator, after posing some questions, cannot tell whether the responses come from a computer or a human. Obviously, to pass the Turing test, the computer should be able to process natural languages, have knowledge representations, can do human-level reasoning, can make rational decisions, can learn from conversations, and can be generative and creative. A practically more useful AGI system should be able to process not just writing languages, but also audio and video.
+
+As of this writing, we have not yet achieved AGI, although recent advent in \myabb{large language model}{LLM} (see Part IV of this notebook for more details) has for a short time made us believe that we might be close to it.
+
+It is worth mentioning that although there is not yet a comprehensive AI that is comparable with a human at every aspect, we do have AIs that are very good at specific tasks, such as classifications, processing videos and audios, playing board games, autonomous driving, etc. They are not AGI, yet still useful and productive in practice, and have started playing important roles in human industry.
+
+\subsection{Research and Development Trends}
 
 \section{AI Agent}
 
