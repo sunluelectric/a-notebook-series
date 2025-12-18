@@ -14,9 +14,9 @@ Notice that different Linux distributions may have different default configurati
 
 \subsection{Types}
 
-There are different types of shells for Linux. The most widely used shell across commonly seen Linux distributions is \mync{Bourne Again Shell}, also known as \mync{bash}. It is derived from the ``Bourne Shell'' used in UNIX. Unless otherwise mentioned, the shell we refer to in the remainder of the notebook is bash. 
+There are different types of shells for Linux. The most widely used shell across commonly seen Linux distributions is \mync{Bourne Again Shell}, also known as ``\mync{bash}''. It is derived from the ``Bourne Shell'' used in UNIX. Unless otherwise mentioned, the shell we refer to in the remainder of the notebook is bash. 
 
-An example of a shell that calculates Fibonacci series is given below. Notice that in practice shell is mainly used for interaction with the OS and not for software development, data processing or numerical calculation. The example is only for demonstration.
+An example of a shell script that calculates Fibonacci series is given below. Notice that in practice shell is mainly used for interaction with the OS and not for software development, data processing or numerical calculation. The example is only for demonstration.
 
 \begin{lstlisting}
 #!/bin/bash
@@ -75,11 +75,11 @@ The above string is called a \mync{command prompt}, indicating the start of a us
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
 		Variable Symbol & Description \\ \hline
-		\verb|\!| & Command number of the current command in the command history. \\ 
-		\verb|\#| & Command number of the current command in the active shell. \\ 
-		\verb|\$| & User prompt ``\verb|$|'' for a regular user, or ``\verb|#|'' for the root user. \\
-		\verb|\w| & Current working directory entire path. \\ 
-		\verb|\W| & Current working directory base name. \\ 
+		\verb|\!| & Index of the current command in the command history. \\ 
+		\verb|\#| & Index of the current command in the active shell. \\ 
+		\verb|\$| & Prompt sign, ``\verb|$|'' for a regular user, or ``\verb|#|'' for the root user. \\
+		\verb|\w| & Path to current working directory. \\ 
+		\verb|\W| & Base name of current working directory. \\ 
 		\verb|\h| & Host name. \\ 
 		\verb|\d| & Current date. \\ 
 		\verb|\t| & Current time. \\ 
@@ -115,7 +115,7 @@ $ whoami
 $ grep <username> /etc/passwd
 <username>:x:<uid>:<gid>:<gecos>:<home-directory>:<shell>
 \end{lstlisting}
-In the above, \verb|whoami| is used to display the current login user's username. Command \verb|grep| is used to search content from files or folders, in this case \verb|<username>| from \verb|/etc/passwd| file. The \verb|/etc/passwd| file stores basic user information. This should return the username, the password (for encrypted password, an ``x'' is returned), UID, \myabb{Group ID}{GID}, user id info, home directory and default shell location of the user.
+In the above, \verb|whoami| is used to display the current login user's username. Command \verb|grep| is used to search content from files or folders, in this case \verb|<username>| from \verb|/etc/passwd| file. The \verb|/etc/passwd| file stores basic user information. This should return the username, the password (for encrypted password, an ``x'' is returned), UID, \myabb{Group ID}{GID}, \myabb{General Electric Comprehensive Operating System}{GECOS} field (used to amend user information, such as address, email, etc.), home directory and default shell location of the user.
 
 The following commands show the date and hostname of the machine.
 \begin{lstlisting}
@@ -169,7 +169,7 @@ for example
 \begin{lstlisting}
 $ alias pwd='pwd; ls -CF'
 \end{lstlisting}
-To permanently add alias to the shell, the alias needs to be added to \verb|~/.bashrc|, which is a piece of shell script that is automatically executed each time a new shell is started by the user. It is sometimes known as the user script.
+To permanently add alias to the shell, the alias needs to be added to \verb|~/.bashrc|, which is a piece of shell script that is automatically executed each time a new shell is started by the user. It is sometimes known as the \mync{user script}.
 
 Some commands are powerful yet difficult to use. Consider using the following two methods to check the user manual about a command.
 \begin{lstlisting}
@@ -283,7 +283,7 @@ The error greater sign \verb|2>|, \verb|2>>| works similarly with \verb|>|, \ver
 
 \section{Shell Environment Variables}\label{ch:sb:subsec:shellenvvar}
 
-\mync{Shell Environmental Variable} is either a system-defined or user-defined variable that the shell can access and keep track. Commonly used environmental variables are introduced below.
+\mync{Shell Environmental Variables} are either system-defined or user-defined variables that the shell can access and keep track. Commonly used environmental variables are introduced below.
 
 Variable \verb|PATH| is one of the most important shell environmental variables. To execute a command by its name, the OS needs to know where the command is located at. Commonly used commands shall be included in \verb|PATH|, the environment variable that traces the locations of commands, so that they can be executed anytime from any working directory. The \verb|PATH| environment variable is a collection of directories in the system, and it is initialized automatically when a shell is started. Check \verb|PATH| by
 \begin{lstlisting}
@@ -301,7 +301,7 @@ The default \verb|PATH| environment variable often contains the following direct
 To determine the location of a particular command, use \verb|type| if the command can be found in the \verb|PATH| environment. Alternatively, use \verb|locate|, \verb|mlocate| to search all the accessible files in the system to find a command. The syntax is demonstrated below.
 \begin{lstlisting}
 $ type <command>
-<command-location>
+<command location>
 \end{lstlisting}
 
 There are many useful environment variables just like \verb|PATH|. A summary is given in Table \ref{ch:sb:tab:shellenvironmentvars}.Command \verb|echo $<variable name>| can be used to check the values of these variables. Use command \verb|env| to check a list of environment variables in the shell.
@@ -348,19 +348,19 @@ Shell configuration files are loaded each time a new shell starts. User-defined 
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
 		File pathname & Description \\ \hline
-		\verb|/etc/profile| & The environment information for every user, which executes upon any user logs in. Root privilege is required to edit this file.  \\ 
-		\verb|/etc/bashrc| & Bash configuration for every user, which executes upon any user starts a shell. Root privilege is required to edit this file. \\ 
-		\verb|~/.bash_profile| & The environment information for current user, which executes upon the user logs in. \\ 
-		\verb|~/.bashrc| & Bash configuration for current user, which executes upon the user starts a shell. \\ 
-		\verb|~/.bash_logout| & Bash log out configuration for current user, which executes upon the user logs out or exit the last bash shell. \\ \hline
+		\verb|/etc/profile| & The environment information for every user. It executes upon any user logs in. Root privilege is required to edit this file.  \\ 
+		\verb|/etc/bashrc| & Bash configuration for every user. It executes upon any user starts a shell. Root privilege is required to edit this file. \\ 
+		\verb|~/.bash_profile| & The environment information for current user. It executes upon the user logs in. \\ 
+		\verb|~/.bashrc| & Bash configuration for current user. It executes upon the user starts a shell. \\ 
+		\verb|~/.bash_logout| & Bash log out configuration for current user. It executes upon the user logs out or exit the last bash shell. \\ \hline
 	\end{tabularx}
 \end{table}
 
-To customize the shell behavior for a user, the most commonly method is to edit his \verb|~/.bashrc| which is executed automatically each time he starts a shell. The file is human-readable and self-explanatory.
+To customize the shell behavior for a user, the most common method is to edit their \verb|~/.bashrc| which is executed automatically each time the user starts a shell. The file is human-readable and self-explanatory.
 
 \section{Basic Shell Script}
 
-We have been discussing one-time shell commands so far. This section briefly introduces shell script programming, which is a collection of reusable shell commands to serve a specific purpose. Shell script can be used both as a standalone commands pipeline and a function that takes into arguments, processes them, and generates results.
+We have been discussing single-line shell commands for one-time usage so far. This section briefly introduces shell script programming. A shell script is a collection of reusable shell commands to serve a specific purpose. Shell script can be used both as a standalone commands pipeline and a function that takes into arguments, processes them, and generates results.
 
 In practice, shell scripts are mainly used for system configuration and software management. It is rarely used for data processing, as there are more handy tools such as C/C++ and Python.
 
@@ -370,14 +370,17 @@ A typical shell script looks like the following
 \begin{lstlisting}
 #!/bin/bash
 
-# <comment>
+# <introduction to the script>
 
-<VARIABLE>=<value>
-...=...
+<variable 1>=<value 1>
+<variable 2>=<value 2>
+...
 
 <main body>
 \end{lstlisting}
-where \verb|#!/bin/bash| is known as the \mync{shebang}, which tells the shell what program to interpret the script with. Shebang is useful when the script is made executable and it is started by its name. In this example, \verb|/bin/bash| is used as the interpreter of the script. Item \verb|# <comment>| gives a brief explanation to the script. Items \verb|<VARIABLE>=<value>| assigns global variables of the script.
+where \verb|#!/bin/bash| is known as the \mync{shebang}, which tells the shell what program to use to execute the script. With shebang, once the script is made executable, the user can execute the script with only the script name and not specifying the program. In this example, \verb|/bin/bash| is used as the interpreter of the script. 
+
+Item \verb|# <comment>| adds comment to the script. It is often a good practice to briefly introduce the script in the beginning. Items \verb|<VARIABLE>=<value>| assigns global variables used by the script and they should be listed before the main body of the script.
 
 \subsection{Basic Syntax}
 
