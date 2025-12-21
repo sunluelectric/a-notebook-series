@@ -1,16 +1,16 @@
 \chapter{Database}
 
-Database and database manage systems are introduced in this and the next few chapters. Both relational and non-relational databases are covered. Tools and commands to manipulate databases are introduced.
+Different databases and database manage systems are introduced in this and the next few chapters. Both relational and non-relational databases are covered. Tools and commands to manipulate databases are introduced.
 
 \section{Relational Database}
 
 \mync{Database}, in a broad view, refers to an organized collection of data of any format. In this sense, any file format that hosts information in a meaningful and explainable way, such as CSV, XML and JSON, is a database. These file formats often work fine when the data is stored in a centralized manner with small data size.
 
-As the data size grows, the robustness and efficiency of storing and retrieving data become challenging, and different database models have been proposed to tackle it. Dedicated software, namely \mync{Database Manage System}[DBMS], is developed to manage and maintain the database and provide an interface for the users to create, retrieve, update and delete data. Different database models require different database engines and DBMS, and different DBMS may provide different interfaces for the users.
+As the data size grows, the robustness and efficiency of storing and retrieving data become challenging, and different database models have been proposed to tackle it. Dedicated software, namely \mync{database manage system}[DBMS], is developed to manage and maintain the database and provide an interface for the users to create, retrieve, update and delete data. Different database models require different database engines and DBMSes, and different DBMSes may provide different interfaces for the users.
 
-There are many database models available on the market. The most widely seen database models can be divided into two categories, namely the \mync{Relational Database}[RDB] and the non-relational databases.
+There are many database models available on the market. The most widely seen database models can be divided into two categories, namely the relational database and the non-relational databases.
 
-Relational database was proposed in 1970s by IBM. Some important features of a relational database include the following.
+\mync{Relational database}[RDB] was proposed in 1970s by IBM. Some important features of a relational database include the following.
 \begin{itemize}
 	\item Structure the data as ``relations'', which is a collection of tables, each consisting of a set of rows (also known as tuple/record) and columns (also known as attribute/field).
 	\item For each table, a primary key, either being a column or a combination of several columns, is defined that can uniquely distinguish a row from others.
@@ -930,7 +930,7 @@ ADD FOREIGN KEY (payment_method_id)
 REFERENCES payment_method(payment_method_id);
 \end{lstlisting}
 
-\section{General Ways to Connect to RDB}
+\section{RDB Connectivity}
 
 This section discusses the tools or program interfaces used along with the DBMS. Many software programs provide interface or toolkit to connect to a database. For example, MATLAB uses database toolbox to connect to SQLite or Microsoft SQL server. Python, as a ``glue'' language, also provide variety of packages to connect to different databases. IDEs such as VSCode can connect to databases using extensions.
 

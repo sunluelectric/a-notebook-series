@@ -1,6 +1,6 @@
 \chapter{Git} \label{ch:git}
 
-Git is a distributed version control system for tracking changes during the software development, and it can be used on multiple platforms including Windows, Unix/Linux and MacOS. This chapter introduces the basic use of Git on a local Linux machine and with a remote repository host server such as GitHub. 
+Git is a distributed version control system for tracking changes during the software development, and it can be used on multiple platforms including Windows, Unix/Linux and macOS. This chapter introduces the basic use of Git on a local Linux machine and with a remote repository host server such as GitHub. 
 
 Git-based version control is widely used in association with \myabb{Continuous Integration and Continuous Deployment}{CI/CD}. CI/CD is an important concept in nowadays software development and deployment. GitHub Actions is GitHub's CI/CD solution and it is also briefly introduced.
 
@@ -8,7 +8,7 @@ Git-based version control is widely used in association with \myabb{Continuous I
 
 \mync{Git}, initially created by Linus Torvalds in 2005, is a distributed version control system for tracking changes in source code and files. It is helpful with maintaining data integrity during the collaborative development of software in distributed non-linear workflows. Git is free and open-source under GNU general public license.
 
-Git introduces \mync{Git repository}, which refers to the ``ecosystem'' Git uses to manage a project. This refers to the \verb|.git| file associated with each Git-managed project, using which Git traces the development of the project. 
+Git introduces \mync{Git repository}, which can be interpreted as the ``ecosystem'' Git uses to manage a project. This refers to the \verb|.git| file associated with each Git-managed project, using which Git traces the development of the project. 
 
 With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and they can synchronize with centralized remote servers. It introduces \mync{branch} to manage the concurrent development of different features of the project, where the main branch (also known as master branch) is the stable and shared repository among everyone, and the child branches (also known as feature branches) are copies of the main branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the main branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
 \begin{figure}[htbp]
