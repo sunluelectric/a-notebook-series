@@ -2,11 +2,13 @@
 
 Different databases and database manage systems are introduced in this and the next few chapters. Both relational and non-relational databases are covered. Tools and commands to manipulate databases are introduced.
 
-\section{Relational Database}
+\section{Database and Database Management System}
 
 \mync{Database}, in a broad view, refers to an organized collection of data of any format. In this sense, any file format that hosts information in a meaningful and explainable way, such as CSV, XML and JSON, is a database. These file formats often work fine when the data is stored in a centralized manner with small data size.
 
 As the data size grows, the robustness and efficiency of storing and retrieving data become challenging, and different database models have been proposed to tackle it. Dedicated software, namely \mync{database manage system}[DBMS], is developed to manage and maintain the database and provide an interface for the users to create, retrieve, update and delete data. Different database models require different database engines and DBMSes, and different DBMSes may provide different interfaces for the users.
+
+\section{Relational Database}
 
 There are many database models available on the market. The most widely seen database models can be divided into two categories, namely the relational database and the non-relational databases.
 
@@ -99,7 +101,7 @@ It is recommended that the following naming conventions be applied to databases,
 \item Column:
 \begin{itemize}
 	\item Use singular name for columns.
-	\item Avoid using over simplified terms such as ``id''.
+	\item Avoid using over simplified and not self-explanatory terms.
 	\item Use only lowercase if possible.
 \end{itemize}
 \item Alias:
@@ -130,7 +132,8 @@ SQL supports variety of data types, and different DBMS may cover slightly differ
 		\hline
 		Data Type & Description \\ \hline
 		INT/INTEGER & Integer, with a range of -2147483648 to 2147483647. When marked ``UNSIGNED'', the range becomes 0 to 4294967295. Some relevant data types are TINYINT, SMALLINT, MEDIUMINT, and BIGINT, which have different ranges. \\ 
-		DEC/DECIMAL(size,d) & An exact fixed-point number. The total number of digits and the number of digits after decimal point are specified by ``size'' and ``d'', respectively. Some relevant data types are DOUBLE(size,d), which can also be used to specify a floating point. Notice that DEC/DECIMAL is usually preferable in most occasions. \\ 
+		DEC/DECIMAL(size,d) & Decimal number, with fixed-precision. The total number of digits and the number of digits after the decimal point are specified by ``size'' and ``d'' respectively. Since the precision is fixed and can be customized, DEC/DECIMAL is recommended in finance applications. \\ 
+		DOUBLE and FLOAT & Decimal number, with approximated precision. FLOAT can be used for general purposes, while DOUBLE for scientific data where higher resolution is expected. \\
 		CHAR(size) & A fixed length string with the specified length in characters. \\ 
 		VARCHAR(size) & A variable length string, with the specified maximum string length in characters. \\ 
 		BOOL/BOOLEAN & This is essentially a 1-digit integer, where 0 stands for ``false'' and otherwise ``true''. \\ 
