@@ -1,21 +1,29 @@
 \chapter{Functional}
 
-Functional refers to a mapping of functions or curves (belonging to a certain set) to a definite number. Details are introduced in this chapter.
+Functional refers to a mapping of functions or curves that belong to a certain set to a definite number. Details are introduced in this chapter.
 
-\section{A Motivating Example}
+\section{Motivating Example}
 
 One of the most famous problems solved by functional and calculus of variation is the brachistochrone problem, which is described in the box below.
+
+Apparently, the brachistochrone problem is an optimization problem where the objective is to find a curve that minimizes a cost function, in this case, the travelling time of the particle. This differs from a conventional optimization problem where the target is to find the optimum values for a limited number of variables. 
+
+The curve, or equivalently the analytical function $y=f(x)$ that describes the curve, contains infinite number of ``pixels''. From that sense, the problem can be taken as an optimization problem with infinite number of degrees. Therefore, the problem cannot be converted into a conventional optimization problem easily.
 
 \begin{shortbox}
 \Boxhead{Brachistochrone Problem}
 
-Let A and B be two fixed points in a vertical plane, where A is higher than B (from gravity perspective) and A, B are not aligned vertically. Draw a curve that joins A and B. A particle is released from A and it slides along the curve traveling from A to B driven by gravity. The velocity of the particle, at any given position, is decided by the position of the particle relevant to $A$ (speed) and the tangent of the curve at the particle position (direction). A demonstration is given by Fig. \ref{ch12fig:brachistochrone_description}.
+Let A and B be two fixed points in the space that are not aligned either vertically or horizontally. Without loss of generality, let A be higher than B. Draw a curve that joins A and B. A particle is released from A and it slides along the curve traveling from A to B driven by gravity. 
+
+Fraction effect is ignored, and hence the velocity of the particle at any given position on the curve is purely decided by the vertical position of the particle relevant to A (speed) and the tangent of the curve at the position (direction). 
+
+A demonstration plot is given by Fig. \ref{ch12fig:brachistochrone_description}.
 
 The brachistochrone problem tries to find the curve that minimizes the time it takes for the particle to travel from A to B. The objective is to find the analytical solution $y=f(x)$ that describes such curve.
 
 \end{shortbox}
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=200pt]{chapters/part-4/figures/brachistochrone_description.png}
 	\caption{Brachistochrone problem description.} \label{ch12fig:brachistochrone_description}
