@@ -39,19 +39,19 @@ Definition of functional as well as its relationship with the associated finite 
 
 Let $y(x)$ be a function of $x$. Let $J[y]$ be a functional of $x$, $y$ and values derived from them. For example, $J[y]$ may look like
 \begin{eqnarray}
-	J = \int_{a}^{b} \sqrt{1+y\prime^2} dx \nonumber
+	J = \int_{a}^{b} \sqrt{1+y\textprime^2} dx \nonumber
 \end{eqnarray}
 which is the length of curve $y(x)$ from $x=a$ to $x=b$. The study of the properties of $J[y]$ with different choice of $y(x)$ is known as the \mync{calculus of functional}. 
 
 Calculus of functional is often difficult to solve. \mync{Calculus of variation} is a special case of calculus of functional that only studies the choice of $y$ that maximizes or minimizes $J$. Even with that been said, calculus of variation is still difficult to solve in general, and the analytical solution of $y(x)$ exists for only certain forms of $J$. This notebook only considers a small subset of the problem where $J$ follows the following form
 \begin{eqnarray}
 	y &=& y(x) \nonumber \\
-	J &=& \int_{a}^{b}F\left(x, y, y\prime \right)dx \label{eq:covbasiceq}
+	J &=& \int_{a}^{b}F\left(x, y, y\textprime \right)dx \label{eq:covbasiceq}
 \end{eqnarray}
 
 Notice that as far as this notebook concerns, the functional \eqref{eq:covbasiceq} must possess \mync{localization property}, where if the curve $y(x)$ is split into segments whose functional calculated separately, the sum of the values of the functional would be equal to the functional of the whole curve. The form in \eqref{eq:covbasiceq} satisfies this property. This does not generally apply if $J$ is defined arbitrarily. For example, consider
 \begin{eqnarray}
-	J &=& \frac{\int_{a}^{b}x\sqrt{1+y\prime^2}dx}{\int_{a}^{b}\sqrt{1+y\prime^2}dx} \nonumber
+	J &=& \frac{\int_{a}^{b}x\sqrt{1+y\textprime^2}dx}{\int_{a}^{b}\sqrt{1+y\textprime^2}dx} \nonumber
 \end{eqnarray}
 which does not follow \eqref{eq:covbasiceq} and it is a non-local functional.
 
@@ -112,7 +112,7 @@ Consider function space $\mathcal{C}(a,b)$ that consists of all continuous $y(x)
 
 Consider function space $\mathcal{D}_1(a,b)$ that consists of all continuous and $1$-st order differentiable functions $y(x)$ defined on a closed interval $[a,b]$. Let $y^1$, $y^2$ be two functions in the function space. The following norm is often used to define the difference of $y^1$ and $y^2$.
 \begin{eqnarray}
-  \norm{y^1(x) - y^2(x)}_1 &=& \max_{a\leq x \leq b} |y^1(x)-y^2(x)| \nonumber \\ && + \max_{a\leq x \leq b} |y^{1\prime}(x)-y^{2\prime}(x)| \label{eq:functionspacenorm1}
+  \norm{y^1(x) - y^2(x)}_1 &=& \max_{a\leq x \leq b} |y^1(x)-y^2(x)| \nonumber \\ && + \max_{a\leq x \leq b} |y^{1\textprime}(x)-y^{2\textprime}(x)| \label{eq:functionspacenorm1}
 \end{eqnarray} 
 
 Consider function space $\mathcal{D}_n(a,b)$ that consists of all continuous and up to $n$-th order differtentiable functions $y(x)$ defined on a closed interval $[a,b]$. Let $y^1$, $y^2$ be two functions in the function space. The following norm is often used to define the difference of $y^1$ and $y^2$.
@@ -149,24 +149,89 @@ where $\alpha_i(x)$ is a fixed function, defines a linear functional on $\mathca
  
 \section{Variation of Functional}
 
-Let $J[y]$ be a functional defined on some normed linear space. Let
+The definition and properties of variation of functional are introduced as follows.
+
+\subsection{Definition}
+
+Let $J[y]$ be a functional defined on some normed linear space. Notice that $J[y]$ is not necessarily linear. Let
 \begin{eqnarray}
 \Delta J[h] &=& J[y + h] - J[y] \label{eq:functionaldifference}
 \end{eqnarray}
-be the increment corresponding to $h$ of $y$. Notice that $J[y]$ is not necessarily linear. If $J[y]$ is indeed linear, \eqref{eq:functionaldifference} gives
+be the increment corresponding to $h$ at $y$. Obviously, $\Delta J[h]$ depends on both $h$ and $y$. 
+Consider fixed $y$. If $\Delta J[h]$ in \eqref{eq:functionaldifference} can be formulated by
 \begin{eqnarray}
-  \Delta J[h] &=& \varphi(h) \nonumber
+  \Delta J[h] &=& \varphi(h) + \varepsilon \norm{h} \label{eq:differential_of_functional}
 \end{eqnarray}
-depends on only $h$ but not $y$. Here, $\varphi(h) = J[h]$ is a linear functional of $h$. If $J[y]$ is nonlinear, \eqref{eq:functionaldifference} can be formulated as
+where $\varphi(h)$ is a linear functional of $h$, playing the principal linear part of $\Delta J[y]$, and $\varepsilon \norm{h}$ the remainder, and $\varepsilon \rightarrow 0$ as $\norm{h} \rightarrow 0$, making $\varepsilon \norm{h}$ an infinitesimal of higher order than $\norm{h}$. In this case, $J[y]$ is said to be a \mync{differentiable functional}. 
+
+The principal linear part of the increment $\varphi(h)$ is ``almost'' $\Delta J[h]$ but differs from it by an infinitesimal of order higher than $\norm{h}$, and it is known as the \mync{variation of functional} of $J[y]$, often denoted by $\delta J[h]$.
+
+It can be proved that the differetial of a differentiable functional is unique, i.e, \eqref{eq:differential_of_functional} formulation is unique for a given $J[y]$ and fixed $y$.
+
+\subsection{Extremum} \label{sec:functional_extremum}
+
+Functional $J[y]$ has extremum at $\hat{y}$ if for any $y$ in a neighborhood of $\hat{y}$, $J[y]-J\left[\hat{y}\right]$ does not change its sign. The ``neighborhood'' is defined from $\norm{y-\hat{y}}$ perspective.
+
+If there exists such $\varepsilon$ that for any $\norm{y-\hat{y}}_1 < \varepsilon$, $J[y]-J\left[\hat{y}\right]$ has the same sign, $J[y]$ at $\hat{y}$ is said to be a \mync{strong extremum}. If the same applies for $\norm{y-\hat{y}}_0 < \varepsilon$, $J[y]$ at $\hat{y}$ is said to be a \mync{weak extremum}. Every strong extremum is always a weak extremum, and this can be easily proved from how the norms are defined.
+
+A necessary condition for $J[y]$ to have an extremum at $\hat{y}$ is that
 \begin{eqnarray}
-  \Delta J[h] &=& \phi(h) + \varepsilon \norm{h} \nonumber
+\delta J[h] &=& 0 \label{eq:functional_extremum_necessary_condition}
 \end{eqnarray}
-where $\varphi(h)$ is a linear functional of $h$, playing the principal linear part of $J[y]$, and $\varepsilon \norm{h}$ the remainder, and $\varepsilon \rightarrow 0$ as $\norm{h} \rightarrow 0$. In this case, $J[y]$ is said to be differentiable. The principal linear part of the increment $\phi(h)$ is ``almost'' $\Delta J[h]$ but differs from it by an infinitesimal of order higher than $1$ relative to $\norm{h}$, and it is known as the \mync{variation of functional} of $J[y]$, often denoted by $\delta J[h]$.
+at $\hat{y}$ for all permissible $h$. This can be proved by contradiction and the proof is neglected here.
 
+\section{Euler's Equation}
 
+Euler's equation plays an important role in calculus of variation. It is the solution, or more precisely, the necessary condition for the extremum of a simple variational problem.
 
+\subsection{The Simplest Varational Problem}
 
+Consider the following varational problem.
 
- 
+\begin{shortbox}
+\Boxhead{The Simplest Variational Problem}
 
+Let $F(x,y,y\textprime)$ be a function that has continuous $1$-st and $2$-nd order partial derivative w.r.t. all its arguments. Let $y$ be a continuously differentiable function of $x$ in $[a,b]$, with boundary conditions $y(a)=A$ and $y(b)=B$. Consider functional
+\begin{eqnarray}
+	J[y] &=& \int_{a}^{b} F\left(x, y, y\textprime\right)dx \label{eq:euler_equation_functional}
+\end{eqnarray}
+The purpose is to find the function $y$ which is a weak extremum of $J[y]$.
 
+\end{shortbox}
+
+The differential of functional corresponds with \eqref{eq:euler_equation_functional} can be calculated as follows. First, consider the increment of $J[y]$ when $y$ changes to $y+h$, where $h$ is a small perturbation function that satisfies the boundary conditions $h(a)=0$ and $h(b)=0$. The increment is given by
+\begin{eqnarray}
+	\Delta J &=& J[y+h] - J[y] \nonumber \\
+	&=& \int_{a}^{b} \left[F\left(x, y+h, y\textprime + h\textprime\right) - F\left(x, y, y\textprime\right)\right]dx + \ldots \nonumber \\
+	&=& \int_{a}^{b} \left[\dfrac{\partial F}{\partial y}h + \dfrac{\partial F}{\partial y\textprime}  h \textprime \right]dx + \ldots \nonumber \\ 
+	&=& \int_{a}^{b} \left[F_yh + F_{y\textprime}h \textprime \right]dx + \ldots \label{eq:euler_equation_principal_linear}
+\end{eqnarray}
+where 
+\begin{eqnarray}
+	F_y &=& \dfrac{\partial F}{\partial y} \nonumber \\
+	F_{y\textprime} &=& \dfrac{\partial F}{\partial y\textprime} \nonumber
+\end{eqnarray}
+and $h\textprime$ the change of $y\textprime$ corresponds to $h$, i.e.,
+\begin{eqnarray}
+	&& y\textprime + h\textprime = \dfrac{d(y+h)}{dx} = y\textprime + \dfrac{dh}{dx} \nonumber \\
+	&& h\textprime = \dfrac{dh}{dx} \nonumber
+\end{eqnarray}
+and $+ \ldots$ the higher order infinitesimal terms.
+
+Equation \eqref{eq:euler_equation_principal_linear} gives the linear principal part of $\Delta J[y]$ and hence it is the variation of functional $J[y]$ denoted by
+\begin{eqnarray}
+\delta J = \int_{a}^{b} \left[F_yh + F_{y\textprime} h \textprime \right]dx \label{eq:euler_equation_variation}
+\end{eqnarray}
+
+To find an extremum of the functional, substitute \eqref{eq:euler_equation_variation} into \eqref{eq:functional_extremum_necessary_condition}, which yields
+\begin{eqnarray}
+F_y - \dfrac{d}{dx}F_{y\textprime} = 0 \label{eq:eular_equation}
+\end{eqnarray}
+
+Equation \eqref{eq:eular_equation} is known as the \mync{Euler's equation}, and it is the necessary condition for the extremum of functional \eqref{eq:euler_equation_functional}. Euler's equation is a $2$-nd order differential equation (contains terms $y\textprime$ and $y\textprime\textprime$), and its solution will in general depend on two boundary conditions, which are $y(a)=A$ and $y(b)=B$ in this problem.
+
+It is worth mentioning that it may tern out that the curve $y$ corresponds with the extremum of the functional is not $2$-nd order differentiable. It can be proved that if $F(x,y,y\textprime)$ in \eqref{eq:euler_equation_functional} has continuous $1$-st and $2$-nd order derivatives w.r.t. all its arguments and $y$ that satisfies Euler's equation has continuous $1$-st order derivative, then it must also has continous $2$-nd order derivative. 
+
+\subsection{Special Cases}
+
+Equation \eqref{eq:euler_equation_functional} assumes $F(x,y,y\textprime)$ to be a function of three arguments. The resulted Euler's equation is a $2$-nd order differential equation. When $F(x,y,y\textprime)$ reduces to $F(x,y)$, $F(x,y\textprime)$ and $F(y,y\textprime)$, simplefied Euler's equations may apply. They are discussed in this section.

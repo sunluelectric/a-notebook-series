@@ -16,7 +16,7 @@ Consider
     y &=& 2x_1^2 + x_2^2 + 2x_1x_2. \label{ch6eq:motivatingexample}
 \end{eqnarray}
 
-Q1: Let $x_2 = 1$ be a constant. Derive $y$ as a function of $x_1$, and calculate its derivative with respect to $x_1$. Similarly, let $x_1 = 1$ be a constant and derive $y$ as a function of $x_2$, and calculate its derivative with respect to $x_2$.
+Q1: Let $x_2 = 1$ be a constant. Derive $y$ as a function of $x_1$, and calculate its derivative w.r.t. $x_1$. Similarly, let $x_1 = 1$ be a constant and derive $y$ as a function of $x_2$, and calculate its derivative w.r.t. $x_2$.
 
 Q2: At $(x_1, x_2) = (1, 1)$, consider small vibrations $\Delta x_1$ and $\Delta x_2$. Approximate $\Delta y$ as a function of $\Delta x_1$ and $\Delta x_2$ using differentiation.
 
@@ -35,7 +35,7 @@ Let $x_2=1$ be constant. Equation \eqref{ch6eq:motivatingexample} becomes
 \begin{eqnarray}
 	y = f(x_1, 1) = 2x_1^2 + 2x_1 + 1, \nonumber
 \end{eqnarray}
-which is given by the intersection of  curved surface (equation \eqref{ch6eq:motivatingexample}) and the vertical flat ($x_2=1$) given by the red solid line in Fig. \ref{ch6fig_motivatingexp}. Its derivative with respect to $x_1$ can be easily obtained as
+which is given by the intersection of  curved surface (equation \eqref{ch6eq:motivatingexample}) and the vertical flat ($x_2=1$) given by the red solid line in Fig. \ref{ch6fig_motivatingexp}. Its derivative w.r.t. $x_1$ can be easily obtained as
 \begin{eqnarray}
 	\dfrac{d}{dx_1}f(x_1,1) &=& 4x_1 + 2. \label{ch6eq:motivatingexpdx1}
 \end{eqnarray}
@@ -44,7 +44,7 @@ Similarly, at $x_1 = 1$, \eqref{ch6eq:motivatingexample} becomes
 \begin{eqnarray}
 	y = f(1, x_2) = x_2^2 + 2x_2 + 2, \nonumber
 \end{eqnarray}
-which is given by the blue solid line in Fig. \ref{ch6fig_motivatingexp}. Its derivative with respect to $x_2$ is
+which is given by the blue solid line in Fig. \ref{ch6fig_motivatingexp}. Its derivative w.r.t. $x_2$ is
 \begin{eqnarray}
 	\dfrac{d}{dx_2}f(1,x_2) &=& 2x_2 + 2. \label{ch6eq:motivatingexpdx2}
 \end{eqnarray}
@@ -55,7 +55,7 @@ Consider small vibrations $\Delta x_1$ and $\Delta x_2$. Firstly, let $x_2$ rema
 \end{eqnarray}
 where $\dfrac{d}{dx_1}f(x_1,1)$ is given in \eqref{ch6eq:motivatingexpdx1}.
 
-On top of \eqref{ch6eq:partialdifx1}, consider vibration $\Delta x_2$. The derivative of function $f(1+\Delta x_1, x_2)$ with respect to $x_2$ depends on $\Delta x_1$ and it is generally unknown without specifying $\Delta x_1$. However, since \eqref{ch6eq:motivatingexample} is continuous and ``smooth'' (Notice that ``smooth'' has specific definition in mathematics. Here, just take its literal meaning: it is perfectly polished without any edges or spikes.), we can intuitively understand that when $\Delta x_1$ is small, $\frac{d}{dx_2}f(1+\Delta x_1, x_2) \approx \frac{d}{dx_2}f(1, x_2)$, and $\frac{d}{dx_2}f(1+\Delta x_1, x_2) \rightarrow \frac{d}{dx_2}f(1, x_2)$ as $\Delta x_1 \rightarrow 0$. Thus, we have
+On top of \eqref{ch6eq:partialdifx1}, consider vibration $\Delta x_2$. The derivative of function $f(1+\Delta x_1, x_2)$ w.r.t. $x_2$ depends on $\Delta x_1$ and it is generally unknown without specifying $\Delta x_1$. However, since \eqref{ch6eq:motivatingexample} is continuous and ``smooth'' (Notice that ``smooth'' has specific definition in mathematics. Here, just take its literal meaning: it is perfectly polished without any edges or spikes.), we can intuitively understand that when $\Delta x_1$ is small, $\frac{d}{dx_2}f(1+\Delta x_1, x_2) \approx \frac{d}{dx_2}f(1, x_2)$, and $\frac{d}{dx_2}f(1+\Delta x_1, x_2) \rightarrow \frac{d}{dx_2}f(1, x_2)$ as $\Delta x_1 \rightarrow 0$. Thus, we have
 \begin{eqnarray}
 	\Delta y &=& \left(f(1+\Delta x_1, 1 + \Delta x_2) -  f(1+\Delta x_1, 1)\right) + \left(f(1+\Delta x_1, 1) - f(1, 1)\right) \nonumber \\
 	&\approx& \dfrac{d}{dx_2}f(1,x_2) \Delta x_2 + \dfrac{d}{dx_1}f(x_1,1) \Delta x_1. \label{ch6eq:motivatingresult1}
@@ -76,7 +76,7 @@ The denotation $\left.\dfrac{d}{dx_1}f(x_1,x_2)\right|_{x_2 \textup{~is constant
 \begin{eqnarray}
 	\dfrac{\partial}{\partial x_1} f(x_1, x_2) &=& 4x_1 + 2x_2. \nonumber
 \end{eqnarray}
-The operator $\dfrac{\partial}{\partial x}$ is called \textit{partial derivative} (with respect to $x$), often followed by a multivariable function $f(x,y)$ where $x$ is one of its inputs. It is similar to the derivative, but emphasizing that the interested function is multivariable, and the derivative of this function with respect to ONLY ONE variable is being studied (and the rest variables assumed constant). Since $\partial f(x)$ is rarely or never used as the infinitesimal of $f(x)$, it will hopefully be less ambiguous.
+The operator $\dfrac{\partial}{\partial x}$ is called \textit{partial derivative} (w.r.t. $x$), often followed by a multivariable function $f(x,y)$ where $x$ is one of its inputs. It is similar to the derivative, but emphasizing that the interested function is multivariable, and the derivative of this function w.r.t. ONLY ONE variable is being studied (and the rest variables assumed constant). Since $\partial f(x)$ is rarely or never used as the infinitesimal of $f(x)$, it will hopefully be less ambiguous.
 
 The formal definition of partial derivative is given in next Section \ref{ch6sec:partialtotalderivative}.
 
@@ -100,7 +100,7 @@ which yields $x_1=x_2=0$.
 
 \section{Partial Derivative} \label{ch6sec:partialtotalderivative}
 
-In the case of single input scalar function $f(x), x \in \mathbb{R}$, there is no point to define partial and total derivative, as the derivative with respect to that single variable by itself is the total derivative.
+In the case of single input scalar function $f(x), x \in \mathbb{R}$, there is no point to define partial and total derivative, as the derivative w.r.t. that single variable by itself is the total derivative.
 
 In the case of multivariable function with multiple inputs, $f(x), x \in \mathbb{R}^{R\times 1}$, the definition partial derivative is given below.
 
@@ -108,7 +108,7 @@ In the case of multivariable function with multiple inputs, $f(x), x \in \mathbb
 	\textbf{Definition of Partial Integral}:
 	\\
 	\\
-	Consider function $y = f(x_1,...,x_n)$ where $y$ is the scalar output and $x = \left[x_1, ..., x_n\right]^T$ is a $n\times 1$ vector input. The partial derivative of $y=f(x)$ with respect to $x_i$ is given by
+	Consider function $y = f(x_1,...,x_n)$ where $y$ is the scalar output and $x = \left[x_1, ..., x_n\right]^T$ is a $n\times 1$ vector input. The partial derivative of $y=f(x)$ w.r.t. $x_i$ is given by
 	\begin{eqnarray}
 		\dfrac{\partial}{\partial x_i}f(x) = \lim_{\Delta x_i \rightarrow 0} \dfrac{f(x_1,..., x_i + \Delta x_i,...,x_n)-f(x_1,...,x_n)}{\Delta x_i}, \label{ch6eq:formalpartialderivative}
 	\end{eqnarray}
