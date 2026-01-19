@@ -1,6 +1,6 @@
 \chapter{Decision Making}
 
-An AI agent should be capable of making decisions. Based on what it observes, what it believes, and what it desires, the agent must determine the most beneficial action or sequence of actions to take. Different from a conventional optimal control problem where the plant and the cost function are assumed known, one of the biggest challenges for the AI agent is that it does not possess sufficient prior knowledge about the plant, and in many cases it needs to learn from successful and failed trails using both offline and online data, and gradually improve its performance.
+An AI agent should be capable of making decisions. Based on what it observes, what it believes and what it desires, the agent must determine the most beneficial action or sequence of actions to take. Different from a conventional optimal control problem where the plant and the cost function are assumed known, one of the biggest challenges for the AI agent is that it does not possess sufficient prior knowledge about the plant, and in many cases it needs to learn from successful and failed trails using both offline and online data, and gradually improve its performance.
 
 This chapter studies decision making with AI. Markov decision process is discussed in detail, as it is one of the most widely used decision-making frameworks.
 
@@ -14,7 +14,7 @@ Intuitively, a rational AI agent should always choose the action that maximizes 
 
 When an AI agent decides to perform an action among all the actions it can take, the system transitions from one state to another. Let the \mync{transition model} be denoted by $P(s\textprime|a,e)$, where $e$ represents the evidence or observation of the system, incorporating the agent’s awareness of its current origin state, $a$ the action taken, and $s\textprime$ the destination state. Notice that $P(s\textprime|a,e)$ is given in the form of probability, which captures uncertainty in the system.
 
-The benefit of reaching a state is quantitatively described by the \mync{utility of a state} $U(s)$. The utility $U(s)$ usually includes not only the immediate reward gained from state $s$, but also the foreseeable future benefits that may arise from reaching $s$ as an intermediate state. For now, do not bother how $U(s)$ can be calculated. Later in Sections \ref{sec:mdp} and \ref{sec:pomdp}, the systematic calculation of $U(s)$ will be introduced.
+The ``value'' of a state is quantitatively described by the \mync{utility of state} $U(s)$. The utility $U(s)$ usually includes not only the immediate reward gained from state $s$, but also the foreseeable future benefits that may arise from reaching $s$ as an intermediate state. For now, do not bother how $U(s)$ can be calculated. Later in Sections \ref{sec:mdp} and \ref{sec:pomdp}, the systematic calculation of $U(s)$ will be introduced.
 
 The \mync{expected utility of action} $EU(a|e)$, given evidence $e$, over possible landing states $s_i \in S$, can be given by
 \begin{eqnarray}
@@ -27,7 +27,7 @@ where $S\textprime$ is the set of all probable destination states by taking acti
 
 Reward and utility are two different concepts in the context of this chapter. Reward represents the instantaneous profit gained by the system by performing an action or a transition, or by leaving or landing on a state. Utility, on the other hand, is a comprehensive evaluation of ``how much an action or a state worth'', by considering not only the instantaneous reward, but also expected maximum reward (often with discount rate applied) to be received in the future. 
 
-As will be shown later, utility can be derived from fixed rewards and transition model.
+As will be shown later, utility can be derived from rewards and transition model.
 
 Both reward and utility are relative values and they can be positive, zero or negative.
 
@@ -92,7 +92,7 @@ In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and ut
 \begin{mdframed}
 	\noindent \textbf{Are there alternatives to MEU?}
 	
-	The expected utility of an action is calculated using \eqref{eq:expected_utility}. An AI agent using \eqref{eq:expected_utility} and \eqref{eq:emu} to make decisions. However, can we base decision making on other measures of utility? For example, consider the worst-case utility defined by
+	The expected utility of an action is calculated using \eqref{eq:expected_utility}. An AI agent may use \eqref{eq:expected_utility} and \eqref{eq:emu} to make decisions. However, can we base decision making on other measures of utility? For example, consider the worst-case utility defined by
 	\begin{eqnarray}
 		U^{\mathrm{worst}}(a|e) &=& \min\{R(s_i,a,e) + \gamma U(s_i)\,|\,P(s_i|a,e) > 0\} \nonumber
 	\end{eqnarray}
@@ -111,7 +111,7 @@ In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and ut
 	Let $U(a|e)$ (or simply $U(a)$) denote the utility of action $a$. The specific form of $U(a)$, whether it represents expected utility or another valid measure, is acceptable as long as the following conditions are satisfied:
 	\begin{itemize}
 		\item $U(a)$ must exist for every action.
-		\item $U(a)$ must reflect preference: if $U(a_1) > U(a_2)$, then $a_1$ is preferred over $a_2$; if $U(a_1) = U(a_2)$, they are indifferent.
+		\item $U(a)$ must reflect preference: if $U(a_1) > U(a_2)$, then $a_1$ is preferred over $a_2$; if $U(a_1) = U(a_2)$, then they are indifferent.
 		\item The preferences reflected by $U(a)$ satisfy the axioms of utility theory.
 	\end{itemize}
 	

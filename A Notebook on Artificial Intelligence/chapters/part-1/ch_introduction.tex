@@ -1,6 +1,6 @@
 \chapter{Introduction to Artificial Intelligence}
 
-This chapter discusses the concept and scope of artificial intelligence and gives a brief review of its development trend. Machine learning is a broader concept than artificial intelligence. Before the introduction of artificial intelligence, machine learning is briefly reviewed.
+This chapter discusses the concept and scope of artificial intelligence and gives a brief review of its development trend.
 
 \section{Artificial Intelligence}
 
@@ -10,9 +10,9 @@ It is theoretically possible to explicitly program a rule-based system that can 
 
 \subsection{Machine Learning}
 
-\mync{Machine learning} refers to the field of study that gives computers the ability to learn without being explicitly programmed to do so. Instead, it systematically learns from the data it sees.  Compared with a explicitly programmed AI, machine learning is often less labor insensitive and more robust.
+\mync{Machine learning} refers to the field of study that gives computers the ability to learn (from the data) without being explicitly programmed to do so. Compared with a explicitly programmed AI, machine learning is often less labor insensitive and more robust.
 
-Depending on the application requirement and training method, there are at least the following $3$ types of machine learning problems.
+Depending on the labeling of samples, there are at least the following $3$ types of machine learning problems.
 
 \vspace{0.1in}
 \noindent \textbf{Supervised Learning}
@@ -20,19 +20,15 @@ Depending on the application requirement and training method, there are at least
 
 In \mync{supervised learning}, samples are given in the form of $(x,y)$, where $x$ is the input features (usually in vector form) and $y$ the label or reference. The purpose of supervised learning is to build a machine learning system that estimates $y$ when receiving input $x$.
 
-Example: on a house price guide website, given the size and location of a house, estimate its price on the market.
+There are broadly divided two types of supervised learning problem, depending on the format of output $y$. If $y$ is a continuous value, the supervise learning problem is also known as a \mync{regression} problem which tries to map $y = f(x)$ with a function. If $y$ is a discrete value taken from a finite set, the supervised learning problem is also known as a \mync{classification} problem which tries to find the most likely label for the corresponding input. 
 
-There are broadly divided two types of supervised learning problem, depending on the format of output $y$. If $y$ is a continuous value , supervise learning becomes a \mync{regression} problem which tries to map $y = f(x)$ with a (non-)linear function. If $y$ is a discrete value taken from a finite set, supervised learning becomes a \mync{classification} problem which tries to find the most likely label given the input. 
-
-Example: given a picture of an animal, classify what animal it is; given the size and location of a house, estimate its price guide.
+Example: on a house price guide website, given the size and location of a house, estimate its price on the market (regression); given a picture of an animal, classify what animal it is (classification).
 
 \vspace{0.1in}
 \noindent \textbf{Reinforcement Learning}
 \vspace{0.1in}
 
-In \mync{reinforcement learning}, a sample is given in the form of $(x, a, r)$ where $x$ is the state of the system, $a$ (optional) an action that the system takes, and $r$ the reward. The purpose of reinforcement learning is to build a machine learning system that determines the optimal action to take that maximizes the utility of the system. The utility often includes not only the immediate reward, but also future foreseeable benefits. 
-
-Notice that different from supervised learning, the optimal action is not included directly in the sample during training. The machine needs to find out what the optimal action is by exploring the action space.
+In \mync{reinforcement learning}, a sample is given in the form of $(x, a, r)$ where $x$ is the state of the system, $a$ (optional) an action that the system takes, and $r$ the reward. At any state, the system can take an action, transforms to a new state, and meantime gains some rewards. The purpose of reinforcement learning is to build a machine learning system that determines the optimal actions to take that maximizes the utility of the system. The utility often includes not only the immediate reward, but also future foreseeable benefits. 
 
 Example: in an autonomous driving vehicle, given the current status of the road environment and the vehicle, decide what actions to take; given a board game (such as chess, go, etc.) and its current board configuration, decide the best next move.
 
@@ -40,11 +36,13 @@ Example: in an autonomous driving vehicle, given the current status of the road 
 \noindent \textbf{Unsupervised Learning}
 \vspace{0.1in}
 
-In \mync{unsupervised learning}, a sample is given in the form of $x$ only the input corpus without any label, reference or rewards. The machine is expected to find the patterns hidden in $x$. The purpose of unsupervised learning is to build a machine learning system that categories a new input based on the detected patterns. 
+In \mync{unsupervised learning}, a sample is given in the form of $(x)$, i.e., only the input corpus but not any label, reference or rewards. The machine is expected to find the patterns hidden in $(x)$. The purpose of unsupervised learning is to build a machine learning system that categories a new input based on the detected patterns. 
 
 Example: in a auto-fill text completion tool, given the first part of a sentence, fill in the remainder of the sentence; based on the movies a user has recently viewed, recommend them new movies that they are likely to enjoy.
 
-AI can be constructed in many ways. Imagine a rule-based system with very comprehensive rules. If done correctly, it may mimic a portion of human behavior. However, this is very difficult to achieve in practice due to the complexity in human. It is more often that we use machine learning to achieve AI. 
+\vspace{0.1in}
+
+Machine learning plays an important tole in AI. AI can be constructed in many ways. Imagine a rule-based system with very comprehensive rules. If done correctly, it may mimic a portion of human behavior. However, this is very difficult to achieve in practice due to the complexity in human. It is more often that we use machine learning to achieve AI. 
 
 \subsection{Scope of AI}
 
