@@ -1,0 +1,48 @@
+\chapter{Cloud Computing}
+
+Amazon Web Service, Microsoft Azure, Google Cloud Platform, etc., are examples of services provided by famous cloud service providers. While the cloud services provided are not necessarily Linux, they are closely tied to applications development and delivery, and hence are introduced here.
+
+In this appendix chapter, a general introduction to cloud services is given. AWS services are then introduced as examples. Notice that similar services are very likely provided by other cloud service providers as well.
+
+\section{Introduction to Cloud Services}
+
+\mync{Cloud services} refer to a collection of managed cloud-based platforms and services including  computing, networking, data storing, and many more. The most important advantage of cloud-based solutions, comparing with the traditional data-center-based solutions, is that it can be easily scaled up and down with little or no blackout time, allowing customers to pay only for operating expenses but not capital expenses and redundancies. Cloud solutions are famous for high availability, robustness, accessibility and efficiency.
+
+When developing applications on the cloud, the developer and the cloud service provider share the responsibilities to provide and sustain the applications. There are at least the following different modes as summarized in Table \ref{tab:cloudservicetier}.
+\begin{itemize}
+	\item \myabb{Infrastructure as a Service}{IaaS}
+	\item \myabb{Platform as a Service}{PaaS}
+	\item \myabb{Function as a Service}{FaaS}, also known as serverless.
+	\item \myabb{Software as a Service}{SaaS}
+\end{itemize}
+
+\begin{table}[!htb]
+	\centering
+	\caption{Levels of cloud services and the corresponding responsibilities shared between the cloud service provider and the user.} \label{tab:cloudservicetier}
+	\begin{tabularx}{\textwidth}{cccccc}
+		\hline
+		\multirow{2}{*}{Model} & \multirow{2}{*}{Hardware} & App & APP & APP & \multirow{2}{*}{Examples} \\ 
+		& & Runtime & Coding & Features & \\ \hline
+		IaaS & C & D & D & D & Virtual machine \\
+		PaaS & C & C & D & D & Cloud-based website \\
+		FaaS & C & C & C & D & AWS Lambda function \\
+		SaaS & C & C & C & C & Microsoft 365 \\
+		\hline
+	\end{tabularx}
+	\begin{flushleft}
+		\footnotesize
+		C: prepared by cloud service provider; \\
+		D: prepared by developer.
+	\end{flushleft}
+\end{table}
+
+When we as individual users talk about cloud, we usually refer to the \mync{public cloud services} provided by Amazon, Microsoft, Google, IBM, etc. Do notice that public cloud services do not make up the entire cloud market. Many enterprises also have \mync{private cloud services} on premises and their employees can connect to the cloud from the internal network. There are also \mync{hybrid cloud services} that integrate private and public clouds, allowing a user to use services provided by the public clouds while storing sensitive data in the private clouds.
+
+Main public cloud providers include \myabb{Amazon Web Services}{AWS}, Microsoft Azure, \myabb{Google Cloud Platform}{GCP}, and many more. While there are overlaps among the services they provide, each of them usually has some unique services and features as selling points, such as Amazon DynamoDB and Azure CosmosDB. The impression is that AWS focuses more on IaaS, hence more flexible, while Azure focuses more on PaaS and SaaS, hence more available and easier to use. The user should choose the cloud service provider based on the problem and there is not a globally best cloud service provider for all problems.
+
+
+
+
+
+
+
