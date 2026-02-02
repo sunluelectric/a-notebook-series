@@ -10,7 +10,7 @@ Git-based version control is widely used in association with \myabb{Continuous I
 
 Git introduces \mync{Git repository}, which can be interpreted as the ``ecosystem'' Git uses to manage a project. This refers to the \verb|.git| file associated with each Git-managed project, using which Git traces the development of the project. 
 
-With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and they can synchronize with centralized remote servers. It introduces \mync{branch} to manage the concurrent development of different features of the project, where the main branch (also known as master branch) is the stable and shared repository among everyone, and the child branches (also known as feature branches) are copies of the main branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the main branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
+With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and they can synchronize with centralized remote servers. It introduces \mync{branch} to manage the concurrent development of different features of the project, where the main branch (also known as the master branch) is the stable and shared repository among everyone, and the feature branches are copies of the main branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the main branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-3/figures/gitflow.png}
@@ -21,7 +21,7 @@ It is possible that multiple branches work on relevant parts in a project and ca
 
 CLI is often used to manage a Git repository. Some commonly used commands are shown in Fig. \ref{ch:sma:fig:gitflow} with more to be introduced later. Notice that a graphical user interface is also available. However, in the scope of this notebook, command line is mostly used.
 
-\section{Git Setup}
+\section{Basic Setup}
 
 Git and its relevant documents can be obtained from its official website \cite{git2025}. In many Linux distributions, Git is pre-installed. If Git is missing, follow the instructions on the official website to install it. The installation procedure may differ with different Linux distributions.
 
@@ -73,7 +73,7 @@ For simplicity, assume that there is only one branch in the repository, namely t
 
 The project directory is split into two parts, outside \verb|./.git/| the workspace, and inside \verb|./.git/| the Git repository. The workspace has the up-to-date project contents and it is directly managed by the user, while Git repository is managed by Git. The user should not manage the repository directly unless using the Git interface.
 
-Inside the Git repository are metadata of the workspace files such as which files have been changed since the last deployment, etc. It also stores a full back up of every historical versions of the project (with powerful compressing mechanisms, of course). It is worth mentioning that instead of recording the changes of a file from version to version, Git records the snapshot of the file in every version, unless it is left untouched between two consecutive versions.
+Inside the Git repository are metadata of the workspace files such as which files have been changed since the last deployment, etc. It also stores a full back up of every historical versions of the project (with powerful compressing techniques, of course). It is worth mentioning that instead of recording the changes of a file from version to version, Git records the snapshot of the file in every version, unless it is left untouched between consecutive versions.
 
 Figure \ref{ch:sma:fig:gitbasics} gives a demonstration of how Git manages the project directory. Git categorizes files in the workspace into the following states: untracked, modified (unstaged), staged, and unmodified. This is shown by Fig. \ref{ch:sma:fig:gitbasics}. A brief explanation of each state is given in Table \ref{ch:sma:tab:gitbasics}. More details are given later.
 
