@@ -2,7 +2,7 @@
 
 Linux command line interface, usually known as the ``shell'' or ``terminal'', is the most available, flexible and powerful tool for the users and programs to interact with the OS and perform actions.
 
-Notice that the shell is not compulsory for casual users when graphical desktop environment is available. Still, it is strongly recommended that the users shall understand at least the basics of the shell since it is more flexible and powerful than the graphical desktop and hence can become handy from time to time when configuring certain software.
+Notice that the shell is not compulsory for casual users when graphical desktop environment is available. Still, it is strongly recommended that the users shall understand at least the basics of the shell since it is more flexible and powerful than the graphical desktop and hence can become handy from time to time when configuring certain software or troubleshooting the system.
 
 Linux shell will be used frequently in the remainder of this notebook.
 
@@ -48,7 +48,7 @@ or make the file executable and call it directly using
 $chmod +x <filename>
 $<filename>
 \end{lstlisting}
-The result is shown below. Here $10$ in entered when it prompts for input.
+The result is shown below. Here $10$ is entered when it prompts for input.
 \begin{lstlisting}
 Enter a number: 10
 Fibonacci sequence up to 10 terms:
@@ -70,7 +70,7 @@ such as
 
 The above string is called a \mync{command prompt}, indicating the start of a user command. By default, for regular users the ending of the prompt is \verb|$|, while for the root user the ending is \verb|#|. The prompt can be customized by changing the environment variable \verb|PS1|. See Sections \ref{ch:sb:subsec:shellenvvar} and \ref{ch:sb:subsec:customizeshell} for details about environment variables and shell customization methods respectively. Commonly seen items are summarized in Table \ref{ch:sb:tab:promptvariable}.
 
-\begin{table}
+\begin{table}[!htb]
 	\centering \caption{Commonly seen items in shell prompt as in \texttt{PS1}.}\label{ch:sb:tab:promptvariable}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
@@ -89,7 +89,7 @@ The above string is called a \mync{command prompt}, indicating the start of a us
 	\end{tabularx}
 \end{table}
 
-For the term \mync{root user} or root for short, we are referring to a special user with username and \myabb{User ID}{UID} ``root'' and 0 respectively. This UID gives him the administration privilege over the machine, such as adding/removing users, changing ownership of files, etc. For security purposes, root user shall not be used on a daily basis. For this reason, the root user's authentication is often deactivated by default. This can be done by setting its login password to invalid.
+For the term \mync{root user} or root for short, we are referring to a special user with username and \myabb{User ID}{UID} ``root'' and 0 respectively. This UID gives the user the administration privilege over the machine, such as adding/removing users, changing ownership of files, etc. For security purposes, root user shall not be used on a daily basis. For this reason, the root user's authentication is often deactivated by default. This can be done by setting its login password to invalid.
 
 Notice that the root user is different from a \mync{sudoer}, the latter of which is basically a regular user equipped with \mync{sudo privilege}. Depending on the configuration, a sudoer may temporarily switch to the root user using \verb|sudo su| as follows.
 \begin{lstlisting}
