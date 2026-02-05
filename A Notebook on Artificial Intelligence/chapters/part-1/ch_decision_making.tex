@@ -1,12 +1,12 @@
 \chapter{Decision Making}
 
-An AI agent should be capable of making decisions. Based on what it observes, what it believes and what it desires, the agent must determine the most beneficial action or sequence of actions to take. Different from a conventional optimal control problem where the plant and the cost function are assumed known, one of the biggest challenges for the AI agent is that it does not possess sufficient prior knowledge about the plant, and in many cases it needs to learn from successful and failed trails using both offline and online data, and gradually improve its performance.
+An AI agent should be capable of making decisions. Based on what it observes, believes and desires, the agent must determine the most beneficial action or sequence of actions to take. Different from a conventional optimal control problem where the plant and the cost function are assumed known, one of the biggest challenges for the AI agent is that it does not possess sufficient prior knowledge about the plant, and in many cases it needs to learn from successful and failed trails using both offline and online data, and gradually improve its performance.
 
-This chapter studies decision making with AI. Markov decision process is discussed in detail, as it is one of the most widely used decision-making frameworks.
+This chapter studies decision making with AI. \myabb{Markov Decision Process}{MDP} is one of the most widely used decision-making frameworks. MDP and its varieties are discussed in detail.
 
 \section{Utility}
 
-To formulate a decision-making problem mathematically, the first step is to define the \mync{utility function} that quantifies the value of an action or a system state. Decision making is essentially the process of maximizing utility. This section introduces the concept of utility and its formulation, and how utility is used in decision making with AI.
+Decision making is all about performing the most beneficial action. To formulate a decision-making problem mathematically, the first step is to define the \mync{utility function} that quantifies the value of an action or a system state. This section introduces the concept of utility and its formulation, and how utility is used in decision making with AI.
 
 \subsection{Utility Theory}
 
@@ -16,7 +16,7 @@ When an AI agent decides to perform an action among all the actions it can take,
 
 The ``value'' of a state is quantitatively described by the \mync{utility of state} $U(s)$. The utility $U(s)$ usually includes not only the immediate reward gained from state $s$, but also the foreseeable future benefits that may arise from reaching $s$ as an intermediate state. For now, do not bother how $U(s)$ can be calculated. Later in Sections \ref{sec:mdp} and \ref{sec:pomdp}, the systematic calculation of $U(s)$ will be introduced.
 
-The \mync{expected utility of action} $EU(a|e)$, given evidence $e$, over possible landing states $s_i \in S$, can be given by
+The \mync{expected utility of action} $EU(a|e)$, given evidence $e$, over possible landing states $s_i \in S$, is given by
 \begin{eqnarray}
 	EU(a|e) &=& \sum_{s_i \in S\textprime} P(s_i|a,e) \left(R(s_i,a,e) + \gamma U(s_i)\right) \label{eq:expected_utility}
 \end{eqnarray}
@@ -25,7 +25,7 @@ where $S\textprime$ is the set of all probable destination states by taking acti
 \begin{mdframed}
 \noindent \textbf{Reward versus Utility}
 
-Reward and utility are two different concepts in the context of this chapter. Reward represents the instantaneous profit gained by the system by performing an action or a transition, or by leaving or landing on a state. Utility, on the other hand, is a comprehensive evaluation of ``how much an action or a state worth'', by considering not only the instantaneous reward, but also expected maximum reward (often with discount rate applied) to be received in the future. 
+Reward and utility are two different concepts in the context of this chapter. Reward represents the instantaneous profit gained by the system by performing an action or a transition, or by leaving or landing on a state. Utility, on the other hand, is a comprehensive evaluation of ``how much an action or a state is worth'', by considering not only the instantaneous reward, but also expected maximum reward (often with discount rate applied) to be received in the future. 
 
 As will be shown later, utility can be derived from rewards and transition model.
 
@@ -87,14 +87,14 @@ Using \eqref{eq:expected_utility}, the expected utility of $a_1$ can be computed
 \end{eqnarray}
 Similarly, $EU(a_2|e) = -5.6$, $EU(a_3|e) = -5.1$, and $EU(a_4|e) = -4.6$. Therefore, according to \eqref{eq:emu}, the rational decision is to take action $a_4$, i.e., move “RIGHT.”
 
-In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and utilities $U(s_i)$ are assumed known from the very beginning of the game. This is rarely the case in practical problems. Sections~\ref{sec:mdp} and~\ref{sec:pomdp} will introduce variety of methods such as value iteration and Q-learning which will become handy when the aforementioned information is unknown from the beginning.
+In this example, all states $s_i$, transition probabilities $P(s_i|a,e)$, and utilities $U(s_i)$ are assumed known from the very beginning of the game. This is rarely the case in practical problems. Sections~\ref{sec:mdp} and~\ref{sec:pomdp} will introduce variety of methods such as value iteration and Q-learning which will become handy when the aforementioned information is unknown.
 
 \begin{mdframed}
 	\noindent \textbf{Are there alternatives to MEU?}
 	
 	The expected utility of an action is calculated using \eqref{eq:expected_utility}. An AI agent may use \eqref{eq:expected_utility} and \eqref{eq:emu} to make decisions. However, can we base decision making on other measures of utility? For example, consider the worst-case utility defined by
 	\begin{eqnarray}
-		U^{\mathrm{worst}}(a|e) &=& \min\{R(s_i,a,e) + \gamma U(s_i)\,|\,P(s_i|a,e) > 0\} \nonumber
+		U^{\mathrm{worst}}(a|e) &=& \min_{s_i\in S\textprime}\{R(s_i,a,e) + \gamma U(s_i)\,|\,P(s_i|a,e) > 0\} \nonumber
 	\end{eqnarray}
 	Instead of maximizing expected utility, could we maximize worst-case utility?
 	
