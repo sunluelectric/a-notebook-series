@@ -19,7 +19,6 @@
 \usepackage{color}
 \usepackage{flexisym}
 \usepackage{url}
-% \usepackage{undertilde}
 \usepackage{matlab-prettifier}
 \usepackage{flexisym}
 \usepackage{mdframed}
@@ -49,7 +48,7 @@
  {
   \seq_if_in:NnTF \g_used_concepts_seq {#1}
    {
-    \PackageWarning{}{The term `#1` has already been defined.}
+    % \PackageWarning{}{The term `#1` has already been defined.}
     \IfValueTF {#2}
     {
       #2
@@ -64,8 +63,8 @@
      {
       \seq_if_in:NnTF \g_used_abbreviations_seq {#2}
        {
-        #2
-        \PackageWarning{}{The abbreviation `#2` has been assigned elsewhere before defining `#1`.}
+        \textbf{#1}~(#2)
+        % \PackageWarning{}{The abbreviation `#2` has been assigned elsewhere before defining `#1`.}
        }
        {
         \seq_gput_right:Nn \g_used_abbreviations_seq {#2}
@@ -78,15 +77,16 @@
    }
  }
 
+
 \NewDocumentCommand{\myabb}{m m}
  {
   \seq_if_in:NnTF \g_used_abbreviations_seq {#2}
    {
     #2
-    \PackageWarning{}{The abbreviation `#2' has already been defined.}
+    % \PackageWarning{}{The abbreviation `#2' has already been defined.}
    }
    {
-    \seq_gput_right:Nn \g_used_abbreviations_seq {#1}
+    \seq_gput_right:Nn \g_used_abbreviations_seq {#2}
     #1~(#2)
    }
  }
