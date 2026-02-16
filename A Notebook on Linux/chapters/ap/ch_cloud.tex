@@ -401,24 +401,40 @@ EC2 Placement Group addresses the first and second points, while Auto-Scaling Gr
   
   Spread Placement places multiple EC2 instances across multiple hardware racks, each rack with its own power and network source. There is at most one instance on a rack. In some cases, it is possible to spread the instances across racks in different AZs in the same region. This is helpful with enhancing the system robustness.
   
+  However, there is a limited number of racks in an AZ or in a region, and hence it is challenging to deploy massive instances (in the scale of hundreds or even thousands) using Spread Placement.
+  
   \item Partition Placement
   
   Partition Placement is the hybrid of the two placements. It defines ``logical partitions'', where each partition represents a rack. EC2 instances in the same partition enjoys low latency, while EC2 instances in different partitions are physically separated and hence unlikely to fail altogether.
   
+  In the case where many instances need to be deployed and it is challenging to use Spread Placement, consider Partition Placement instead, and let some instances share the same partition.
+  
 \end{itemize}
 
-Here, a ``rack'' can be taken as a group of servers in an AZ that has its distinct power and network source from other racks. Notice that with Spread Placement, it is required that all instances must be deployed on different racks. There is a limited number of racks in a region, and hence it is challenging to deploy massive instances (in the scale of hundreds or even thousands instances) using Spread Placement. In such case, consider Partition Placement instead, and let some instances share the same partition.
-
-EC2 Auto-Scaling Group, on the other hand, allows the user to automatically scale up and down the number of the identically deployed EC2 instances depending on the computation burden.
-
-
-
-
-
+EC2 Auto-Scaling Group, on the other hand, allows the user to automatically scale up and down the number of the identically deployed EC2 instances depending on the computation burden. From this sense, EC2 Auto-Scaling Group is like a EC2 orchestration tool.
 
 \subsection{AWS Lambda Function}
 
-AWS Lambda is a FaaS compute service that allows the user to run their code without provisioning or managing servers. The user only provides the script and specify the trigger of the script. When the trigger is fulfilled, AWS executes the script. The user does not need to worry about the allocation of the resources, such as VMs or memories, to execute the script.
+AWS Lambda is an event-driven FaaS computing service. The user provides the script and specify the trigger (such as database update, etc.) Upon triggered, AWS executes the script. The user does not need to worry about the allocation of the resources such as VMs or memories to execute the script. 
+
+Since AWS Lambda needs to access AWS managed services, it should be assigned with a proper role.
+
+
+
+
+
+
+\subsection{AWS Container Management}
+
+
+
+
+
+
+
+
+
+
 
 
 
