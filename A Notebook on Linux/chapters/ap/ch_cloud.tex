@@ -335,19 +335,81 @@ In addition to the default on-demand charging, there are other charging models a
 
 \subsection{EC2 Security Group}
 
+EC2 Security Group plays as the firewall of the VM. It is basically a table that describes what inbound and outbound connectivity are allowed in the given network, the IP addresses, the port, and the protocol.
+
+An example is given below in Fig. \ref{fig:aws_ec2_security_group}. By default, the Security Bound allows outbound traffic, and it is put into the default \myabb{Virtual Private Cloud}{VPC} (more to be introduced in later sections) that has Internet access. That explains why a EC2 instance can access the Internet by default.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{chapters/ap/figures/aws_ec2_security_group.png}
+	\caption{Creating Security Group for EC2.} \label{fig:aws_ec2_security_group}
+\end{figure}
+
+Once a Security Group is defined, it can be re-used for multiple EC2 instances. It is possible to modify or change Security Group for a EC2 instance on the fly.
+
+Notice that the use of Security Group is not limited to EC2. Security Group for other services, such as private networks, will be introduced in later sections. When there is a gateway, there can be a security group.
+
 \subsection{EC2 Network Adapter}
 
-\subsection{EC2 Access Control and Connectivity}
+A EC2 instance connects to the Internet or to other devices in the network via a network adapter, also known as a network interface. When launching a EC2 instance, a network adapter is attached by default and outbound Internet access is enabled. There are at least the following network adapters that the user can choose when launching a EC2 instance.
+\begin{itemize}
+  \item \myabb{Elastic Network Interface}{ENI}: the default general purpose low-cost network adapter
+  \item Enhanced Networking: the faster network adapter with a bandwidth of $10$Gbps to $100$Gbps
+  \item \myabb{Elastic Fabric Adapter}{EFA}: the very-high-performance network adapter that requires large and in-time data transmission
+\end{itemize}
+
+It is possible to attach multiple network adapters to a EC2 instance. However, there must be at least one network interface, known as the primary network interface, attached to the instance. Network interface can be attached to a EC2 instance when it is running, stopped, or being launched. They are known as hot attach, warm attach and cold attach, respectively.
+
+\subsection{EC2 Connectivity and Access Control}
+
+When an EC2 is launched, the user can login to the EC2 instance via several ways. One of the easiest and most commonly used way is introduced below.
+\begin{enumerate}
+  \item When launching an EC2 instance, the user should create (or use an existing) key pair and attach it to the EC2 instance. This involves downloading the private key to the user's local machine. Later, the user can remote login to the EC2 instance with the private key. Consider changing the permission of the private key using \texttt{chmod 400 <key name>.pem}.  When launching the EC2 instance, select allow SSH login. This will enable SSH login in the Security Group of the EC2 instance.
+  \item Once the EC2 instance is launched, get its public IP address from AWS console.
+  \item SSH login to the EC2 instance using the IP address and the private key as follows:
+  \begin{lstlisting}
+ssh ec2-user@<ip address> -i <key name>.pem
+  \end{lstlisting}
+  where \verb|ec2-user| is the default login user name.
+  \item Use the EC2 normally just like any other VM.
+\end{enumerate}
+
+When an EC2 is launched, by default it is a independent \myabb{Virtual Machine}{VM} and has no access to other AWS services such as databases. For VMs that need to access AWS services, it is recommended that a role be created and attached to the EC2 instance. When a user logs into the system, they can temporarily assign their role to the EC2 instance as follows.
+
+\begin{enumerate}
+    \item Remote login to the system as introduced earlier. Note that at this point it is simply an individual VM and has no access to any AWS service. The EC2 instance does not identify the user. The private key \verb|.pem| file cannot be used to identify the user who login to the system.
+    \item Run command \verb|aws configure| and follow the configuration wizard. At some point, it asks the user for the secret access key pair. Once the user is identified, the user's role is temporarily attached to the EC2 instance.
+\end{enumerate} 
+
 
 \subsection{EC2 Placement Group and Scaling Group}
 
+Sometimes it is desirable to deploy multiple EC2 instances for the following reasons.
+\begin{itemize}
+  \item Multiple EC2 instances, each with a different task, need to work together for the application.
+  \item Multiple EC2 instances are deployed to enhance system robustness, in which case an instance is a back up to another instance.
+  \item Multiple EC2 instances, each with identical configuration and perform the same task, is deployed as a scale up to the single instance to share load.
+\end{itemize}
 
+EC2 Placement Group addresses the first and second points, while Auto-Scaling Group addresses the third. They are introduced below. There are at least the following different types of EC2 Placement Groups.
+\begin{itemize}
+  \item Cluster Placement
+  
+  Cluster Placement places multiple EC2 instances with different tasks on the same rack for low latency and high throughput.
+  
+  \item Spread Placement
+  
+  Spread Placement places multiple EC2 instances across multiple hardware racks, each rack with its own power and network source. There is at most one instance on a rack. In some cases, it is possible to spread the instances across racks in different AZs in the same region. This is helpful with enhancing the system robustness.
+  
+  \item Partition Placement
+  
+  Partition Placement is the hybrid of the two placements. It defines ``logical partitions'', where each partition represents a rack. EC2 instances in the same partition enjoys low latency, while EC2 instances in different partitions are physically separated and hence unlikely to fail altogether.
+  
+\end{itemize}
 
+Here, a ``rack'' can be taken as a group of servers in an AZ that has its distinct power and network source from other racks. Notice that with Spread Placement, it is required that all instances must be deployed on different racks. There is a limited number of racks in a region, and hence it is challenging to deploy massive instances (in the scale of hundreds or even thousands instances) using Spread Placement. In such case, consider Partition Placement instead, and let some instances share the same partition.
 
-
-
-
-
+EC2 Auto-Scaling Group, on the other hand, allows the user to automatically scale up and down the number of the identically deployed EC2 instances depending on the computation burden.
 
 
 
