@@ -415,17 +415,112 @@ EC2 Auto-Scaling Group, on the other hand, allows the user to automatically scal
 
 \subsection{AWS Lambda Function}
 
-AWS Lambda is an event-driven FaaS computing service. The user provides the script and specify the trigger (such as database update, etc.) Upon triggered, AWS executes the script. The user does not need to worry about the allocation of the resources such as VMs or memories to execute the script. 
+AWS Lambda is an event-driven FaaS computing service. The user provides the script and specify the trigger. Upon triggered, AWS executes the script which allows it to process data and manipulate AWS managed services accordingly. Since AWS Lambda needs to access AWS managed services, it should be assigned with a proper role. The user does not need to worry about the allocation of the resources such as VMs or memories to execute the script. The computation runtime and memory of a single invocation is limited to $15$ minutes and $10$GB, respectively. 
 
-Since AWS Lambda needs to access AWS managed services, it should be assigned with a proper role.
+Many AWS managed services and activities can be used as the trigger for AWS Lambda. The full list is given in the official website, and some commonly seen ones are given below.
+\begin{itemize}
+	\item AWS EventBridge
+	\item AWS DynamoDB
+	\item AWS S3
+	\item AWS Config
+	\item AWS IoT
+	\item Amazon API Gateway
+	\item AWS CloudWatch Logs
+	\item AWS Simple Queue Service
+	\item AWS Simple Queue Service
+	\item AWS Simple Email Service
+\end{itemize}
+Some of the services will be introduced in the remainder of this appendix chapter.
 
-
-
-
-
+Notice that AWS EventBridge is an AWS managed event bus that is helpful with building event-driven applications. All API calls can connect to AWS EventBridge, thus triggering AWS Lambda.
 
 \subsection{AWS Container Management}
 
+AWS provide container orchestration tools that can be used to automatically scale up and down containers. The user needs to pay for the CPU, memory and other resources consumed by the containers, but not for the orchestration tools themselves.
+
+\myabb{AWS Elastic Container Service}{AWS ECS} is an orchestration tool fully managed by AWS to manage containerized applications. 
+
+\myabb{AWS Elastic Kubernetes Service}{AWS EKS} is an open-source software for container management. Notice that the user can of course deploy Kubernetes on an VM to manage their containers. It is recommended to use AWS EKS instead for such scenarios. 
+
+AWS Fargate is a serverless, pay-as-you-go compute engine that lets the user focus on building applications without managing servers. When the user deploys a piece of code with AWS Fargate, AWS runs the code in either ECS or EKS, and charges the user at the same rate as ECS and EKS. It is especially useful then there is a unpredictable workload on a containerized application, as Fargate can automatically scale in and out based on the workload.
+
+\section{AWS Database}
+
+AWS supports many databases, both first-party and third-party. Third-party databases such as Microsoft SQL Server, MySQL, MariaDB, PostgreSQL, Oracle, etc., are not introduced here. This section focuses on first-party propriety databases.
+
+AWS managed first-party databases include Amazon Aurora, DynamoDB, DocumentDB (compatible with MongoDB), MemoryDB (compatible with Redis), and many more. In this section, Aurora and DynamoDB are introduced, as they are basic and widely used.
+
+\subsection{AWS Aurora}
+
+AWS Aurora is an AWS managed \myabb{relational database}{RDB}. Comparing with any other RDBs, Aurora provides the following features.
+\begin{itemize}
+	\item Data backup. When Aurora is deployed, duplicated data is deployed. At least 3 AZs have identical copies of the data, each AZ at least 2 copies. This means that there are at least 6 copies of the data deployed, making the database very available and reliable.
+	
+	\item Read replica. Read replicas can be deployed, which boost the read capability.
+	
+	\item Database recover with read replicas. Automated failover is available with Aurora replica. It is possible to promote a read replica into a database once the primary database fails. Amazon Aurora Global Database creates cross-region read replicas, and if the primary region fails, the replicas in other regions will automatically cut over to the new primary region.
+	
+	\item Data snapshot sharing. Aurora snapshots are shareable with other AWS accounts.
+	
+\end{itemize}
+
+Notice that both multi-AZ data backups introduced in the first bullet point and read replicas in the rest bullet points can be used to recover the system when the primary database fails. They have some differences.
+\begin{itemize}
+	\item Multi-AZ data backups always exist, while read replica is optional and it needs additional setup.
+	\item While multi-AZ data backups are purely used for database recovering, read replicas can be used to boost read performance along with the primary database.
+	\item When comes to database recovering, multi-AZ data backups usually work better. Although a read replica can be promoted to become the main database, it is updated asynchronously, and they may not have the latest data. Multi-AZ data backup based recovery is a preferred way to handle failover, and it is updated synchronously. Multi-AZ data backups based recovery also responses faster.
+	\item Multi-AZ data backups always reside within a single region. For cross-region recovery, consider using cross-region read replica instead.
+	
+\end{itemize}
+
+Amazon RDB Proxy is a fully management service that makes connecting Amazon RDBs, Aurora included, more scalable and secure. Amazon RDB Proxy helps with managing a large number of connections from serverless architectures (such as Lambda) to an RDB database by establishing a warm connection pool to the database. This allows applications to reuse existing connections, rather than creating new connections, for every function invocation, thus improve performance.
+
+\subsection{AWS DynamoDB}
+
+AWS Dynamo is a very powerful AWS managed NoSQL database that supports both key-value storage and document storage. It has the following features.
+\begin{itemize}
+	\item Database backup. The data is spread across 3 geographically distinct data centers. In addition, DynamoDB provides the following backup features.
+	
+	DynamoDB On-Demand Backup enables full backup at anytime without affecting the performance of the database. The backup is stored in the same region as the source. 
+	
+	DynamoDB Point-in-Time Recovery restores the database to anytime back in time, from 5 minutes to 35 days. This feature is not enabled by default. 
+	
+	DynamoDB Streams captures changes in the database in a time stream. When DynamoDB Streams is enabled, it captures a time-ordered sequence of item-level modifications in a DynamoDB table and durably stores the information for up to 24 hours. This feature is not enabled by default.
+	
+	Multi-master multi-region replication ("global table") is supported using DynamoDB streams with latency under 1 second.
+	
+	\item High performance. The data is saved on SDD, and it is able to handle millions of reads and writes requests per second, higher than the relational databases.
+	
+	\item Consistency. Eventually consistent reads is enabled by default. Strongly consistent reads can be enabled. DynamoDB Transactions automatically rolls back if a writing operation fails, i.e. guaranteeing "all-or-nothing transaction".
+	
+\end{itemize}
+
+\subsection{Database Security and Connectivity}
+
+AWS services with appropriate roles can access AWS managed databases. Some commonly seen architecture is briefly introduced.
+
+It is possible to use IAM Database Authentication to secure a database. It works for MariaDB, MySQL and PostgreSQL. In such cases, an EC2 can access the database using profile credentials instead of a password.
+
+AWS Lambda can be triggered by database activities, and it can also manipulate and update databases. RDB Event is an alternative to Lambda function to perform database operations. However, RDB Event is less flexible than Lambda function, later of which can be triggered by many kinds of events from a variety of AWS services. 
+
+\section{AWS Networking}
+
+\myabb{AWS Virtual Private Cloud}{AWS VPC} is the AWS managed networking services to build virtual \myabb{Local Area Network}{LAN} and gateways. Other services relevant to networking, such as \myabb{Domain Name Service}{DNS} tool Route 53, etc., are also introduced.
+
+\subsection{AWS Virtual Private Cloud}
+
+\subsection{AWS VPC Configuration}
+
+
+\subsection{AWS VPC Gateway}
+
+\subsection{AWS VPC Endpoint}
+
+\subsection{AWS VPC Route Table and Access Control List}
+
+\subsection{AWS VPC Connectivity}
+
+\subsection{AWS VPC Direct Access}
 
 
 
@@ -434,6 +529,9 @@ Since AWS Lambda needs to access AWS managed services, it should be assigned wit
 
 
 
+\section{Other AWS Services}
+
+AWS Step Function is an AWS managed state machine that can be used to build data pipelines.
 
 
 
