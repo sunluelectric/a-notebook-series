@@ -4,15 +4,15 @@ This chapter studies the concepts and basic properties of linear equations and l
 
 \section{Linear System}
 
-This section introduced linear system and its notations.
+This section introduces linear equation and linear system, their scalar and vector notations, and their solution set.
 
-\subsection{Linear System and Solution Set}
+\subsection{Linear Equation}
 
-A \mync{linear equation} refers to an equation of the following form.
+A \mync{linear equation} of variables $x_i$ refers to the equation of the following form
 \begin{eqnarray}
-  a_1 x_1 + a_2 x_2 + \ldots + a_n x_n &=& b \nonumber
+  a_1 x_1 + \ldots + a_n x_n &=& b \nonumber
 \end{eqnarray}
-which is a linear equation of variables $x_i$. The number of $x_i$ is an integer denoted by $n$ and $n\geq 1$. Variables $a_i$ and $b$ real or complex numbers known in advance. Variables $a_i$ are known as the \mync{coefficients} of the equation. 
+where $i$ is the index $i=1,\ldots, n$ with $n\geq 1$ being the total number of variables of $x_i$. Parameters $a_i$ and $b$ are real or complex constant values, where $a_i$ are known as the \mync{coefficients} of the equation. 
 
 A system of linear equations on the same variable set is known as a \mync{linear system}. For example,
 \begin{eqnarray}
@@ -22,7 +22,7 @@ a_{m1} x_1 + a_{m2} x_2 + \ldots + a_{mn} x_n &=& b_m \nonumber
 \end{eqnarray}
 is a linear system of variables $x_i$. 
 
-A linear system has solution if there is at least one set of variables $x_i$ that fulfills all the linear equations in the system. In practice, a linear system may: 
+A linear system has solution(s) if there is at least one set of variables $x_i$ that fulfills all the linear equations in the system. However, this is not always the case. In practice, a linear system may 
 \begin{itemize}
   \item have no solution;
   \item have one unique solution;
@@ -32,9 +32,9 @@ The solution(s) to a linear system forms its \mync{solution set}. The cardinalit
 
 \begin{mdframed}
 
-\noindent \textbf{Can a linear system have $2$ or more finite number of solutions?}
+\noindent \textbf{Can a linear system have more than two finite number of solutions?}
 
-A linear system cannot have $2$ or more finite number of solutions. This can be proved easily by proof by contradiction.
+A linear system cannot have more than two finite number of solutions. This can be proved by contradiction.
 
 Assume that a linear system has a finite number of $N\geq 2$ solutions. From those solutions, select two distinct set of solutions $x_i^a$ and $x_i^b$. Since the solutions are distinct, at least one of them is non-zero. Without loosing generality, let us assume that $x_i^a$ is an non-zero solution.
 
@@ -71,7 +71,7 @@ Let $p \in P = \{0, \frac{1}{N}, \frac{2}{N} \ldots, \frac{N}{N}\}$. The cardina
 
 \end{mdframed}
 
-A linear system with one for infinite solutions is said to be \mync{consistent}, whereas a linear system with no solution is said to be \mync{inconsistent}. Two linear systems are said to be \mync{equivalent} if they have the same solution set.
+A linear system that has solution(s) is said to be \mync{consistent}, whereas a linear system with no solution is said to be \mync{inconsistent}. Two linear systems are said to be \mync{equivalent} if they have the same solution set.
 
 \subsection{Matrix Notation}
 
@@ -101,19 +101,22 @@ Matrix $A$ and vector $b$ contains all the information necessary to solve the li
 
 As mentioned earlier, a linear system may have zero, one or infinite solutions. It is interesting to see how the numbers of solutions are determined by (certain patterns) in $A$ and $b$. Detailed discussions are given in later part of this notebook. A quick review is given below.
 
-There are mainly two factors that decide the number of solutions of a linear system.
+There are mainly the following factors that decide the number of solutions of a linear system.
 \begin{itemize}
-  \item The number of linearly independent equations (the definition of linearly independent will be introduced in later part of the notebook) among the $m$ equations versus the number of independent variables $n$. 
-  \item The consistency of linearly dependent equations, if any.
+    \item For the system to have solution(s), the linearly dependent equations, if any, must be consistent;
+    \item For a system that has solution(s),
+    \begin{itemize}
+      \item For a system to have one unique solution, the number of linearly independent equations must match the number of variables.
+      \item For a system to have infinite solutions, the number of linearly independent equations must be smaller than the number of variables $n$.
+    \end{itemize}
 \end{itemize}
+Notice that it is impossible to have more linearly independent equations than the number of the variables.
 
-For a linear system to be consistent, all the linear dependent equations must be consistent. For a consistent linear system to have a unique solution, the number of linearly independent equations must match the number of independent variables.
-
-An extension to the question is given below. Consider the \mync{homogeneous system} of \eqref{eq:linear_system_matrix} which is given by
+Consider the \mync{homogeneous system} of \eqref{eq:linear_system_matrix} which is given by
 \begin{eqnarray}
   Ax &=& 0 \nonumber
 \end{eqnarray}
-with $b=0$ substituted into the original linear system. It is obvious that the system must be consistent, and at least the zero vector $x=0$ is a solution. The question is whether $x=0$ is the unique solution. This is determined by the number of linearly independent rows of $A$, and whether it matches with the number of the independent variables. 
+with $b=0$ substituted into the original linear system. This can be taken as a special case of \eqref{eq:linear_system_matrix}. It is obvious that the system must be consistent, and at least the zero vector $x=0$ is a solution. The question is whether $x=0$ is the unique solution. This is determined by the number of linearly independent rows of $A$, and whether it matches with the number of the independent variables. 
 
 Let $A$ be $m \times n$, where the number of equations is $m$ and the number of independent variables, $n$. 
 
@@ -123,17 +126,75 @@ The number of linearly independent rows, in this context, is denoted by the rank
 
 \section{Vector and Matrix Calculations}
 
-Basic rules for calculations with vectors and matrices are introduced in this section.
+Vector and matrix notations have been introduced in the earlier section. Basic vectors and matrices computation rules are introduced in this section.
 
 \subsection{Vector Calculations}
 
+Vectors are special matrix that has only one row or column, and they are known as \mync{row vector} or \mync{column vector} respectively. By saying ``vector'', we often refer to column vector. In the writing, a column vector can be denoted by the transpose of a row vector.
 
+Equality. Two vectors are equal if and only if they are of the same size, and their corresponding entries are equal.
 
+Sum. The sum of two vector exists only if they have the same size. The sum of two vector is obtained by adding corresponding entries. For example, consider $x = [x_1, \ldots, x_n]^T$, $y = [y_1, \ldots, y_n]^T$. The sum is given by
+\begin{eqnarray}
+  x + y &=& \left[\begin{array}{c}
+                   x_1 + y_1 \\
+                   \vdots \\
+                   x_n + y_n 
+                 \end{array}\right] \nonumber
+\end{eqnarray}
+Substraction works similarly.
+
+Scalar multiple. A vector multiplied by a scalar is obtained by multiplying each entry with the scalar. For example, consider $x = [x_1, \ldots, x_n]^T$ and $c$ a scalar. The scalar multiple is given by
+\begin{eqnarray}
+  cx &=& \left[\begin{array}{c}
+                 cx_1 \\
+                 \vdots \\
+                 cx_n 
+               \end{array}\right] \nonumber
+\end{eqnarray}
+
+With sum and scalar multiple introduced, define the \mync{weighted linear combination of vectors} as follows. Let $v_1, \ldots, v_p \in \mathbb{R}^{n\times 1}$ be $p$ vectors. Let $c_1,\ldots, c_p$ be $p$ scalars. Let $y\in \mathbb{R}^{n\times 1}$ be given by
+\begin{eqnarray}
+  y &=& c_1v_1 + \ldots + c_pv_p \nonumber
+\end{eqnarray}
+and $y$ is known as a linear combination of $v_1, \ldots, v_p$ with corresponding weights $c_1, \ldots, c_p$. The value of $y$ changes with different choice of weights. All probable values of $y$ form the \mync{span} of $v_1, \ldots, v_p$, often denoted by $\textup{Span}\{v_1, \ldots, v_p\}$, which is obviously a subset of $\mathbb{R}^{n\times 1}$.
+
+An interesting problem about span is to calculate the weights $c_1, \ldots, c_p$ given $v_1, \ldots, v_p$ and $y$.
+
+Weighted linear combination of vectors is an important concept closely related to vector space (also known as linear space) which will be introduced formally in abstract algebra in later part of this notebook.
+
+Dot product. The dot product of two vectors of the same size is the sum of multiplication of corresponding entries. For example, consider $x = [x_1, \ldots, x_n]^T$, $y = [y_1, \ldots, y_n]^T$. The dot sum is given by
+\begin{eqnarray}
+  x \cdot y = x_1y_1 + \ldots + x_ny_n \nonumber 
+\end{eqnarray}
+Notice that the dot product of two vectors can be taken as the matrix multiplication of two matrix of size $1\times n$ and $n\times 1$ in the form of $x^Ty$ or $y^Tx$. Matrix multiplication is introduced in the next section.
 
 \subsection{Matrix Calculations}
 
+A matrix can be written as a combination of rows or columns.
 
+Matrix-vector product. Let $A \in \mathbb{R}^{m\times n}$ be a matrix, and let $x\in\mathbb{R}^{n\times 1}$ a vector. The multiplication $Ax$ exists only if the number of columns in matrix $A$ matches the number of rows in vector $x$, in this example, $n$. It is given by
+\begin{eqnarray}
+  Ax = \left[\begin{array}{ccc}
+               a_1 & \ldots & a_n 
+             \end{array}\right] \left[\begin{array}{c}
+                                        x_1 \\
+                                        \vdots \\
+                                        x_n
+                                      \end{array}\right] = x_1a_1 + \ldots x_na_n \nonumber
+\end{eqnarray}
+where $a_i \in\mathbb{R}^{n\times 1}$ are the columns of $A$. Consequently, $Ax=b$, given $A$ and $b$, has solution if and only if $b$ is a linear combination of (linearly independent) columns of $A$.
 
-
-
-
+Alternatively and equivalently, $Ax$ can be interpreted as follows.
+\begin{eqnarray}
+  Ax = \left[\begin{array}{c}
+                 A_1 \\
+                 A_2 \\
+                 A_3 
+               \end{array}\right]x = \left[\begin{array}{c}
+                                             A_1x \\
+                                             A_2x \\
+                                             A_3x 
+                                           \end{array}\right] \nonumber
+\end{eqnarray}
+where $A_i$ are the rows of $A$ and $A_ix$ is the dot product.
