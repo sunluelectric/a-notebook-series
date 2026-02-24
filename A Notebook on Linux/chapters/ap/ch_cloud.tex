@@ -41,7 +41,7 @@ The most popular cloud services are \mync{public cloud services} provided by Ama
 
 Main public cloud providers include \myabb{Amazon Web Service}{AWS}, Microsoft Azure, \myabb{Google Cloud Platform}{GCP}, and many more. While there are overlaps among the services they provide, each of them usually has some unique features as selling points, such as proprietary database management systems, etc. The impression is that \myabb{Amazon Web Service}{AWS} focuses more on \myabb{Infrastructure as a Service}{IaaS}, hence more flexible, while Azure focuses more on \myabb{Platform as a Service}{PaaS} and \myabb{Software as a Service}{SaaS}, hence more available and easier to use. The user should choose the cloud service provider based on the problem and there is not a globally best cloud service provider for all problems.
 
-\section{Services Types}
+\subsection{Services Types}
 
 There are variety of cloud services. This section tries to categorize the most commonly seen ones into the following types.
 \begin{itemize}
@@ -507,10 +507,72 @@ AWS Lambda can be triggered by database activities, and it can also manipulate a
 
 \myabb{AWS Virtual Private Cloud}{AWS VPC} is the AWS managed networking services to build virtual \myabb{Local Area Network}{LAN} and gateways. Other services relevant to networking, such as \myabb{Domain Name Service}{DNS} tool Route 53, etc., are also introduced.
 
+VPC is a very important component in AWS architecture, a big part of which is grouping services, putting them into different subnets, and building connectivity within and across these subnets. With that been said, networking with AWS VPC is a complex topic with tons of newly introduced concepts such as subnet, gateway, route table, endpoint, different types of IP addresses, etc. This section only gives the basics of AWS VPC.
+
 \subsection{AWS Virtual Private Cloud}
 
-\subsection{AWS VPC Configuration}
+A VPC closely resembles a private network in a traditional data center. A user can define a VPC and deploy AWS managed services inside that network, and can also configure connectivity within VPC, across VPC and from VPC to the Internet.
 
+Some basic concepts are reviewed below. These concepts or ideas are not defined or exclusively used by AWS.
+\begin{itemize}
+	\item \mync{Classless Inter-Domain Routing}[CIDR]: a representation of IP address allocation. 
+	
+	CIDR is given in the form of \verb|x.x.x.x/y|, where \verb|x| is a value between $0$ and $255$, i.e., an $8$-digit binary value. This makes \verb|x.x.x.x| a $32$-digit IP address. The value of $y$ indicates the fixed number of digits. 
+	
+	For example, consider \texttt{192.168.1.0/24}. Among the $32$ digits, the first $24$ digits are fixed, and the last $8$ digits are flexible. This makes the IP address allocation \texttt{192.168.1.0} to \texttt{192.168.1.255}, with $256$ total IPs. The value of $y$ decides the number of IPs. For example, $26$ represents $64$ addresses, $24$, $256$ addresses, $16$, $65536$ addresses, and $32$ a single address.
+	
+	CIDR is used almost everywhere in AWS to represent IP addresses and a range of IP addresses, including security groups, route tables, etc.
+	
+	\item \mync{Private IP}: the IP addresses that is used inside a private network (and not used globally by the Internet). When a VPC is defined and devices and subnets are deployed inside the VPC, they are assigned with a private IP address. 
+	
+	Following the universally adopted convention, the following IP addresses are reserved for private IP.
+	\begin{itemize}
+		\item Large network: \texttt{10.0.0.0/8}
+		\item Medium network: \texttt{172.16.0.0/12}
+		\item Small network: \texttt{192.168.0.0/16}, widely used by home routers
+	\end{itemize}
+	When a router sees the above IPs, it will take them as private IP addresses. Most IP address other than the above will be taken as public IP address. (There are exceptions, for example, \texttt{127.0.0.1} for loopback, etc.)
+	
+	\item \mync{Network Address Translation}[NAT]: a technology used by routers to map multiple private IP addresses to a single or limited number of public IP addresses.
+	
+	The total number of IPv4 addresses is slightly over $4$ billion, which is not enough for each and every smart device to have a distinguished public address. Yet, for a device to be able to access the Internet, it must possesses a public IP address registered on the Internet. For that reason, a public address must be shared among multiple devices in a private network. This is done by a router. In practice, a router is assigned with a single public IP address. It manages multiple devices in a private network, each assigned with a private IP address. The router must translate the network addresses across the Internet and the private network. 
+	
+	When a device in the private network wants to access the Internet, the request is sent to the router, where its private IP address is translated to the public IP address that the router holds. The translation is bidirectional. When the router receives a message, it needs to identify which device the message is intended for in the private network, and translate the public IP address to the private IP address..
+	
+	Note that NAT will be unnecessary in the future with the spread of IPv6, which will be able to assign globally unique IP address for each and every smart device. IPv6 can produce over $3.4\times 10^{38}$ unique addresses.  
+	
+\end{itemize}
+
+AWS VPC defines a stationary list of CIDR blocks of private IP addresses. Each CIDR defines a subnet. In AWS VPC, there is a size limit to each CIDR that ranges from \texttt{/28} ($16$ addresses) to \texttt{/16} ($65536$ addresses). That means, the size of a subnet in an AWS VPC ranges from $16$ to $65536$. In each subnet, the first $4$ IP addresses in a subnet by AWS and cannot be assigned by the user.
+
+AWS VPC uses \mync{route table}(s) to direct the network traffic. It is essentially a rule book set for the devices in a subnet that says ``if a machine in the subnet what to access IP address \texttt{x.x.x.x/y}, then direct the traffic to (device)'' and ``(device)'' can be network gateway, etc.
+
+A \mync{NAT gateway} is the ``router'' of a subnet in a VPC. It is necessary if the devices in the subnet wants Internet access. A NAT gateway translates the private IP addresses in a subnet to a global IP address assigned to the NAT gateway. Notice that NAT gateway is necessary only for those devices in the private network that do not possess public IP addresses. The user is able to deploy a device and assign it with a public IP address. Such a device does not require a NAT gateway.
+
+NAT gateways and devices with public addresses connect to the \mync{Internet Gateway}[IGW] of the VPC to connect to the Internet. The connection from these NAT gateways and devices to the IGW is managed by the route table(s) of the VPC.
+
+The relationship of devices in private subnets, NAT gateway, devices with public addresses and IGW is demonstrated in Fig. \ref{fig:aws_vpc_gateway}. 
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{chapters/ap/figures/aws_vpc_gateway.png}
+	\caption{Devices in VPC public and private subnets accessing the Internet.} \label{fig:aws_vpc_gateway}
+\end{figure}
+
+Notice that \mync{public subnet} in this context refers to the collection of devices in the VPC that is assigned with a public IP address. By this definition, NAT gateway is considered a device in the public subnet. For a device in the private subnet to access the Internet, it must access the Internet via a NAT gateway in the public subnet. Whereas for a device that is already assigned with a public IP address, it can access the Internet without a NAT gateway.
+
+The connectivities from the device in the private network to the NAT gateway in the public network and from the NAT gateway and the device with public IP address to the IGW are managed by route table(s) of the VPC.
+
+
+
+
+
+
+
+
+
+
+\subsection{AWS VPC Configuration}
 
 \subsection{AWS VPC Gateway}
 
