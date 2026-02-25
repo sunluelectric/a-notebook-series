@@ -545,13 +545,20 @@ Some basic concepts are reviewed below. These concepts or ideas are not defined 
 
 AWS VPC defines a stationary list of CIDR blocks of private IP addresses. Each CIDR defines a subnet. In AWS VPC, there is a size limit to each CIDR that ranges from \texttt{/28} ($16$ addresses) to \texttt{/16} ($65536$ addresses). That means, the size of a subnet in an AWS VPC ranges from $16$ to $65536$. In each subnet, the first $4$ IP addresses in a subnet by AWS and cannot be assigned by the user.
 
-AWS VPC uses \mync{route table}(s) to direct the network traffic. It is essentially a rule book set for the devices in a subnet that says ``if a machine in the subnet what to access IP address \texttt{x.x.x.x/y}, then direct the traffic to (device)'' and ``(device)'' can be network gateway, etc.
+In the remainder of this section, the tools that AWS VPC uses to manage IP address assignments, connectivity and access controls. Key components include
+\begin{itemize}
+  \item Gateway: the router
+  \item Network \myabb{Access Control List}{ACL}: firewall
+  \item Route table: connectivity configuration
+\end{itemize}
 
-A \mync{NAT gateway} is the ``router'' of a subnet in a VPC. It is necessary if the devices in the subnet wants Internet access. A NAT gateway translates the private IP addresses in a subnet to a global IP address assigned to the NAT gateway. Notice that NAT gateway is necessary only for those devices in the private network that do not possess public IP addresses. The user is able to deploy a device and assign it with a public IP address. Such a device does not require a NAT gateway.
+\subsection{AWS VPC Gateway}
 
-NAT gateways and devices with public addresses connect to the \mync{Internet Gateway}[IGW] of the VPC to connect to the Internet. The connection from these NAT gateways and devices to the IGW is managed by the route table(s) of the VPC.
+A \mync{NAT gateway} is the ``router'' of a subnet. There are two types of NAT gateways, public NAT gateway and private NAT gateway. A public NAT gateway is necessary if the devices in the subnet wants Internet access. The public NAT gateway translates the private IP addresses in a subnet to a public IP address (known as \mync{elastic IP address} in AWS) assigned to that NAT gateway. Notice that the public NAT gateway is necessary only for those devices that do not possess public IP addresses. The user is able to deploy a device and assign it with a public IP address. Such a device does not require a public NAT gateway to access Internet.
 
-The relationship of devices in private subnets, NAT gateway, devices with public addresses and IGW is demonstrated in Fig. \ref{fig:aws_vpc_gateway}. 
+Public NAT gateways and devices with public addresses connect to the \mync{Internet Gateway}[IGW] of the VPC to access the Internet. The connection from these NAT gateways and devices to the IGW is managed by the route table(s) of the VPC.
+
+The relationship of private subnets, public NAT gateway, devices with public addresses and IGW is demonstrated in Fig. \ref{fig:aws_vpc_gateway}. 
 
 \begin{figure}[!htb]
 	\centering
@@ -559,26 +566,19 @@ The relationship of devices in private subnets, NAT gateway, devices with public
 	\caption{Devices in VPC public and private subnets accessing the Internet.} \label{fig:aws_vpc_gateway}
 \end{figure}
 
-Notice that \mync{public subnet} in this context refers to the collection of devices in the VPC that is assigned with a public IP address. By this definition, NAT gateway is considered a device in the public subnet. For a device in the private subnet to access the Internet, it must access the Internet via a NAT gateway in the public subnet. Whereas for a device that is already assigned with a public IP address, it can access the Internet without a NAT gateway.
+Notice that \mync{public subnet} in this context refers to the collection of devices in the VPC that is assigned with a public IP address. By this definition, a public NAT gateway is considered a device in the public subnet.
 
-The connectivities from the device in the private network to the NAT gateway in the public network and from the NAT gateway and the device with public IP address to the IGW are managed by route table(s) of the VPC.
+The connectivity from the device in the private network to the NAT gateway in the public network and from the NAT gateway and the device with public IP address to the IGW are managed by route table(s) of the VPC, which will be introduced in the later Section \ref{ap:aws_vpc_route_table}.
 
+While a public NAT gateway helps to connect devices in private subnets with the Internet, a private NAT gateway connects the devices not to the Internet but to other VPCs or on-premises network of the user.
 
+\subsection{AWS VPC Access Control List}
 
+\subsection{AWS VPC Route Table} \label{ap:aws_vpc_route_table}
 
-
-
-
-
-
-
-\subsection{AWS VPC Configuration}
-
-\subsection{AWS VPC Gateway}
+AWS VPC uses \mync{route table}(s) to direct the network traffic. It is essentially a rule book set for the devices in a subnet that says ``if a machine in the subnet what to access IP address \texttt{x.x.x.x/y}, then direct the traffic to (device)'' and ``(device)'' can be network gateway, etc.
 
 \subsection{AWS VPC Endpoint}
-
-\subsection{AWS VPC Route Table and Access Control List}
 
 \subsection{AWS VPC Connectivity}
 
