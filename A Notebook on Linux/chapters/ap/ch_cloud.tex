@@ -333,7 +333,7 @@ In addition to the default on-demand charging, there are other charging models a
 	\item Dedicated. AWS dedicates a server for the user to run its VM. This is expensive but can be useful when the VM has to be deployed in such a way due to licensing requirement or security concerns. 
 \end{itemize}
 
-\subsection{EC2 Security Group}
+\subsection{EC2 Security Group} \label{ap:aws_ec2_security_group}
 
 EC2 Security Group plays as the firewall of the VM. It is basically a table that describes what inbound and outbound connectivity are allowed in the given network, the IP addresses, the port, and the protocol.
 
@@ -509,10 +509,6 @@ AWS Lambda can be triggered by database activities, and it can also manipulate a
 
 VPC is a very important component in AWS architecture, a big part of which is grouping services, putting them into different subnets, and building connectivity within and across these subnets. With that been said, networking with AWS VPC is a complex topic with tons of newly introduced concepts such as subnet, gateway, route table, endpoint, different types of IP addresses, etc. This section only gives the basics of AWS VPC.
 
-\subsection{AWS Virtual Private Cloud}
-
-A VPC closely resembles a private network in a traditional data center. A user can define a VPC and deploy AWS managed services inside that network, and can also configure connectivity within VPC, across VPC and from VPC to the Internet.
-
 Some basic concepts are reviewed below. These concepts or ideas are not defined or exclusively used by AWS.
 \begin{itemize}
 	\item \mync{Classless Inter-Domain Routing}[CIDR]: a representation of IP address allocation. 
@@ -541,7 +537,18 @@ Some basic concepts are reviewed below. These concepts or ideas are not defined 
 	
 	Note that NAT will be unnecessary in the future with the spread of IPv6, which will be able to assign globally unique IP address for each and every smart device. IPv6 can produce over $3.4\times 10^{38}$ unique addresses.  
 	
+    \item \mync{IPv6}: next generation IP address that is more powerful than IPv4.
+    
+    IPv6 differs from IPv4 in many aspects. Almost all IPv6 addresses are public addresses (there are some addresses reserved for special purposes), and NAT is likely to be unnecessary unless for additional security layer. 
+    
+    Since there are so many IPv6 addresses, it is improbable to scan a range of IPv6 address. With IPv4 addresses, a hacker can scan the entire address space in minutes and if he decides to launch an attack to all these IP addresses, all devices with public IP addresses will be affected. But with IPv6 address, they can hardly scan even a small portion of it. It will be more challenging for a hacker to attack a machine unless they know the exact IPv6 address of the machine in advance. It is almost impossible to scan-and-find a machine, as the distribution of valid IP addresses will be sparse.
 \end{itemize}
+
+As of this writing, IPv4 is still the most widely adopted IP address form. That said, AWS VPC has very good support of IPv6. Almost everything introduced in the remainder of this section can be set up with both IPv4 and IPv6 addresses.
+
+\subsection{AWS Virtual Private Cloud}
+
+A VPC closely resembles a private network in a traditional data center. A user can define a VPC and deploy AWS managed services inside that network, and can also configure connectivity within VPC, across VPC and from VPC to the Internet.
 
 AWS VPC defines a stationary list of CIDR blocks of private IP addresses. Each CIDR defines a subnet. In AWS VPC, there is a size limit to each CIDR that ranges from \texttt{/28} ($16$ addresses) to \texttt{/16} ($65536$ addresses). That means, the size of a subnet in an AWS VPC ranges from $16$ to $65536$. In each subnet, the first $4$ IP addresses in a subnet by AWS and cannot be assigned by the user.
 
@@ -552,9 +559,11 @@ In the remainder of this section, the tools that AWS VPC uses to manage IP addre
   \item Route table: connectivity configuration
 \end{itemize}
 
+All network traffic is logged automatically in VPC Flow Logs, which can become handy during troubleshooting.
+
 \subsection{AWS VPC Gateway}
 
-A \mync{NAT gateway} is the ``router'' of a subnet. There are two types of NAT gateways, public NAT gateway and private NAT gateway. A public NAT gateway is necessary if the devices in the subnet wants Internet access. The public NAT gateway translates the private IP addresses in a subnet to a public IP address (known as \mync{elastic IP address} in AWS) assigned to that NAT gateway. Notice that the public NAT gateway is necessary only for those devices that do not possess public IP addresses. The user is able to deploy a device and assign it with a public IP address. Such a device does not require a public NAT gateway to access Internet.
+A \mync{NAT gateway} is the ``router'' of a subnet. There are two types of NAT gateways, public NAT gateway and private NAT gateway. A public NAT gateway is necessary if the devices in a private subnet wants Internet access. The public NAT gateway translates the private IP addresses in a subnet to a public IP address (known as \mync{elastic IP address} in AWS) assigned to that NAT gateway. Notice that the public NAT gateway is necessary only for those devices that do not possess public IP addresses. The user is able to deploy a device and assign it with a public IP address. Such a device does not require a public NAT gateway to access Internet.
 
 Public NAT gateways and devices with public addresses connect to the \mync{Internet Gateway}[IGW] of the VPC to access the Internet. The connection from these NAT gateways and devices to the IGW is managed by the route table(s) of the VPC.
 
@@ -574,13 +583,56 @@ While a public NAT gateway helps to connect devices in private subnets with the 
 
 \subsection{AWS VPC Access Control List}
 
+Network \myabb{Access Control List}{ACL} is the firewall defined at the subnet level, and it applies to all instances within that subnet. It is essentially a collection ranked inbound and outbound rules that allowing or denying traffics with user specified IP addresses, port and protocol, represented by tables. The default inbound and outbound rules are given in Tables \ref{tab:aws_networkacl_inbound} and \ref{tab:aws_networkacl_outbound}. Notice that though the two tables look similar, they are two separate tables.
+
+\begin{table}[!htb]
+	\centering
+	\caption{AWS Network ACL default inbound rules.} \label{tab:aws_networkacl_inbound}
+	\begin{tabular}{cccccc}
+		\hline
+        Rule \verb|#| & Type & Protocol & Port range & Source & Allow / Deny \\ \hline
+        $100$ & All IPv4 traffic & All & All & \texttt{0.0.0.0/0} & Allow \\
+        $101$ & All IPv6 traffic & All & All & \texttt{::/0} & Allow \\
+        $*$ & All traffic & All & All & \texttt{0.0.0.0/0} & Deny \\
+        $*$ & All IPv6 traffic & All & All & \texttt{::/0} & Deny \\
+		\hline
+	\end{tabular}
+	\begin{flushleft}
+		\footnotesize
+		A rule with a smaller rule number has a higher priority over a rule with larger rule number.
+	\end{flushleft}
+\end{table}
+
+\begin{table}[!htb]
+	\centering
+	\caption{AWS Network ACL default outbound rules.} \label{tab:aws_networkacl_outbound}
+	\begin{tabular}{cccccc}
+		\hline
+        Rule \verb|#| & Type & Protocol & Port range & Source & Allow / Deny \\ \hline
+        $100$ & All IPv4 traffic & All & All & \texttt{0.0.0.0/0} & Allow \\
+        $101$ & All IPv6 traffic & All & All & \texttt{::/0} & Allow \\
+        $*$ & All traffic & All & All & \texttt{0.0.0.0/0} & Deny \\
+        $*$ & All IPv6 traffic & All & All & \texttt{::/0} & Deny \\
+		\hline
+	\end{tabular}
+	\begin{flushleft}
+		\footnotesize
+		A rule with a smaller rule number has a higher priority over a rule with larger rule number.
+	\end{flushleft}
+\end{table}
+
+Notice that Network ACL is stateless. For bidirectional communication, both inbound and outbound connectivity need to be allowed. This is different from Security Group (the firewall of a device such as EC2 instance; recall Section \ref{ap:aws_ec2_security_group}), which is often stateful.
+
 \subsection{AWS VPC Route Table} \label{ap:aws_vpc_route_table}
 
 AWS VPC uses \mync{route table}(s) to direct the network traffic. It is essentially a rule book set for the devices in a subnet that says ``if a machine in the subnet what to access IP address \texttt{x.x.x.x/y}, then direct the traffic to (device)'' and ``(device)'' can be network gateway, etc.
 
 \subsection{AWS VPC Endpoint}
 
-\subsection{AWS VPC Connectivity}
+\subsection{AWS VPC Peering}
+
+VPC Peering allows seamless connectivity of devices in two VPCs, just as if they were in the same VPC. The two VPCs peered together cannot have overlapped CIDRs. VPC Peering is not transitive. 
+
 
 \subsection{AWS VPC Direct Access}
 
