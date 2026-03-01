@@ -335,9 +335,7 @@ In addition to the default on-demand charging, there are other charging models a
 
 \subsection{EC2 Security Group} \label{ap:aws_ec2_security_group}
 
-EC2 Security Group plays as the firewall of the VM. It is basically a table that describes what inbound and outbound connectivity are allowed in the given network, the IP addresses, the port, and the protocol.
-
-An example is given below in Fig. \ref{fig:aws_ec2_security_group}. By default, the Security Bound allows outbound traffic, and it is put into the default \myabb{Virtual Private Cloud}{VPC} (more to be introduced in later sections) that has Internet access. That explains why a EC2 instance can access the Internet by default.
+EC2 Security Group plays as the firewall of the VM. It is basically a table that describes what inbound and outbound connectivity are allowed in the given network, the IP addresses, the port, and the protocol. An example is given below in Fig. \ref{fig:aws_ec2_security_group}. By default, the Security Bound allows outbound traffic, and it is put into the default \myabb{Virtual Private Cloud}{VPC} (more to be introduced in later sections) that has Internet access. That explains why a EC2 instance can access the Internet by default.
 
 \begin{figure}[!htb]
 	\centering
@@ -345,9 +343,11 @@ An example is given below in Fig. \ref{fig:aws_ec2_security_group}. By default, 
 	\caption{Creating Security Group for EC2.} \label{fig:aws_ec2_security_group}
 \end{figure}
 
+Security Group is stateful. Although inbound and outbound allowed requests are defined separately, they may ``overwrite'' each other in practice. This is different from Network \myabb{Access Control List}{ACL} that will be introduced in later Section \ref{ap:aws_network_acl} which is the stateless firewall for a subnet where all inbound and outbound connectivity must be explicitly defined.
+
 Once a Security Group is defined, it can be re-used for multiple EC2 instances. It is possible to modify or change Security Group for a EC2 instance on the fly.
 
-Notice that the use of Security Group is not limited to EC2. Security Group for other services, such as private networks, will be introduced in later sections. When there is a gateway, there can be a security group.
+Notice that the use of Security Group is not limited to EC2, but also other AWS resources such as \myabb{AWS Relational Database Service}{AWS RDS}, AWS Redshift, Elastic Load Balancing, Lambda, etc. Most of these services are closely related to EC2 and computing.
 
 \subsection{EC2 Network Adapter}
 
@@ -581,7 +581,7 @@ The connectivity from the device in the private network to the NAT gateway in th
 
 While a public NAT gateway helps to connect devices in private subnets with the Internet, a private NAT gateway connects the devices not to the Internet but to other VPCs or on-premises network of the user.
 
-\subsection{AWS VPC Access Control List}
+\subsection{AWS VPC Access Control List} \label{ap:aws_network_acl}
 
 Network \myabb{Access Control List}{ACL} is the firewall defined at the subnet level, and it applies to all instances within that subnet. It is essentially a collection ranked inbound and outbound rules that allowing or denying traffics with user specified IP addresses, port and protocol, represented by tables. The default inbound and outbound rules are given in Tables \ref{tab:aws_networkacl_inbound} and \ref{tab:aws_networkacl_outbound}. Notice that though the two tables look similar, they are two separate tables.
 
