@@ -534,29 +534,29 @@ AWS Lambda can be triggered by database activities, and it can also manipulate a
 
 \section{AWS Networking}
 
-\myabb{AWS Virtual Private Cloud}{AWS VPC} is the AWS managed networking services to build virtual \myabb{Local Area Network}{LAN} and gateways. Other services relevant to networking, such as \myabb{Domain Name Service}{DNS} tool Route 53, etc., are also introduced.
+\myabb{AWS Virtual Private Cloud}{AWS VPC} is the AWS managed networking services to build virtual \myabb{Local Area Network}{LAN} and gateways. Other services relevant to networking, such as \myabb{Domain Name Service}{DNS} tool Route 53, are also introduced.
 
-VPC is a very important component in AWS architecture, a big part of which is grouping services, putting them into different subnets, and building connectivity within and across these subnets. With that been said, networking with AWS VPC is a complex topic with tons of newly introduced concepts such as subnet, gateway, route table, endpoint, different types of IP addresses, etc. This section only gives the basics of AWS VPC.
+VPC is a very important component in AWS architecture. It groups services and virtual resources into subnets and builds connectivity within and across these subnets. Networking with AWS VPC is a complex topic. Many new concepts such as subnet, gateway, route table, endpoint, etc. are introduced in this chapter. That said, the chapter only introduces the basics of AWS VPC.
 
-Some basic concepts are reviewed below. These concepts or ideas are not defined or exclusively used by AWS.
+Before the introduction of AWS VPC, the following preliminary concepts are briefly reviewed.
 \begin{itemize}
-	\item \mync{Classless Inter-Domain Routing}[CIDR]: a representation of IP address allocation. 
+	\item \mync{Classless Inter-Domain Routing}[CIDR]: a commonly used IP address representation of a subnet. 
 	
-	CIDR is given in the form of \verb|x.x.x.x/y|, where \verb|x| is a value between $0$ and $255$, i.e., an $8$-digit binary value. This makes \verb|x.x.x.x| a $32$-digit IP address. The value of $y$ indicates the fixed number of digits. 
+	CIDR is given in the form of \verb|x.x.x.x/y|, where \verb|x| is a value between $0$ and $255$, i.e., an $8$-digit binary value. This makes \verb|x.x.x.x| a $32$-digit IP address. The value of $y$ indicates the fixed number of digits among the $32$ digits shared within the subnet.
 	
-	For example, consider \texttt{192.168.1.0/24}. Among the $32$ digits, the first $24$ digits are fixed, and the last $8$ digits are flexible. This makes the IP address allocation \texttt{192.168.1.0} to \texttt{192.168.1.255}, with $256$ total IPs. The value of $y$ decides the number of IPs. For example, $26$ represents $64$ addresses, $24$, $256$ addresses, $16$, $65536$ addresses, and $32$ a single address.
+	For example, consider \texttt{192.168.1.0/24}. Among the $32$ digits, the first $24$ digits are fixed, and the last $8$ digits are flexible. This makes the IP address allocation \texttt{192.168.1.0} to \texttt{192.168.1.255}, with $256$ total IPs for the subnet. The value of $y$ decides the number of IP addresses in the subnet. The larger $y$, the more fixed digits in the subnet, hence the less IP addresses. For example, $16$, $65536$ addresses, $24$, $256$ addresses, $26$ represents $64$ addresses, and $32$ a single address.
 	
-	CIDR is used almost everywhere in AWS to represent IP addresses and a range of IP addresses, including security groups, route tables, etc.
+	CIDR is used almost everywhere in AWS to represent IP addresses of a subnet. It is widely used when setting up security groups, route tables, etc.
 	
 	\item \mync{Private IP}: the IP addresses that is used inside a private network (and not used globally by the Internet). When a VPC is defined and devices and subnets are deployed inside the VPC, they are assigned with a private IP address. 
 	
 	Following the universally adopted convention, the following IP addresses are reserved for private IP.
 	\begin{itemize}
-		\item Large network: \texttt{10.0.0.0/8}
-		\item Medium network: \texttt{172.16.0.0/12}
+		\item Large network: \texttt{10.0.0.0/8}, widely used by companies.
+		\item Medium network: \texttt{172.16.0.0/12}, widely used by small institutes or office networks.
 		\item Small network: \texttt{192.168.0.0/16}, widely used by home routers
 	\end{itemize}
-	When a router sees the above IPs, it will take them as private IP addresses. Most IP address other than the above will be taken as public IP address. (There are exceptions, for example, \texttt{127.0.0.1} for loopback, etc.)
+	When a router sees the above IPs, it will take them as private IP addresses. Most IP address other than the above will be taken as public IP address, with some exceptions, for example \texttt{127.0.0.1} for loopback, etc.
 	
 	\item \mync{Network Address Translation}[NAT]: a technology used by routers to map multiple private IP addresses to a single or limited number of public IP addresses.
 	
@@ -564,26 +564,31 @@ Some basic concepts are reviewed below. These concepts or ideas are not defined 
 	
 	When a device in the private network wants to access the Internet, the request is sent to the router, where its private IP address is translated to the public IP address that the router holds. The translation is bidirectional. When the router receives a message, it needs to identify which device the message is intended for in the private network, and translate the public IP address to the private IP address..
 	
-	Note that NAT will be unnecessary in the future with the spread of IPv6, which will be able to assign globally unique IP address for each and every smart device. IPv6 can produce over $3.4\times 10^{38}$ unique addresses.  
-	
-    \item \mync{IPv6}: next generation IP address that is more powerful than IPv4.
-    
-    IPv6 differs from IPv4 in many aspects. Almost all IPv6 addresses are public addresses (there are some addresses reserved for special purposes), and NAT is likely to be unnecessary unless for additional security layer. 
-    
-    Since there are so many IPv6 addresses, it is improbable to scan a range of IPv6 address. With IPv4 addresses, a hacker can scan the entire address space in minutes and if he decides to launch an attack to all these IP addresses, all devices with public IP addresses will be affected. But with IPv6 address, they can hardly scan even a small portion of it. It will be more challenging for a hacker to attack a machine unless they know the exact IPv6 address of the machine in advance. It is almost impossible to scan-and-find a machine, as the distribution of valid IP addresses will be sparse.
+	Note that NAT will be unnecessary in the future with the spread of IPv6, which will be able to assign globally unique IP address for each and every smart device.
 \end{itemize}
 
-As of this writing, IPv4 is still the most widely adopted IP address form. That said, AWS VPC has very good support of IPv6. Almost everything introduced in the remainder of this section can be set up with both IPv4 and IPv6 addresses.
+\begin{mdframed}
+\noindent \textbf{IPv6 and Its Advantages over IPv4}
+
+IPv6 is the next generation IP address that is more powerful than IPv4. IPv6 differs from IPv4 in many aspects, the most important of which is to have a far larger number of available addresses. IPv6 can produce over $3.4\times 10^{38}$ unique addresses. All smart devices can have their globally unique public addresses, and NAT is likely to be unnecessary. 
+
+Since there are so many IPv6 addresses, it is improbable to scan a range of IPv6 address. With IPv4 addresses, a hacker can scan the entire address space in minutes and if he decides to launch an attack to all these IP addresses, all devices with public IP addresses will be affected. But with IPv6 address, they can hardly scan even a small portion of it. It will be more challenging for a hacker to attack a machine unless they know the exact IPv6 address of the machine in advance. It is almost impossible to scan-and-find a machine, as the distribution of valid IP addresses will be sparse.
+
+As of this writing, IPv4 is still the most widely adopted IP address form.
+
+\end{mdframed}
+
+AWS VPC has very good support of IPv6. Almost everything introduced in the remainder of this section can be set up with both IPv4 and IPv6 addresses.
 
 \subsection{AWS Virtual Private Cloud}
 
 A VPC closely resembles a private network in a traditional data center. A user can define a VPC and deploy AWS managed services inside that network, and can also configure connectivity within VPC, across VPC and from VPC to the Internet.
 
-AWS VPC defines a stationary list of CIDR blocks of private IP addresses. Each CIDR defines a subnet. In AWS VPC, there is a size limit to each CIDR that ranges from \texttt{/28} ($16$ addresses) to \texttt{/16} ($65536$ addresses). That means, the size of a subnet in an AWS VPC ranges from $16$ to $65536$. In each subnet, the first $4$ IP addresses in a subnet by AWS and cannot be assigned by the user.
+AWS VPC defines a stationary list of CIDR blocks of private IP addresses. Each CIDR defines a subnet. In AWS VPC, there is a size limit to each CIDR that ranges from \texttt{/28} ($16$ addresses) to \texttt{/16} ($65536$ addresses). That means, the size of a subnet in an AWS VPC ranges from $16$ to $65536$. In each subnet, the first $4$ IP addresses are reserved by AWS.
 
-In the remainder of this section, the tools that AWS VPC uses to manage IP address assignments, connectivity and access controls. Key components include
+In the remainder of this section, the tools that AWS VPC uses to manage IP address assignments, connectivity and access controls are introduced, mainly including
 \begin{itemize}
-  \item Gateway: the router
+  \item Gateway: router
   \item Network \myabb{Access Control List}{ACL}: firewall
   \item Route table: connectivity configuration
 \end{itemize}
@@ -592,7 +597,7 @@ All network traffic is logged automatically in VPC Flow Logs, which can become h
 
 \subsection{AWS VPC Gateway}
 
-A \mync{NAT gateway} is the ``router'' of a subnet. There are two types of NAT gateways, public NAT gateway and private NAT gateway. A public NAT gateway is necessary if the devices in a private subnet wants Internet access. The public NAT gateway translates the private IP addresses in a subnet to a public IP address (known as \mync{elastic IP address} in AWS) assigned to that NAT gateway. Notice that the public NAT gateway is necessary only for those devices that do not possess public IP addresses. The user is able to deploy a device and assign it with a public IP address. Such a device does not require a public NAT gateway to access Internet.
+A \mync{NAT gateway} is the ``router'' of a subnet. There are two types of NAT gateways, public NAT gateway and private NAT gateway. A public NAT gateway is necessary if the devices in a private subnet wants Internet access. The public NAT gateway translates the private IP addresses in a subnet to a public IP address (known as \mync{elastic IP address} in AWS) assigned to that NAT gateway. Notice that the public NAT gateway is necessary only for those devices that do not possess public IP addresses. The user is able to deploy a device and assign it with a public IP address. Such a device does not require a public NAT gateway to access the Internet.
 
 Public NAT gateways and devices with public addresses connect to the \mync{Internet Gateway}[IGW] of the VPC to access the Internet. The connection from these NAT gateways and devices to the IGW is managed by the route table(s) of the VPC.
 
