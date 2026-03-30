@@ -64,11 +64,13 @@ where $*$ denotes the convolution operator.
 
 Given the probability function of a discrete random variable or the PDF of a continuous random variable, a lot of insights can be extracted. Commonly seen measures of a random variable are introduced in this section and the following sections. Usually, they can be calculated from their associated probability functions or PDFs.
 
-In probability and statistics sense, \mync{expectation} (also known as \mync{mean}) describes the average value of a random variable, if the variable is generated many times. For discrete random variable $X$, the expectation is given below.
+In probability and statistics sense, \mync{expectation} (also known as \mync{mean}) describes the average value of a random variable, if the experiment is carried out many times. For discrete random variable $X$, the expectation is given by
 \begin{eqnarray}
 	\textup{E}(X) &=& \sum_{i=1}^{n}x_iP(x_i) \label{eq:expectationdiscrete}
 \end{eqnarray}
-where $\textup{E}(\cdot)$ is used to denote the expectation, and $n$ the cardinality of the sample space. In the case of countably infinite sample space, replace $n$ with $\infty$ in \eqref{eq:expectationdiscrete}. For continuous random variable, it is
+where $\textup{E}(\cdot)$ denotes the expectation, and $n$ the cardinality of the sample space. In the case of countably infinite sample space, replace $n$ with $\infty$ in \eqref{eq:expectationdiscrete}. 
+
+For continuous random variable, it is
 \begin{eqnarray}
 	\textup{E}(X) &=& \int_{-\infty}^{\infty}xf(x)dx \label{eq:expectationcontinuous}
 \end{eqnarray}

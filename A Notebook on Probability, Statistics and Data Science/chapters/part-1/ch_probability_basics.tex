@@ -4,11 +4,11 @@ This chapter introduces the basic concepts, axioms and theorems in probability t
 
 \section{Randomness and Stochasticity}
 
-The terms ``random'' and ``stochastic'' are used to describe variables or models whose measurements or outcomes are not precisely predictable.
+The terms ``random'' and ``stochastic'' are used to describe variables or models whose values or outcomes are not precisely known.
 
-\mync{Randomness} typically refers to the case where a variable (as in ``random variable'') is not precisely measurable or predictable. However, the chance of it taking particular values may follow some patterns known as the statistical properties of the variable. For example, the reading of a sensor may contain random noise. The value of the noise corresponding with a particular reading is unknown, but the range of it is often known and can be obtained from the sensor manufacture. For another example, let variable $X$ denote the result of tossing a coin, and $X$ is a random variable with the following pattern. It is either head ($X=1$) or tail ($X=0$), each with a $50\%$ chance. The precise value remains unknown until the coin is tossed.
+\mync{Randomness} typically refers to the case where a variable (as in ``random variable'') is not precisely measurable or predictable. However, the chance of it taking particular values may follow known patterns. For example, the reading of a sensor may contain random noise. The value of the noise corresponding with a particular reading is unknown, but the range of it is often known and can be obtained from the sensor manufacture. For another example, let variable $X$ denote the result of tossing a coin, and $X$ is a random variable with the following pattern. It is either head ($X=1$) or tail ($X=0$), each with a $50\%$ chance. The precise value remains unknown until the coin is tossed.
 
-\mync{Stochasticity} typically refers to the case where the outcome of a process (as in ``stochastic process'') is not predictable. This is likely caused by the incomplete modeling or random disturbance of the system. As a result, the process becomes non-deterministic, i.e., the output of the system cannot be precisely determined by the model and the input. A stochastic process can still be described by a parametric model, but with some unknowns (usually in the form of random variables) in the equations.
+\mync{Stochasticity} typically refers to the case where the state and output of a process (as in ``stochastic process'') is non-deterministic even with a fixed input. This is likely caused by the incomplete modeling or random disturbance of the system. As a result, the system cannot be precisely determined by the model and the input. A stochastic process can still be described by a parametric model, but with some unknowns (usually in the form of random variables) in the equations.
 
 This part of the notebook mainly studies random variables. Stochastic process and control of stochastic systems are introduced elsewhere in control system related notebooks.
 
@@ -32,7 +32,7 @@ A set $S$ that consists of all possible outcomes of a random experiment is calle
 \begin{mdframed}
 \noindent \textbf{Countable Infinity VS Uncountable Infinity}
 
-Though both infinity, the total number of natural numbers, i.e., the cardinality of $\mathbb{N}$, is less than the total number of real numbers, i.e., the cardinality of $\mathbb{R}$.
+Though both infinity, the total number of natural numbers, i.e., the cardinality of $\mathbb{N}$, is ``smaller'' than the total number of real numbers, i.e., the cardinality of $\mathbb{R}$.
 
 The cardinality of $\mathbb{N}$ is known as $\aleph_0$. It is also the cardinality of all rational numbers. In computing, it is also the cardinality of all computable numbers (i.e., numbers that can be computed to any desired precision by a finite terminating algorithm) and computable functions (i.e., algorithms). The total number of real numbers is known as $\aleph_1$. It is also the cardinality of all irrational numbers and complex numbers, the number of points on a line or in a high dimensional space $\mathbb{R}^n$ where $n$ is a finite integer.
 
@@ -45,19 +45,21 @@ Finite sample spaces and countably infinite sample spaces are also known as \myn
 
 \subsection{Event}
 
-An \mync{event} is defined as a subset $A \subseteq S$, i.e., it is a portion of all possible outcomes. An event may or may not occur depending on the outcome of the experiment. In the special case where $A$ has only one element, the event is also called an \mync{elementary event}, or a \mync{sample}. Notice that all elementary events are mutually exclusive as each of them contains an independent outcome of the experiment. In the special case where $A=S$, the event is also called a \mync{certain event}.
+An \mync{event} is defined as a subset $A \subseteq S$, i.e., it is a portion of all possible outcomes. An event may or may not occur depending on the outcome of the experiment. In the special case where $A$ has only one element, the event is also called an \mync{elementary event}, or a \mync{sample}. Notice that all elementary events are mutually exclusive as each of them is a distinct outcome of the experiment. In the special case where $A=S$, the event is also called a \mync{certain event}.
 
 \section{Probability}
 
 Given an experiment and an event, it is unsure whether the event will occur, and \mync{probability} is a measurement of the likelihood that the event is going to occur. For example, if the probability is $50\%$, it means that the event has an equal chance of happening or not happening.
 
-There are different ways to calculate the probability of events. A rigorous mathematical definition of probability, known as axiomatic approach, is introduced in Section \ref{subsec:probability_axioms}. But before that, classical approach, empirical approach and geometric probability are introduced. One may get confused with which is the ``true'' definition of probability. As will be shown later, though defined from different angles, they all point to essentially the same concept.
+There are different ways to calculate the probability of events. A rigorous mathematical definition of probability, known as axiomatic approach, is introduced in Section \ref{subsec:probability_axioms}. But before that, classical approach, empirical approach and geometric probability are introduced. One may get confused with which is the ``true'' definition of probability. As will be shown later, though defined from different angles, they all point to the same concept essentially.
 
 \subsection{Classical Probability}
 
 In the \mync{classical approach}, as a prerequisite all elementary events have the same chance of occurrence, and the total number of elementary events is $n$. Define an event that contains $h$ elementary events. The \mync{classical probability} of the event is given by $h/n$.
 
-Calculating $h$, the cardinality of event $A$, and $n$, the cardinality of the sample space $S$, is the key to solving the classical probability. Permutation and combination are widely used for such calculations. Suppose that there are $n$ distinct objects, and we would like to select $r\leq n$ objects from them and put them into a sequence. The \mync{permutation} defined by
+Parameters $h$ and $n$ are the cardinality of event $A$ and the cardinality of the sample space $S$ respectively. Calculating $h$ and $n$ is the key to solving the classical probability. Permutation and combination are widely used for such calculations. 
+
+Suppose that there are $n$ distinct objects, and we would like to select $r\leq n$ objects from them and put them into a sequence. The \mync{permutation} defined by
 \begin{eqnarray}
   nPr &=& n(n-1)(n-2)\cdots (n-r+1) \label{eq:permutation}
 \end{eqnarray}
@@ -149,7 +151,7 @@ Recall the definition of a certain event. A certain event must have a probabilit
 
 Our intuitive understanding of probability should align with the frequency approach, where the probability of an event should describe how frequently an event occurs if the experiment is repeated many times. The axiomatic approach, though very clearly defined mathematically, seems to disconnect from the intuition.
 
-As will be introduced in a later Section \ref{subsec:largenumbers}, the law of large numbers actually bridges the axiomatic approach and frequency approach, and guarantees the consistency of the two. As a result, the probability defined in axiomatic approach can also reflect the likelihood of an event happening the similar way the frequency approach does, and there is no gap in between.
+As will be introduced in a later Section \ref{subsec:largenumbers}, the law of large numbers actually bridges the axiomatic approach and frequency approach, thus guaranteeing the consistency. In addition, as introduced earlier, the classical probability is within the framework of axiomatic approach, and the geometric probability can be taken as a limiting case of classical probability. As a result, the probability defined in axiomatic approach (including classical probability and geometric probability) reflects the likelihood of an event happening the similar way the frequency approach does, and there is no gap in between. Everything comes into the same picture.
 
 \end{mdframed}
 
