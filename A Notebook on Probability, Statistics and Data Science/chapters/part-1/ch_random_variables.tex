@@ -81,12 +81,20 @@ Some features of expectation calculation are given below.
 	\textup{E}(cX) &=& c\textup{E}(X) \nonumber \\
 	\textup{E}(X+Y) &=& \textup{E}(X) + \textup{E}(Y) \nonumber
 \end{eqnarray}
-where $c$ is a constant and $X$, $Y$ are two random variables. These features can be easily derived from \eqref{eq:expectationdiscrete} and \eqref{eq:expectationcontinuous}. Furthermore, if $X$, $Y$ are independent, recall $f(x,y) = f_X(x)f_Y(y)$,
+where $c$ is a constant and $X$, $Y$ are two random variables. These features can be easily derived from \eqref{eq:expectationdiscrete} and \eqref{eq:expectationcontinuous}. 
+
+The expectation of the multiplication of two random variables, $XY$, can be calculated as follows.
+\begin{eqnarray}
+	\textup{E}(XY) &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty} xyf(x, y)dxdy \nonumber
+\end{eqnarray}
+where $f(x, y)$ is the joint distribution of $X$ and $Y$ which will be introduced in detail in Section \ref{sec:jointdistribution}. Furthermore, if $X$, $Y$ are independent,
 \begin{eqnarray}
 	\textup{E}(XY) &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty} xyf(x, y)dxdy \nonumber \\
 	&=& \int_{-\infty}^{\infty}xf_X(x)dx \times \int_{-\infty}^{\infty}yf_Y(y)dy \nonumber \\
 	&=& \textup{E}(X)\textup{E}(Y) \nonumber
 \end{eqnarray}
+where $f_X(x)$, $f_Y(y)$ are the distributions of $X$ and $Y$ which can be derived from $f(x,y)$. Details are also introduced in Section \ref{sec:jointdistribution}.
+
 
 \subsection{Variance and Standard Deviation}
 
@@ -101,15 +109,12 @@ Variance and standard deviation are sometimes denoted as $\sigma^2$ and $\sigma$
 
 For continuous random variables, from \eqref{eq:varderived} the variance is
 \begin{eqnarray}
-	\textup{Var}(X) &=& \int_{-\infty}^{\infty} (x-\textup{E}(X))^2f(x)dx \nonumber
+	\textup{Var}(X) &=& \int_{-\infty}^{\infty} (x-\textup{E}(X))^2f(x)dx \nonumber \\
 \end{eqnarray}
 
 Some features of variance calculation are given below.
 \begin{eqnarray}
-	\textup{Var}(cX) &=& c^2\textup{Var}(X) \nonumber
-\end{eqnarray}
-For independent random variables $X$ and $Y$,
-\begin{eqnarray}
+	\textup{Var}(cX) &=& c^2\textup{Var}(X) \nonumber \\
 	\textup{Var}(X\pm Y) &=& \textup{Var}(X) + \textup{Var}(Y) \nonumber
 \end{eqnarray}
 
@@ -166,7 +171,7 @@ The kurtosis $\gamma_2$ measures the ``tailedness'' of a probability distributio
 	\caption{Demonstration of PDF with different excess kurtosis.} \label{fig:kurtosis_demo}
 \end{figure}
 
-\section{Joint Distribution}
+\section{Joint Distribution} \label{sec:jointdistribution}
 
 \mync{Joint distribution} describes the distribution of multiple random variable combinations. It is especially useful when these variables are correlated, in which case the joint probability function or PDF can reflect their correlation. 
 
@@ -226,7 +231,6 @@ where $f_Y(y)$ is obtained using \eqref{eq:jointpdfdowngrade}. Equation \eqref{e
   &=& \dfrac{f_Y(y)}{f_Y(y)} \nonumber \\
   &=& 1 \nonumber
 \end{eqnarray}
-Note that given a particular value of $y$, $f_Y(y)$ is a constant value independent of $x$, and hence can be taken out of the integration in the above derivation.
 
 If $X$ and $Y$ are independent variables, $f(x,y) = f_X(x)f_Y(y)$. In this case, \eqref{eq:conditionalpdf1} becomes
 \begin{eqnarray}
@@ -309,53 +313,57 @@ The \mync{correlation} of two variables is defined and calculated as follows.
 \end{eqnarray}
 From \eqref{eq:covlemma}, apparently $-1\leq \rho \leq 1$. When two variables are uncorrelated or independent, $\rho=0$. If $\rho=1$, the two variables $X$ and $Y$ are said to be \mync{perfect positive correlated}. This happens usually because the two variables are positively linearly depended, for example, $X=2Y$ or $X=Y+1$. If $\rho=-1$, they are said to be \mync{perfect negative correlated}, and the similar idea applies.
 
-\section{Parameter Estimation}
+\section{Basic Parameter Estimation}
 
-Parameter estimation is an important use case of conditional distribution. Let $\theta$ be the parameter to be estimated, and $x$ the measurement that reflects $\theta$ via measurement model $f(\theta, x)$ which is given in the form of joint PDF. Both $\theta$ and $x$ can be vectors.
+Parameter estimation is an important use case of conditional distribution. This section introduces only the basics of parameter estimation as a use case of conditional probability. More about parameter estimation can be found in control system relevant notebooks. 
 
 \subsection{Posteriori Mean}
 
-Without measurement $x$, the estimate of $\theta$ is given by
+Let $\theta$ be the parameter to be estimated, and $x$ the measurement that reflects $\theta$ via measurement model $f(\theta, x)$ which is given in the form of joint PDF. Both $\theta$ and $x$ can be vectors. Under the scope of the discussion in this section, it is assumed that $f(\theta,x)$ is known. Without measurement $x$, the estimate of $\theta$ is given by
 \begin{eqnarray}
 	\hat{\theta} &=& \int_{-\infty}^{\infty} \theta f_\theta(\theta) d\theta \nonumber
 \end{eqnarray}
-where $f_\theta(\theta)$ is obtained using \eqref{eq:jointpdfdowngrade}. This is known as the \mync{priori estimation} of $\theta$. 
+where $f_\theta(\theta)$ is obtained from $f(\theta,x)$ using \eqref{eq:jointpdfdowngrade}. This is known as the \mync{priori estimation} of $\theta$. 
 
 Given measurement $x$, the \mync{posteriori estimation} of $\theta$ can be obtained as follows. From \eqref{eq:conditionalpdf1a},
 \begin{eqnarray}
 	f_{\theta|X}(\theta|x) &=& \dfrac{f_{X|\theta}(x|\theta)f_\theta(\theta)}{f_X(x)} \label{eq:conditionalpdf2} \\
 	\hat{\theta} &=& \int_{-\infty}^{\infty} \theta f_{\theta|X}(\theta|x) d\theta \label{eq:posterioriestimation}
 \end{eqnarray}
-where $f_{X|\theta}(x|\theta)$ is known as the \mync{likelihood function} that describes the likelihood of measuring $x$ if the actual parameter(s) is $\theta$. The PDF $f_\theta(\theta)$ is from the priori estimation of $\theta$. Finally, $f_X(x)$ is known as the \mync{evidence}. With fixed $x$, $f_X(x)$ becomes a constant.
+where $f_{X|\theta}(x|\theta)$ is known as the \mync{likelihood function} that describes the likelihood of measuring $x$ if the actual parameter(s) is $\theta$. Distribution $f_X(x)$ is known as the \mync{evidence}. With fixed $x$, $f_X(x)$ becomes a constant.
 
 Equation \eqref{eq:conditionalpdf2} is essentially
 \begin{eqnarray}
 	\textup{posteriori} &=& \dfrac{\textup{likelihood}\times\textup{priori}}{\textup{evidence}} \label{eq:posteriorimemo}
 \end{eqnarray} 
 
-Notice that all the components in \eqref{eq:conditionalpdf2} and \eqref{eq:posteriorimemo} are derived from the joint distribution $f(\theta, x)$. With known analytical $f(\theta, x)$ and a set of measurement $x$, \eqref{eq:conditionalpdf2} can be used to calculate the estimate. However, in practice $f(\theta, x)$ is often unknown and other estimation methods need to be used.
+Notice that all the components in \eqref{eq:conditionalpdf2} and \eqref{eq:posteriorimemo} are derived from the joint distribution $f(\theta, x)$. With known analytical $f(\theta, x)$ and a set of measurement $x$, \eqref{eq:conditionalpdf2} can be used to calculate the estimate. 
 
-\subsection{MLE and MAP}
+The use of posteriori estimation \eqref{eq:posteriorimemo} assumes that $f(\theta, x)$ is know, from where the likelihood, the priori and the evidence can be derived given a specific measurement $x$. However, this is often not true in reality, where $f(\theta, x)$ is often unknown and the likelihood, the priori and the evidence are either unknown or only partially known. In the next Section \ref{sec:mlemap}, \myabb{Maximum Likelihood Estimation}{MLE} is introduced as an example of alternation to the posteriori estimation that does not require the full picture of $f(\theta, x)$.
 
-Alternative to \eqref{eq:posterioriestimation}, there are at least two other types of commonly seen estimations, namely \mync{Maximum Likelihood Estimation}[MLE] and \mync{Maximum A Posteriori}[MAP] estimation. MLE and MAP are widely used in system identification. Hence, more details of them can be found in control system relevant notebooks. A brief introduction is given below.
+\subsection{MLE and MAP} \label{sec:mlemap}
 
-In many occasions, the joint distribution $f(\theta, x)$ is unknown. Instead, the measurement $x$ can be formulated as a function of $\theta$ plus noise. In this case, only $f_{X|\theta}(x|\theta)$ the likelihood function can be derived, whereas the priori estimation and evidence are unknown. As a result, \eqref{eq:conditionalpdf2} and \eqref{eq:posterioriestimation} cannot be used to calculate the estimate.
+Alternative to \eqref{eq:posterioriestimation}, there are at least two other types of commonly seen estimations, namely \mync{Maximum Likelihood Estimation}[MLE] and \mync{Maximum A Posteriori}[MAP] estimations. Details of them can be found in control system relevant notebooks. A brief introduction is given below.
+
+In many occasions, the joint distribution $f(\theta, x)$ is unknown. Instead, the measurement $x$ can be formulated as a function of $\theta$ plus noise. This function is known as the measurement model or output model of the system. In this case, the likelihood $f_{X|\theta}(x|\theta)$ can be derived from the measurement model, whereas the priori estimation and evidence are unknown. As a result, \eqref{eq:conditionalpdf2} and \eqref{eq:posterioriestimation} cannot be used to calculate the estimate.
 
 In this case, consider maximizing the likelihood function to obtain the estimate as follows.
 \begin{eqnarray}
 	\hat{\theta} &=& \argmax_\theta f_{X|\theta}(x|\theta) \nonumber
 \end{eqnarray}
-This is known as MLE. MLE is useful when only the output model is known.
+This is known as MLE. MLE is useful when only the measurement model is known.
 
+There are many ways to solve an MLE problem. In the special cases where $f_{X|\theta}(x|\theta)$ is a special distribution, such as Gaussian and Laplace, the MLE becomes \mync{Weighted Least Squares}[WLS] estimator and \mync{Least Absolute Value}[LAV] estimator, respectively.
 
-There are many ways to solve an MLE problem. In the special cases where $f_{X|\theta}(x|\theta)$ is a special distribution, such as Gaussian, Laplace, etc., the MLE becomes \mync{Weighted Least Squares}[WLS] estimator, \mync{Least Absolute Value}[LAV] estimator, etc., respectively.
-
-A general way of solving MLE is given below. Let cost function
+A general way of solving MLE is given below. Define the cost function as
 \begin{eqnarray}
-	J &=& -\sum_{i=1}^{m}\textup{ln}f_{X|\theta}(x|\theta) \nonumber \\
-	\hat{\theta} &=& \arg\min_{x} J \nonumber
+	J &=& -\sum_{i=1}^{m}\textup{ln}f_{X|\theta}(x|\theta) \nonumber 	
 \end{eqnarray}
-which can be solved using commonly used optimization algorithms such as Newton-Raphson Method.
+and use 
+\begin{eqnarray}
+\hat{\theta} &=& \arg\min_{x} J \nonumber
+\end{eqnarray}
+which can be solved using commonly used optimization algorithms such as Newton-Raphson method.
 
 MAP estimation is also known as the Bayesian estimation. Like the posteriori mean method, MAP also calculates the posteriori distribution \eqref{eq:conditionalpdf2}. But instead of \eqref{eq:posterioriestimation}, the estimate is calculated using
 \begin{eqnarray}
@@ -367,14 +375,14 @@ Notice that \eqref{eq:mapestimate1} is equivalent to
 \begin{eqnarray}
 	\hat{\theta} &=& \argmax_\theta f_{X|\theta}(x|\theta)f_\theta(\theta) \label{eq:mapestimate2}
 \end{eqnarray}
-as $f_X(x)$ becomes constant for a given set of $x$. In this sense, comparing with the posteriori mean method, MAP does not require $f_X(x)$ nor the joint distribution $f(\theta, x)$ in the calculation. Comparing with MLE, MAP further requires $f_\theta(\theta)$ the priori estimate.
+as $f_X(x)$ is a constant for any $x$ and does not affect the result of \eqref{eq:mapestimate1}. In this sense, comparing with the posteriori mean method, MAP does not require $f_X(x)$ nor the joint distribution $f(\theta, x)$ in the calculation. Comparing with MLE, MAP further requires the priori $f_\theta(\theta)$.
 
 Equation \eqref{eq:mapestimate2} can be solved as follows.
 \begin{eqnarray}
 	J &=& -\sum_{i=1}^{m}\textup{ln}f_{X|\theta}(x|\theta) - \textup{ln}f_\theta(\theta) \nonumber \\
 	\hat{\theta} &=& \arg\min_{x} J \nonumber
 \end{eqnarray}
-likewise.
+which can likewise be solved using commonly used optimization algorithms.
 
 \begin{mdframed}
 	\noindent \textbf{MLE versus MAP versus Posteriori Mean}
@@ -395,7 +403,7 @@ The maximum information contained in the samples can be described by \mync{Fishe
 \begin{eqnarray}
 	\textup{Var}(\hat{\theta}) &\geq& I(\theta)^{-1} \label{eq:crlb}
 \end{eqnarray}
-which is known as the \mync{Cram\'{e}r–Rao lower bound}[CRLB] of the estimator. From \eqref{eq:crlb}, it can be seen that the ``larger'' $I(\theta)$, the lower $\textup{Var}(\hat{\theta})$  can possibly reach.
+which is known as the \mync{Cram\'{e}r–Rao Lower Bound}[CRLB] of the estimator. From \eqref{eq:crlb}, it can be seen that the ``larger'' $I(\theta)$, the lower $\textup{Var}(\hat{\theta})$  can possibly reach.
 
 It is possible (although in many cases difficult) to check and prove whether an estimator hits the bound and provides the smallest possible $\textup{Var}(\hat{\theta})$ by comparing it with its corresponding CRLB. If its variance equals to CRLB, the estimator an \mync{optimal estimator}. A more general CRLB for biased estimator can also be derived. The detailed derivations of Fisher Information Matrix and general CRLB are not given in this notebook.
 
@@ -412,7 +420,7 @@ Notice that in practice, MSE and RMSE are meaningful only when $n$ is large enou
 \end{eqnarray}
 for unbiased estimation because $E\left[\hat{\theta}\right]=\theta$, and the MSE approaches the variance of the estimate. From this point of view, we can use the variance of the estimate, $\textup{Var}(\hat{\theta})$, interchangeably with MSE as an evaluation of the performance of the estimation. In most literatures, $\textup{Var}(\hat{\theta})$ is used, implying that the result is theoretical and derived under the assumption of ``infinite runs''.
 
-The smaller $\textup{Var}(\hat{\theta})$, the more precise the estimation. There is a limitation to how small $\textup{Var}(\hat{\theta})$ can be regardless of the design of the estimator. This is intuitive because there is only so much information contained in the samples, given limited sample size and measurement error. So long as the estimation is done using those samples, its precision is limited. 
+The smaller $\textup{Var}(\hat{\theta})$, the more precise the estimation. There is a limitation to the minimum value of $\textup{Var}(\hat{\theta})$ due to CRLB. This is intuitive because there is only so much information contained in the samples, given limited sample size and measurement error. So long as the estimation is done using those samples, its precision is limited. 
 
 \section{Important Theorems}
 

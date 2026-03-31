@@ -27,9 +27,11 @@ Run Bernoulli trails repeatedly. Each Bernoulli trail has a probability of $p$ t
 
 Bernoulli distribution can be taken as a special case of binomial distribution with $n=1$, $x=1$. The expectation, variance, skewness and excess kurtosis of the binomial distribution are $np$, $npq$, $\dfrac{q-p}{\sqrt{npq}}$ and $\dfrac{1-6pq}{npq}$, respectively.
 
-If $n$ is large, Binomial distribution becomes a verification of CLT on Bernoulli trail. Indeed, when $n$ is large, binomial distribution approaches normal distribution.
+If $n$ is large, Binomial distribution becomes a verification of CLT on Bernoulli trail. Let $n$ be a fixed large number, and let the Bernoulli trail describe the output to a stochastic system. Among the $n$ trials, $X$ of them outputs $1$ while $n-X$ of them, $0$. The mean of the output, therefore, is $X/n$. According to CLT, $X/n$ should follow Gaussian distribution when $n$ is large, and in that case $X$ should also follow Gaussian distribution. 
 
-Binomial distribution can be extended to \mync{multinomial distribution}, where instead of a single event $A$ happening with probability $p$ or not happening with probability $q$, s.t. $p+q=1$, consider multiple events $A_1$, $A_2$, ..., $A_m$, each with probability $p_1$, $p_2$, ..., $p_m$, respectively, s.t. $p_1+p_2+\ldots+p_m=1$. Consider a total of $n$ tests. The number of $A_1$ occurring is a random variable $X_1$, event $A_2$, $X_2$, and so on. Multinomial distribution studies the probability of
+Indeed, when $n$ is large, binomial distribution approaches Gaussian distribution.
+
+Binomial distribution can be extended to \mync{multinomial distribution}, where instead of a single event $A$ happening with probability $p$ or not happening with probability $q$, s.t. $p+q=1$, consider multiple events $A_1$, $A_2$, ..., $A_m$, each with probability $p_1$, $p_2$, ..., $p_m$, respectively, subjected to $p_1+p_2+\ldots+p_m=1$. Consider a total of $n$ tests. The number of $A_1$ occurring is a random variable $X_1$, event $A_2$, $X_2$, and so on. Multinomial distribution studies the probability of
 \begin{eqnarray}
 	P(X_1=x_1, X_2=x_2,\ldots, X_m = x_m) &=& \dfrac{n!}{x_1!x_2!\ldots x_m!}p_1^{x_1}p_2^{x_2}\ldots p_m^{x_m} \nonumber \\
 	\textup{s.t.} && \sum x_i = n \nonumber
@@ -43,7 +45,7 @@ Binomial distribution is different from \mync{hypergeometric distribution}. Bino
 	\end{array}\right)\left(\dfrac{b}{b+r}\right)^x\left(\dfrac{r}{b+r}\right)^{n-x} \nonumber \nonumber
 \end{eqnarray}
 
-On the other hand, if after each test the marble is not returned to the bag, it becomes a hypergeometric distribution and the probability follows
+On the other hand, if after each test the marble is not returned to the bag (this would suggest that $n\leq r+b$), it becomes a hypergeometric distribution and the probability follows
 \begin{eqnarray}
 	f(x) = P(X=x) = \dfrac{\left(\begin{array}{c}
 			b \\
@@ -62,7 +64,7 @@ When $b$, $r$ are far larger than $n$, the hypergeometric distribution can be ap
 
 \section{Normal Distribution}
 
-\mync{Normal distribution}, also known as \mync{Gaussian distribution}, is a continuous distribution. It is one of the most widely used distributions to model random noise. One of the explanations is given as follows. Many measurements such as sensor readings are in fact aggregated values. For example, consider a sensor whose reading refreshes at $1Hz$. Behind the screen, it might be sampling the signal at $1000Hz$, and the reading is the average of every $1000$ samples. According to CLT, the reading shall follow normal distribution.
+\mync{Normal distribution}, also known as \mync{Gaussian distribution}, is a continuous distribution. It is one of the most widely used distributions to model random noise. One of the explanations is given as follows. Many measurements such as sensor readings are in fact aggregated values. For example, consider a sensor whose reading refreshes at $1Hz$. Behind the screen, it might be sampling the signal at $1000Hz$, and the reading is the average of every $1000$ samples. According to CLT, the reading shall follow normal distribution given that $1000$ is a large number.
 
 We will discuss single normal distribution first, followed by joint multivariate normal distribution.
 
@@ -94,26 +96,25 @@ where $\lambda >0$ is the shape parameter as shown in Fig. \ref{fig:poisson_pmf}
 	\includegraphics[width=250pt]{chapters/part-1/figures/poisson_pmf.eps}
 	\caption{Poisson distribution with different $\lambda$.} \label{fig:poisson_pmf}
 \end{figure}
-Notice that the sum of two Poisson distribution with shape parameters $\lambda_1$ and $\lambda_2$ is also Poisson distribution with $\lambda = \lambda_1 + \lambda_2$.
+The expectation, variance, skewness and excess kurtosis of the distribution are $\lambda$, $\lambda$, $\dfrac{1}{\sqrt{\lambda}}$ and $\dfrac{1}{\lambda}$, respectively. Notice that the sum of two Poisson distribution with shape parameters $\lambda_1$ and $\lambda_2$ is also Poisson distribution with $\lambda = \lambda_1 + \lambda_2$.
 
-Poisson distribution is often used to describe the probability of an event happening a particular number of times in a given window, assuming each occurrence of the event is independent. The parameter $\lambda$ reflects the average number of occurrence. For example, it can model the number of times a machine fails in a year, assuming each failure is independent from another (the failures are completely random and independent). 
+Poisson distribution is often used to describe the probability of an event happening a particular number of times, assuming that the occurrence of the event is independent, the chance of the event happening a single time is low, but there are many trials where the event can happen. The parameter $\lambda$ reflects the average number of occurrence. 
 
-Binomial distribution is closely connected with Poisson distribution. Poisson distribution can be taken as a limiting case of binomial distribution when $n\rightarrow\infty$, $p\rightarrow 0$ is small, and $\lambda = np$ a decent value. A demonstration is given in Fig. \ref{fig:poisson_vs_b}.
+Poisson distribution can be taken as a limiting case of binomial distribution where $n\rightarrow\infty$, $p\rightarrow 0$, and $\lambda = np$ a decent value. A demonstration is given in Fig. \ref{fig:poisson_vs_b}.
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-1/figures/poisson_vs_b.eps}
 	\caption{Poisson distribution approximation using binomial distribution.} \label{fig:poisson_vs_b}
 \end{figure}
+An intuitive explanation is given using the following example. Consider studying the number of failures of a machine in one year. In each second, the machine has a failure rate of $p=2\times 10^{-7}$ which is very small. The total number of seconds in a year is $31536000$, which is a large number and it is associated with the number of trails. When the machine fails, it automatically restarts instantly so that it would not affect its behavior in the consecutive second.
 
-An intuitive explanation is given using the following example. Consider studying the number of failure of a machine in one year. In each second, the machine has a failure rate of $p$, which of course is very small. The total number of seconds in a year is $31,536,000$, which is a large number and it is associated with the number of trails. The number of failure of the machine in a year can be approximately described by binomial distribution with $n=31536000$. The underlying assumption is that the machine can either fail or survive every second with the probability of $p$ and $1-p$ respectively, and its status in each second are independent, ignoring the downtime of the machine.
+The number of failure of the machine in a year can be described by binomial distribution with $n=31536000$ a large number and $p=2\times 10^{-7}$ a small number. The expected number of failures is $np\approx 6.3$, and can be approximately described by a Poisson distribution with $\lambda=np\approx 6.3$.
 
-Another example of Poisson distribution is the number of visitors of a website in a given period of time. Each internet user has a small probability $p$ to visit the website. The total number of internet users is $n$ which is a large number. The number of visitors to the website follows Poisson distribution with $\lambda=np$ being the expected visitor number.
-
-The expectation, variance, skewness and excess kurtosis of the distribution are $\lambda$, $\lambda$, $\dfrac{1}{\sqrt{\lambda}}$ and $\dfrac{1}{\lambda}$, respectively.
+Another example of Poisson distribution is the number of visitors of a website. Each internet user has a small probability $p$ to visit the website. The total number of internet users is $n$ which is a large number. The number of visitors to the website follows Poisson distribution with $\lambda=np$ being the expected visitor number.
 
 \section{Exponential Distribution} \label{sec:exponential_distribution}
 
-\mync{Exponential distribution} can be used to model the duration of time between two events in a Poisson distribution. For example, it can model the operating time of a machine between two failures, assuming that the failures are independent and random.
+\mync{Exponential distribution} is a continuous distribution that can be used to model the duration of time between two events in a Poisson distribution. For example, it can model the operating time of a machine between two failures, assuming that the failures are independent and random.
 
 Exponential distribution is an important special case of the $\Gamma$ distribution. More about $\Gamma$ distribution will be introduced in more details later.
 
