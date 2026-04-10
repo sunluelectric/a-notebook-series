@@ -44,7 +44,7 @@ In the context of vibe coding, the developer does not need to program a single l
 
 \subsection{Project Tree}
 
-The project tree of a vibe coding environment may look like Fig. \ref{fig:claude_vibe_tree}. Notice that Claude Code is used as an example. Other vibe coding tools such as Codex may have a slightly different project tree structure.
+The project tree of a vibe coding environment may look like Fig. \ref{fig:claude_vibe_tree}. Notice that Claude Code is used as an example and more details can be found in \cite{claudeCode2026overview}. Other vibe coding tools such as Codex may have a slightly different project tree structure.
 
 \begin{figure}[!htb]
 	\centering
@@ -61,14 +61,53 @@ While vibe coding is indeed very powerful as will be illustrated by the examples
 
 \section{Code with Vibe Coding}
 
-This section introduces vibe coding with Claude Code. Many concepts and techniques introduced in this section can be transferred to other vibe coding tools such as OpenAI Codex and AMP.
+This section introduces vibe coding with Claude Code. The details are given in \cite{claudeCode2026overview}. Many concepts and techniques introduced in this section can be transferred to other vibe coding tools such as OpenAI Codex and AMP.
 
 \subsection{Installation}
 
-\subsection{Project Initialization}
+Claude Code can be installed on Windows, Linux and macOS systems. For example, to install Claude Code on a Linux machine, use
+\begin{lstlisting}
+curl -fsSL https://claude.ai/install.sh | bash
+\end{lstlisting}
+in the terminal.
+
+After installation, use \verb|claude| in the shell to start claude. In the first start of Claude Code, the user needs to login with either a Claude account (with Claude chatbot subscription) or a Claude API key.
+
+\subsection{Simple Vibe Coding}
+
+Assume that the user is in an empty project root folder, from there Claude Code is started. The user can use the following command
+\begin{lstlisting}
+/init
+\end{lstlisting}
+to initialize the folder. Claude Code shall create \verb|CLAUDE.md| file in the project folder, inside which is a basic template for a project. The \verb|CLAUDE.md| file is the minimum setup for a Claude Code incorporated project. The user can describe the project in \verb|CLAUDE.md| file and Claude Code will start coding accordingly. 
+
+When Claude Code starts coding, it will create a \verb|.claude| folder which it uses to save intermediate files. Unless the user wants to add skills, plugins and subagents for Claude Code, the user does not need to review or modify anything inside \verb|.claude| folder.
+
+Commonly adopted vibe coding practice with Claude Code, as well as other similar vibe coding tools, are summarized below.
+
+It is recommended that the user gives detailed instructions and user requirements in \verb|CLAUDE.md|. The user is encouraged to ask Claude Code to make a development and testing plan before coding, and save the plan in a file such as \verb|PLAN.md|. The user shall check the plan, and let Claude Code implement the plan phase by phase. After completion of developing and testing of each phase, it is recommended that the user require Claude Code to document the phase and commit the intermediate achievement.
+
+The user is encouraged to check the context window consumption after each step, should there be many steps for a complex project. Use \verb|/context| to check the context window consumption. When the context window is about to be used up, the user is encouraged to perform one of the following.
+\begin{itemize}
+  \item Use \verb|/compact| manually to compact the context window in between implementation phases.
+  \item Ask Claude Code to summarize the progress and save it in a file such as \verb|README.md|. Clear the chat or start a new Claude Code agent, and let the new agent resume the development.
+\end{itemize}
+It is not recommended to let Claude Code decide the timing for the compact, as it may happen in the middle of the development of an important and complicated feature.
 
 \subsection{Tools, Skills and Plugins}
 
+Tools, skills and plugins make vibe coding more powerful than agentic AI programming. They further elevate the level of automation of programming and program management with vibe coding. 
+
+
+
+
+
 \subsection{Sub Agent}
+
+\subsection{Hook}
+
+
+\section{Vibe Coding in Sandbox}
+
 
 \section{Example: D\&D Co-player Project}
