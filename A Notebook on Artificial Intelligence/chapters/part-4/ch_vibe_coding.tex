@@ -1,44 +1,35 @@
 \chapter{Vibe Coding} 
 
-Vibe coding is one of the most successful and widely appreciated applications of LLM and agentic AI. Many LLM service providers such as OpenAI and Anthropic provide vibe coding services for their subscribers. In this chapter, vibe coding is introduced with Anthropic Claude Code used as an example.
+Vibe coding is one of the most successful and widely appreciated applications of LLM and agentic AI. Many LLM service providers such as OpenAI and Anthropic provide vibe coding services for their subscribers. 
 
-Notice that vibe coding is continuously evolving. The materials introduced in this notebook only reflect the development up to the writing.
+In this chapter, vibe coding is introduced with Anthropic Claude Code used as an example. Similar ideas used by Claude Code is likely to be found on other vibe coding services such as OpenAI Codex and GitHub Copilot Plan.
 
-\section{Different Ways of Coding}
+Notice that vibe coding is continuously evolving. The materials introduced in this notebook reflect only the development up to the writing.
 
-In the past few years, LLM and agentic AI have revolutionized the way developers code. Up till this writing, there have been at least the following different ways of coding, and it is continuously evolving.
+\section{Coding Styles}
+
+In the past few years, LLM and agentic AI have revolutionized the way people code. Up till this writing, there have been at least the following different coding styles, and it is continuously evolving.
 \begin{itemize}
   \item Conventional coding
   
-  A developer codes in a conventional \myabb{Integrated Development Environment}{IDE} which is little more than just a text editor. All codes are inserted into the scripts manually. The IDE is often able to detect syntax error and compile the code.
-  
-  Example: VS Code without AI-featured extensions.
-  
   \item Coding with autocompletion
   
-  The AI predicts the intention of the developer by looking at the existing codes and comments, and automatically fill in the next few lines of codes. The developer can modify the filled contents when necessary.
-  
-  Autocompletion is effective when the contents to be filled is simple, self-contained, and pattern-wise consistent with existing codes, but may struggle with fully automatically generating a long portion of codes for complex functions.
-  
-  Example: VS Code with GitHub copilot extension.
-  
-  \item Agentic programming
-  
-  The IDE is incorporated with a chatbox. The developer can put their comprehensive requests into the chatbox, and the AI is able to review, modify or generate files in the project directory to achieve the goal. When the AI agents modify the codes, the developer can review the modification in real-time. The reviewer can accept or reject each changes before testing the program. The developer can raise new requests during the development by interacting with the AI using the chatbox. Should their be any error message, the AI is able to view the message and revise the code accordingly. 
-  
-  Compared with autocompletion, in agentic programming the AI agents are allowed to read and write files in the project folder, and iteratively and recursively program and test the codes. It leverages the level of automation in coding and requires much less human involvement. However, the AI agents can only reach everything in the project folder and have no means to access any resources in the outside world, for example, to query the Internet for the latest libraries or to automatically raise a pull request on GitHub when a feature is developed.
-  
-  Example: VS Code with GitHub copilot extension in ``Agent'' mode.
+  \item Agentic coding
   
   \item Vibe coding
-  
-  In vibe coding, there is not necessarily an IDE. The developer puts the requirements in markdown files prior to the programming, and start the AI from the \myabb{Command Line Interface}{CLI}. The AI reads the requirements, plans the developing procedures, performs and tests the programming iteratively. Different from agentic programming, the AI is able to equip MCP tools, skills and plugins to better coordinate the development of the project. For example, it can query the Internet for latest user manuals for the libraries, manage the project in Jira, update the project in GitHub, and so on. The developer is able to interact with the AI in CLI using natural language. They can supervise the coding process should they wish to. They can also leave everything to the AI, including the programming, testing, debugging and documentation.
-  
-  In both agentic programming and vibe coding, the programming can be done by multiple AI agents. In vibe coding, more complicated frameworks are supported, and the AI chooses the framework. Hence, vibe coding is often considered more automated than agentic programming. With vibe coding, it is possible to let the machine run by itself for a few days with no human interactions to deliver a project. However, the amount of token consumption of vibe coding is often considerably larger than agentic programming. The quality of the job largely depends on the precision of the instruction files and tools. It is challenging for the developer to work collaboratively with the AI to code or debug due to the massive amount of codes automatically generated by the AI.
-  
-  Example: Anthropic Claude Code, OpenAI Codex, AMP, VS Code with GitHub copilot extension in ``Plan'' mode.
-  
 \end{itemize}
+
+In conventional coding, a developer codes in a conventional \myabb{Integrated Development Environment}{IDE} which is little more than just a text editor. All codes are inserted into the scripts manually. The IDE is often able to detect syntax error and compile the code. Examples include VS Code without AI-featured extensions.
+
+In coding with autocompletion, the AI predicts the intention of the developer by looking at the existing codes and comments, and automatically fill in the next few lines of codes. The developer can modify the filled contents when necessary. Autocompletion is effective when the contents to be filled is simple, self-contained, and pattern-wise consistent with the existing codes. However, it may struggle with fully automatically generating a long portion of codes for complex functions. Examples include VS Code with GitHub copilot extension.
+
+In agentic coding, the IDE is incorporated with a chatbox. The developer can put their comprehensive requests into the chatbox, and the AI is able to review, modify or generate files in the project directory to achieve the goals. When the AI agents modify the codes, the developer can review the modification in real-time. The reviewer can accept or reject each changes before testing the program. The developer can raise new requests during the development by interacting with the AI using the chatbox. Should their be any error message, the AI is able to view the message and revise the code accordingly. Examples include VS Code with GitHub copilot extension in ``Agent'' mode.
+  
+Different from coding with autocompletion where the AI can access only (a portion of) the active file, in agentic programming the AI agents are allowed to access almost all files in the project folder, and iteratively and recursively program and test the codes. It elevates the level of automation and requires much less human intervention. While the AI agents can fully utilize everything in the project folder, it cannot reach out to the outside world, for example, to query the Internet for the latest libraries, or to automatically raise a pull request on GitHub when a feature is developed.
+
+In vibe coding, there is not necessarily an \myabb{Integrated Development Environment}{IDE}. The developer puts the requirements in markdown files prior to the development, and start the AI from the \myabb{Command Line Interface}{CLI}. The AI reads the requirements, plans the developing procedures, performs and tests the programming iteratively. Different from agentic programming, the AI is able to equip MCP tools, skills and plugins to better coordinate the development of the project. For example, it can query the Internet for latest user manuals for the libraries, manage the project in Jira, update the project in GitHub, and so on. The developer is able to interact with the AI in CLI using natural language. They can supervise the coding process should they wish to. They can also leave everything to the AI, including the programming, testing, debugging and documentation. Examples include Anthropic Claude Code, OpenAI Codex, AMP, VS Code with GitHub copilot extension in ``Plan'' mode.
+
+In both agentic and vibe coding, the programming can be done by multiple AI agents. In vibe coding, more complicated frameworks are supported, and the AI chooses the framework. Hence, vibe coding is often considered more automated than agentic programming. With vibe coding, it is possible to let the machine run by itself for a few days with no human interactions to deliver a project. However, the amount of token consumption of vibe coding is often considerably larger than agentic programming. The quality of the job largely depends on the precision of the instruction files and tools. It is challenging for the developer to work collaboratively with the AI to code or debug due to the massive amount of codes automatically generated by the AI.
 
 In the context of vibe coding, the developer does not need to program a single line of code. Instead, they need to construct the requirement documents and equip the AI with necessary tools. They are known as the \mync{context engineer}, an expansion of prompt engineer role.
 
@@ -59,11 +50,11 @@ In the project tree, \verb|CLAUDE.md| is compulsory as it serves as the instruct
 
 While vibe coding is indeed very powerful as will be illustrated by the examples in the coming sections, it has restrictions. The advantages and disadvantages of vibe coding over conventional coding are discussed in this section.
 
-\section{Code with Vibe Coding}
+\section{Simple Coding}
 
-This section introduces vibe coding with Claude Code. The details are given in \cite{claudeCode2026overview}. Many concepts and techniques introduced in this section can be transferred to other vibe coding tools such as OpenAI Codex and AMP.
+This section introduces the basic vibe coding with Claude Code. The details are given in \cite{claudeCode2026overview}. Many concepts and techniques introduced in this section can be transferred to other vibe coding tools such as OpenAI Codex and AMP.
 
-\subsection{Installation}
+\subsection{Installation and Project Initialization}
 
 Claude Code can be installed on Windows, Linux and macOS systems. For example, to install Claude Code on a Linux machine, use
 \begin{lstlisting}
@@ -73,8 +64,6 @@ in the terminal.
 
 After installation, use \verb|claude| in the shell to start claude. In the first start of Claude Code, the user needs to login with either a Claude account (with Claude chatbot subscription) or a Claude API key.
 
-\subsection{Simple Vibe Coding}
-
 Assume that the user is in an empty project root folder, from there Claude Code is started. The user can use the following command
 \begin{lstlisting}
 /init
@@ -83,7 +72,7 @@ to initialize the folder. Claude Code shall create \verb|CLAUDE.md| file in the 
 
 When Claude Code starts coding, it will create a \verb|.claude| folder which it uses to save intermediate files. Unless the user wants to add skills, plugins and subagents for Claude Code, the user does not need to review or modify anything inside \verb|.claude| folder.
 
-Commonly adopted vibe coding practice with Claude Code, as well as other similar vibe coding tools, are summarized below.
+\subsection{Simple Vibe Coding}
 
 It is recommended that the user gives detailed instructions and user requirements in \verb|CLAUDE.md|. The user is encouraged to ask Claude Code to make a development and testing plan before coding, and save the plan in a file such as \verb|PLAN.md|. The user shall check the plan, and let Claude Code implement the plan phase by phase. After completion of developing and testing of each phase, it is recommended that the user require Claude Code to document the phase and commit the intermediate achievement.
 
@@ -94,20 +83,26 @@ The user is encouraged to check the context window consumption after each step, 
 \end{itemize}
 It is not recommended to let Claude Code decide the timing for the compact, as it may happen in the middle of the development of an important and complicated feature.
 
-\subsection{Tools, Skills and Plugins}
+\section{Advanced Coding}
 
-Tools, skills and plugins make vibe coding more powerful than agentic AI programming. They further elevate the level of automation of programming and program management with vibe coding. 
-
-
+Tools, skills and plugins expand the capability of vibe coding and further elevate the level of coding automation. They are introduced in this section as part of advanced coding techniques. Hook enforces the system to perform certain actions, such as Git commit, at the end of each programming cycle. It is also introduced in this section.
 
 
+\subsection{Tool}
 
-\subsection{Sub Agent}
+\subsection{Skill}
+
+\subsection{Plugin}
 
 \subsection{Hook}
 
+\section{Sub-Agent and Team}
 
-\section{Vibe Coding in Sandbox}
+\section{Sandbox}
+
+\subsection{Local Sandbox}
+
+\subsection{Remote Sandbox}
 
 
 \section{Example: D\&D Co-player Project}
