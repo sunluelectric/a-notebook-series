@@ -4,7 +4,7 @@ Agentic AI describes a comprehensive AI system that can make decisions and perfo
 
 The concept of agentic AI is not new. However, in recent years it has drawn increasing attention due to the rapid advancements in LLM. LLMs provide a general-purpose language interface that makes agentic AI significantly more scalable and cost-effective. For this reason, agentic AI is included as a key topic in this part of the notebook.
 
-\section{Introduction to Agentic AI}
+\section{Introduction to Agentic AI} \label{sec:introduction_to_agentic_ai}
 
 The term ``agent'' refers to an entity that functions like a human. By this definition, \mync{agentic AI} refers to AI-based systems that can solve complex problems with minimum human oversight. It is possible to build an agentic AI system without LLM and use only conventional AI frameworks such as MDP and ANN. While being good at specific tasks, the use of such agentic AI systems often lacks of general-purpose interfaces. With the recent rise of LLMs, agentic AI has been re-contextualized and is gaining increasing popularity. LLMs provide a general-purpose language interface that makes agentic AI significantly more scalable and cost-effective. 
 
@@ -26,7 +26,7 @@ An LLM-incorporated agentic AI system with LLM agents is often more capable than
     \item Sub-tasks solving:
     \begin{itemize}
       \item Receive and comprehend unstructured inputs.
-      \item Use ``tools'' to connect to other resources such as databases, computational units and actuators.
+      \item Connect to other resources such as databases, computational units and actuators.
       \item Generate structured outputs.
       \item Integrate the outputs from sub-problems into a final, coherent solution to the original problem.
     \end{itemize}
@@ -54,7 +54,7 @@ Another commonly used architecture is shown in Fig.~\ref{fig:agenticwf2}. In thi
 	\label{fig:agenticwf2}
 \end{figure}
 
-LLM agents in an agentic AI system do not rely solely on the internal knowledge encoded in the model. Instead, they can be configured to interact with external tools such as databases, web browsers, calculators, etc., to enhance their problem-solving capabilities. This tool-augmented reasoning is essential for tasks that require up-to-date information, precise computation, or direct interaction with external environments. It also helps with reducing hallucination. A representative architecture is given in Fig.~\ref{fig:agenticwf3}, where the LLM autonomously decides when to invoke an external tool and generates the appropriate commands using pre-defined protocols known as the \myabb{Model Context Protocol}{MCP}. MCP is introduced in Section~\ref{sec:mcp}.
+LLM agents in an agentic AI system do not rely solely on the internal knowledge encoded in the model. Instead, they can be configured to use \mync{agentic AI tools} to connect to external resources such as databases, web browsers, calculators, etc., to enhance their problem-solving capabilities. This tool-augmented reasoning is essential for tasks that require up-to-date information, precise computation, or direct interaction with external environments. It also helps with reducing hallucination. A representative architecture is given in Fig.~\ref{fig:agenticwf3}, where the LLM autonomously decides when to invoke an external tool and generates the appropriate commands using pre-defined protocols known as the \myabb{Model Context Protocol}{MCP}. MCP is introduced in Section~\ref{sec:mcp}.
 
 \begin{figure}[!htb]
 	\centering

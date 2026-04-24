@@ -48,13 +48,20 @@ In the project tree, \verb|CLAUDE.md| is compulsory as it serves as the instruct
 
 \subsection{Pros and Cons}
 
-While vibe coding is indeed very powerful as will be illustrated by the examples in the coming sections, it has restrictions. The advantages and disadvantages of vibe coding over conventional coding are discussed in this section.
+While vibe coding is indeed very powerful as will be illustrated by the examples in the coming sections, it has restrictions. Vide coding is useful and effective when the project has the following features.
+\begin{itemize}
+  \item It is a prototype or feature test project, and the user needs a quick and smooth start, focusing on realizing functions, but not implementing precise details.
+  \item The programming languages, libraries and functions are well established.
+\end{itemize}
+For the above use cases, vibe coding can often save time and speed up the development.
 
-\section{Simple Coding}
+On the other hand, vibe coding is less useful when the project is at the fine-tuning stage and requires extremely precise coding, or when the function requires proprietary libraries or algorithms. Recently, features such as skills and plugins, to be introduced in \ref{sec:advanced_coding}, have been proposed and they might be useful with tackling these issues.
+
+\section{Basic Coding}
 
 This section introduces the basic vibe coding with Claude Code. The details are given in \cite{claudeCode2026overview}. Many concepts and techniques introduced in this section can be transferred to other vibe coding tools such as OpenAI Codex and AMP.
 
-\subsection{Installation and Project Initialization}
+\subsection{Installation}
 
 Claude Code can be installed on Windows, Linux and macOS systems. For example, to install Claude Code on a Linux machine, use
 \begin{lstlisting}
@@ -62,7 +69,9 @@ curl -fsSL https://claude.ai/install.sh | bash
 \end{lstlisting}
 in the terminal.
 
-After installation, use \verb|claude| in the shell to start claude. In the first start of Claude Code, the user needs to login with either a Claude account (with Claude chatbot subscription) or a Claude API key.
+\subsection{Project Initialization}
+
+After installation, use command \verb|claude| in the shell to start claude. In the first start of Claude Code, the user needs to login with either a Claude account (with Claude chatbot subscription) or a Claude API key.
 
 Assume that the user is in an empty project root folder, from there Claude Code is started. The user can use the following command
 \begin{lstlisting}
@@ -74,25 +83,45 @@ When Claude Code starts coding, it will create a \verb|.claude| folder which it 
 
 \subsection{Simple Vibe Coding}
 
-It is recommended that the user gives detailed instructions and user requirements in \verb|CLAUDE.md|. The user is encouraged to ask Claude Code to make a development and testing plan before coding, and save the plan in a file such as \verb|PLAN.md|. The user shall check the plan, and let Claude Code implement the plan phase by phase. After completion of developing and testing of each phase, it is recommended that the user require Claude Code to document the phase and commit the intermediate achievement.
+It is recommended that the user gives detailed instructions and user requirements in \verb|CLAUDE.md|. When there are multiple nested files, use \verb|@<file name>| to include a file into the root file.
+
+The user is encouraged to ask Claude Code to plan before coding. For example, the user may ask Claude Code to split the project into multiple phases or stages and plan the tasks and tests to do in each phase, and save the plan in a file such as \verb|PLAN.md|. The user shall check the plan, and let Claude Code implement the plan phase by phase. After completion of developing and testing of each phase, it is recommended that the user require Claude Code to document the phase and commit the intermediate achievement.
 
 The user is encouraged to check the context window consumption after each step, should there be many steps for a complex project. Use \verb|/context| to check the context window consumption. When the context window is about to be used up, the user is encouraged to perform one of the following.
 \begin{itemize}
   \item Use \verb|/compact| manually to compact the context window in between implementation phases.
-  \item Ask Claude Code to summarize the progress and save it in a file such as \verb|README.md|. Clear the chat or start a new Claude Code agent, and let the new agent resume the development.
+  \item Ask Claude Code to summarize the progress and save it in a file such as \verb|README.md|. Clear the chat or start a new Claude Code agent using \verb|/clear|, and let the new agent resume the development.
 \end{itemize}
-It is not recommended to let Claude Code decide the timing for the compact, as it may happen in the middle of the development of an important and complicated feature.
+If possible, do not let Claude Code decide the timing for compacting the context, as it may happen in the middle of the development of an important and complicated feature.
 
-\section{Advanced Coding}
+\section{Advanced Coding} \label{sec:advanced_coding}
 
-Tools, skills and plugins expand the capability of vibe coding and further elevate the level of coding automation. They are introduced in this section as part of advanced coding techniques. Hook enforces the system to perform certain actions, such as Git commit, at the end of each programming cycle. It is also introduced in this section.
+Tools and skills expand the capability of vibe coding and further elevate the level of coding automation. Plugins can be taken as packaged tools and skills. They are introduced in this section as part of advanced coding techniques. 
+
+Hook enforces the system to perform certain actions, such as Git commit, at the end of each programming cycle. It is also introduced in this section.
+
+\subsection{Tools}
+
+The concept of tools was firstly introduced in Section \ref{sec:introduction_to_agentic_ai} as an important feature of agentic AI frameworks. The similar idea applies in the context of vibe coding, where the tools help the vibe coding engine such as Claude Code to gain additional abilities relevant to programming and project management.
+
+In this section, tools with \myabb{Model Context Protocol}{MCP} interface are introduced, as whey have become popular and powerful, and they are easy to install with Claude Code. \myabb{Model Context Protocol}{MCP} has been introduced in Section \ref{sec:mcp} and details are not given here.
+
+MCP incorporated tools can be found on MCP marketplaces such as Official MCP Registry \cite{mcp2025registry}, MCP.So \cite{mcpso2026}, and many more. To install a specific MCP incorporated tool with Claude Code, follow the instructions on the corresponding official repository. Very often,
+\begin{lstlisting}
+% claude mcp add <server name> [option]
+\end{lstlisting}
+command is used in the shell.
+
+Once an MCP incorporated tool is installed, start Claude Code and use \verb|/mcp| command to check the status and options with that tool. During the vibe coding, the user can explicitly ask Claude Code to perform certain tasks using the tool(s).
+
+\subsection{Skills}
+
+Tools are more like black-box packaged functions to the coding agent. The agent knows how to call a tool with the corresponding API, and it decides when to use it. However, it does not know anything happening inside a tool, such as its mechanism or algorithm.
 
 
-\subsection{Tool}
+\subsection{Plugins}
 
-\subsection{Skill}
-
-\subsection{Plugin}
+Ralph Loops
 
 \subsection{Hook}
 
