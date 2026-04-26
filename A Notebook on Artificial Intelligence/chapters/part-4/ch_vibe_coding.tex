@@ -1,41 +1,95 @@
 \chapter{Vibe Coding} 
 
-Vibe coding is one of the most successful and widely appreciated applications of LLM and agentic AI. Many LLM service providers such as OpenAI and Anthropic provide vibe coding services for their subscribers. 
+Vibe coding is one of the most successful and widely appreciated applications of LLM and agentic AI. Many LLM service providers, such as OpenAI and Anthropic, provide vibe coding services for their subscribers. 
 
-In this chapter, vibe coding is introduced with Anthropic Claude Code used as an example. Similar ideas used by Claude Code is likely to be found on other vibe coding services such as OpenAI Codex and GitHub Copilot Plan.
+In this chapter, vibe coding is introduced with Anthropic Claude Code as an example. Similar ideas used by Claude Code are likely to be found in other vibe coding services such as OpenAI Codex and GitHub Copilot Plan.
 
-Notice that vibe coding is continuously evolving. The materials introduced in this notebook reflect only the development up to the writing.
+Note that vibe coding is continuously evolving. The materials introduced in this notebook reflect developments only up to the time of writing.
 
-\section{Coding Styles}
+\section{Introduction to Vibe Coding}
 
-In the past few years, LLM and agentic AI have revolutionized the way people code. Up till this writing, there have been at least the following different coding styles, and it is continuously evolving.
+Vibe coding is briefly introduced and compared with other coding methods.
+
+\subsection{Coding Spectrum}
+
+In the past few years, LLM and agentic AI have revolutionized the way people code. Rather than viewing coding as a set of isolated styles, it is often more helpful to view it as an evolving spectrum of methods and philosophies over time. Up to the time of writing, this spectrum includes at least the following approaches, and it continues to evolve.
+
 \begin{itemize}
   \item Conventional coding
-  
   \item Coding with autocompletion
-  
   \item Agentic coding
-  
   \item Vibe coding
 \end{itemize}
 
-In conventional coding, a developer codes in a conventional \myabb{Integrated Development Environment}{IDE} which is little more than just a text editor. All codes are inserted into the scripts manually. The IDE is often able to detect syntax error and compile the code. Examples include VS Code without AI-featured extensions.
+In \mync{conventional coding}, a developer works in a conventional \myabb{Integrated Development Environment}{IDE}, which is little more than a text editor. All code is inserted into scripts manually. The IDE is often able to detect syntax errors and compile the code. Examples include VS Code without AI-enabled extensions.
 
-In coding with autocompletion, the AI predicts the intention of the developer by looking at the existing codes and comments, and automatically fill in the next few lines of codes. The developer can modify the filled contents when necessary. Autocompletion is effective when the contents to be filled is simple, self-contained, and pattern-wise consistent with the existing codes. However, it may struggle with fully automatically generating a long portion of codes for complex functions. Examples include VS Code with GitHub copilot extension.
+In \mync{coding with autocompletion}, the AI predicts the developer's intention by looking at existing code and comments, and automatically fills in the next few lines of code. The developer can modify the suggested content when necessary. Autocompletion is effective when the content to be filled is simple, self-contained, and pattern-wise consistent with the existing code. However, it may struggle to automatically generate long sections of code for complex functions. Examples include VS Code with GitHub Copilot extension.
 
-In agentic coding, the IDE is incorporated with a chatbox. The developer can put their comprehensive requests into the chatbox, and the AI is able to review, modify or generate files in the project directory to achieve the goals. When the AI agents modify the codes, the developer can review the modification in real-time. The reviewer can accept or reject each changes before testing the program. The developer can raise new requests during the development by interacting with the AI using the chatbox. Should their be any error message, the AI is able to view the message and revise the code accordingly. Examples include VS Code with GitHub copilot extension in ``Agent'' mode.
-  
-Different from coding with autocompletion where the AI can access only (a portion of) the active file, in agentic programming the AI agents are allowed to access almost all files in the project folder, and iteratively and recursively program and test the codes. It elevates the level of automation and requires much less human intervention. While the AI agents can fully utilize everything in the project folder, it cannot reach out to the outside world, for example, to query the Internet for the latest libraries, or to automatically raise a pull request on GitHub when a feature is developed.
+In \mync{agentic coding}, the IDE is integrated with a chatbox. The developer can put comprehensive requests into the chatbox, and the AI can review, modify, or generate files in the project directory to achieve the goals. When AI agents modify the code, the developer can review the modifications in real time. The reviewer can accept or reject each change before testing the program. The developer can raise new requests during development by interacting with the AI through the chatbox. If there is an error message, the AI can view the message and revise the code accordingly. Examples include VS Code with the GitHub Copilot extension in ``Agent'' mode. Different from coding with autocompletion, where the AI can access only (a portion of) the active file, in agentic coding AI agents are allowed to access almost all files in the project folder, and iteratively and recursively write and test code. This elevates the level of automation and requires much less human intervention. While AI agents can fully utilize everything in the project folder, they cannot reach out to the outside world, for example, to query the Internet for the latest libraries and learn something new on the fly.
 
-In vibe coding, there is not necessarily an \myabb{Integrated Development Environment}{IDE}. The developer puts the requirements in markdown files prior to the development, and start the AI from the \myabb{Command Line Interface}{CLI}. The AI reads the requirements, plans the developing procedures, performs and tests the programming iteratively. Different from agentic programming, the AI is able to equip MCP tools, skills and plugins to better coordinate the development of the project. For example, it can query the Internet for latest user manuals for the libraries, manage the project in Jira, update the project in GitHub, and so on. The developer is able to interact with the AI in CLI using natural language. They can supervise the coding process should they wish to. They can also leave everything to the AI, including the programming, testing, debugging and documentation. Examples include Anthropic Claude Code, OpenAI Codex, AMP, VS Code with GitHub copilot extension in ``Plan'' mode.
+In \mync{vibe coding}, there is not necessarily an \myabb{Integrated Development Environment}{IDE}. The developer puts requirements in markdown files before development, and starts the AI from the \myabb{Command Line Interface}{CLI}. The AI reads the requirements, plans development procedures, and performs programming and testing iteratively. Different from agentic coding, the AI can equip MCP tools, skills, and plugins to better coordinate project development. For example, it can query the Internet for the latest user manuals for libraries, manage the project in Jira, update the project on GitHub, and so on. The developer can interact with the AI in the CLI using natural language. They can supervise the coding process if they wish. They can also leave everything to the AI, including programming, testing, debugging, and documentation. Examples include Anthropic Claude Code, OpenAI Codex, AMP, and VS Code with the GitHub Copilot extension in ``Plan'' mode.
 
-In both agentic and vibe coding, the programming can be done by multiple AI agents. In vibe coding, more complicated frameworks are supported, and the AI chooses the framework. Hence, vibe coding is often considered more automated than agentic programming. With vibe coding, it is possible to let the machine run by itself for a few days with no human interactions to deliver a project. However, the amount of token consumption of vibe coding is often considerably larger than agentic programming. The quality of the job largely depends on the precision of the instruction files and tools. It is challenging for the developer to work collaboratively with the AI to code or debug due to the massive amount of codes automatically generated by the AI.
+In both agentic and vibe coding, programming can be done by multiple AI agents. In vibe coding, more complicated frameworks are supported, and the AI chooses the framework. Hence, vibe coding is often considered more automated than agentic coding. With vibe coding, it is possible to let the machine run by itself for a few days with no human interaction and deliver a project. However, token consumption in vibe coding is often considerably larger than in agentic coding. The quality of the output largely depends on the precision of the instruction files and tools. It can be challenging for developers to work collaboratively with the AI to code or debug, due to the massive amount of code automatically generated by the AI.
 
-In the context of vibe coding, the developer does not need to program a single line of code. Instead, they need to construct the requirement documents and equip the AI with necessary tools. They are known as the \mync{context engineer}, an expansion of prompt engineer role.
+In the context of vibe coding, the developer does not need to program a single line of code. Instead, they need to construct requirement documents and equip the AI with necessary tools. This role is known as the \mync{context engineer}, an expansion of the prompt engineer role.
+
+\subsection{Pros and Cons}
+
+While vibe coding is very powerful, as will be illustrated by the examples in the following sections, it has restrictions. Vibe coding is useful and effective when a project has the following features.
+\begin{itemize}
+  \item It is a prototype or feature test project, and the user needs a quick and smooth start, focusing on realizing functions rather than implementing precise details.
+  \item The programming languages, libraries, and functions are well established.
+\end{itemize}
+For the above use cases, vibe coding can often save time and speed up the development.
+
+On the other hand, vibe coding is less useful when the project is at the fine-tuning stage and requires extremely precise coding, or when the required functionality depends on proprietary libraries or algorithms. Recently, features such as skills and plugins, to be introduced in \ref{sec:advanced_coding}, have been proposed, and they might be useful in tackling these issues.
+
+\section{Basic Vibe Coding}
+
+This section introduces basic vibe coding with Claude Code. The details are given in \cite{claudeCode2026overview}. Many concepts and techniques introduced in this section can be transferred to other vibe coding tools such as OpenAI Codex and AMP.
+
+\subsection{Installation}
+
+Claude Code can be installed on Windows, Linux, and macOS systems. For example, to install Claude Code on a Linux machine, use
+\begin{lstlisting}
+curl -fsSL https://claude.ai/install.sh | bash
+\end{lstlisting}
+in the terminal.
+
+\subsection{Project Initialization}
+
+After installation, use the command \verb|claude| in the shell to start Claude. On the first start of Claude Code, the user needs to log in with either Claude account (with a Claude chatbot subscription) or a Claude API key.
+
+Assume that the user is in an empty project root folder; from there, Claude Code is started. The user can use the following command
+\begin{lstlisting}
+/init
+\end{lstlisting}
+to initialize the folder. Claude Code will create a \verb|CLAUDE.md| file in the project folder. The \verb|CLAUDE.md| file is the minimum setup for a Claude Code-incorporated project. The user can describe the project in the \verb|CLAUDE.md| file, and Claude Code will start coding accordingly.
+
+When Claude Code starts coding, it will create a \verb|.claude| folder to save files used by Claude Code. Unless the user wants to add skills, plugins, and subagents for Claude Code, the user does not need to review or modify anything inside the \verb|.claude| folder.
+
+\subsection{Simple Vibe Coding}
+
+It is recommended that the user provide detailed instructions and user requirements in \verb|CLAUDE.md|. When the instructions spread in multiple files, use \verb|@<file name>| to include the content of a file into a parent file.
+
+The user is encouraged to ask Claude Code to plan before coding. For example, the user may ask Claude Code to split the project into multiple phases or stages, plan the tasks and tests for each phase, and save the plan in a file such as \verb|PLAN.md|. The user should check the plan and let Claude Code implement it phase by phase. After completion of development and testing for each phase, it is recommended that the user ask Claude Code to document the phase and commit the intermediate achievement.
+
+The user is encouraged to check context window consumption after each step, especially when there are many steps in a complex project. Use \verb|/context| to check context window consumption. When the context window is about to be used up, the user is encouraged to do one of the following:
+\begin{itemize}
+  \item Use \verb|/compact| manually after reaching a milestone to compact the context window in between implementation phases.
+  \item Ask Claude Code to summarize the progress and save it in a file such as \verb|README.md|. Clear the context window using \verb|/clear|, and let the new agent read the saved documentations and resume the development.
+\end{itemize}
+If possible, do not let Claude Code decide when to compact the context, as it may happen in the middle of developing an important and complicated feature.
+
+\section{Advanced Coding} \label{sec:advanced_coding}
+
+Tools and skills expand the capability of vibe coding and further elevate the level of coding automation. Plugins can be considered packaged tools and skills. They are introduced in this section as part of advanced coding techniques.
+
+Hooks enforce the system to perform certain actions, such as Git commits, at the end of each programming cycle. They are also introduced in this section.
 
 \subsection{Project Tree}
 
-The project tree of a vibe coding environment may look like Fig. \ref{fig:claude_vibe_tree}. Notice that Claude Code is used as an example and more details can be found in \cite{claudeCode2026overview}. Other vibe coding tools such as Codex may have a slightly different project tree structure.
+The project tree of a vibe coding environment may look like Fig. \ref{fig:claude_vibe_tree}, where note that Claude Code is used as an example, and more details can be found in \cite{claudeCode2026overview}. Other vibe coding tools, such as Codex, may have slightly different project tree structures.
 
 \begin{figure}[!htb]
 	\centering
@@ -44,80 +98,54 @@ The project tree of a vibe coding environment may look like Fig. \ref{fig:claude
 	\label{fig:claude_vibe_tree}
 \end{figure}
 
-In the project tree, \verb|CLAUDE.md| is compulsory as it serves as the instruction to the AI on what to do with the project. The rest files and subdirectories such as the \verb|.claude/skills| are optional and they are used to expand the capability of the AI. More about them will be introduced in the coming sections.
+As introduced earlier, \verb|CLAUDE.md| is compulsory while other files such as \verb|.claude\skills| are optional. They relate to user-defined tools, commands, plugins and advanced configurations to be introduced in the remainder of this section.
 
-\subsection{Pros and Cons}
+\subsection{Tool}
 
-While vibe coding is indeed very powerful as will be illustrated by the examples in the coming sections, it has restrictions. Vide coding is useful and effective when the project has the following features.
-\begin{itemize}
-  \item It is a prototype or feature test project, and the user needs a quick and smooth start, focusing on realizing functions, but not implementing precise details.
-  \item The programming languages, libraries and functions are well established.
-\end{itemize}
-For the above use cases, vibe coding can often save time and speed up the development.
+The concept of tools was first introduced in Section \ref{sec:introduction_to_agentic_ai} as an important feature of agentic AI frameworks. A similar idea applies in the context of vibe coding, where tools help a vibe coding engine such as Claude Code gain additional abilities relevant to programming and project management.
 
-On the other hand, vibe coding is less useful when the project is at the fine-tuning stage and requires extremely precise coding, or when the function requires proprietary libraries or algorithms. Recently, features such as skills and plugins, to be introduced in \ref{sec:advanced_coding}, have been proposed and they might be useful with tackling these issues.
+In this section, tools with a \myabb{Model Context Protocol}{MCP} interface are introduced, as they have become popular and powerful, and are easy to install with Claude Code. \myabb{Model Context Protocol}{MCP} has been introduced in Section \ref{sec:mcp}, and details are not repeated here.
 
-\section{Basic Coding}
-
-This section introduces the basic vibe coding with Claude Code. The details are given in \cite{claudeCode2026overview}. Many concepts and techniques introduced in this section can be transferred to other vibe coding tools such as OpenAI Codex and AMP.
-
-\subsection{Installation}
-
-Claude Code can be installed on Windows, Linux and macOS systems. For example, to install Claude Code on a Linux machine, use
-\begin{lstlisting}
-curl -fsSL https://claude.ai/install.sh | bash
-\end{lstlisting}
-in the terminal.
-
-\subsection{Project Initialization}
-
-After installation, use command \verb|claude| in the shell to start claude. In the first start of Claude Code, the user needs to login with either a Claude account (with Claude chatbot subscription) or a Claude API key.
-
-Assume that the user is in an empty project root folder, from there Claude Code is started. The user can use the following command
-\begin{lstlisting}
-/init
-\end{lstlisting}
-to initialize the folder. Claude Code shall create \verb|CLAUDE.md| file in the project folder, inside which is a basic template for a project. The \verb|CLAUDE.md| file is the minimum setup for a Claude Code incorporated project. The user can describe the project in \verb|CLAUDE.md| file and Claude Code will start coding accordingly. 
-
-When Claude Code starts coding, it will create a \verb|.claude| folder which it uses to save intermediate files. Unless the user wants to add skills, plugins and subagents for Claude Code, the user does not need to review or modify anything inside \verb|.claude| folder.
-
-\subsection{Simple Vibe Coding}
-
-It is recommended that the user gives detailed instructions and user requirements in \verb|CLAUDE.md|. When there are multiple nested files, use \verb|@<file name>| to include a file into the root file.
-
-The user is encouraged to ask Claude Code to plan before coding. For example, the user may ask Claude Code to split the project into multiple phases or stages and plan the tasks and tests to do in each phase, and save the plan in a file such as \verb|PLAN.md|. The user shall check the plan, and let Claude Code implement the plan phase by phase. After completion of developing and testing of each phase, it is recommended that the user require Claude Code to document the phase and commit the intermediate achievement.
-
-The user is encouraged to check the context window consumption after each step, should there be many steps for a complex project. Use \verb|/context| to check the context window consumption. When the context window is about to be used up, the user is encouraged to perform one of the following.
-\begin{itemize}
-  \item Use \verb|/compact| manually to compact the context window in between implementation phases.
-  \item Ask Claude Code to summarize the progress and save it in a file such as \verb|README.md|. Clear the chat or start a new Claude Code agent using \verb|/clear|, and let the new agent resume the development.
-\end{itemize}
-If possible, do not let Claude Code decide the timing for compacting the context, as it may happen in the middle of the development of an important and complicated feature.
-
-\section{Advanced Coding} \label{sec:advanced_coding}
-
-Tools and skills expand the capability of vibe coding and further elevate the level of coding automation. Plugins can be taken as packaged tools and skills. They are introduced in this section as part of advanced coding techniques. 
-
-Hook enforces the system to perform certain actions, such as Git commit, at the end of each programming cycle. It is also introduced in this section.
-
-\subsection{Tools}
-
-The concept of tools was firstly introduced in Section \ref{sec:introduction_to_agentic_ai} as an important feature of agentic AI frameworks. The similar idea applies in the context of vibe coding, where the tools help the vibe coding engine such as Claude Code to gain additional abilities relevant to programming and project management.
-
-In this section, tools with \myabb{Model Context Protocol}{MCP} interface are introduced, as whey have become popular and powerful, and they are easy to install with Claude Code. \myabb{Model Context Protocol}{MCP} has been introduced in Section \ref{sec:mcp} and details are not given here.
-
-MCP incorporated tools can be found on MCP marketplaces such as Official MCP Registry \cite{mcp2025registry}, MCP.So \cite{mcpso2026}, and many more. To install a specific MCP incorporated tool with Claude Code, follow the instructions on the corresponding official repository. Very often,
+MCP-incorporated tools can be found on MCP marketplaces such as Official MCP Registry \cite{mcp2025registry}, MCP.So \cite{mcpso2026}, and many more. To install a specific MCP-incorporated tool with Claude Code, follow the instructions in the corresponding official repository. Very often,
 \begin{lstlisting}
 % claude mcp add <server name> [option]
 \end{lstlisting}
-command is used in the shell.
+is used in the shell to install a new MCP server.
 
-Once an MCP incorporated tool is installed, start Claude Code and use \verb|/mcp| command to check the status and options with that tool. During the vibe coding, the user can explicitly ask Claude Code to perform certain tasks using the tool(s).
+Once an MCP-incorporated tool is installed, start Claude Code and use \verb|/mcp| command to check its status and options. During vibe coding, the user can explicitly ask Claude Code to perform certain tasks using the tools.
 
-\subsection{Skills}
+\subsection{Skill}
 
-Tools are more like black-box packaged functions to the coding agent. The agent knows how to call a tool with the corresponding API, and it decides when to use it. However, it does not know anything happening inside a tool, such as its mechanism or algorithm.
+While tools are packed functions in black boxes, skills are verbally written instructions in markdown that teach the coding agent with new information. Comparing with tools, the use of skills has at least the following advantages and may become useful in many occasions.
 
+\begin{itemize}
+  \item More transparent. 
+  
+  While tools are packed black boxes, skills are human-readable instruction documents. The user can audit or modify the documents more easily.
+  
+  \item Cheaper and easier to develop and deploy.
+  
+  To develop a tool from scratch, the user needs to program and pack functions, and develop associated APIs. To develop a skill, the user only needs to collect instructive documents. The agent will read the instructions and, when necessary, code the API by itself. In this sense, ``everyone can define skills'' even if they do not know anything about coding.
+  
+  \item Certain tasks are difficult to pack into functions, hence only doable with skills. 
+  
+  In some use cases, the additional information is hidden only in verbal descriptions and no tools can access them. For example, imagine that user wants the agent to program following their implicit ``habit'' consistently. The user can do so by collecting their own codes and use them as part of the skills. The agent can then learn the habit from the sample codes and behave accordingly. This goal is difficult to meet with tools.
+\end{itemize}
+
+Though easier to implement, skills are often less precise and sometimes not as powerful as a tool for complicated tasks. This is not surprising as tools are programs dedicated to a task, while skills are descriptive instructions in markdown documents. 
+
+With Claude Code, the user can add a skill to the coding agent by creating a folder with the skill name under \verb|.claude| folder, and create \verb|SKILL.md| to describe the skill. This is demonstrated by the file structure below. Sub folders and supporting documents, if any, can be placed into the same skill folder. If the agent is expected to learn from sample codes, the codes can be put into the same folder as well.
+\begin{lstlisting}
+.claude
+  \- <skill name>
+    |- SKILL.md
+    |- <other supporting documents>
+    |- scripts
+        |- <sample scripts>
+        | ...
+\end{lstlisting}
+
+Skills can be shared online. Many skills can be installed, in which case the corresponding skill folders will be automatically cloned to \verb|.claude|.
 
 \subsection{Plugins}
 
@@ -132,6 +160,5 @@ Ralph Loops
 \subsection{Local Sandbox}
 
 \subsection{Remote Sandbox}
-
 
 \section{Example: D\&D Co-player Project}
