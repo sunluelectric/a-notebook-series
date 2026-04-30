@@ -134,22 +134,68 @@ While tools are packed functions in black boxes, skills are verbally written ins
 
 Though easier to implement, skills are often less precise and sometimes not as powerful as a tool for complicated tasks. This is not surprising as tools are programs dedicated to a task, while skills are descriptive instructions in markdown documents. 
 
-With Claude Code, the user can add a skill to the coding agent by creating a folder with the skill name under \verb|.claude| folder, and create \verb|SKILL.md| to describe the skill. This is demonstrated by the file structure below. Sub folders and supporting documents, if any, can be placed into the same skill folder. If the agent is expected to learn from sample codes, the codes can be put into the same folder as well.
+With Claude Code, the user can add a skill to the coding agent by creating a folder with the skill name under \verb|.claude| folder, and create \verb|SKILL.md| to describe the skill. This is demonstrated by the file structure below \cite{claudeCode2026skills}. Sub folders and supporting documents, if any, can be placed into the same skill folder. If the agent is expected to learn from sample codes, the codes can be put into the same folder as well.
 \begin{lstlisting}
-.claude
-  \- <skill name>
-    |- SKILL.md
-    |- <other supporting documents>
-    |- scripts
-        |- <sample scripts>
-        | ...
+<skill name>/
+|-- SKILL.md           # Main instructions (required)
+|-- template.md        # Template for Claude to fill in
+|-- examples/
+|   \-- sample.md      # Example output showing expected format
+\-- scripts/
+    \-- validate.sh    # Script Claude can execute
 \end{lstlisting}
 
-Skills can be shared online. Many skills can be installed, in which case the corresponding skill folders will be automatically cloned to \verb|.claude|.
+In \verb|SKILL.md|, the name and a one-line description of the skill should be given, followed by detailed instructions. The instructions can spread into multiple sub folders and files. A simple example of a skill is given below \cite{claudeCode2026skills}. In
+\begin{lstlisting}
+.claude/skills/explain-code/SKILL.md
+\end{lstlisting}
+add the following
+\begin{lstlisting}
+---
+name: explain-code
+description: Explains code with visual diagrams and analogies. Use when explaining how code works, teaching about a codebase, or when the user asks "how does this work?"
+---
+
+When explaining code, always include:
+
+1. **Start with an analogy**: Compare the code to something from everyday life
+2. **Draw a diagram**: Use ASCII art to show the flow, structure, or relationships
+3. **Walk through the code**: Explain step-by-step what happens
+4. **Highlight a gotcha**: What's a common mistake or misconception?
+
+Keep explanations conversational. For complex concepts, use multiple analogies.
+\end{lstlisting}
+This skill teaches claude code how to explain a piece of code, should the user needs it to do so.
+
+Skills are essentially collections of instructions and documents, hence can be shared easily across machines.
 
 \subsection{Plugins}
 
-Ralph Loops
+Plugins are essentially pre-defined collections of tools, skills, configurations, etc., all packed together. Claude Code provides variety of official plugins and they can be easily installed and executed.
+
+To install Claude Code official plugins, use
+\begin{lstlisting}
+/plugin install <plugin name>@claude-plugins-official
+\end{lstlisting}
+or browse for the plugins using
+\begin{lstlisting}
+/plugin > Discover
+\end{lstlisting}
+
+Once installed, the user can call a plugin using \verb|/<plugin name> <options>|. The options and goals of different plugins differ, and the user shall check the official website for the use of each plugin. 
+
+Take \verb|ralph-loop| as an example. It is a plugin that allows the coding agent to iteratively program, test and improve the quality of the code. The instruction is given in \cite{claudeCode2026ralphWiggum}. To start \verb|ralph-loop|, use the following command in Claude Code
+\begin{lstlisting}
+/ralph-loop "Your task description" --completion-promise "DONE"
+
+# Run the above command only ONCE, and Claude Code automatically:
+# 1. Works on the task
+# 2. Tries to exit
+# 3. Stop hook blocks exit
+# 4. Stop hook feeds the SAME prompt back
+# 5. Repeat until completion
+\end{lstlisting}
+
 
 \subsection{Hook}
 
