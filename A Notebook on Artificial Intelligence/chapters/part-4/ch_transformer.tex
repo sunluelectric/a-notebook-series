@@ -1,26 +1,24 @@
 \chapter{Transformer} \label{ch:transformer}
 
-\myabb{Large language model}{LLM} is one of the many solutions to NLP, and NLP is a type of problem under sequential data processing. In the past few years we have seen revolutionary development in LLM, and hence it forms a dedicated part in the notebook. With the introduction of multimodal LLM, the capability of LLM expands beyond language processing towards image and even video processing. 
+\myabb{Large language model}{LLM} is one of the many solutions to \myabb{natural language processing}{NLP} as part of sequential data processing and generative \myabb{artificial intelligence}{AI}. In the past few years we have seen revolutionary development in LLM, and hence it forms a dedicated part in the notebook. With the introduction of multimodal LLM, the capability of LLM expands beyond language processing towards image and even video processing. 
 
-Modern LLM is built on top of Transformer, an AI framework proposed in the landmark paper ``Attention Is All You Need'' \cite{vaswani2017attention}. Transformer is introduced in this chapter. 
+Modern LLM is built on top of Transformer, an AI framework proposed in the landmark paper ``Attention Is All You Need'' \cite{vaswani2017attention}. Before formally introducing LLM in the following chapters, Transformer is introduced in this chapter.
 
 A brief review of RNN, the state-of-the-art framework prior to Transformer, is given, and its shortages are addressed. Transformer framework and its key components are introduced. Lastly, the development trend of Transformer is discussed.
 
 \section{RNN and Its Limitations}
 
-RNN has been introduced in earlier Chapter \ref{ch:rnn}. A brief review is given in this section, focusing on its shortages in NLP.
+\myabb{Recurrent neural network}{RNN} has been introduced in earlier Chapter \ref{ch:rnn}. A brief review is given in this section, focusing on its shortages in NLP.
 
 \subsection{A Brief Review of RNN}
 
-Compared with a dense ANN, RNN is more efficient in building up correlation between consecutive inputs, and hence it becomes a powerful framework when it comes to sequential data processing. 
+In a conventional dense ANN, the correlation of consecutive inputs cannot be captured efficiently. A dense ANN would treat all the inputs equally, without structurally addressing the sequence and distance between words. Large number of nodes, layers and training data are often required to compensate for the lack of structural information in the dense ANN framework to achieve a well performed system. In addition, dense ANN requires fixed input length. Although it is possible to use ``NULL'' as placeholders for unused characters, the upper limit of length is bounded.
 
-In a conventional dense ANN, the correlation cannot be captured efficiently. In contrast, a dense ANN would treat all the inputs ``equally'' in a symmetric manner. To enforce the ANN to ``address'' the correlation, it would require a lot more layers and nodes (which is often considered low-efficient), and requires more data points during the training. Other problems of conventional dense ANN include, for example, the lack of ability in handling data with arbitrary length.
-
-CNN and RNN try to tackle the above problems by implementing a ``pre-processing'' stage, where the correlation of the spatial and sequential data is first abstracted using some mechanism, and the correlation information is sent as (additional) inputs to the following dense ANN.
+Compared with dense \myabb{artificial neural network}{ANN}, RNN is more efficient in building up correlations between consecutive inputs, and hence it becomes a powerful framework for sequential data processing. RNN tries to tackle the above issues by implementing a ``pre-processing'' stage, where the correlation of the sequential data is first abstracted. The correlation information is then amended as additional inputs to the followed up dense ANN.
 
 \subsection{Limitations of RNN}
 
-``Attention'' was not a new concept invented in \cite{vaswani2017attention}. It was proposed a few years earlier than the transformer, and had been integrated into several CNN and RNN models to boost their performances to capture long-range dependencies. In these researches, attention mechanism is more often a supporting role than the main character. It is quite surprising indeed that when getting rid of CNN and RNN and purely relying on attention mechanism, everything gets better: more efficient in training and better in performance.
+
 
 Does this mean that the RNN, which we had been relying on so much, is in fact the drawback to NLP? The following is the answer of ChatGPT-4 of this question.
 
@@ -125,7 +123,7 @@ TBA
 
 \subsection{Attention Mechanism}
 
-TBA
+Attention was not a new concept invented in \cite{vaswani2017attention}. It was proposed a few years earlier than the transformer, and had been integrated into several CNN and RNN models to boost their performances to capture long-range dependencies. In these researches, attention mechanism is more often a supporting role than the main character. It is quite surprising indeed that when getting rid of CNN and RNN and purely relying on attention mechanism, everything gets better: more efficient in training and better in performance.
 
 \subsection{Transformer-Based NLP}
 

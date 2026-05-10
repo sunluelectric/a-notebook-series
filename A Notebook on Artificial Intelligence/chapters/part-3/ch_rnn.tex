@@ -2,7 +2,7 @@
 
 \section{Brief Review of RNN}
 
-RNN is a connectionist model with the ability to selectively pass information across sequence steps \cite{lipton2015critical}. It is good at handling sequence of data such as voice message, text contents, or a flow of images (videos). It is worth mentioning that the ``sequence'' does not necessarily mean a time sequence. Nevertheless, without losing generality, we will consider time sequence in the review for simplicity and convenience.
+\myabb{Recurrent neural network}{RNN} is a connectionist model with the ability to selectively pass information across sequence steps \cite{lipton2015critical}. It is good at handling sequence of data such as voice message, text contents, or a flow of images (videos). It is worth mentioning that the ``sequence'' does not necessarily mean a time sequence. Nevertheless, without losing generality, we will consider time sequence in the review for simplicity and convenience.
 
 Denote inputs $x(1), x(2), ..., x(k), ...$ where $x(k)$ is a vector sampled at time instant $k$. The length of the sequence may be finite or infinite. In the case of finite sequence, its maximum sample index is denoted by $T$. For example, in the context of natural language processing, each input might be a word in a dictionary. For example, $x(1) = \textup{``Pandas''}$, $x(2)=\textup{``are''}$, $x(3)=\textup{``so''}$, $x(4)=\textup{``cute''}$, $x(5)=\textup{``!''}$. The corresponding target output sequence is given by $y(1), y(2), ..., y(k), ...$, respectively.
 
