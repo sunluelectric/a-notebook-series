@@ -9,11 +9,16 @@ Commonly seen special distributions are introduced here. Some of them are very u
 	&& f(x) = P(X=x) = \left\{\begin{array}{cc}
 		p & x=1 \\
 		q & x=0
-	\end{array}\right. \nonumber
+	\end{array}\right. \nonumber \\
+	&& \begin{array}{ll}
+		\textup{s.t.} & 0\leq p \leq 1 \\
+		& 0\leq q \leq 1 \\
+		& p+q=1 \nonumber
+	\end{array}
 \end{eqnarray}
-subject to $0\leq p \leq 1$, $0\leq q \leq 1$ and $p+q=1$. Each test is also called a \mync{Bernoulli trail}.
+Each experiment is also called a \mync{Bernoulli trail}.
 
-The expectation, variance, skewness and excess kurtosis of the distribution are $p$, $pq$, $\dfrac{q-p}{\sqrt{pq}}$ and $\dfrac{1-6pq}{pq}$, respectively.
+The expectation, variance, skewness and excess kurtosis of the distribution are $p$, $pq$, $\frac{q-p}{\sqrt{pq}}$ and $\frac{1-6pq}{pq}$, respectively.
 
 Run Bernoulli trails repeatedly. Each Bernoulli trail has a probability of $p$ to take value $1$, and $q=1-p$ to take value $0$. The test is carried out $n$ times. The number of the tests with outcome $1$ is a discrete random variable $0\leq X \leq n$. In this case, $X$ follows \mync{binomial distribution}, whose probability function is given by
 \begin{eqnarray}
@@ -25,11 +30,11 @@ Run Bernoulli trails repeatedly. Each Bernoulli trail has a probability of $p$ t
 	&=& \dfrac{n!}{x!(n-x)!}p^x(1-p)^{n-x}
 \end{eqnarray}
 
-Bernoulli distribution can be taken as a special case of binomial distribution with $n=1$, $x=1$. The expectation, variance, skewness and excess kurtosis of the binomial distribution are $np$, $npq$, $\dfrac{q-p}{\sqrt{npq}}$ and $\dfrac{1-6pq}{npq}$, respectively.
+Bernoulli distribution can be taken as a special case of binomial distribution with $n=1$, $x=1$. The expectation, variance, skewness and excess kurtosis of the binomial distribution are $np$, $npq$, $\frac{q-p}{\sqrt{npq}}$ and $\frac{1-6pq}{npq}$, respectively.
 
-If $n$ is large, Binomial distribution becomes a verification of CLT on Bernoulli trail. Let $n$ be a fixed large number, and let the Bernoulli trail describe the output to a stochastic system. Among the $n$ trials, $X$ of them outputs $1$ while $n-X$ of them, $0$. The mean of the output, therefore, is $X/n$. According to CLT, $X/n$ should follow Gaussian distribution when $n$ is large, and in that case $X$ should also follow Gaussian distribution. 
+If $n$ is large, Binomial distribution becomes a verification of CLT on Bernoulli trail. Let $n$ be a fixed large number, and let the Bernoulli trail describe the output to a stochastic system. Among the $n$ trials, $X$ of them outputs $1$ while $n-X$ of them, $0$. The mean of the output, therefore, is $X/n$. According to CLT, $X/n$ should follow normal distribution when $n$ is large, and in that case $X$ should also follow normal distribution. 
 
-Indeed, when $n$ is large, binomial distribution approaches Gaussian distribution.
+Indeed, when $n$ is large, binomial distribution approaches normal distribution.
 
 Binomial distribution can be extended to \mync{multinomial distribution}, where instead of a single event $A$ happening with probability $p$ or not happening with probability $q$, s.t. $p+q=1$, consider multiple events $A_1$, $A_2$, ..., $A_m$, each with probability $p_1$, $p_2$, ..., $p_m$, respectively, subjected to $p_1+p_2+\ldots+p_m=1$. Consider a total of $n$ tests. The number of $A_1$ occurring is a random variable $X_1$, event $A_2$, $X_2$, and so on. Multinomial distribution studies the probability of
 \begin{eqnarray}
@@ -62,7 +67,7 @@ with $\textup{max}(0, n-r) \leq x \leq \textup{min}(n, b)$.
 
 When $b$, $r$ are far larger than $n$, the hypergeometric distribution can be approximated by the binomial distribution. When $b$ and $r$ approaches infinity with constant ratio $b/(b+r)$ and $r/(b+r)$, hypergeometric distribution converges to binomial distribution.
 
-\section{Normal Distribution}
+\section{Normal Distribution} \label{sec:normal-distribution}
 
 \mync{Normal distribution}, also known as \mync{Gaussian distribution}, is a continuous distribution. It is one of the most widely used distributions to model random noise. One of the explanations is given as follows. Many measurements such as sensor readings are in fact aggregated values. For example, consider a sensor whose reading refreshes at $1Hz$. Behind the screen, it might be sampling the signal at $1000Hz$, and the reading is the average of every $1000$ samples. According to CLT, the reading shall follow normal distribution given that $1000$ is a large number.
 
@@ -76,7 +81,7 @@ where $\mu$, $\sigma^2$ are the mean and variance of the distribution respective
 
 Let $X$ be a random variable following normal distribution with mean $\mu$ and variance $\sigma^2$. This can be denoted by $X\sim\mathcal{N}(\mu, \sigma^2)$. Let $Z=\dfrac{X-\mu}{\sigma}$, and $Z$ would be a standard normal distribution with mean $0$ and variance $1$.
 
-For a random variable $X$ following normal distribution, the probabilities of its value falling between $\pm \sigma$, $\pm 2\sigma$ and $\pm 3\sigma$ are $0.6827$, $0.9545$ and $0.9973$ respectively. In statistics, sometimes we will take samples with residuals larger than $|3\sigma|$ as outliers.
+For a random variable $X$ following normal distribution, the probabilities of its value falling between the mean $\pm \sigma$, $\pm 2\sigma$ and $\pm 3\sigma$ are $0.6827$, $0.9545$ and $0.9973$ respectively. In statistics, sometimes we will take samples with residuals larger than $|3\sigma|$ as outliers.
 
 Multivariate normal distribution describes a vector of random variables $X = \left[X_1, \ldots, X_m\right]$ that follows joint normal distribution. The joint PDF is given by
 \begin{eqnarray}
@@ -96,7 +101,7 @@ where $\lambda >0$ is the shape parameter as shown in Fig. \ref{fig:poisson_pmf}
 	\includegraphics[width=250pt]{chapters/part-1/figures/poisson_pmf.eps}
 	\caption{Poisson distribution with different $\lambda$.} \label{fig:poisson_pmf}
 \end{figure}
-The expectation, variance, skewness and excess kurtosis of the distribution are $\lambda$, $\lambda$, $\dfrac{1}{\sqrt{\lambda}}$ and $\dfrac{1}{\lambda}$, respectively. Notice that the sum of two Poisson distribution with shape parameters $\lambda_1$ and $\lambda_2$ is also Poisson distribution with $\lambda = \lambda_1 + \lambda_2$.
+The expectation, variance, skewness and excess kurtosis of the distribution are $\lambda$, $\lambda$, $\frac{1}{\sqrt{\lambda}}$ and $\frac{1}{\lambda}$, respectively. Notice that the sum of two Poisson distribution with shape parameters $\lambda_1$ and $\lambda_2$ is also Poisson distribution with $\lambda = \lambda_1 + \lambda_2$.
 
 Poisson distribution is often used to describe the probability of an event happening a particular number of times, assuming that the occurrence of the event is independent, the chance of the event happening a single time is low, but there are many trials where the event can happen. The parameter $\lambda$ reflects the average number of occurrence. 
 
@@ -116,9 +121,7 @@ Another example of Poisson distribution is the number of visitors of a website. 
 
 \mync{Exponential distribution} is a continuous distribution that can be used to model the duration of time between two events in a Poisson distribution. For example, it can model the operating time of a machine between two failures, assuming that the failures are independent and random.
 
-Exponential distribution is an important special case of the $\Gamma$ distribution. More about $\Gamma$ distribution will be introduced in more details later.
-
-The PDF is the exponential distribution is given by
+The PDF of the exponential distribution is given by
 \begin{eqnarray}
 	f(x) &=& \left\{\begin{array}{cc}
 		\lambda e^{-\lambda x} & x \geq 0 \\
@@ -132,7 +135,9 @@ where $\lambda$ is the shape parameter that reflects the average occurrence rate
 	\caption{Exponential distributions with different $\lambda$.} \label{fig:exponential}
 \end{figure}
 
-The expectation, variance, skewness and excess kurtosis of the distribution are $\dfrac{1}{\lambda}$, $\dfrac{1}{\lambda^2}$, $2$ and $6$, respectively.
+The expectation, variance, skewness and excess kurtosis of the distribution are $\frac{1}{\lambda}$, $\frac{1}{\lambda^2}$, $2$ and $6$, respectively.
+
+Exponential distribution is an important special case of the $\Gamma$ distribution. More about $\Gamma$ distribution will be introduced in more detail in Section \ref{sec:gamma-distribution}
 
 \section{Uniform Distribution}
 
@@ -146,7 +151,7 @@ The PDF of continuous uniform distribution is given by
 	\end{array}\right. \nonumber
 \end{eqnarray}
 
-The expectation, variance, skewness and excess kurtosis of the distribution are $\dfrac{a+b}{2}$, $\dfrac{(b-a)^2}{12}$, $0$ and $-\dfrac{6}{5}$, respectively.
+The expectation, variance, skewness and excess kurtosis of the distribution are $\frac{a+b}{2}$, $\frac{(b-a)^2}{12}$, $0$ and $-\dfrac{6}{5}$, respectively.
 
 \section{Cauchy Distribution}
 
@@ -164,7 +169,7 @@ and it is plotted in Fig. \ref{fig:cauchy_pdf}.
 
 From mathematics perspective, Cauchy distribution describes the ratio of two independent normal distributed random variables with mean zero. It is a useful distribution in physics.
 
-\section{$\Gamma$, $\chi^2$, $\beta$ and $F$ Distributions}
+\section{$\Gamma$, $\chi^2$, $\beta$ and $F$ Distributions} \label{sec:gamma-distribution}
 
 The \mync{$\Gamma$}[gamma], \mync{$\chi^2$}[chi-square], \mync{$\beta$}[beta] and \mync{$F$} distributions are introduced as follows.
 
@@ -181,7 +186,7 @@ where $\alpha>0$ and $\beta>0$ are the shape parameters (some literatures uses s
 \begin{eqnarray}
 	\Gamma(\alpha) &=& \int_{0}^{\infty}t^{\alpha-1}e^{-t}dt \nonumber
 \end{eqnarray}
-for $\alpha > 0$. $\Gamma$ distribution is the superset of many distributions. For example, the exponential distribution introduced in the earlier section is a special case of $\Gamma$ distribution with $\alpha=1$, and it is used to model the time interval between two events in the Poisson distribution.
+for $\alpha > 0$. $\Gamma$ distribution is the superset of many distributions. For example, exponential distribution introduced earlier is a special case of $\Gamma$ distribution with $\alpha=1$, and it is used to model the time interval between two events in the Poisson distribution.
 
 The plot of the PDF of Gamma distribution is given in Fig. \ref{fig:gamma_pdf}.
 \begin{figure}
@@ -206,7 +211,7 @@ The plot of the PDF of Gamma distribution is given in Fig. \ref{fig:gamma_pdf}.
 	
 \end{mdframed}
 
-The expectation, variance, skewness and excess kurtosis of the distribution are $\dfrac{\alpha}{\beta}$, $\dfrac{\alpha}{\beta^2}$, $\dfrac{2}{\sqrt{\alpha}}$ and $\dfrac{6}{\alpha}$, respectively.
+The expectation, variance, skewness and excess kurtosis of the distribution are $\frac{\alpha}{\beta}$, $\frac{\alpha}{\beta^2}$, $\frac{2}{\sqrt{\alpha}}$ and $\frac{6}{\alpha}$, respectively.
 
 \subsection{$\chi^2$ Distribution}
 
@@ -217,7 +222,7 @@ The $\chi^2$ distribution is a special case of Gamma distribution. In \eqref{eq:
 		0 & \textup{otherwise}
 	\end{array}\right. \label{eq:chi2pdf}
 \end{eqnarray}
-Equation \eqref{eq:chi2pdf} is also denoted by $\chi^2(r)$, where $r$ is known as the degrees of freedom. The plots of PDFs with different $\gamma$ are shown in Fig. \ref{fig:chi2_pdf}.
+Equation \eqref{eq:chi2pdf} is also denoted by $\chi^2(r)$, where $r$ is known as the degrees of freedom. The plots of PDFs with different $r$ are shown in Fig. \ref{fig:chi2_pdf}.
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.6\textwidth]{chapters/part-1/figures/chi2_pdf.eps}
@@ -226,7 +231,7 @@ Equation \eqref{eq:chi2pdf} is also denoted by $\chi^2(r)$, where $r$ is known a
 
 The $\chi^2$ distribution can be used to model the sum of the squares of $r$ independent standard normal distributions, making it an important distribution is statistics, such as in outlier test. 
 
-The expectation, variance, skewness and excess kurtosis of the distribution are $r$, $2r$, $\sqrt{\dfrac{8}{r}}$ and $\dfrac{12}{r}$, respectively.
+The expectation, variance, skewness and excess kurtosis of the distribution are $r$, $2r$, $\frac{2\sqrt{2r}}{r}$ and $\frac{12}{r}$, respectively.
 
 \subsection{$\beta$ Distribution}
 
@@ -237,28 +242,40 @@ Let $X_1$ and $X_2$ be two independent random variables following Gamma distribu
 		0 & \textup{otherwise}
 	\end{array}\right. \label{eq:betapdf}
 \end{eqnarray}
-In some literatures, notation $(a, b)$ or $(\alpha, \beta)$ are used to denote $(\alpha_1, \alpha_2)$ in \eqref{eq:betapdf}.
+
+Beta function
+\begin{eqnarray}
+	\beta(a, b) &=& \int_{0}^{1} t^{a-1}(1-t)^{b-1}dt \nonumber \\ 
+	&=& \dfrac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)} \nonumber
+\end{eqnarray}
+can be used and \eqref{eq:betapdf} can be re-written as
+\begin{eqnarray}
+	f(x) &=& \left\{\begin{array}{cc}
+		\dfrac{1}{\beta(\alpha_1, \alpha_2)}x^{\alpha_1-1}(1-x)^{\alpha_2-1} & 0 < x < 1 \\
+		0 & \textup{otherwise}
+	\end{array}\right. \nonumber
+\end{eqnarray}
 
 \subsection{$F$-Distribution}
 
 Let $X_1$, $X_2$ be two random variables following $\chi^2$ distribution with degree of freedom $\nu_1$ and $\nu_2$ respectively. Let
 \begin{eqnarray}
-	X &=& \dfrac{\dfrac{X_1}{\nu_1}}{\dfrac{X_2}{\nu_2}} \nonumber
+	X &=& \dfrac{X_1 / \nu_1}{X_2 / \nu_2} \nonumber
 \end{eqnarray}
 then $X$ follows $F$-distribution, named after R.A. Fisher.
 
 The PDF of the $F$-distribution is given by
 \begin{eqnarray}
 	f(x) &=& \left\{\begin{array}{cc}
-		\dfrac{\Gamma\left(\dfrac{\nu_1+\nu_2}{2}\right)}{\Gamma\left(\dfrac{\nu_1}{2}\right)\Gamma\left(\dfrac{\nu_2}{2}\right)}\nu_1^{\dfrac{\nu_1}{2}}\nu_2^{\dfrac{\nu_2}{2}}x^{\left(\dfrac{\nu_1}{2}-1\right)}\left(\nu_2+\nu_1 x\right)^{-\dfrac{\nu_1+\nu_2}{2}} & x > 0 \\
+		\dfrac{1}{\beta\left(\dfrac{\nu_1}{2},\dfrac{\nu_2}{2}\right)}\left(\dfrac{\nu_1}{\nu_2}\right)^{\dfrac{\nu_1}{2}}x^{\left(\dfrac{\nu_1}{2}+1\right)}\left(1+\dfrac{\nu_1}{\nu_2}x\right)^{\left(-\dfrac{\nu_1 + \nu_2}{2}\right)} & x > 0 \\
 		0 & \textup{otherwise}
 	\end{array}\right. \nonumber
 \end{eqnarray}
-where $\nu_1$, $\nu_2$ are the shape parameters of the distribution. 
+where $\nu_1$, $\nu_2$ are the shape parameters and $\beta(\cdot)$ the beta function. 
 
 \section{Student's $t$-Distribution}
 
-The zero-mean \mync{Student's $t$-distribution} (also referred as $t$-distribution for simplicity) PDF is given by
+The zero-mean \mync{Student's $t$-distribution} (also known as $t$-distribution for simplicity) PDF is given by
 \begin{eqnarray}
 	f(x) &=& \dfrac{\Gamma\left(\dfrac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\sigma\Gamma\left(\dfrac{\nu}{2}\right)}\left(1+\dfrac{x^2}{\nu\sigma^2}\right)^{-\dfrac{\nu+1}{2}} \label{eq:tpdf}
 \end{eqnarray}
@@ -272,4 +289,4 @@ then $X$ follows $t$-distribution \eqref{eq:tpdf}.
 
 Student's $t$-distribution is famous for its heavy-tail characteristics, and it is good at emulating noise with outliers.
 
-The expectation, variance, skewness and excess kurtosis of the $t$-distribution given by \eqref{eq:tpdf} are $0$, $\dfrac{\nu}{\nu-2}$ $(\nu>2)$, $0$ $(\nu>3)$ and $\dfrac{6}{\nu-4}$ $(\nu>4)$ respectively.
+The expectation, variance, skewness and excess kurtosis of the $t$-distribution given by \eqref{eq:tpdf} are $0$, $\frac{\nu}{\nu-2}$ $(\nu>2)$, $0$ $(\nu>3)$ and $\frac{6}{\nu-4}$ $(\nu>4)$ respectively.

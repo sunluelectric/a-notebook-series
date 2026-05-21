@@ -247,7 +247,7 @@ best_selling_games_df = pd.read_csv("best-selling-video-games.csv")
 best_selling_games_df
 \end{lstlisting}
 which reads all the information in the CSV table into a data frame as shown by Fig. \ref{fig:dfexp}.
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=\textwidth]{chapters/part-3/figures/df_example.png}
 	\caption{The simplest data frame importing using pandas.}
@@ -264,7 +264,7 @@ When no index column is specified, pandas will add an additional auto-incrementa
 best_selling_games_df = pd.read_csv("best-selling-video-games.csv", index_col = "Title", usecols = ["Title", "Sales", "Publisher(s)"])
 best_selling_games_df
 \end{lstlisting}
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.5\textwidth]{chapters/part-3/figures/df_example2.png}
 	\caption{Specifying index column and reading only selected columns using pandas.}

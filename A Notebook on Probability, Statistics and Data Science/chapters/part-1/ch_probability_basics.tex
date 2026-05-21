@@ -10,19 +10,19 @@ The terms ``random'' and ``stochastic'' are used to describe variables or models
 
 \mync{Stochasticity} typically refers to the case where the state and output of a process (as in ``stochastic process'') is non-deterministic even with a fixed input. This is likely caused by the incomplete modeling or random disturbance of the system. As a result, the system cannot be precisely determined by the model and the input. A stochastic process can still be described by a parametric model, but with some unknowns (usually in the form of random variables) in the equations.
 
-This part of the notebook mainly studies random variables. Stochastic process and control of stochastic systems are introduced elsewhere in control system related notebooks.
+This notebook mainly studies random variables. Stochastic process and control of stochastic systems are introduced elsewhere in control system related notebooks, such as in robust control related chapters.
 
 \subsection{Random Experiment}
 
-Experiments are among the most important activities in science and engineering. Very often, experiments are used to verify theories. In these cases, experiments are carefully designed so that their outcomes are deterministic and predictable as long as the theory is correct. By observing the results of the experiments matching the prediction of the theory, we build confidence in the theory.
+Experiments are very important science and engineering. Very often, experiments are used to confirm theories. In these cases, the experiments are carefully designed so that their outcomes are deterministic and predictable as long as a theory is correct. By observing the results of the experiments matching the prediction of the theory, we build confidence in the theory.
 
-However, this notebook is concerned with another type of experiment where the result contains randomness due to the lack of information or incomplete modeling. Such experiments include tossing a coin, predicting the GDP of a country next year, etc. These experiments are known as \mync{random experiments}. The result of a random experiment can still be meaningful because it reflects some insights of the system. The challenge is to design the experiments so that useful information can be revealed from the experiment results efficiently.
+However, this notebook is concerned with another type of experiment where the result contains randomness due to the lack of information or incomplete modeling. Such experiments include tossing a coin, measuring the lifespan of a randomly picked item from a production line, etc. These experiments are known as \mync{random experiments}. The result of a random experiment is often unpredictable and sometimes meaningless. However, the collective results of a set of random experiments repeatedly carried out can be meaningful because they reflect some insights of the system. The challenge is to design the experiments so that useful information can be revealed from the experiment results efficiently.
 
 \subsection{Sample Space}
 
 A set $S$ that consists of all possible outcomes of a random experiment is called a \mync{sample space}.
 
-\mync{Cardinality} refers to the number of elements in a set. Depending on the cardinality of a sample space, the space can be categorized as follows. If a sample space has a finite number of elements, it is called a \mync{finite sample space}. Otherwise, it is called an \mync{infinite sample space}. If the elements in an infinite sample space can be mapped to natural numbers, the sample space is also called a \mync{countably infinite sample space}. Otherwise, the sample space is called a \mync{uncountably infinite sample space}. Examples are given below.
+Depending on the cardinality (number of elements in a set) of a sample space, it can be categorized as follows. If a sample space has a finite number of elements, it is called a \mync{finite sample space}. Otherwise, it is called an \mync{infinite sample space}. If the elements in an infinite sample space can be mapped to natural numbers, the sample space is also called a \mync{countably infinite sample space}. Otherwise, the sample space is called a \mync{uncountably infinite sample space}. Examples are given below.
 \begin{itemize}
 	\item Finite sample space. Randomly pick 5 balls from a bag that contains 50 red balls and 50 green balls. The number of red balls in the 5 picked balls forms a finite sample space, $S = \{0, 1, 2, 3, 4, 5\}$.
 	\item Countably infinite sample space. The number of consecutive ``heads'' when tossing a coin before the first ``tail'' forms a countably infinite sample space, $S = \mathbb{N}$.
@@ -51,13 +51,13 @@ An \mync{event} is defined as a subset $A \subseteq S$, i.e., it is a portion of
 
 Given an experiment and an event, it is unsure whether the event will occur, and \mync{probability} is a measurement of the likelihood that the event is going to occur. For example, if the probability is $50\%$, it means that the event has an equal chance of happening or not happening.
 
-There are different ways to calculate the probability of events. A rigorous mathematical definition of probability, known as axiomatic approach, is introduced in Section \ref{subsec:probability_axioms}. But before that, classical approach, empirical approach and geometric probability are introduced. One may get confused with which is the ``true'' definition of probability. As will be shown later, though defined from different angles, they all point to the same concept essentially.
+There are different ways to calculate the probability of events. A rigorous mathematical definition of probability, known as axiomatic approach, is introduced in Section \ref{subsec:probability_axioms}. But before that, classical approach, empirical approach and geometric probability are introduced. One may get confused with which is the ``true'' definition of probability. As will be shown later, though defined from different angles on different types of problems, they all point to the same concept essentially.
 
 \subsection{Classical Probability}
 
 In the \mync{classical approach}, as a prerequisite all elementary events have the same chance of occurrence, and the total number of elementary events is $n$. Define an event that contains $h$ elementary events. The \mync{classical probability} of the event is given by $h/n$.
 
-Parameters $h$ and $n$ are the cardinality of event $A$ and the cardinality of the sample space $S$ respectively. Calculating $h$ and $n$ is the key to solving the classical probability. Permutation and combination are widely used for such calculations. 
+Parameters $h$ and $n$ are the cardinality of event $A$ and sample space $S$ respectively. Calculating $h$ and $n$ is the key to solving the classical probability. Permutation and combination are widely used for such calculations. 
 
 Suppose that there are $n$ distinct objects, and we would like to select $r\leq n$ objects from them and put them into a sequence. The \mync{permutation} defined by
 \begin{eqnarray}
@@ -142,18 +142,22 @@ Define an event $A$ that is made up of $h$ such elementary events out of $A_i$. 
 \begin{eqnarray}
   P(A) &=& \dfrac{h}{n} \nonumber
 \end{eqnarray}
-where $h$, $n$ are the cardinality of $A$ and $S$ with respect to the elementary events.
+where $h$, $n$ are the cardinality of $A$ and $S$ with respect to the elementary events. 
 
-Recall the definition of a certain event. A certain event must have a probability of $1$. However, an event with probability $1$ is not necessarily a certain event. For example, consider dropping a ball in a circle. The probability of it landing precisely in the center of the circle is $0$ (yet possible), and the probability of otherwise is $1$ (yet not certain).
+This bridges classical probability and the axiomatic approach. Notice that geometric probability can be taken as an expansion of the classical probability and hence is also linked to the axiomatic approach. Classical probability and geometric probability are essentially probability function of axiomatic approach in certain applications.
 
 \begin{mdframed}
-\noindent \textbf{Axiomatic approach Versus Frequency Approach}
+\noindent \textbf{Axiomatic approach and Frequency Approach}
 
 Our intuitive understanding of probability should align with the frequency approach, where the probability of an event should describe how frequently an event occurs if the experiment is repeated many times. The axiomatic approach, though very clearly defined mathematically, seems to disconnect from the intuition.
 
-As will be introduced in a later Section \ref{subsec:largenumbers}, the law of large numbers actually bridges the axiomatic approach and frequency approach, thus guaranteeing the consistency. In addition, as introduced earlier, the classical probability is within the framework of axiomatic approach, and the geometric probability can be taken as a limiting case of classical probability. As a result, the probability defined in axiomatic approach (including classical probability and geometric probability) reflects the likelihood of an event happening the similar way the frequency approach does, and there is no gap in between. Everything comes into the same picture.
+As will be introduced in Section \ref{subsec:largenumbers}, the law of large numbers bridges the axiomatic approach and frequency approach, thus guaranteeing the consistency. 
+
+As introduced earlier, the classical probability is within the framework of axiomatic approach, and the geometric probability can be taken as a limiting case of classical probability. As a result, the probability defined in axiomatic approach (including classical probability and geometric probability) reflects the likelihood of an event happening the similar way the frequency approach does, and there is no gap in between. Everything comes into the same picture.
 
 \end{mdframed}
+
+Recall the definition of a certain event. A certain event must have a probability of $1$. However, an event with probability $1$ is not necessarily a certain event. For example, consider dropping a ball in a circle. The probability of it landing precisely in the center of the circle is $0$ (yet possible), and the probability of otherwise is $1$ (yet not certain).
 
 \subsection{Conditional Probability}
 
@@ -176,12 +180,12 @@ An example of implementing Bayes' rule is given below.
 \begin{shortbox}
 \Boxhead{Example of Bayes' Rule}
 
-A couple has an equal chance of giving birth to a boy or a girl. Gather a group of couples with 2 children. Randomly pick one couple.
+The chances of a child being a boy or a girl are the same half-half. Gather a group of couples with 2 children. Randomly pick one couple.
 
 \begin{enumerate}
 	\item Without further information, what is the chance of them having two girls?
 	\item From an earlier interview, we know that they have at least one girl. What is the chance of them having two girls?
-	\item From an earlier interview, we know that their first child is a girl. What is the chance of their second child being a girl as well?
+	\item From an earlier interview, we know that their first child is a girl. What is the chance of them having two girls?
 \end{enumerate}
 
 \end{shortbox}
@@ -216,15 +220,22 @@ P(A|B) &=& \dfrac{P\left(A \cap B\right)}{P(B)} \nonumber \\
 &=& \dfrac{P(A)}{P(B)} \nonumber \\
 &=& \dfrac{1}{3} \nonumber
 \end{eqnarray}
-where note that $P\left(A \cap B\right) = P(A)$ since $A\subset B$. Intuitively, this makes sense. From the interview, it is possible to drop $\left[\textup{Boy Boy}\right]$ from the sample space for this couple. As a result, the probability of them having two girls, $\dfrac{1}{3}$, is higher than in the first question, $\dfrac{1}{4}$, where no prior information was available. In this example, the prior information is useful for obtaining a more precise answer.
+where note that $P\left(A \cap B\right) = P(A)$ since $A\subset B$. Intuitively, this makes sense. From the interview, it is possible to drop $\left[\textup{Boy Boy}\right]$ from the sample space for this couple. As a result, the probability of them having two girls, $\frac{1}{3}$, is higher than in the first question, $\frac{1}{4}$, where no prior information was available. In this example, the prior information is useful for obtaining a more precise answer.
 
 Consider the third question. Using Bayes' rule,
 \begin{eqnarray}
-P(D|C) &=& \dfrac{P\left(D \cap C\right)}{P(C)} \nonumber \\
-&=& \dfrac{P(A)}{P(C)} \nonumber \\
-&=& \dfrac{1}{2} \nonumber
+	P(A|C) &=& \dfrac{P\left(A \cap C\right)}{P(C)} \nonumber \\
+	&=& \dfrac{P(A)}{P(C)} \nonumber \\
+	&=& \dfrac{1}{2} \nonumber
 \end{eqnarray}
-Note that from \eqref{eq:probsetexp}, $P(D) = \dfrac{1}{2}$. Therefore, $P(D|C) = P(D)$. In this example, the prior information about whether $C$ occurs is not helpful for calculating the probability that $D$ occurs. This makes sense. The genders of both children are independent. The first child, whether a boy or a girl, does not affect the likelihood of the gender of the second child.
+Notice that the third question is essentially asking the probability of the second child being a girl, as we already know that the first child is a girl. Therefore, the probability can also be calculated using
+\begin{eqnarray}
+	P(D|C) &=& \dfrac{P\left(D \cap C\right)}{P(C)} \nonumber \\
+	&=& \dfrac{P(A)}{P(C)} \nonumber \\
+	&=& \dfrac{1}{2} \label{eq:probsetexpa}
+\end{eqnarray}
+
+From \eqref{eq:probsetexp} and \eqref{eq:probsetexpa}, we can see that $P(D|C) = P(D) = \frac{1}{2}$, which indicates that the prior information about whether $C$ occurred does not provide additional insights on whether $D$ occurred, as $D$ always has a chance of $50\%$ to occur regardless of the result of $C$. This makes sense. The genders of both children are independent. The first child, whether a boy or a girl, does not affect the likelihood of the gender of the second child.
 
 If $P(B|A)=P(B)$, or equivalently $P(A\cap B) = P(A)P(B)$, the two events $A$ and $B$ are known as \mync{independent events}. In this case, the prior knowledge of whether $A$ has occurred does not affect the probability of event $B$, and vice versa.
 
@@ -240,6 +251,12 @@ The probability of $X$ taking a particular value $x$ is denoted by $P(X=x)$ or s
 
 Furthermore, define $P(X\leq x)$ or $F(x)$ as the \mync{cumulative distribution function} of $x$. It is easy to prove that $F(x)$ is nondecreasing, and $\lim_{x\rightarrow -\infty}F(x)=0$, $\lim_{x\rightarrow \infty}F(x)=1$. Also, $F(x)$ ``jumps'' at each $P(X=x_k)>0$ and it is continuous from the right.
 
+Apparently from the axiom,
+\begin{eqnarray}
+	\sum P(X_i) &=& 1 \nonumber
+\end{eqnarray}
+for any continuous random variable.
+
 \subsection{Continuous Random Variable}
 
 A random variable $X$ may also take continuous values in many applications. For example, let $X$ denote the time consumption to finish a task, in which case $X$ is a random variable whose value can be any positive number.
@@ -250,7 +267,7 @@ Inspired by this, define \mync{probability density function}[PDF] or $f(x)$ for 
 \begin{eqnarray}
 	f(x) &=& \dfrac{d}{dx}F(x) \nonumber
 \end{eqnarray}
-With this definition, $f(x)$ is such a function that
+With this definition, $f(x)$ is such function that
 \begin{eqnarray}
 	P(a < X < b) &=& \int_{a}^{b}f(x)dx \nonumber
 \end{eqnarray}
@@ -261,11 +278,17 @@ gives the probability of $X$ in a range, and
 \end{eqnarray}
 Notice that $f(x)$ itself is not probability. It is $f(x)dx$ accumulating in range $x \in (a, b)$ that forms the probability, hence the name ``probability density''.
 
+Apparently from the axiom,
+\begin{eqnarray}
+	\int_{-\infty}^{\infty}f(x)dx &=& 1 \label{eq:pdf-axiom}
+\end{eqnarray}
+for any continuous random variable.
+
 In science and engineering problems, continuous random variables are more common than discrete random variables. In engineering, discrete random variables can sometimes be described by impulse PDF.
 
 \subsection{Distribution of Derived Variable}
 
-Let $X$ be a random variable with PDF $f_X(x)$. Let $U$ be another random variable which is a function of $X$, $U=\phi(X)$. The PDF of $U$ can be calculated from $f_X$ and $\phi$. Details are given below.
+Let $X$ be a random variable with PDF $f_X(x)$. Let $U$ be another random variable which is a function of $X$, $U=\phi(X)$. The PDF of $U$ can be calculated from $f_X$ and $\phi$ as follows.
 
 For simplicity, assume that $U=\phi(X)$ is an injective function (one-to-one function), and $X=\phi^{-1}(U)=\psi(U)$. In that case, the PDF of $U$, $g(u)$, can be obtained as follows.
 \begin{eqnarray}
@@ -276,52 +299,26 @@ For example, let $U=aX$, $X=\frac{U}{a}$.
 	g(u) &=& \left|\dfrac{1}{a}\right|f\left(\dfrac{u}{a}\right) \nonumber
 \end{eqnarray}
 
-Let $X$, $Y$ be two random variables with joint distribution $f(x, y)$. Let $U=X+Y$. The PDF of $U$ can be obtained as follows.
-\begin{eqnarray}
-	g(u) &=& \int_{-\infty}^{\infty} f(x, u-x)dx \label{eq:conditionalpdf3}
-\end{eqnarray}
-In the special case where $X$ and $Y$ are independent, $f(x, y) = f_X(x)f_Y(y)$, and \eqref{eq:conditionalpdf3} becomes
-\begin{eqnarray}
-	g(u) &=& \int_{-\infty}^{\infty} f_X(x)f_Y(u-x)dx \nonumber \\
-	&=& f_X * f_Y \nonumber
-\end{eqnarray}
-where $*$ denotes the convolution operator.
-
 \subsection{Expectation}
 
-Given the probability function of a discrete random variable or the PDF of a continuous random variable, a lot of insights can be extracted. Commonly seen measures of a random variable are introduced in this section and the following sections. Usually, they can be calculated from their associated probability functions or PDFs.
+Given the probability function of a discrete random variable or the PDF of a continuous random variable, a lot of insights can be extracted. Commonly seen measures of a random variable are introduced in this and the next sections.
 
-In probability and statistics sense, \mync{expectation} (also known as \mync{mean}) describes the average value of a random variable, if the experiment is carried out many times. For discrete random variable $X$, the expectation is given by
+In probability and statistics, \mync{expectation} (also known as \mync{mean}) describes the average value of a random variable, if the experiment is carried out many times. For discrete random variable $X$, the expectation is given by
 \begin{eqnarray}
 	\textup{E}(X) &=& \sum_{i=1}^{n}x_iP(x_i) \label{eq:expectationdiscrete}
 \end{eqnarray}
-where $\textup{E}(\cdot)$ denotes the expectation, and $n$ the cardinality of the sample space. In the case of countably infinite sample space, replace $n$ with $\infty$ in \eqref{eq:expectationdiscrete}. 
-
-For continuous random variable, it is
+where $\textup{E}(\cdot)$ denotes the expectation, and $n$ the cardinality of the sample space. In the case of countably infinite sample space, replace $n$ with $\infty$. For continuous random variable $X$, the expectation is given by
 \begin{eqnarray}
 	\textup{E}(X) &=& \int_{-\infty}^{\infty}xf(x)dx \label{eq:expectationcontinuous}
 \end{eqnarray}
 Expectation is sometimes denoted by $\mu$ in literatures.
 
-Some features of expectation calculation are given below.
+Expectation has the following commonly used features.
 \begin{eqnarray}
 	\textup{E}(cX) &=& c\textup{E}(X) \nonumber \\
 	\textup{E}(X+Y) &=& \textup{E}(X) + \textup{E}(Y) \nonumber
 \end{eqnarray}
-where $c$ is a constant and $X$, $Y$ are two random variables. These features can be easily derived from \eqref{eq:expectationdiscrete} and \eqref{eq:expectationcontinuous}. 
-
-The expectation of the multiplication of two random variables, $XY$, can be calculated as follows.
-\begin{eqnarray}
-	\textup{E}(XY) &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty} xyf(x, y)dxdy \nonumber
-\end{eqnarray}
-where $f(x, y)$ is the joint distribution of $X$ and $Y$ which will be introduced in detail in Section \ref{sec:jointdistribution}. Furthermore, if $X$, $Y$ are independent,
-\begin{eqnarray}
-	\textup{E}(XY) &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty} xyf(x, y)dxdy \nonumber \\
-	&=& \int_{-\infty}^{\infty}xf_X(x)dx \times \int_{-\infty}^{\infty}yf_Y(y)dy \nonumber \\
-	&=& \textup{E}(X)\textup{E}(Y) \nonumber
-\end{eqnarray}
-where $f_X(x)$, $f_Y(y)$ are the distributions of $X$ and $Y$ which can be derived from $f(x,y)$. Details are also introduced in Section \ref{sec:jointdistribution}.
-
+where $c$ is a constant and $X$, $Y$ two random variables. These features can be easily derived using \eqref{eq:expectationdiscrete} and \eqref{eq:expectationcontinuous}. 
 
 \subsection{Variance and Standard Deviation}
 
@@ -332,18 +329,19 @@ where $f_X(x)$, $f_Y(y)$ are the distributions of $X$ and $Y$ which can be deriv
 	&=& \textup{E}\left(X^2\right)-\textup{E}(X)^2 \label{eq:varderived} \\
 	\textup{Std}(X) &=& \sqrt{\textup{Var}(X)} \nonumber
 \end{eqnarray}
-Variance and standard deviation are sometimes denoted as $\sigma^2$ and $\sigma$ respectively. Notice that \eqref{eq:varderived} also implies that $\textup{E}\left(X^2\right) \geq \textup{E}(X)^2$, a conclusion used in many lemma derivations.
+Variance and standard deviation are non-negative and often denoted by $\sigma^2$ and $\sigma$ respectively. Notice that \eqref{eq:varderived} also implies that $\textup{E}\left(X^2\right) \geq \textup{E}(X)^2$, a conclusion used in many lemma derivations.
 
-For continuous random variables, from \eqref{eq:varderived} the variance is
+For continuous random variables, from \eqref{eq:vardef} the variance is
 \begin{eqnarray}
-	\textup{Var}(X) &=& \int_{-\infty}^{\infty} (x-\textup{E}(X))^2f(x)dx \nonumber \\
+	\textup{Var}(X) &=& \int_{-\infty}^{\infty} (x-\textup{E}(X))^2f(x)dx \label{eq:varcontinuousf}
 \end{eqnarray}
 
-Some features of variance calculation are given below.
+Variance has the following commonly used features.
 \begin{eqnarray}
 	\textup{Var}(cX) &=& c^2\textup{Var}(X) \nonumber \\
-	\textup{Var}(X\pm Y) &=& \textup{Var}(X) + \textup{Var}(Y) \nonumber
+	\textup{Var}(X\pm Y) &=& \textup{Var}(X) + \textup{Var}(Y) \label{eq:variance-sum-independent}
 \end{eqnarray}
+where in \eqref{eq:variance-sum-independent} $X$ and $Y$ are independent random variables.
 
 Mean and standard deviation can be used to standardize a random variable as follows.
 \begin{eqnarray}
@@ -353,25 +351,25 @@ where $\mu$, $\sigma$ are the mean and standard deviation of random variable $X$
 
 \subsection{Moment} \label{sec:moments}
 
-In mathematics, the \mync{$r$-th moment} of a continuous function $f(x)$ about $c$ is defined as follows.
+In mathematics, the \mync{$n$-th order moment} of a continuous function $f(x)$ about $c$ is defined as follows.
 \begin{eqnarray}
 	\mu_n &=& \int_{-\infty}^{\infty}(x-c)^nf(x)dx \nonumber
 \end{eqnarray}
 
-By simply saying ``moment'' without specifying $c$, $c=0$ by default. Let $f(x)$ be a PDF. In this sense, the $0$-th order and the $1$st order moment of a probability density function can be calculated as follows.
+By simply saying ``moment'' without specifying $c$, $c=0$ by default. Let $f(x)$ be a PDF. With \eqref{eq:pdf-axiom} and \eqref{eq:expectationcontinuous}, the $0$-th and the $1$st order moments of a probability density function are
 \begin{eqnarray}
 	&& \mu_0 = \int_{-\infty}^{\infty}f(x)dx = 1 \nonumber \\
 	&& \mu_1 = \int_{-\infty}^{\infty}xf(x)dx = \textup{E}(X) \nonumber
 \end{eqnarray}
-where it can be seen that the $0$th and $1$st moments of a PDF are 1 and its mean, respectively.
+respectively.
 
-Further more, let $c=\mu_1$ be the mean of the random variable to calculate the $2$nd-order central moment $\mu_2$ as follows.
+Further more, let $c=\mu_1$ be the mean of the random variable. With \eqref{eq:varcontinuousf}, the $2$nd order central moment $\mu_2$ about $c$ is
 \begin{eqnarray}
 	\mu_2 = \int_{-\infty}^{\infty}(x-\mu_1)^2f(x)dx = \textup{Var}(X) \nonumber
 \end{eqnarray}
 which is the variance of the random variable.
 
-Using mean and variance to further define standardized moments as shown below. Define $\bar{\mu}_k$ for $k\geq 3$ as follows.
+Define the $3$-rd and $4$-th order standardized moments as follows. Let $\bar{\mu}_k$, $k = 3, 4$ be given by
 \begin{eqnarray}
 	&& \bar{\mu}_k = \dfrac{\mu_k}{\sigma^k} \nonumber
 \end{eqnarray}
@@ -441,7 +439,13 @@ Thus,
 \end{eqnarray}
 which is the integration of \eqref{eq:jointpdf} w.r.t. all other variables from $-\infty$ to $\infty$. 
 
-Equation \eqref{eq:jointpdfdowngrade} can be interpreted as follows. If $(X_i, Y_i)$ samples are generated from $f(x, y)$ in \eqref{eq:jointpdf}, and we only look at the $X_i$ of these samples, they should follow \eqref{eq:jointpdfdowngrade}.
+Equation \eqref{eq:jointpdfdowngrade} can be interpreted as follows. If $(X_i, Y_i)$ samples are generated from $f(x, y)$ in \eqref{eq:jointpdf}, and we only look at first element $X_i$ of these samples, they should follow \eqref{eq:jointpdfdowngrade}.
+
+Using \eqref{eq:jointpdfdowngrade}, the expectation and variance for a variable can be calculated from the joint PDF as follows.
+\begin{eqnarray}
+	\textup{E}(X) &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}xf(x, y)dxdy \nonumber \\
+	\textup{Var}(X) &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}\left(x-\textup{E}(X)\right)^2f(x, y)dxdy \nonumber
+\end{eqnarray}
 
 \subsection{Conditional Distribution}
 
@@ -470,16 +474,36 @@ Equation \eqref{eq:conditionalpdf1} can be recurrently re-written as
 	f_{X|Y}(x|y) &=& \dfrac{f_{Y|X}(y|x)f_X(x)}{f_Y(y)} \label{eq:conditionalpdf1a}
 \end{eqnarray}
 
+\subsection{Distribution of Summation of Random Variables}
+
+Let $X$, $Y$ be two random variables with joint distribution $f(x, y)$. Let $U=X+Y$. The PDF of $U$ can be obtained as follows.
+\begin{eqnarray}
+	g(u) &=& \int_{-\infty}^{\infty} f(x, u-x)dx \label{eq:conditionalpdf3}
+\end{eqnarray}
+In the special case where $X$ and $Y$ are independent, $f(x, y) = f_X(x)f_Y(y)$, and \eqref{eq:conditionalpdf3} becomes
+\begin{eqnarray}
+	g(u) &=& \int_{-\infty}^{\infty} f_X(x)f_Y(u-x)dx \nonumber \\
+	&=& f_X * f_Y \nonumber
+\end{eqnarray}
+where $*$ denotes the convolution operator.
+
+\subsection{Expectation of Multiplication of Random Variables}
+
+The expectation of the multiplication of two random variables, $XY$, can be calculated as follows.
+\begin{eqnarray}
+	\textup{E}(XY) &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty} xyf(x, y)dxdy \nonumber
+\end{eqnarray}
+where $f(x, y)$ is the joint distribution of $X$ and $Y$. Furthermore, if $X$, $Y$ are independent,
+\begin{eqnarray}
+	\textup{E}(XY) &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty} xyf(x, y)dxdy \nonumber \\
+	&=& \int_{-\infty}^{\infty}xf_X(x)dx \times \int_{-\infty}^{\infty}yf_Y(y)dy \nonumber \\
+	&=& \textup{E}(X)\textup{E}(Y) \nonumber
+\end{eqnarray}
+where $f_X(x)$, $f_Y(y)$ are the distributions of $X$ and $Y$ which can be derived from $f(x,y)$.
 
 \subsection{Covariance and Correlation}
 
 Covariance and correlation are defined for a joint distribution with multiple random variables. For simplicity, consider only two random variables $X$, $Y$ whose joint distribution is given by $f_{XY}(x, y)$. The idea derived from here can be generated to more variables.
-
-The PDF of one variable can be derived from the joint distribution using \eqref{eq:jointpdfdowngrade}. It is straight forward to get the expectation and variance for that variable as follows.
-\begin{eqnarray}
-	\textup{E}(X) &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}xf(x, y)dxdy \nonumber \\
-	\textup{Var}(X) &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}\left(x-\textup{E}(X)\right)^2f(x, y)dxdy \nonumber
-\end{eqnarray}
 
 The \mync{covariance} of two variables is defined and calculated as follows.
 \begin{eqnarray}
@@ -492,6 +516,14 @@ where $\textup{Cov}(X, Y)$ is sometimes denoted by $\sigma_{XY}$. Notice that un
 	&=& 0 \nonumber
 \end{eqnarray}
 If the covariance of the two variables is zero, the two variables are called \mync{uncorrelated}. Independent variables are always uncorrelated. However, uncorrelated variables are not necessarily independent.
+
+In \eqref{eq:variance-sum-independent}, the variance of the sum of random variables are given. In the case where the variables are dependent, \eqref{eq:variance-sum-independent} shall be generalized to
+\begin{eqnarray}
+	\textup{Var}(X\pm Y) &=& \iint_{-\infty}^{\infty} \left(X + Y - E\left[X + Y\right]\right)f(x,y)dxdy \nonumber \\
+	&=& \iint_{-\infty}^{\infty} \left(X - E\left[X\right]\right)f(x,y)dxdy + \iint_{-\infty}^{\infty} \left(Y - E\left[Y\right]\right)f(x,y)dxdy \nonumber \\
+	&& + 2\iint_{-\infty}^{\infty} \left(X - E\left[X\right]\right)\left(Y - E\left[Y\right]\right)f(x,y)dxdy \nonumber \\
+	&=& \textup{Var}(X) + \textup{Var}(Y) + 2\textup{Cov}(X, Y) \nonumber
+\end{eqnarray}
 
 Furthermore,
 \begin{eqnarray}
@@ -526,9 +558,9 @@ Using \eqref{eq:explemma} on \eqref{eq:covariance1}, \eqref{eq:vardef} gives
 \end{eqnarray}
 or equivalently
 \begin{eqnarray}
-	\sigma_{XY}^2 &\leq& \sigma_X^2\sigma_Y^2 \nonumber
+	\sigma_{XY}^2 &\leq& \sigma_X^2\sigma_Y^2 \label{eq:covlemma-original}
 \end{eqnarray}
-Noticing that while $\sigma_X$, $\sigma_Y$ are always non-negative, $\sigma_{XY}$ is not,
+Noticing that while $\sigma_X$, $\sigma_Y$ are always non-negative, $\sigma_{XY}$ is not, and \eqref{eq:covlemma-original} can be rewritten as
 \begin{eqnarray}
 	-\sigma_X\sigma_Y \leq \sigma_{XY} \leq \sigma_X\sigma_Y \label{eq:covlemma}
 \end{eqnarray}
@@ -546,24 +578,26 @@ There are a few important theorems frequently used in the study of probability a
 
 \subsection{Law of Large Numbers} \label{subsec:largenumbers}
 
-The \mync{Law of Large Numbers}[LLN] is a theorem that basically says if performing the same experiment a large number of times, the average of the outcomes of the experiments should eventually converge to a certain value which is the empirical expectation of the experiment. The larger number of trails, the closer the average to the (empirical) expectation.
+The \mync{Law of Large Numbers}[LLN] is a theorem that says if performing the same experiment a large number of times, the average of the outcomes of the experiments should eventually converge to a certain value which is the expectation of the experiment.
 
 In mathematical expression, let $X$ be a random variable which represents the outcome of an experiment, and $\bar{X}$ its expectation. Let $X_i$ be a sample of the outcome. According to LLN,
 \begin{eqnarray}
 	\lim_{n\rightarrow\infty} \sum_{i=1}^{n}\dfrac{X_i}{n} &=& \bar{X} \nonumber
 \end{eqnarray}
 
+LLN bridges analytical conclusion and empirical experiment results.
+
 \subsection{Central Limit Theorem}
 
-\mync{Central Limit Theorem}[CLT] states the following observation. For \myabb{independent and identically distributed}{i.i.d.} random variables not necessarily following normal distribution, the empirical mean of the samples taken from these distributions tends towards normal distribution when the number of samples is large.
+\mync{Central Limit Theorem}[CLT] states the following observation. For \myabb{independent and identically distributed}{i.i.d.} random variables not necessarily following normal distribution, the empirical mean of the samples taken from these distributions tends towards normal distribution when the number of samples is large. More about normal distribution will be introduced in Section \ref{sec:normal-distribution}; for now, take it as a specific distribution with predefined form of PDF.
 
-Let $X$ be a random variable not necessarily following normal distribution, and it has mean and variance of $\mu$ and $\sigma^2<\infty$ respectively. Let $X_i$ be samples of the random variable. The empirical mean of the samples is calculated by
+Let $X$ be a random variable not necessarily following normal distribution, and it has mean and variance of $\mu$ and $\sigma^2<\infty$ respectively. Draw $n$ samples from the distribution. Let $X_i$ be the samples. The empirical mean of the samples is hence calculated by
 \begin{eqnarray}
 	\bar{X}_n &=& \dfrac{1}{n}\sum_{i=1}^{n}X_i \nonumber
 \end{eqnarray}
-where $n$ is a fixed number. CLT states that $\bar{X}_n$ follows normal distribution when $n$ is large. The mean and variance of the normal distribution are $\mu$ and $\dfrac{\sigma^2}{n}$ respectively, i.e.,
-\begin{eqnarray}
-	\dfrac{\bar{X}_n-\mu}{\dfrac{\sigma}{\sqrt{n}}} \nonumber
-\end{eqnarray}
-follows standard normal distribution. 
+Notice that according to LLN, if $n$ approaches infinity, $\bar{X}_n$ shall converge to the mean of the experiment. In practice, with limited though large $n$, $\bar{X}_n$ is a random variable. Imagine repeating the above several times and a set of $\bar{X}_n$ with different values can be obtained. 
+
+The distribution of $\bar{X}_n$ depends on the original distribution as well as the choice of $n$. For example, if $n=1$, $\bar{X}_n = X_1$ and clearly it will follow the original distribution of $X$. 
+
+CLT states that $\bar{X}_n$ tends towards normal distribution when $n$ is large, regardless of the original distribution of $X$.
 

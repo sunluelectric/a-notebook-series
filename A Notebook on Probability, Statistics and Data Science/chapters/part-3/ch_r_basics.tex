@@ -1387,13 +1387,13 @@ p + coord_cartesian(xlim=c(50, 200), ylim = c(400000, 1200000)) # second chart
 \end{lstlisting}
 where notice that two charts are generated. The first chart using \verb|xlim()|, \verb|ylim| removes all samples outside the boundary from the chart. While in the second chart using \verb|coord_cartesian()|, all samples preserves and the chart zooms in towards the boundary. The results are given in Figs. \ref{ch:r1:fig:coordinate_demo1} and \ref{ch:r1:fig:coordinate_demo2}, respectively. The difference can be observed near the boundary.
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/coordinate_demo1.png}
 	\caption{Add coordinates layer using \texttt{xlim()} and \texttt{ylim()}.} \label{ch:r1:fig:coordinate_demo1}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/coordinate_demo2.png}
 	\caption{Add coordinates layer using \texttt{coord_cartesian()}.} \label{ch:r1:fig:coordinate_demo2}
@@ -1436,7 +1436,7 @@ p + ggtitle("Mortgage price per unit area in different regions.") +
 \end{lstlisting}
 
 The resulted chart is given in Fig. \ref{ch:r1:fig:mortgage_histogram_theme}. Compare it with Fig. \ref{ch:r1:fig:mortgage_histogram_demo} to see the differences by applying \verb|theme()| in the themes layer.
-\begin{figure}
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=250pt]{chapters/part-3/figures/mortgage_histogram_theme.png}
 	\caption{Mortgage price chart with theme.} \label{ch:r1:fig:mortgage_histogram_theme}
