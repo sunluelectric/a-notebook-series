@@ -1,4 +1,4 @@
-\chapter{Parameter Estimation Basics}
+\chapter{Parameter Estimation Basics} \label{ch:parameter-estimation}
 
 This section introduces the basics of parameter estimation as a use case of conditional probability. More about parameter estimation can be found in control system relevant notebooks. 
 
@@ -86,19 +86,17 @@ which can likewise be solved using commonly used optimization algorithms.
 	
 \end{mdframed}
 
-\section{Parameter Estimation Benchmark}
+\section{Estimation Benchmark}
 
-Estimation error is almost always unavoidable due to the limited size of the samples. However, it is desirable that with an appropriate estimation method, the estimates are unbiased from the true value of the population, i.e., the expectation of the estimates should equal the corresponding values of the population. In that case, the estimation is known as \mync{unbiased estimation}. 
+Estimation error is almost always unavoidable due to the limited size of the samples. However, it is desirable that with an appropriate estimation method, the estimates are unbiased from the true value of the population, i.e., the expectation of the estimates should equal to the corresponding values of the population. In that case, the estimation is known as \mync{unbiased estimation}. For example, when the measurement noise is unbiased normal distribution, WLS is unbiased estimation. In the remaining of this section, all the discussions are restricted to unbiased estimation.
 
-Consider unbiased estimation. The accuracy of an estimation method can be evaluated as follows.
-
-The maximum information contained in the samples can be described by \mync{Fisher Information Matrix} named after Sir Ronald Fisher. The following equation describes the relation between $\textup{Var}(\hat{\theta})$ and Fisher Information Matrix $I(\theta)$ for a scalar unbiased estimator.
+The maximum information contained in the samples can be described by \mync{Fisher Information Matrix} named after Sir Ronald Fisher. The following equation describes the relation between the minimum variance achievable $\textup{Var}(\hat{\theta})$ and Fisher Information Matrix $I(\theta)$ for a scalar unbiased estimator.
 \begin{eqnarray}
 	\textup{Var}(\hat{\theta}) &\geq& I(\theta)^{-1} \label{eq:crlb}
 \end{eqnarray}
-which is known as the \mync{Cram\'{e}r–Rao Lower Bound}[CRLB] of the estimator. From \eqref{eq:crlb}, it can be seen that the ``larger'' $I(\theta)$, the lower $\textup{Var}(\hat{\theta})$  can possibly reach.
+which is known as the \mync{Cram\'{e}r–Rao Lower Bound}[CRLB] of the estimator. For any unbiased estimator design, it is impossible to achieve a smaller estimation variance than \eqref{eq:crlb}. The larger $I(\theta)$, the more information the estimator has, and the lower $\textup{Var}(\hat{\theta})$ it can possibly achieve.
 
-It is possible (although in many cases difficult) to check and prove whether an estimator hits the bound and provides the smallest possible $\textup{Var}(\hat{\theta})$ by comparing it with its corresponding CRLB. If its variance equals to CRLB, the estimator an \mync{optimal estimator}. A more general CRLB for biased estimator can also be derived. The detailed derivations of Fisher Information Matrix and general CRLB are not given in this notebook.
+It is possible (although in many cases difficult) to check and prove whether an estimator hits the bound and provides the smallest possible $\textup{Var}(\hat{\theta})$ by comparing it with its corresponding CRLB. If its variance equals to CRLB, the estimator is an \mync{optimal estimator}. A more general CRLB for biased estimator can also be derived. The detailed derivations of Fisher Information Matrix and general CRLB are not given in this notebook.
 
 The magnitude of the estimation error can be evaluated using \mync{Mean Squared Error}[MSE] and \mync{Root Mean Squared Error}[RMSE] as defined below. 
 

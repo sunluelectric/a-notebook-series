@@ -1,8 +1,8 @@
-\chapter{Basic Statistics} \label{ch:statisticsandsampling}
+\chapter{Statistics Basics} \label{ch:statisticsandsampling}
 
-Statistics is widely used in science and engineering. Broadly speaking, any attempt to estimate an unknown property of a system using direct or indirect measurements can be considered an application of statistics. Due to factors such as measurement errors and limited sample sizes, the exact value of the unknown property cannot be determined. Instead, statistics provides methodologies for efficiently estimating the most probable value of the unknown, given the available data and its limitations. It also offers tools to quantify the estimation error and the confidence level of the result.
+Statistics is widely used in science and engineering. Broadly speaking, any attempt to estimate an unknown property of a system using empirical data can be considered an application of statistics. Statistics also offers tools to quantify the estimation error and the confidence level of the result.
 
-This chapter introduces various sampling methods and demonstrates how to use samples to solve basic statistical problems.
+This chapter introduces various sampling methods and demonstrates how they are used to solve basic statistical problems.
 
 \section{Two Types of Statistical Problems}
 
@@ -11,68 +11,76 @@ At least two common types of problems in science and engineering involve the wid
 \begin{enumerate}
 	\item There is a property of the system whose true value exists but is unknown. We have either direct or indirect measurements of this value, subject to measurement noise. The goal is to estimate the true value from the measurements, while minimizing the effect of noise.
 
-Example: Consider a power system with many buses, each having a voltage phasor. The objective is to estimate the voltage phasors using various sensor measurements deployed across the system.
+	Example: Parameter estimation introduced in Chapter \ref{ch:parameter-estimation}.
 
-	\item There is a large population of items whose properties follow an unknown underlying distribution. It is impractical to examine every item due to the size of the population. Hence, we collect some samples and record their properties. The goal is to estimate the distribution of the entire population using only the samples.
-
-Example: Suppose a factory produces a large number of light bulbs. The objective is to estimate the average lifespan of the bulbs by randomly selecting a few and testing their durability.
+	\item There is a large population of items and we want to study the statistical properties (such as distributions) of their features. It is impractical to examine every item due to the size of the population. Hence, we interview only a portion of the population and try to estimate the properties of the entire population using the collected information.
+	
+	Example: Population census.
 
 \end{enumerate}
 
-The two types of problems, though sound different, are deeply connected in the essence. Specifically, the first type will be introduced with greater details in control system relevant notebooks.
+The two types of problems, though sound different, are deeply connected in the essence. Parameter estimation is an example of the first type. More about parameter estimation as well as other problems corresponding with the first type will be introduced in control system relevant notebooks. The remainder of this part of the notebook mainly focuses on the second type of problems.
 
 \section{Sampling}
 
 When selecting samples from the population, it is critical to ensure that the selection is done randomly, and all elements in the population have an equal probability of being selected. 
 
-Depending on whether an element can be selected multiple times, we have
+Depending on whether a sample can be chosen multiple times, sampling methods can be categorized as follows.
 \begin{itemize}
-  \item Sampling with replacement. In this scenario, a member can be chosen more than once, and the samples are \mync{independent and identically distributed}[i.i.d.]
-  \item Sampling without replacement. In this scenario, a member can be chosen no more than once, and the later samples distribution is slightly affected by earlier samples.
+  \item Sampling with replacement. A member can be chosen more than once, and the samples are \myabb{independent and identically distributed}{i.i.d.}
+  \item Sampling without replacement. A member can be chosen no more than once, and the later samples distribution is slightly affected by earlier samples.
 \end{itemize}
 Sampling with replacement is applicable in many engineering problems, such as measuring a physical property of a system and calculating the mean. Sampling without replacement is applicable in many social science problems, such as conducting a survey to estimate the average income of the population. They do have some subtle differences and they are explained using the following example.
 
 Let a set of $N$ random variables be the population. Sample the population $M$ times using sampling with/without replacement. Calculate the mean and variance of the samples, and compare them with their counterparts in the population.
 
-Let $N=100$ and $M=500$. Figures \ref{ch:sampling:fig:sample-wr-n100} and \ref{ch:sampling:fig:sample-nwr-n100} give the cumulative mean and variance of sampling with and without replacement, respectively. The mean and variance are given by red and blue curves, respectively. The statistics obtained from the cumulative samples and from the population are given by the solid and dashed curves, respectively. Notice that in Fig. \ref{ch:sampling:fig:sample-nwr-n100}, after number of samples exceeding $100$, the entire population has been sampled, and thus the sampling stops. This explains why its mean and variance stop fluctuating and converge to the population mean and variance respectively.
+Let $N=100$ and $M=500$. Figure \ref{ch:sampling:fig:sample-n100} gives the cumulative mean and variance of sampling with and without replacement, respectively. The mean and variance are given by red and blue curves, respectively. The statistics obtained from the cumulative samples and from the population are given by the solid and dashed curves, respectively. Notice that in Fig. \ref{ch:sampling:fig:sample-n100}, after number of samples exceeding $100$, the entire population has been sampled, and thus the sampling stops. This explains why its mean and variance stop fluctuating and converge to the population mean and variance respectively.
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-2/figures/sample-wr-n100.eps}
-	\caption{Sample with replacement, population size $N=100$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-wr-n100}
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{chapters/part-2/figures/sample-wr-n100.eps}
+		\caption{Sample with replacement.}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{chapters/part-2/figures/sample-nwr-n100.eps}
+		\caption{Sample without replacement.}
+	\end{subfigure}
+	\caption{Mean and variance of two sampling approaches, population size $N=100$, sample size $0< M\leq500$.}
+	\label{ch:sampling:fig:sample-n100}
 \end{figure}
 
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=250pt]{chapters/part-2/figures/sample-nwr-n100.eps}
-	\caption{Sample without replacement, population size $N=100$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-nwr-n100}
-\end{figure}
-
-In practice, however, the population size is often orders of magnitudes larger than the number of samples. In the second example, let $N=10000$ and $M=500$. The corresponding figures are given in Figs. \ref{ch:sampling:fig:sample-wr-n10000} and \ref{ch:sampling:fig:sample-nwr-n10000}. There is no obvious differences of the two figures.
+Consider a more practical case where the population size is orders of magnitudes larger than the number of samples. In the second example, let $N=10000$ and $M=500$. The corresponding figure is Fig. \ref{ch:sampling:fig:sample-n10000}. There is no obvious differences of the two figures.
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-2/figures/sample-wr-n10000.eps}
-	\caption{Sample with replacement, population size $N=10000$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-wr-n10000}
-\end{figure}
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=250pt]{chapters/part-2/figures/sample-nwr-n10000.eps}
-	\caption{Sample without replacement, population size $N=10000$, sample size $0< M\leq500$.} \label{ch:sampling:fig:sample-nwr-n10000}
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{chapters/part-2/figures/sample-wr-n10000.eps}
+		\caption{Sample with replacement.}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{chapters/part-2/figures/sample-nwr-n10000.eps}
+		\caption{Sample without replacement.}
+	\end{subfigure}
+	\caption{Mean and variance of two sampling approaches, population size $N=10000$, sample size $0< M\leq500$.}
+	\label{ch:sampling:fig:sample-n10000}
 \end{figure}
 
 \section{Moments Estimation}
 
-It is reasonable to assume that the statistical properties of the samples are connected with those of the population. The statistics of the population can be estimated using the samples. The larger the sample size, the more likely this statement holds true.
+The statistical properties of the samples reflects those of the population to some extent, thus able to estimate the later.
 
-In practice, certain types of distributions of the population are often assumed based on prior knowledge or common sense, for example, Gaussian distribution for the salaries of people living in a city. Samples are taken from the population and used to estimate the properties of the distribution, such as its mean and variance.
-
-More details are given below.
+It is quite common to assume a form of distribution for the population of interest based on prior knowledge or common sense, with the shape and scale parameters to be filled. For example, to model the salary of the population in a domain in a country, we can assume that it follows normal distribution with unknown mean and variance. Samples are then taken from the population and used to estimate the properties of the distribution, such as its mean and variance in a normal distribution.
 
 \subsection{Mean and Variance}
 
-The \mync{sample mean} and \mync{sample variance} are calculated as follows. Let $X_1, \ldots, X_m$ be the samples. For sampling size $m\geq 2$,
+Assume that the population size is far larger than the sample size. The \mync{sample mean} and \mync{sample variance} are calculated as follows. Let $X_1, \ldots, X_m$ be the samples. For sampling size $m\geq 2$,
 \begin{eqnarray}
 	\bar{X} &=& \dfrac{1}{m}\sum_{i=1}^{m}X_i \label{eq:sample_mean} \\
 	S^2 &=& \dfrac{1}{m-1}\sum_{i=1}^{m}\left(X_i - \bar{X}\right)^2 \label{eq:sample_variance}
@@ -90,8 +98,8 @@ From \eqref{eq:sample_variance},
 	&=& \dfrac{1}{m-1} E\left[\sum_{i=1}^{m}X_i^2 - m\bar{X}^2\right] \nonumber \\
 	&=& \dfrac{1}{m-1}\sum_{i=1}^{m} E\left[X_i^2\right] - \dfrac{m}{m-1}E\left[\left(\dfrac{1}{m}\sum_{i=1}^{m}X_i\right)^2\right] \nonumber \\
 	&=& \dfrac{1}{m-1}\sum_{i=1}^{m} E\left[X_i^2\right] - \dfrac{1}{m(m-1)}E\left[\left(\sum_{i=1}^{m}X_i\right)^2\right] \label{eq:proof_samplevar_2} \\
-	&=& \dfrac{1}{m-1}\sum_{i=1}^{m} \left(\textup{Var}(X_i) + E[X_i]^2\right) \nonumber \\ && -  \dfrac{1}{m(m-1)}\left(\textup{Var}\left(\sum_{i=1}^{m}X_i\right) + E\left[\sum_{i=1}^{m}X_i\right]^2\right) \nonumber \\
-	&=& \dfrac{m}{m-1}\left(\sigma^2 + \mu^2\right) - \dfrac{1}{m(m-1)}\left(m\sigma^2 + m^2\mu^2\right) \nonumber \\
+	&=& \dfrac{1}{m-1}\sum_{i=1}^{m} \left(\textup{Var}(X_i) + E[X_i]^2\right) \nonumber \\ && -  \dfrac{1}{m(m-1)}\left(\textup{Var}\left(\sum_{i=1}^{m}X_i\right) + E\left[\sum_{i=1}^{m}X_i\right]^2\right) \label{eq:proof_samplevar_3} \\
+	&=& \dfrac{m}{m-1}\left(\sigma^2 + \mu^2\right) - \dfrac{1}{m(m-1)}\left(m\sigma^2 + m^2\mu^2\right) \label{eq:proof_samplevar_4} \\
 	&=& \dfrac{1}{m-1}\left(m\sigma^2 + m\mu^2 - \sigma^2 - m\mu^2\right) \nonumber \\
 	&=& \sigma^2 \nonumber
 \end{eqnarray}
@@ -99,35 +107,37 @@ where note that in \eqref{eq:proof_samplevar_1}
 \begin{eqnarray}
 	\sum_{i=1}^{m}X_i &=& m\bar{X} \nonumber
 \end{eqnarray}
-which is from \eqref{eq:sample_mean}, and in \eqref{eq:proof_samplevar_2}
-\begin{eqnarray}
-	E\left[X^2\right] &=& \textup{Var}(X) + E[X]^2 \nonumber
-\end{eqnarray}
-for any random variable $X$ as given in \eqref{eq:varderived}.
+which is from \eqref{eq:sample_mean}. Substituting \eqref{eq:varderived} into \eqref{eq:proof_samplevar_2} gives \eqref{eq:proof_samplevar_3}. Substituting $E[X_i] = \mu$, $\textup{Var}(X_i) = \sigma^2$ into \eqref{eq:proof_samplevar_3} gives \eqref{eq:proof_samplevar_4}. 
 
-The reason for dividing by $m-1$ in \eqref{eq:sample_variance}, rather than $m$, is that the sample mean $\bar{X}$ is also estimated from the data. This adjustment ensures that $S^2$ is an unbiased estimation of the population variance $\sigma^2$.
-
-Imagine a scenario where the population mean $\mu$ is known in advance. In that case, we could have calculated sample variance alternatively as follows
+The reason for dividing by $m-1$ in \eqref{eq:sample_variance}, rather than $m$, is that the sample mean $\bar{X}$ is also estimated from the data. This adjustment ensures that $S^2$ is an unbiased estimation of the population variance $\sigma^2$. Imagine a scenario where the population mean $\mu$ is known in advance. In that case, we could have calculated sample variance alternatively as follows
 \begin{eqnarray}
 	{S^*}^2 &=& \dfrac{1}{m}\sum_{i=1}^{m}\left(X_i - \mu\right)^2 \nonumber
 \end{eqnarray}
-This estimator would also be unbiased for $\sigma^2$, and does not require the $m-1$ correction.
+This estimator would also be unbiased for $\sigma^2$, and does not require $m-1$ denominator correction.
 
 \subsection{Other Moments}
 
 Recall from Section \ref{sec:moments} that the mean and the variance are the $1$st order moment and the $2$nd order central moment respectively. The mean and variance obtained from the samples are closely related their correspondents in the population. It is natural to expand the idea to other moments. This is known as the \mync{method of moments} in population estimation.
 
-Commonly used moments and central moments are of $4$th order or lower. Note that bias might be introduced when using central moments where the center is obtained from the samples, as illustrated earlier for the sample variance.
+Commonly used moments and central moments are of $4$-th order or lower. Note that bias might be introduced when using central moments where the center is obtained from the samples, as illustrated earlier for the sample variance.
 
-\section{Confidence Interval Estimation}
+\section{Confidence Interval} 
 
-The estimation obtained from empirical data often differs from the true value due to the randomness introduced by the samples. From CLT, we know that the more samples, the more confident we are that the true value is close to the estimate. 
+Confidence interval is another approach than estimation variance and MSE to quantify the estimation error.
 
-To put it into perspective, we can derive the probability of the true value $\theta$ actually lying with a given interval $\left[\hat{\theta}_{\textup{min}},\hat{\theta}_{\textup{max}}\right]$, $P\left(\hat{\theta}_{\textup{min}} \leq \theta \leq \hat{\theta}_{\textup{max}}\right)$, as a function of estimation algorithm, measurement noise and samples number. The interval is known as the \mync{Confidence Interval}[CI]. Each CI corresponds with a probability. CI estimation tries to find the probability of a CI, or find the smallest CI for a given probability.
+\subsection{Confidence Interval Estimation}
 
-As an example, consider estimating the CI of the mean of a normal distribution using samples taken from that distribution. Let $\mathcal{N}(\mu,\sigma^2)$ be a normal distribution, and $X_1, \ldots, X_m$ a set of $m$ samples generated from the distribution. From the samples, the sample mean $\bar{X}$ and sample variance $S^2$ are calculated.
+The estimation obtained from empirical data often differs from the true value due to the randomness introduced by the samples. The error depends on the quality (noise contained in the samples) and quantity of the samples, the size and complexity of the system as well as the estimation method. 
 
-Apparently, $\mu$ does not necessarily equal to $\bar{X}$. The smaller $\sigma^2$ and larger $m$, the more likely that $\bar{X}$ is close to $\mu$. The error $\tilde{\mu} = \mu - \bar{X}$ is a random variable with
+Let the true value be $\theta$ and its estimation $\bar{\theta}$. The estimate is a best guess of the true value, but the estimation error $\tilde{\theta} = \bar{\theta} - \theta$ is unavoidable. With $\hat{\theta}$ alone, we are not confident of how good the estimation is. The MSE, if presented together with the estimate, is helpful to some extend.
+
+Consider another approach to quantify the scale of the estimation error. Specify an interval, $\left[\hat{\theta}_{\textup{min}},\hat{\theta}_{\textup{max}}\right]$. The estimator shall be able to calculate the probability that the true value is within the interval, i.e., $P\left(\hat{\theta}_{\textup{min}} \leq \theta \leq \hat{\theta}_{\textup{max}}\right)$. The interval is known as the \mync{confidence interval}[CI]. Each CI corresponds with a probability. \mync{CI estimation} tries to find the probability of a CI, or find the smallest CI for a given probability.
+
+\subsection{CI Estimation of Normal Distribution Mean}
+
+Consider estimating the CI of the mean of a normal distribution using samples. Let $\mathcal{N}(\mu,\sigma^2)$ be a normal distribution, and $X_1, \ldots, X_m$ a set of $m$ samples generated from the distribution. From the samples, the sample mean $\bar{X}$ and sample variance $S^2$ are calculated.
+
+Apparently, $\bar{X}$ does not necessarily equal to $\mu$. The smaller $\sigma^2$ and larger $m$, the more likely that $\bar{X}$ is close to $\mu$. The error $\tilde{\mu} = \mu - \bar{X}$ is a random variable with
 \begin{eqnarray}
 	E[\tilde{\mu}] &=& 0 \nonumber \\
 	\textup{Var}[\tilde{\mu}] &=& E\left[\left(\mu-\dfrac{1}{m}\sum_{i=1}^{m} X_i\right)^2\right] \nonumber \\
@@ -142,7 +152,7 @@ where notice that in \eqref{eq:sample_mean_var0},
 \end{eqnarray}
 for $i\neq j$.
 
-Though \eqref{eq:sample_mean_var2} can be used to derive the CI, it is useless in the empirical approach because the statistics of the original distribution, $\mu$ and $\sigma$, is not known exactly. Therefore, \eqref{eq:sample_mean_var2} needs to be reformulated to include $\bar{X}$ and $S^2$. Rewrite \eqref{eq:sample_mean_var1} as follows.
+It can be proved that the estimation error follows normal distribution with variance given by \eqref{eq:sample_mean_var2}. The variance can be used to derive the CI. However, in the empirical approach this is meaningless because the variance of the measurements $\sigma^2$ is unknown in the first place. Therefore, \eqref{eq:sample_mean_var2} needs to be reformulated to include $\bar{X}$ and $S^2$. Rewrite \eqref{eq:sample_mean_var1} as follows.
 \begin{eqnarray}
 	\textup{Var}[\tilde{\mu}] &=& \dfrac{1}{m^2}E\left[\sum_{i=1}^{m}\left(\bar{X}+\tilde{\mu}-X_i\right)^2\right] \nonumber \\
 	&=& \dfrac{1}{m^2}E\left[\sum_{i=1}^{m}\left(\bar{X}-X_i\right)^2\right] + \dfrac{2}{m^2}E\left[\sum_{i=1}^{m}\left(\bar{X}-X_i\right)\tilde{\mu}\right] + \dfrac{1}{m^2}E\left[\sum_{i=1}^{m}\tilde{\mu}^2\right] \nonumber \\
@@ -159,21 +169,25 @@ Solving \eqref{eq:sample_mean_var3} for $E[\tilde{\mu}^2]$ gives
 \end{eqnarray}
 Equations \eqref{eq:sample_mean_var2} and \eqref{eq:sample_mean_var4} look similar except that $\sigma^2$ is replaced by $S^2$. Notice that \eqref{eq:sample_mean_var4} gives the variance. For the standard deviation,
 \begin{eqnarray}
-	\textup{Std}(\tilde{\mu}) = \dfrac{1}{\sqrt{m}}\sqrt{S^2} = \dfrac{1}{\sqrt{m}}S \label{eq:sample_mean_var5}
+	\textup{Std}(\tilde{\mu}) &=& \dfrac{1}{\sqrt{m}}S \label{eq:sample_mean_var5}
 \end{eqnarray} 
 where $S$ is the estimate of the standard deviation using the samples. Let the interval be $\left[\bar{X}-\textup{CI}, \bar{X}+\textup{CI}\right]$ where from \eqref{eq:sample_mean_var5},
 \begin{eqnarray}
 	\textup{CI} &=& \dfrac{u_{\alpha}}{\sqrt{m}}S \label{eq:intervalci}
 \end{eqnarray}
-and $u_{\alpha}$ a gain factor determines the range of CI. Each $u_{\alpha}$ corresponds with a CI and a probability. The relation can be derived from the CDF. The result is given below.
+and $u_{\alpha}$ a gain factor determines the range of CI. Each $u_{\alpha}$ corresponds with a CI in \eqref{eq:intervalci} and a probability $P$ of the estimation error within CI. The probability $P$ can be calculated by integrating the PDF of a standard normal distribution from $-u_{\alpha}$ to $u_{\alpha}$ as shown below.
 \begin{eqnarray}
-	\textup{F}(u_\alpha) = \dfrac{P+1}{2} = \dfrac{1}{2}\left(1+\textup{erf}\left(\dfrac{u_\alpha}{\sqrt{2}}\right)\right) \nonumber
+	P &=& \int_{-u_{\alpha}}^{u_{\alpha}} \dfrac{1}{\sqrt{2\pi}}e^{-\dfrac{x^2}{2}}dx \nonumber \\
+	&=& \sqrt{\dfrac{2}{\pi}}\int_{0}^{u_{\alpha}} e^{-\dfrac{x^2}{2}}dx \nonumber \\
+	&=& \sqrt{\dfrac{2}{\pi}}\int_{0}^{u_{\alpha}/\sqrt{2}}e^{-t^2}\sqrt{2}dt \label{eq:error-function-1} \\
+	&=& \textup{erf}\left(\dfrac{u_\alpha}{\sqrt{2}}\right) \label{eq:error-function-2}
 \end{eqnarray}
-where $F(\cdot)$ is the CDF of the standard normal distribution and $\textup{erf}(\cdot)$ the error function. This is equivalent with
+where in \eqref{eq:error-function-1} $x$ is substituted with $\sqrt{2}t$ and in \eqref{eq:error-function-2} $\textup{erf}(\cdot)$ is the error function 
 \begin{eqnarray}
-	\textup{erf}\left(\dfrac{u_\alpha}{\sqrt{2}}\right) &=& P \nonumber
+	\textup{erf}(z) &=& \dfrac{2}{\sqrt{\pi}}\int_{0}^{z}e^{-t^2}dt \nonumber
 \end{eqnarray}
-Some commonly used $u_{\alpha}$ and confidence pairs are listed below for normal distribution noise assumption:
+
+Some commonly used $u_{\alpha}$ and corresponding $P$ are listed below.
 \begin{itemize}
 	\item $u_{\alpha}=1$, $P=0.683$;
 	\item $u_{\alpha}=1.96$, $P=0.95$;
@@ -188,4 +202,3 @@ In the previous example, the problem is to estimate the CI of the mean of a norm
 For example, instead of using normal distribution as the noise assumption, $t$-distribution might be used, especially if the number of samples are small. The $t$-distribution has the ``heavy tail'' to emulate outliers, thus making the result more robust.
 
 Depending on the choice of noise assumption, CI may look different and/or $u_{\alpha}$ may differ. There are CI tables for different types of noise.
-
