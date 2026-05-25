@@ -1,12 +1,8 @@
 \chapter{Python (Part II: Python for Data Science)} \label{ch:tftorch}
 
-This chapter focuses on the introduction of commonly used Python-supported ANN engines used in data science. ANN relationships with AI, machine learning and deep learning as well as theories and mechanisms behind ANN can be found on other notebooks, hence is not given here. The introduction only contains the basic usage of these ANN engines from the implementation perspective, and it may not reflect the state-of-the-art technologies such as transformer, LLM, instruction-tuned LLM, etc. These state-of-the-art technologies are introduced on other notebooks.
+This chapter introduces commonly used Python-supported ANN engines used in data science, including data processing using \myabb{artificial intelligence}{AI}. Notice that theories behind AI and machine learning are given in other AI relevant notebooks. This chapter only focuses on implementations. Commonly seen ANN use cases such as computer vision and widely adopted ANN libraries such as TensorFlow and PyTorch are introduced.
 
-There are many ANN engines for Python. Among all, TensorFlow and PyTorch are very popular and powerful generic-purpose ANN engines. They both cover a large range of supervised, reinforcement and unsupervised learning applications including classification, regression, pattern recognition, computer vision, natural language processing, clustering, abnormality detection, and many more. They both offer variety of tools to quickly and flexibly design and deploy different types of AI models such as conventional dense networks, CNN models, RNN models, and many more. Both of them can be used to train, evaluate and run networks. Both of them provide server solutions, cloud solutions and edge computing solutions.  TensorFlow and PyTorch are introduced in this chapter.
-
-Installation of TensorFlow and PyTorch can be found in there websites. Although it is possible to run all the calculations on CPU, these ANN engines are more powerful when GPU/TPU are enabled. Depends on the OS and the GPU/TPU brands of the local system, different methods may apply to enable GPU/TPU. For example, if NVIDIA GPU is used, a software called CUDA can be used to configure and enable GPU for ANN training. The installation of TensorFlow, PyTorch, and the enabling of GPU/TPU modules are not covered here.
-
-Alternative to running the code on a local system, consider using online platforms such as Google Colaboratory, which already have all necessary packages pre-installed and the CPU/GPU/TPU pre-configured.
+The training and deployment of \myabb{large language models}{LLM}, although often done using Python, is also given in other AI relevant notebooks but not here. This is because LLM technologies are developing rapidly and it is better to put their relevant contents in dedicated notebooks.
 
 \section{Quick Review}
 
@@ -50,9 +46,7 @@ Given that many, if not all, of the above steps involve a lot of human interacti
 
 \subsection{Commonly Seen ANN Use Cases}
 
-\subsection{Computer Vision}
-
-CV, as an important part of AI, has evolved in the past decades. In the early 2010s, ANN was not used in CV. Instead, conventional deterministic approaches were widely used. With the development in deep learning, the primary approach for CV has changed to CNN. There are a few milestones along the way that together make the change happen:
+\myabb{Computer vision}{CV}, as an important part of AI, has evolved in the past decades. In the early 2010s, ANN was not used in CV. Instead, conventional deterministic approaches were widely used. With the development in deep learning, the primary approach for CV has changed to CNN. There are a few milestones along the way that together make the change happen:
 \begin{itemize}
   \item Development of GPU
   \item CNN with deep neural network
@@ -70,7 +64,15 @@ The commonly seen objectives of CV include:
   \item Image comprehension and generation
 \end{itemize}
 
-\subsection{Natural Language Processing}
+\myabb{Natural language processing}{NLP} is another important use case of ANN.
+
+\subsection{ANN Libraries in Python}
+
+There are many ANN engines for Python. Among all, TensorFlow and PyTorch are very popular and powerful generic-purpose ANN engines. They both cover a large range of supervised, reinforcement and unsupervised learning applications including classification, regression, pattern recognition, computer vision, natural language processing, clustering, abnormality detection, and many more. They both offer variety of tools to quickly and flexibly design and deploy different types of AI models such as conventional dense networks, CNN models, RNN models, and many more. Both of them can be used to train, evaluate and run networks. Both of them provide server solutions, cloud solutions and edge computing solutions.  TensorFlow and PyTorch are introduced in this chapter.
+
+Installation of TensorFlow and PyTorch can be found in there websites. Although it is possible to run all the calculations on CPU, these ANN engines are more powerful when GPU/TPU are enabled. Depends on the OS and the GPU/TPU brands of the local system, different methods may apply to enable GPU/TPU. For example, if NVIDIA GPU is used, a software called CUDA can be used to configure and enable GPU for ANN training. The installation of TensorFlow, PyTorch, and the enabling of GPU/TPU modules are not covered here.
+
+Alternative to running the code on a local system, consider using online platforms such as Google Colaboratory, which already have all necessary packages pre-installed and the CPU/GPU/TPU pre-configured.
 
 \section{TensorFlow}
 
