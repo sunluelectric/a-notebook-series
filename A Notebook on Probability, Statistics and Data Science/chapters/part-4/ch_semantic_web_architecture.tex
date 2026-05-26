@@ -4,7 +4,7 @@ Semantic web uses URI to identify an existing interpretation, RDF/RDFS to store 
 
 RDF, RDFS and basic SPARQL are introduced in this chapter. OWL will be introduced in the next Chapter \ref{ch:owl}.
 
-\section{Uniform Resource Identifier}
+\section{Uniform Resource Identifier} \label{sec:uri}
 
 Human uses symbols to represent objects in reality. The concept associated with a symbol is used to help define and interpret objects. An example of interpreting ``Apple'' is given in Fig. \ref{fig:semiotictriangle}.
 \begin{figure}[!htb]
@@ -14,7 +14,9 @@ Human uses symbols to represent objects in reality. The concept associated with 
 	\label{fig:semiotictriangle}
 \end{figure}
 
-\myabb{Uniform resource identifier}{URI} points to the interpretation of the symbols used in the semantic web. In practice, the resource is either the definition of the class/object/property, or the higher-level ontology (often by another semantic web). For example, consider building a semantic web to describe an apple farm. Consider using \texttt{dbpedia.org/page/Apple} from DBpedia as the URI of interpretation of apple, which already gives a clear and rich definition of apple such as abstract, Wikipedia link, emoji, sugar level, etc. This saves the time of building the interpretation of apple from scratch.
+\mync{Uniform resource identifier}[URI] points to the interpretation of the symbols used in the semantic web. In practice, the resource is either the definition of the class/object/property, or the higher-level ontology (often by another semantic web). For example, consider building a semantic web to describe an apple farm. Consider using \texttt{dbpedia.org/page/Apple} from DBpedia as the URI of interpretation of apple, which already gives a clear and rich definition of apple such as abstract, Wikipedia link, emoji, sugar level, etc. This saves the time of building the interpretation of apple from scratch. 
+
+URI can be used to bridge multiple semantic webs and build semantic web hierarchy, by doing which the system is naturally merged and scaled up.
 
 URI shall contain at least two pieces of information: the address (locator), and the identity (name). URI is often ASCII encoded, but it is possible to extend to unicode. The generic syntax is given below. If it looks similar with the \myabb{Uniform Resource Locator}{URL}, that is because URL is considered as a subclass of URI.
 \begin{lstlisting}
@@ -34,9 +36,9 @@ https://www.rfc-editor.org/rfc/rfc3986.html#section-3.1
 \end{lstlisting}
 which happens to be a good example of an URI.
 
-\section{Resource Description Framework}
+\section{Resource Description Framework} \label{sec:rdf}
 
-RDF is the backbone data model of the semantic web. It stores data in the form of triples. RDF alone is not powerful enough to record DL. In practice, RDF usually works with RDFS which expands its vocabulary to include class, subclass, etc., and OWL which further expands its vocabulary and introduce DL features, to together form a comprehensive semantic web. RDF is the fundamental of RDFS and OWL.
+RDF is the backbone data model of the semantic web. It stores data in the form of triples. RDF alone is not powerful enough to record \myabb{description logic}{DL}. In practice, RDF usually works with RDFS which expands its vocabulary to include class, subclass, etc., and OWL which further expands its vocabulary and introduce \myabb{description logic}{DL} features, to together form a comprehensive semantic web. RDF is the fundamental of RDFS and OWL.
 
 Notice that RDF is not a syntax by itself. A markup language is needed to host the RDF framework. Commonly used markup languages are listed below. They can be translated from one to the other.
 \begin{itemize}
@@ -172,7 +174,7 @@ In summary, RDF defines the objects (nodes) and also the properties among object
 
 The underlying mechanisms behind RDF, such as how machine stores graphical database including nodes and relationships, and how it enables query using SPARQL, is out of the scope of this notebook. Though details are not given, a brief review of the mechanisms is given in later part of the notebook.
 
-\section{RDF Schema}
+\section{RDF Schema} \label{sec:rdfs}
 
 RDFS enforces schema to the RDF model. By using RDF/RDFS, a more consistent and semantic RDF model can be achieved.
 
@@ -269,7 +271,7 @@ The semantics with RDF/RDFS are from both the triples in the RDF model as well a
 
 The semantics allow new information to be derived from existing ones using logic.
 
-\section{SPARQL}
+\section{SPARQL Protocol and RDF Query Language} \label{sec:sparql}
 
 SPARQL is a recursive acronym of SPARQL Protocol and RDF Query Language, and it is a widely used query and manipulation language for semantic web. It is SQL-like in the syntax, but its underlying mechanisms differ largely from how an \myabb{relational database management system}{RDBMS} running SQL.
 

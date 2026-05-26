@@ -1,12 +1,12 @@
 \chapter{Semantic Web Basics} \label{ch:briefintrosemanticweb}
 
-This chapter briefly introduces semantic web and its supporting theory of ontology and logic reasoning. Ontology inspires computer scientists regarding how information can be stored and exchanged efficiently using the internet, which leads to semantic web, an internet-based knowledge base schema. The internet powered by the semantic web (together with other technologies) defines Web 3.0, a new-generation internet framework.
+Ontology inspires computer scientists on how information can be stored and exchanged efficiently on the internet, which leads to semantic web, an internet-based knowledge base schema. 
 
-Note that there are subtle differences between ``internet'' and ``Internet''. The lowercase ``internet'' refers to the technology that bridges machines to form a network of any size, while the uppercase ``Internet'' refers to the specific internet that links the entire world together. In this part of the notebook, however, they are used interchangeably.
+The semantic web, together with other technologies, defines Web 3.0, a new-generation internet framework. Ontology, logic reasoning and semantic web are introduced in this chapter.
 
 \section{Web of Data}
 
-The internet is a technology that enables information exchange among machines. With the power of the internet, users can obtain information from remote servers, databases, or knowledge bases. 
+The internet is a technology that enables information exchange among machines. With the power of the internet, users can obtain information from remote servers, databases, or knowledge bases. Note that there are subtle differences between ``internet'' and ``Internet''. The lowercase ``internet'' refers to the technology that bridges machines to form a network of any size, while the uppercase ``Internet'' refers to the specific internet that links the entire world together. In this part of the notebook, however, they are used interchangeably.
 
 In the early days, using the internet required professional skills. Nowadays, everyone can access the internet using a graphical-interface browser that can be easily found on a computer or mobile device. Public knowledge bases such as Wikipedia have made obtaining information much easier.
 
@@ -33,7 +33,7 @@ We have discussed the limitations of Web 2.0 where the data retrieval can be too
 For this purpose, there are at least the following two development trends.
 \begin{itemize}
   \item Let the LLM-based AI interpret all the knowledge. The LLM should be smart enough to precisely capture what the user wants and get back to him with useful and accurate information. This leads to chatbot, copilot, \myabb{resource augmented generation}{RAG} and agentic AI.
-  \item Create a powerful and flexible NoSQL database. Make the information in the database readable for both humans and machines, and somehow integrate the semantics of the contents into the database. This leads to \mync{semantic web}.
+  \item Create a powerful and flexible NoSQL database. Make the information in the database readable for both humans and machines, and somehow integrate the semantics of the contents into the database. This leads to \mync{semantic web}, a graph-based knowledge base schema.
 \end{itemize}
 
 In practice, it is most recommended to use both LLM-based AI and semantic web simultaneously. This is because both LLM-based AI and semantic web have drawbacks when used alone.
@@ -48,13 +48,13 @@ In practice, it is most recommended to use both LLM-based AI and semantic web si
 	
 	\item Semantic web
 	\begin{itemize}
-		\item In the design phase, it is challenging to design the framework of an efficient semantic web backbone.
+		\item In design phase, just like any other databases, it is challenging to design the structure of the semantic web to the optimum, and it requires joint effort from domain expert and knowledge engineer.
 		\item In implementation phase, there is a steep learning curve for database manipulation.
 		\item Semantic web alone returns JSON objects and it is not good at summarizing and formatting the response in a human-friendly manner.
 	\end{itemize}
 \end{itemize}
 
-Web 3.0 schema focuses on semantic web. The word ``semantic'' in this context specifically refers to the relations of objects and properties that can be used for machine-driven descriptive reasoning. See later sections for details. Semantic web is so important that it is often considered synonymous with Web 3.0, although the broader vision of Web 3.0 includes other features as well.
+Web 3.0 schema focuses on semantic web. The word ``semantic'' in this context specifically refers to the relations of objects and properties that can be used for machine-driven descriptive reasoning. Semantic web is so important that it is often considered synonymous with Web 3.0, although the broader vision of Web 3.0 includes other features as well.
 
 \begin{mdframed}
 \noindent \textbf{Web 3.0 Features Besides Semantic Web}
@@ -65,7 +65,7 @@ Distributed storage has both advantages and disadvantages. On one hand, it provi
 
 \end{mdframed}
 
-This part of the notebook discusses the technologies used in semantic web such as \mync{resource description framework}[RDF] model, \mync{RDF schema}[RDFS] and \mync{web ontology language}[OWL]. We will see how we can use semantic web to collect and organize information, and create a knowledge base for both humans, machines, and AI.
+This part of the notebook discusses the technologies used in semantic web such as \myabb{resource description framework}{RDF} model, \myabb{RDF schema}{RDFS} and \myabb{web ontology language}{OWL}. We will see how we can use semantic web to collect and organize information, and create a knowledge base for both humans, machines, and AI.
 
 \subsection{Semantic Web Vision}
 
@@ -88,7 +88,7 @@ The layers and components in each layer are briefly introduced as follows.
 \begin{itemize}
 	\item Web platform layer
 	\begin{itemize}
-		\item \myabb{Uniform resource identifier}{URI} and/or internationalized resource identifier, often a string used to identify and trace an information source. If the information source is another semantic web, this also bridges the semantic webs together, naturally scaling up the system.
+		\item \myabb{Uniform resource identifier}{URI} that identifies and traces an information source. More about URI is introduced in Section \ref{sec:uri}.
 		\item Communication protocols, such as HTTP and HTTPS.
 		\item Text encoding methods, such as unicode, utf-8.
 		\item Authentication methods.
@@ -101,7 +101,7 @@ The layers and components in each layer are briefly introduced as follows.
 	\begin{itemize}
 		\item RDF (by default) which uses triples to represent a graphical database.
 		\item RDFS and OWL which expand the capability of RDF model.
-		\item SPARQL which is the recommended language for semantic web query (SPARQL 1.0) and manipulation (SPARQL 1.1).
+		\item \myabb{SPARQL Protocol and RDF Query Language}{SPARQL} which is the recommended language for semantic web query (SPARQL 1.0) and manipulation (SPARQL 1.1).
 	\end{itemize}
 	\item Logic
 	\begin{itemize}
@@ -110,13 +110,15 @@ The layers and components in each layer are briefly introduced as follows.
 	\end{itemize}
 \end{itemize}
 
+RDF, RDFS, OWL and SPARQL are introduced formally in later Section \ref{sec:rdf}, Section \ref{sec:rdfs}, Chapter \ref{ch:owl} and Section \ref{sec:sparql} respectively. Below are brief introductions to these concepts just as a heads up.
+
 The knowledge and semantics are stored using the RDF/RDFS model. The RDF/RDFS is often further powered by OWL. RDF serves as the foundation with the basic structure. RDFS expands the capability of RDF by introducing new vocabularies such as ``class'', ``subclass'', ``property''. And finally OWL enables a set of ways to define complex ontologies and create rigorous and complex semantics. 
 
 As an analogy, think of RDF as the paper and pencil, RDFS the 24-color crayon set, and OWL the drawing skills. Together they make a sophisticated and richly structured picture.
 
-Many syntaxes such as RDF/XML and JSON-LD can be used as markup languages to describe RDF/RDFS/OWL used in a semantic web. They describe the same contents and logic, but just in different languages. There is no globally optimal syntax. More details are introduced in later chapters.
+Many syntax such as RDF/XML and JSON-LD can be used as markup languages to describe RDF/RDFS/OWL used in a semantic web. They describe the same contents and logic, but just in different languages. There is no globally optimal syntax. More details are introduced in later chapters.
 
-There are several query and manipulating languages for semantic web, and \mync{SPARQL Protocol and RDF Query Language}[SPARQL] is probably the most adopted one. It allows users to search, retrieve, and modify information stored in the RDF model. The syntax of SPARQL is designed to look similar to SQL, and many commands in SPARQL have counterparts in SQL, such as \verb|SELECT|, \verb|WHERE|, \verb|GROUP BY|, and \verb|ORDER BY|. However, the backend technologies of a semantic web engine, known as \mync{triplestore} or \mync{RDF management system}, differ largely from that of a relational database management system. For example, triplestore relies heavily on graph theory and graph pattern mapping when searching through a semantic web.
+There are several query and manipulating languages for semantic web, and \myabb{SPARQL Protocol and RDF Query Language}{SPARQL} is probably the most adopted one. It allows users to search, retrieve, and modify information stored in the RDF model. The syntax of SPARQL is designed to look similar to SQL, and many commands in SPARQL have counterparts in SQL, such as \verb|SELECT|, \verb|WHERE|, \verb|GROUP BY|, and \verb|ORDER BY|. However, the backend technologies of a semantic web engine, known as \mync{triplestore} or \mync{RDF management system}, differ largely from that of a relational database management system. For example, triplestore relies heavily on graph theory and graph pattern mapping when searching through a semantic web.
 
 An example of semantic web is given below.
 \begin{mdframed}
@@ -225,7 +227,7 @@ WHERE {
 
 \end{mdframed}
 
-In most applications, the system cannot expect the end user to write SPARQL directly. Commercialized semantic web applications such as WolframAlpha (\textit{wolframalpha.com}) often provide a search bar which looks similar but works entirely differently with a conventional key-word based search bar. The input to the search bar is converted into SPARQL query by a natural language processing engine (such as an LLM) and then executed with the triplestore.
+Applications cannot expect the end user to write SPARQL. Commercialized semantic web applications such as WolframAlpha (\textit{wolframalpha.com}) often provide a search bar which looks similar but works entirely differently with a conventional key-word based search bar. The input to the search bar is converted into SPARQL query by a natural language processing engine (such as an LLM) and then executed with the triplestore.
 
 \subsection{Semantic Web Limitations and Challenges}
 
@@ -284,7 +286,7 @@ Other ways of leveling ontology include using the expressiveness. The ``light-we
 
 \section{Logic} \label{sec:logic}
 
-Humans are good at deriving new knowledge from existing knowledge. The systematic way of doing so is \mync{logic}. The term ``formal logic'' rigorously defines logic reasoning methods and procedures to automate logic inference by machines.
+\mync{Logic} refers to the systematic way of deriving new information from existing knowledge. The term ``formal logic'' rigorously defines logic reasoning methods and procedures to automate logic inference by machines.
 
 Notice that logic and logical expression are by themselves very complex and rich concepts. It is not possible to include all the details about them in the scope of this notebook. Only a scratch is given in this section.
 
@@ -309,31 +311,19 @@ Finally, there is the human level of semantics, which is by far most advanced an
 
 One of the goals of semantic web is to enable a machine to understand the semantics as much as possible, hopefully to gain the capability of logic reasoning just like a human. 
 
-\subsection{Logic Framework} \label{subsec:knowledgeandlogic}
+\subsection{Logic Frameworks} \label{subsec:knowledgeandlogic}
 
 Different logic frameworks have different levels of complexity and capabilities of expressing semantics. Commonly seen logic frameworks are briefly introduced as follows.
 
-\vspace{0.1in}
-\noindent \textbf{Propositional Logic}
-\vspace{0.1in}
+\mync{Propositional logic} is the fundamental of logic reasoning. In propositional logic, knowledge is represented by either simple facts which are known as propositions, or facts connected with ``AND'', ``OR'', ``NOT'', ``IF ... THEN ...'', ``IF AND ONLY IF'' which are known as compound propositions.
 
-Propositional logic is the fundamental of logic reasoning. In propositional logic, knowledge is represented by either simple facts which are known as propositions, or facts connected with ``AND'', ``OR'', ``NOT'', ``IF ... THEN ...'', ``IF AND ONLY IF'' which are known as compound propositions.
-
-\vspace{0.1in}
-\noindent \textbf{First-Order Logic}
-\vspace{0.1in}
-
-\myabb{First-order logic}{FOL} is the most commonly used logic as of today. In FOL, quantifiers and logic connectives are introduced, including universal quantification $\forall$, existential quantification $\exists$, conjunction $\land$, disjunction $\lor$ and negation $\neg$. A formal way of representing logic expressions are defined. For example, using the following to represent ``all humans are mortal''
+\mync{First-order logic}[FOL] is the most commonly used logic as of today. In FOL, quantifiers and logic connectives are introduced, including universal quantification $\forall$, existential quantification $\exists$, conjunction $\land$, disjunction $\lor$ and negation $\neg$. A formal way of representing logic expressions are defined. For example, using the following to represent ``all humans are mortal''
 \begin{eqnarray}
 	\forall x \left(\textup{Human}(x) \rightarrow \textup{Mortal}(x)\right) \nonumber
 \end{eqnarray}
 where $\textup{CLASS}(x)$ is equivalent of the proposition ``$x$ belongs to CLASS'', which can be either true or false. The above proposition says ``for any instance, if it is true that the instance belongs to human, then it must be true that the instance belongs to mortal''.
 
-\vspace{0.1in}
-\noindent \textbf{Description Logic}
-\vspace{0.1in}
-
-\myabb{Description logic}{DL} is a subset of FOL. Derivation of DL from FOL is not under the scope of this notebook. Some key features of DL are summarized as follows.
+\mync{Description logic}[DL] is a subset of FOL. Derivation of DL from FOL is not under the scope of this notebook. Some key features of DL are summarized as follows.
 \begin{itemize}
 	\item Define classes and subclasses.
 	\item Define properties (roles) and associated domains and ranges.
@@ -357,6 +347,8 @@ The proof of G$\ddot{o}$del's Incompleteness Theorems can be found elsewhere and
 While FOL inference is not decidable, DL inference, on the other hand, is decidable. That is one of the reasons DL is preferred over FOL in semantic web.
 	
 \end{mdframed}
+
+\subsection{Attributive Language with Complement}
 
 \mync{Attributive language with complement}[ALC] is one of the ways to describe a simple DL, and it forms an important subset of OWL. Understanding ALC is helpful with learning OWL in later sections. A brief introduction of ALC is given below.
 

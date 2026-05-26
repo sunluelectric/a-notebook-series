@@ -200,6 +200,24 @@ For the demonstrations given in this notebook, GraphDB is used, unless otherwise
 
 Notice that RDF/RDFS/OWL/SPARQL APIs can be enabled using packages or libraries in many programming languages. For example, in Python, there are several packages available for semantic web operations, including \verb|rdflib|, \verb|Owlready2|, \verb|SPARQLWrapper|, etc. Some of these packages have ``lite'' triplestore engine built-in which provides some SPARQL features for in-memory operations. They do not have all the features of a triplestore. However, they can connect to a triplestore API, in which case they serve as Python-to-triplestore interfaces.
 
+\section{Commonly Used Namespaces}
+
+Commonly used built-in name spaces are summarized in Table \ref{tab:commonnamespace}.
+
+\begin{table}[!htb]
+	\centering \caption{Commonly used name spaces in RDF models. URI is neglected since they can be easily found online.} \label{tab:commonnamespace}
+	\begin{tabularx}{\textwidth}{lX}
+		\hline
+		Namespace & Description \\ \hline
+		\verb|rdf| & RDF syntax. \\
+		\verb|rdfs| & RDFS syntax. \\
+		\verb|xsd|  & XML syntax. \\
+		\verb|foaf| & Friend-of-a-friend. It describes people, their activities and relations to other people and object. \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+To search URI for a name space, use \textit{prefix.cc}.
 
 \section{Example: Semantic Web for Home Assets}
 
@@ -222,30 +240,19 @@ The result should be something like Fig. \ref{fig:houseassetexp}, after visualiz
 
 \subsection{Define Classes Hierarchy}
 
+TBA
+
 \subsection{Define Properties Hierarchy}
+
+TBA
 
 \subsection{Add OWL}
 
+TBA
+
 \subsection{Data Retrieval Examples}
 
-\section{Reference: Commonly Used Namespace}
-
-Commonly used built-in name spaces are summarized in Table \ref{tab:commonnamespace}.
-
-\begin{table}
-	\centering \caption{Commonly used name spaces in RDF models. URI is neglected since they can be easily found online.} \label{tab:commonnamespace}
-	\begin{tabularx}{\textwidth}{lX}
-		\hline
-		Namespace & Description \\ \hline
-		\verb|rdf| & RDF syntax. \\
-		\verb|rdfs| & RDFS syntax. \\
-		\verb|xsd|  & XML syntax. \\
-		\verb|foaf| & Friend-of-a-friend. It describes people, their activities and relations to other people and object. \\
-		\hline
-	\end{tabularx}
-\end{table}
-
-To search URI for a name space, use \textit{prefix.cc}.
+TBA
 
 
 
