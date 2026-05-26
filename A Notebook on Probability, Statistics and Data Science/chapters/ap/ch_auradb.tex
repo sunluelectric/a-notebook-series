@@ -1,29 +1,39 @@
-\chapter{AuraDB}
+\chapter{Neo4j Database}
 
-AuraDB is a graph database efficient at modeling relationships of entities. It is not a semantic web triplestore, yet they share some similarities and have overlaps in use cases.
+Neo4j is a graph database efficient at modeling relationships of entities. It is not a semantic web triplestore, yet they share some similarities and have overlaps in use cases.
 
-In this appendix chapter, AuraDB is briefly introduced. More details are given in Neo4j website \cite{neo4j2026}. 
+In this appendix chapter, Neo4j is briefly introduced. More details are given in Neo4j website \cite{neo4j2026}. 
 
 \section{Introduction}
 
-A brief introduction of AuraDB is given. A comparison of it with semantic web is given.
+A brief introduction of Neo4j is given. A comparison of it with semantic web is given.
 
-\subsection{AuraDB as a Graph Database}
-
-TBA
-
-\subsection{Semantic Web VS AuraDB}
-
-Notice that AuraDB is not a semantic web triplestore, as some of the features of semantic web, such as hierarchical class, properties and OWL are not (fully) supported, and SPARQL is not supported. As a result, it cannot provide as much description logic reasoning as a standard semantic web benchmarked by the late SPARQL standards.
-
-Both being graphic databases, AuraDB and a typical semantic web store data in different manners. The underlying data structures are different, hence the different supported query features.
-
-That said, AuraDB is still very useful. It is less complicated than semantic web, and thanks to that it is more efficient and often more user-friendly. It is especially good at graphical pattern matching.
-
-\section{Ontology Design with AuraDB}
+\subsection{Neo4j as a Graph Database}
 
 TBA
 
-\section{Example: Smart Home Project Graph Database}
+\subsection{AuraDB}
+
+Neo4j can be deployed either as a fully-managed cloud database, in which case, it is also known as \mync{AuraDB}, or a self-managed local database. 
+
+The fully-managed AuraDB introduces additional running cost. In exchange, it is often more robust than self-managed databases and it comes with additional features such as data importer and analyzer.
+
+The self-managed local database has a community version which is fully functional and free-of-charge, and an enterprise version which has all the features in the community version plus addons such as clustering.
+
+In the remaining of this chapter, self-managed community version of Neo4j database is used in all demonstrations.
+
+\subsection{Semantic Web VS Neo4j}
+
+Notice that Neo4j is not a semantic web triplestore, as some of the features of semantic web, such as hierarchical class, properties and OWL are not (fully) supported, and SPARQL is not supported. As a result, it cannot provide as much description logic reasoning as a standard semantic web benchmarked by the late SPARQL standards.
+
+Both being graphic databases, Neo4j and a typical semantic web store data in different manners. The underlying data structures are different, hence the different supported query features.
+
+That said, Neo4j is still very useful. It is less complicated than semantic web, and thanks to that it is more efficient and often more user-friendly. It is especially good at graphical pattern matching.
+
+\section{Neo4j Design}
+
+TBA
+
+\section{Neo4j Implementation}
 
 TBA
