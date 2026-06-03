@@ -273,22 +273,22 @@ The semantics allow new information to be derived from existing ones using logic
 
 \section{SPARQL Protocol and RDF Query Language} \label{sec:sparql}
 
-SPARQL is a recursive acronym of SPARQL Protocol and RDF Query Language, and it is a widely used query and manipulation language for semantic web. It is SQL-like in the syntax, but its underlying mechanisms differ largely from how an \myabb{relational database management system}{RDBMS} running SQL.
+SPARQL is a recursive acronym of \mync{SPARQL Protocol and RDF Query Language}[SPARQL], and it is a widely used query and manipulation language for semantic web. It is SQL-like in the syntax, but its underlying mechanisms differ largely from how an \myabb{relational database management system}{RDBMS} running SQL.
 
-In the lately released SPARQL 1.1 standard, more operations such as advanced query and interfering are included, making it more powerful and capable than what SPARQL 1.0 standard has provided. SPARQL 1.1 is already supported by many triplestores. As of year 2026, SPARQL 1.2 has been proposed and the draft can be found at \textit{w3.org/TR/sparql12-query/}.
+In the lately released SPARQL 1.1 standard, more operations such as advanced query and interfering are included, making it more powerful and capable than what SPARQL 1.0 standard has offered. SPARQL 1.1 is already supported by many triplestores. As of year 2026, SPARQL 1.2 has been proposed and the draft can be found at \cite{w3c2026sparql12query}.
 
-Notice that SPARQL is not only a language but also a protocol layer. The input and return have specific formats which are also defined by the SPARQL standard. Introducing SPARQL from a protocol perspective is not the focus of this chapter, hence it is not covered in details. 
+Notice that SPARQL is not only a language but also a protocol layer. The input and return have specific formats which are also defined by the SPARQL standard. Introducing SPARQL from a protocol perspective is not the focus of this chapter, hence it is not covered in details. The term \mync{SPARQL server} often refers to a triplestore with SPARQL-supported APIs.
 
 Notice that SPARQL is one of the most widely adopted languages for semantic web query and manipulation but not the only language. It is possible that other languages are better than SPARQL on specific tasks.
 
-\subsection{SPARQL for Basic Query}
+\subsection{Basic Query}
 
 SPARQL offers flexible ways of querying data. There are different commands to trigger a query, each fulfilling a different purpose. For example,
 \begin{itemize}
 	\item \verb|SELECT| returns an instance.
 	\item \verb|CONSTRUCT| returns a sub RDF graph based on the query result.
-	\item \verb|ASK| returns true and false of whether a query has a solution.
-	\item \verb|DESCRIBE| returns the schematic of a resource; this is useful when the structure of RDF data in the data source is unclear.
+	\item \verb|ASK| returns true or false for a clause.
+	\item \verb|DESCRIBE| returns the schematics of a resource; this is useful when the structure of RDF data in the data source is unclear.
 \end{itemize}
 
 The basic syntax of SPARQL looks similar with SQL as shown below.
