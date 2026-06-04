@@ -1077,7 +1077,7 @@ Volumes such as emptyDir and hostPath have been introduced in earlier Sections \
 
 With EKS cluster, it is more common to use AWS storage such as EBS, EFS to persist data. CSI is used to link EKS cluster with those storages. PVC is used in the Kubernetes configuration files to claim storage for the applications.
 
-Details of attaching the third-party storage systems such as EFS to Kubernetes services such as EKS are not introduced in details here mainly because the procedures differ from platform to platform. The user should check the user manual for the specific service he wants to use. In general, the user needs to do the following:
+Details of attaching the third-party storage systems such as EFS to Kubernetes services such as EKS are not introduced in detail here mainly because the procedures differ from platform to platform. The user should check the user manual for the specific service he wants to use. In general, the user needs to do the following:
 \begin{itemize}
   \item Create the storage system with the cloud service provider.
   \item Configure firewall settings and security groups so that the Kubernetes cluster can reach the storage system.
