@@ -34,7 +34,7 @@ Unlike other text editors, Vim defines four different modes, namely \mync{normal
     \hline
     Mode & Description \\ \hline
     Normal & Default mode. It is used to navigate the cursor in the text, search and replace text pieces, and run basic text operations such as undo, redo, cut (delete), copy and paste. \\ 
-    Insert & It is used to insert keyboard inputs into the text, just like commonly used text editors today. \\ 
+    Insert & It is used to insert keyboard inputs into the text just like commonly used text editors. \\ 
     Visual & It is similar to normal mode, and it allows the user to select a block of text. Normal mode commands can be used on the selected text. \\ 
     Cmdline & It takes in a single line command input and perform actions accordingly, such as save and quit. \\
     \hline
@@ -45,9 +45,13 @@ As a start, the following basic commands can be used to quickly create, edit and
 \begin{lstlisting}
 $ vim testvim
 \end{lstlisting}
-to create a file named ``testvim'' and open the file using Vim. Notice that in some Linux versions, Vi might be aliased to Vim by default.
+to create a file named ``testvim'' and open the file using Vim. Notice that in some Linux versions, command \verb|vi| might be aliased to \verb|vim| by default.
 
-In the opened file, use \verb|Esc| and \verb|i|/\verb|a| (insert/append) to switch between normal mode and insert mode. Notice that in the normal mode, the cursor is on a character. When using the insert command, the insertion cursor is put to the left of that character, whereas when using the append command, the insertion cursor is put to the right of that character. In the normal mode, use \verb|h|, \verb|j|, \verb|k|, \verb|l| to navigate the position of the cursor. If a modern keyboard is used, the left, right, up and down arrows can also be used to navigate the position of the cursor in both normal and insert modes. Finally, in the normal mode, use \verb|:w| to save the file, and \verb|:q| to quit Vim, or use \verb|:wq| to save and quit Vim.
+In the opened file, use \verb|i|/\verb|a| (insert/append) to switch from default mode to insert mode, and \verb|Esc| to switch back to normal mode. Notice that in normal mode, the cursor is on a character. When using the insert command, the insertion cursor is put to the left of that character, whereas when using the append command, the insertion cursor is put to the right of that character. In normal mode, use \verb|h|, \verb|j|, \verb|k|, \verb|l| to navigate the position of the cursor. If a modern keyboard is used, the left, right, up and down arrows can also be used to navigate the position of the cursor in both normal and insert modes. 
+
+To quickly navigate, consider using \verb|b| and \verb|w| rather than \verb|h| and \verb|l| to move cursor by words instead of characters. Use \verb|0| (zero) to jump to the beginning of the line, or \verb|$| to the end of the line. Use \verb|gg| to jump to the first line of the file, and \verb|G| to the last line. Use \verb|:<number>| to jump to a specific line of the file.
+
+Finally, in normal mode, use \verb|:w| to save the file, and \verb|:q| to quit Vim, or use \verb|:wq| to save and quit Vim.
 
 The above basic commands and their relationships are summarized in Fig.~\ref{ch:tfe:fig:vimbasicmodeswitching}. A flowchart for creating/opening, editing, saving, and quitting a text file using the aforementioned commands is given in Fig.~\ref{ch:tfe:fig:vimbasicoperationflowchart}.
 
@@ -65,7 +69,7 @@ The above basic commands and their relationships are summarized in Fig.~\ref{ch:
 
 There are other shortcuts that switch from normal mode to insert mode. Some of them are summarized in Table \ref{ch:tfe:tab:switchtoinsert}.
 
-\begin{table}
+\begin{table}[!htb]
   \centering \caption{Commonly used shortcuts to switch from normal mode to insert mode.}\label{ch:tfe:tab:switchtoinsert}
   \begin{tabularx}{\textwidth}{lX}
     \hline
@@ -84,7 +88,7 @@ There are other shortcuts that switch from normal mode to insert mode. Some of t
 
 With the basic operations introduced in Section \ref{ch:tfe:subsec:vimgeneralintro}, we are able to create and edit text files of any kind. Though at this point the advantages of using Vim over other text editors are not obvious yet, the Vim editor is at least useable.
 
-We can now customize the user profile for better user experience. Notice that the customization is completely optional and personal. This section only introduces the idea and basic methods such as re-mapping keys and creating user-defined shortcuts. Everything introduced here are merely examples and it is completely up to the user how to design and implement his own profile.
+We can now customize the user profile for better user experience. Notice that the customization is completely optional and personal. This section only introduces the basic setups such as re-mapping keys and creating user-defined shortcuts. Everything introduced here are merely examples and it is completely up to the user how to design and implement his own profile.
 
 In Linux, navigate to home directory. Create the following path and file \verb|~/.vim/vimrc| or \verb|~/.vimrc|, which will serve as the Vim configuration file. Each time Vim is started, it will automatically access this file and apply the configurations inside.
 
@@ -232,9 +236,12 @@ Many Vim commands in normal mode follow a common pattern: an operator command di
 
 The operator specifies the action (for example, delete, yank, or change), while the motion specifies the range to which the action applies (for example, a character, a word, a line, or the entire file). Some operators may work without an explicit motion, or they may have a default motion. 
 
-For example, consider the \verb|u| command for undo. It is not an operator–motion command, but a standalone command that does not take a motion argument.
+For example, consider command \verb|u| for undo. It is not an operator–motion command, but a standalone command that does not take a motion argument.
 
-To repeat an operation multiple times, prepend the command with a number indicating how many times it should be executed.
+To repeat an operation multiple times, prefix the command with a number indicating how many times it should be executed, and the syntax becomes
+\begin{lstlisting}
+<number><operator><option>
+\end{lstlisting}
 
 \subsection{Delete, Cut, Copy and Paste}
 
@@ -246,15 +253,13 @@ Delete, cut, copy and paste are mostly done in normal mode as follows.
 
 Use \verb|x| to delete the character at the cursor, or \verb|X| to delete the character before the cursor. To delete multiple characters, one option is to press \verb|x| or \verb|X| repeatedly (or hold the key). Alternatively, Vim allows automatic repetition by prefixing a count. For example, \verb|20x| deletes 20 characters starting from the cursor. The same principle applies to other operators and motions. For example, \verb|10l| moves the cursor 10 characters to the right.
 
-\vspace{0.1in}
-\noindent \textbf{Delete and Cut}
-\vspace{0.1in}
+In Vim, operator \verb|d| deletes text. It can be used to perform cut-and-paste as well, since the deleted content using \verb|d| is automatically stored in the clipboard. Operator \verb|d| requires a motion to define the range. For example, \verb|dl| deletes one character to the right (the character at the cursor), while \verb|dh| deletes one character to the left. Motion can be prefixed. For example, \verb|d20l| deletes 20 characters to the right, where ``20l'' serves as the motion.
 
-In Vim, cutting text is equivalent to deleting it, since deleted text is stored in a register and can be pasted. Thus, all delete operations can be considered cut operations, and they are more flexible than simply using \verb|x| or \verb|X|.
-
-The operator \verb|d| deletes text and it requires a motion to define the range. For example, \verb|dl| deletes one character to the right (the character at the cursor), while \verb|dh| deletes one character to the left. Similarly, \verb|d20l| deletes 20 characters to the right, where ``20l'' serves as the motion. A combination such as \verb|5d4l| also works, producing the same result as \verb|d20l|.
-
-The operator \verb|d| becomes more powerful when combined with word motions. For example, \verb|w| is a word motion and its range is to the first character of the next word. Consider sentence ``William Shakespear (c. 23 April 1564[b] – 23 April 1616) was an English playwright, poet and actor.'' with the position of the cursor at ``S'' in ``Shakespear''. Operation \verb|dw| deletes ``Shakespear ''. When the cursor is in the middle of a word, \verb|dw| deletes from the cursor to the beginning of the next word. For instance, if the cursor is on the ``k'' in ``Shakespeare'', \verb|dw| deletes ``kespeare ''. Motion \verb|b| works similarly, except that it traces words backward to the left. To delete the whole word regardless of cursor position, use the ``inner word'' motion \verb|iw|. For example, \verb|diw| deletes the entire word under the cursor but keeps the following space.
+The operator \verb|d| can be used with other motions. For example, \verb|w| is a word motion and its range is to the first character of the next word. Consider sentence 
+\begin{lstlisting}
+William Shakespeare (c. 23 April 1564[b] - 23 April 1616) was an English playwright, poet and actor.
+\end{lstlisting}
+with the position of the cursor at ``S'' in ``Shakespeare''. Operation \verb|dw| deletes ``Shakespeare '' (notice that the space after Shakespeare is also deleted). When the cursor is in the middle of a word, \verb|dw| deletes from the cursor to the beginning of the next word. For instance, if the cursor is on the ``k'' in ``Shakespeare'', \verb|dw| deletes ``kespeare ''. Motion \verb|b| works similarly, except that it traces words backward to the left. To delete the whole word regardless of cursor position, use the ``inner word'' motion \verb|iw|. For example, \verb|diw| deletes the entire word under the cursor but keeps the following space.
 
 In addition to character motions (\verb|h|, \verb|l|) and word motions (\verb|b|, \verb|w|), there are sentence motions \verb|(| and \verb|)|, and paragraph motions \verb|{| and \verb|}|. There are also ``inner'' motions such as \verb|is| (inner sentence), \verb|ip| (inner paragraph), \verb|i'|, \verb|i"|, \verb|i`| (inner quotations), and \verb|i(|, \verb|i<|, \verb|i{| (inner blocks). They all work in a similar manner.
 
@@ -300,9 +305,9 @@ In addition to character motions (\verb|h|, \verb|l|) and word motions (\verb|b|
   \end{tabularx}
 \end{table}
 
-The operator \verb|c| works similarly to \verb|d|, except that it automatically switches to insert mode after removing the selected text. 
+The operator \verb|c| works similarly with \verb|d|, except that it automatically switches to insert mode after removing the selected text. 
 
-To copy text into a register, use \verb|y| (short for ``yank''), followed by a motion to indicate the range of text. The motions follow Table \ref{ch:tfe:tab:motion}. To paste the most recently yanked or deleted text after the cursor, use \verb|p|. No motion is required.
+To copy text into the clipboard, use \verb|y| (short for ``yank''), followed by a motion to indicate the range of text. The motions follow Table \ref{ch:tfe:tab:motion}. To paste the most recently yanked or deleted text after the cursor, use \verb|p|. No motion is required.
 
 In addition to the motions listed in Table \ref{ch:tfe:tab:motion}, another commonly used type of motion is ``find by character.'' For example, consider the following line of text, with the cursor starting on the letter ``A'':
 \begin{lstlisting}
@@ -315,7 +320,7 @@ If the command \verb|df;| is used when the cursor is at the letter ``A'', Vim de
 
 \subsection{Search in the Text}
 
-In normal mode, use \verb|/<keyword>| followed by \verb|Enter| to search the file for a keyword. Keys \verb|n| and \verb|N| are used to navigate through the search results (\verb|n| repeats the search in the same direction, while \verb|N| reverses it). The command \verb|zz| recenters the current cursor line in the middle of the screen. 
+In normal mode, use \verb|/<keyword>| followed by \verb|Enter| to search the file for a keyword. Keys \verb|n| and \verb|N| are used to navigate through the search results. The command \verb|zz| re-centers the current cursor line to the middle of the screen. 
 
 When a search is active, \verb|n| and \verb|N| can also be used as motions together with delete, change, or yank (copy) operators, as shown in Table \ref{ch:tfe:tab:deletecut}.
 
@@ -325,11 +330,11 @@ Use \verb|Ctrl+o| and \verb|Ctrl+i| to jump backward and forward through the cur
 
 To perform a ``save as,'' use \verb|:w <new path>| in command-line mode.
 
-In command-line mode, the prefix \verb|!| allows interaction with the shell. For example, consider the case of editing a read-only file when Vim was not started with \verb|sudo|. A simple \verb|:w| will fail. Instead, use:
+In command-line mode, the prefix \verb|!| allows interaction with the shell. For example, consider a case where the file can only be edited by a sudoer. A user, who has sudo privilege, opened the file in regular mode and forgot to use sudo. After making changes to the file, they cannot save it using \verb|:w| due to permission failure. In this case, consider using
 \begin{lstlisting}
 :w !sudo tee %
 \end{lstlisting}
-Here, \verb|tee| is a Linux command that takes standard input and writes it to a file, and \verb|%| refers to the current file.
+to save the file. Here, \verb|tee| is a Linux command that takes standard input and writes it to a file, and \verb|%| refers to the current file.
 
 Another example is inserting the contents of an external file into the current buffer. Move the cursor to the desired location, then use:
 \begin{lstlisting}
@@ -350,9 +355,9 @@ Use \verb|v| to enter the visual mode, then navigate the cursor to select a bloc
 	\caption{An example of visual mode where a block of text is selected.} \label{ch:tfe:fig:vimvm1}
 \end{figure}
 
-In any of the above visual mode, use \verb|:normal + <operation>| to execute operation(s) form the normal mode for each line. This allows convenient editing of multiple lines of text all together. For example, use \verb|V| to select a few lines of contents, followed by \verb|:normal 0iprefix-|. This will insert \verb|prefix-| to all the lines, as if \verb|0iprefix-| is executed in normal mode to all the lines separately, where \verb|0| (zero) navigates to the beginning of the line, \verb|i| switches to insert mode, and \verb|prefix-| is entered as the content.
+In any of the above visual mode, use \verb|:normal + <operation>| to execute normal mode operation(s) for each line. This allows convenient editing of multiple lines of text all together. For example, use \verb|V| to select a few lines of contents, followed by \verb|:normal 0iprefix-|. This will insert \verb|prefix-| to all the lines, as if \verb|0iprefix-| is executed in normal mode to all the lines separately, where \verb|0| (zero) is a short key to navigate to the beginning of the line, \verb|i| switches to insert mode, and \verb|prefix-| is entered as the content.
 
-Alternatively, in visual-block mode after selecting a block of content, use \verb|I| to enter insert mode and insert content in the first row of the selected block. When existing the insert mode using \verb|<Esc>|, the changes will apply to all selected rows. Similar effect can be achieved.
+Alternatively, in visual-block mode after selecting a block of content, use \verb|I| to enter insert mode and insert content in the first row of the selected block. Then exit the insert mode. The changes made to the first row, such as adding the prefix, will be apply to all selected rows.
 
 \section{Vim Macros}
 
@@ -399,7 +404,7 @@ peach.jpg
 \end{lstlisting}
 and the cursor should be at row \verb|pear.jpg|.
 
-To repeat the recorded procedures, use \verb|@<macro-name>|. In this example, just key in \verb|@s| in the normal mode, and the file should appear as
+To repeat the recorded procedures, use \verb|@<macro-name>|. In this example, just key in \verb|@s| in normal mode, and the file should appear as
 \begin{lstlisting}
 image: 'apple.jpg'
 ttl: 5
@@ -412,21 +417,19 @@ peach.jpg
 
 Repetitively using \verb|@s| proceeds with the revision. In the case the procedure needs to be repeated for many times, use \verb|<number>@<macro-name>|, in this example \verb|3@s|, to complete the remaining task.
 
-\section{File Explorer and Screen Splitting}
+\section{File Explorer}
 
 Many IDEs come with project folder navigation and screen splitting features. In these IDEs, there is often a built-in file explorer, from where the user can navigate in the file system, select a file to edit, and the IDE will split the window for the selected file. Vim has similar features that supports file explorer and screen splitting, either via built-in functions or third-party support tools.
 
 In Vim, use \verb|:Explore|, \verb|:Sexplore| or \verb|:Vexplore| (or \verb|:Ex|, \verb|:Sex|, \verb|:Vex| for short) in cmdline mode to open a file explorer, from where the user can navigate the cursor to select a file. Vim will then open the file in a split window that allows the user to further editing the file. There are many third-party plugin tools that enable convenient file explorer functions.
 
-Use \verb|:split| and \verb|:vsplit| for horizontal and vertical screen splitting respectively. A second split window would show up with the same text file opened. Command \verb|splitright| and \verb|splitbelow| is used to setup the default cursor position after splitting the screen. To navigate the cursor across different split windows, use \verb|Ctrl+w| followed by \verb|h|, \verb|j|, \verb|k| and \verb|l|. Resize the selected split window using \verb|:res+<number>|, \verb|:res-<numer>|, \verb|:vertical resize+<number>|, \verb|:vertical resize-<number>|. 
-
 \section{NeoVim}
 
-Vim being an open-source project allows other to fork and build new projects on top of it. \mync{NeoVim} is one of those projects. Comparing with Vim whose code is almost all from Bram Moolenaar, NeoVim is more of a community-driven project with diversified contributors. 
+\mync{NeoVim} is a fork of Vim. It is a community-driven project with diversified contributors. 
 
-A potential problem with project codes coming from a single contributor is that the code is often a bit more messy than if it were written and cross-checked by multiple contributors, and that has been the main criticism Vim has received. NeoVim, on the other hand, has cleaner code base. 
+NeoVim is often regarded as a more cutting-edge version of Vim in the sense that new features usually come sooner in NeoVim than in Vim. NeoVim also has a better and more native support for Lua language. The configuration file for NeoVim, i.e., the counterpart of \verb|vimrc|, can be built by Lua files. 
 
-NeoVim is often regarded as a more cutting-edge version of Vim in the sense that new features usually come sooner in NeoVim than in Vim. NeoVim also has a better and more native support for Lua language. The configuration file for NeoVim, i.e., the counterpart of \verb|vimrc|, can be built by Lua files. Vim is initially a single-thread application, which is fine when it is used as a text editor. However, it limits the ability of Vim calling other shell services. The user needs to wait for the shell services to end before he can start editing the document again. NeoVim, on the other hand, uses multi-thread framework, hence does not pose this issue. Later on Vim added the support to allow plug-ins to trigger multi-thread processes.
+Vim is intended to be a single-thread application which is fine as a text editor. However, it limits its ability of calling and running other shell services simultaneously. NeoVim, on the other hand, uses multi-thread framework, hence does not pose this issue. Later on Vim added the support to allow plug-ins to trigger multi-thread processes.
 
 The drawback of NeoVim is that it being a younger and more collaborative project seems to be less stable than Vim.
 
