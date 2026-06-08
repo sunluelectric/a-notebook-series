@@ -10,9 +10,9 @@ Linux system has the \mync{root directory} which is denoted by a single forward 
 \begin{lstlisting}
 /<directory>/<directory>/.../<directory or file>
 \end{lstlisting}
-where the first \verb|/| represents the root directory, and sequential \verb|<directory>/| represents a subdirectory under its root.
+where the first \verb|/| represents the root directory, and sequential \verb|<directory>/| represents a subdirectory under its parent.
 
-Upon Linux installation, a \mync{filesystem hierarchy} is created. A user can create new files under this hierarchy framework, but should not change the framework itself. The hierarchy is given in Fig. \ref{ch:fm:fig:hierarchy}. Notice that different Linux distributions may differ slightly on how the architecture looks like. The ``\verb|/|'' in the figure, as introduced, stands for the root directory, and ``\verb|root|'' in the figure is a subdirectory under \verb|/| whose directory name is ``root'' and it is used store root user related documents. They are two different directories.
+Upon Linux installation, a \mync{filesystem hierarchy} is created. A user can create new files or directories under this hierarchy framework, but should not change the framework itself. The hierarchy is given in Fig. \ref{ch:fm:fig:hierarchy}. Notice that different Linux distributions may differ slightly on how the architecture looks like. The ``\verb|/|'' in the figure, as introduced, stands for the root directory, and ``\verb|root|'' in the figure is a subdirectory under \verb|/| whose directory name is ``root'' and it is used store root user related documents. They are two different directories.
 
 \begin{figure}[!htb]
 	\centering
@@ -20,17 +20,15 @@ Upon Linux installation, a \mync{filesystem hierarchy} is created. A user can cr
 	\caption{An example of Linux file system hierarchy.} \label{ch:fm:fig:hierarchy}
 \end{figure}
 
-A regular user's home directory is often located at \verb|/home/<user name>|. When logging in as a regular user, his home directory is stored in the HOME environmental variable and can be retrieved by \verb|$HOME|. A shortcut to \verb|$HOME| is given by the tilde \verb|~| for convenience. Hence, for example \verb|ls ~| lists down the files and directories under his home directory.
+A regular user's home directory is often located at \verb|/home/<user name>|. When logging in as a regular user, his home directory is stored in the HOME environmental variable and can be retrieved by \verb|$HOME|. A shortcut to \verb|$HOME| is given by the tilde $\sim$ for convenience. Hence, for example \texttt{ls}~$\sim$ lists down the files and directories under his home directory.
 
-As can be seen from Fig. \ref{ch:fm:fig:hierarchy}, the hierarchy contains quite a few pre-determined subdirectories, each serving a different purpose. For the ease of illustration, these subdirectories are roughly categorized by functionalities and accessibility shown in Fig. \ref{ch:fm:fig:directorycate}.
+As can be seen from Fig. \ref{ch:fm:fig:hierarchy}, the hierarchy contains quite a few pre-determined subdirectories, each serving a different purpose. For the ease of illustration, these subdirectories are roughly categorized by functionalities and accessibility shown in Fig. \ref{ch:fm:fig:directorycate}. A brief introduction to the directories are summarized in Table \ref{ch:fm:tab:hierarchyintro}.
 
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-1/figures/linux_directory_cate.png}
 	\caption{A rough categorization of commonly used directories in Linux file hierarchy standard.} \label{ch:fm:fig:directorycate}
 \end{figure}
-
-A brief introduction to the directories are summarized in Table \ref{ch:fm:tab:hierarchyintro}.
 
 \begin{table}[!htb]
   \centering \caption{Introduction to commonly used directories in Linux file hierarchy standard.}\label{ch:fm:tab:hierarchyintro}
@@ -60,15 +58,15 @@ A brief introduction to the directories are summarized in Table \ref{ch:fm:tab:h
   \end{tabularx}
 \end{table}
 
-Linux file hierarchy standard differs from MS-DOS and Windows in several ways. Firstly, Linux stores all files (regardless of their physical location) under the root directory, while Windows uses drive letters such as \verb|C:\|, \verb|D:\| to distinguish different hard drives. Secondly, Linux uses slash (\verb|/|) to separate directory names, e.g. \verb|/home/username| while Windows uses back slash (\verb|\|), e.g. \verb|C:\Users\username|. Lastly, Linux uses ``magic numbers'' to indicate file types, while Windows often uses suffixes to tell file types. 
+Linux file hierarchy standard differs from MS-DOS and Windows in several ways. Firstly, Linux stores all files (regardless of their physical location) under the root directory, while Windows uses drive letters such as \verb|C:\|, \verb|D:\| to distinguish different hard drives. Secondly, Linux uses slash (\verb|/|) to separate directory names, e.g. \verb|/home/username| while Windows uses back slash (\verb|\|), e.g. \verb|C:\Users\username|. Lastly, Linux uses magic numbers to indicate file types, while Windows often uses suffixes to tell file types. 
 
-Magic numbers of a file refer to the first few bytes of a file that are unique to a particular file type, for example, PNG file is hex \verb|89 50 4e 47|. Linux compare the magic numbers of a file with an internal database to decide the file types and features. Distinguishing file types using magic numbers can be more reliable than using suffixes, though a bit less intuitive.
+\mync{Magic numbers} of a file refer to the first few bytes of a file that are unique to a particular file type, for example, PNG file is hex \verb|89 50 4e 47|. Linux compare the magic numbers of a file with an internal database to decide the file types and features. Distinguishing file types using magic numbers can be more reliable than using suffixes, though a bit less intuitive.
 
 \section{Hard and Soft Links}
 
-The files are stored in the physical disk, and the name (including path) of the file is nothing but a ``link'' to that storage. The user and the OS can reach and manipulate the storage using the file name. 
+A \mync{link}, in the filesystem context, refers to the mapping of a file name and path to its physical existence on the hard drive. The user and the OS can reach and manipulate the storage using the fine names and paths.
 
-In addition to the original file name, Linux allows the user to create \mync{hard link} or \mync{soft link} (also known as \mync{symbolic link}) to refer to a file. A demonstrative plot is given in Fig. \ref{fig:hardsoftlink}. More details are introduced in the rest of the section.
+When a file is created, its file full path is used as the link. In addition to the original file name, Linux allows the user to create hard links and soft links to refer to a file. A demonstrative plot is given in Fig. \ref{fig:hardsoftlink}. More details are introduced in the rest of the section.
 
 \begin{figure}[!htb]
 	\centering
@@ -78,27 +76,27 @@ In addition to the original file name, Linux allows the user to create \mync{har
 
 \subsection{Hard Link}
 
-As shown in Fig. \ref{fig:hardsoftlink}, a hard link is an alternative to the file name that directly points to the stored data. Both the original file name and the hard link share the same \mync{inode number}. The inode number is a unique identifier of a file that Linux uses to map a file name to the stored data. From this sense, a hard link is equivalent to the original file name, and the original file name can be taken as the ``default hard link''.
+As shown in Fig. \ref{fig:hardsoftlink}, a \mync{hard link} is an alternative to the file name that directly points to the stored data. Both the original file name and the hard link share the same \mync{inode number}. The inode number is a unique identifier of a file that Linux uses to map a file name to the stored data. From this sense, a hard link is equivalent to the original file name, and the original file name can be taken as the ``default hard link''.
 
-If a file is associated with additional hard links, removing the original file does not erase the data, and the data is still accessible via the remaining hard links. Only when all the hard links are removed, should the OS mark the storage as ``free'' and the data might be erased in the future when new data comes in. This is because the OS traces the link account of an inode number (the number of hard links to an inode number, the original file name included), and will consider the data removable only if it drops to 0.
+If a piece of hard drive storage is associated with only one hard link, removing the hard link would mean removing the information on the hard drive. Usually the OS would not directly erase the information from the hard drive. Instead, it will mark the space on the hard drive as ``free'', and later other information will occupy the space and overwrite the contents. However, if a storage is associated with multiple hard links, removing one of the hard links does not clear the data, and the data is still accessible via the remaining hard links. Only when all the hard links are removed, should the OS mark the storage as free. This is because the OS traces the link account of an inode number (the number of hard links to an inode number, the original file name included), and will consider the data removable only if it drops to 0.
 
-Hard links can be used as a back up of the original file just in case its original file name is deleted by accident. Notice that a hard link does not create a duplication of the data referred by the original file name. 
+Hard links can be used as a back up of the original file just in case its original file name is deleted by accident. Notice that a hard link does not create a physical duplication of the data referred by the original file name on the hard drive. The hard link can only project the file from accidental deletion, but not from edition of its contents.
 
 Use
 \begin{lstlisting}
-$ ln <file> <hard link>
+$ ln <existing link> <new hard link>
 \end{lstlisting}
 to create a hard link for a file.
 
 \subsection{Soft Link}
 
-As shown in Fig. \ref{fig:hardsoftlink}, a soft link or a symbolic link is a second-layer point of the data. The soft link does not point to the data in the physical storage directly, but points to another link and forms a chain. If any links in the chain is broken, the soft link becomes a dangling link and loses the reference to the data. Notice that there is a limit to the length of the chain which effectively avoids looped chain. A larger overhead of processing time is expected as the chain becomes longer.
+As shown in Fig. \ref{fig:hardsoftlink}, a \mync{soft link} (also known as \mync{symbolic link}) is a second-layer point of the data. The soft link does not point to the data in the physical storage directly, bu to another hard or soft link and forms a chain. If any links in the chain is broken, the soft link becomes a dangling link and loses the reference to the data. Notice that there is a limit to the length of the chain which effectively avoids looped chain. A larger overhead of processing time is expected as the chain becomes longer.
 
 Soft links are useful to create shortcuts or cross-file system links.
 
 Use
 \begin{lstlisting}
-$ ln -s <file> <soft link>
+$ ln -s <existing link> <new soft link>
 \end{lstlisting}
 to create a soft link for a file.
 
@@ -116,7 +114,7 @@ In Table \ref{ch:fm:tab:commonfilecommands}, \verb|chmod| and \verb|chown| are a
     \verb|pwd| & Print working directory. \\ 
     \verb|ls| & List the subdirectories and files (and their detail information) in a given directory. \\ 
     \verb|tree| & List the subdirectories and files in a tree hierarchy. \\  
-    \verb|touch| & Create an empty file. \\ 
+    \verb|touch| & Create an empty file, or update the ``last-modified'' timestamp of a file. \\ 
     \verb|mkdir| & Create an empty subdirectory. \\ 
     \verb|mv| & Move (cut-and-paste) a directory or a file; change name of a directory or a file. \\ 
     \verb|cp| & Copy-and-paste a directory or a file. \\ 
@@ -127,7 +125,7 @@ In Table \ref{ch:fm:tab:commonfilecommands}, \verb|chmod| and \verb|chown| are a
   \end{tabularx}
 \end{table}
 
-\subsection{Information Retrieval}
+\subsection{Query}
 
 As given in Table \ref{ch:sb:tab:shellenvironmentvars}, \verb|$PWD| is the environmental variables to store the current working directory of the shell. Therefore, to print the current working directory in the console, use command 
 \begin{lstlisting}
@@ -143,7 +141,7 @@ As one of the most frequently used commands, \verb|ls| lists down information ab
 $ ls [<option>] [<path>]
 \end{lstlisting}
 
-An example is given in Fig. \ref{ch:fm:fig:lscommandexample}. As shown in the example, command \verb|ls| alone shows only the name of files and subdirectories excluding hidden items and details of each item. With the additional arguments in the option field, the returns can be customized with more details displayed. For example in Fig. \ref{ch:fm:fig:lscommandexample}, the \verb|-l| argument displays the information in long listing form, which includes the owner and access control list information. More details about files and directories access control list are given in later part of this section.
+An example is given in Fig. \ref{ch:fm:fig:lscommandexample}. Command \verb|ls| alone shows only the name of files and subdirectories excluding hidden items and details of each item. With the additional arguments in the option field, the returns can be customized with more details displayed. For example in Fig. \ref{ch:fm:fig:lscommandexample}, the \verb|-l| argument displays the information in long listing form, which includes the owner and access control list information. More details about files and directories access control list are given in later part of this section.
 
 \begin{figure}[!htb]
 	\centering
@@ -294,7 +292,7 @@ When performing actions such as listing, moving, copying, removing, wildcard cha
     \hline
     Directory & Description \\ \hline
     \verb|*| & Matches any number of characters. \\ 
-    \verb|?| & Matches one character. \\ 
+    \verb|?| & Matches any one character. \\ 
     \verb|[...]| & Matches characters given in the square bracket, which can include a hyphen-separated range of characters. \\
     \hline
   \end{tabularx}
@@ -315,7 +313,7 @@ Following the item type, the ACL of the item is given in the form of 9-bit permi
     Directory & Description \\ \hline
     \verb|r| & View what is in the file or directory. \\ 
     \verb|w| & Change file contents; rename file; delete file. Add or remove files or subdirectories in a directory. \\ 
-    \verb|x| & Run a file as a program. Change to the directory as the current directory; search through the directory; access metadata (file size, etc.) of files in the directory. \\
+    \verb|x| & Run a file as a program. Set the directory to be the current directory; search through the directory; access metadata (file size, etc.) of files in the directory. \\
     \hline
   \end{tabularx}
 \end{table}
@@ -342,7 +340,7 @@ Both the owner and users with administrative privileges can change the permissio
 $ chmod [<option>] <new_mode> <path>
 \end{lstlisting}
 
-The new mode can be expressed symbolically. For example, \verb|g-w| removes write permission from the group while leaving other permissions unchanged. Similarly, \verb|go+w| adds write permission to both group and others. Here, \verb|u|, \verb|g|, and \verb|o| represent ``user'' (owner), ``group,'' and ``others,'' while \verb|r|, \verb|w|, and \verb|x| stand for ``read,'' ``write,'' and ``execute.''
+The new mode can be expressed symbolically. For example, \verb|g-w| removes write permission from the group while leaving other permissions unchanged. Similarly, \verb|go+w| adds write permission to both group and others. Here, \verb|u|, \verb|g|, and \verb|o| represent ``user'' (owner), ``group'' and ``others'', while \verb|r|, \verb|w|, and \verb|x| stand for ``read'', ``write'' and ``execute''.
 
 Alternatively, a $3$-digit octal number can represent permissions. For example, \verb|664| corresponds to the following.
 \begin{itemize}
@@ -355,11 +353,11 @@ Hence, \verb|664| assigns permissions \verb|rw-rw-r--| to the file.
 
 \subsection{Change Default Permissions}
 
-The default ACL for a newly created file or directory is defined by \verb|umask|. Check its value by
+The default ACL for a newly created file or directory is defined by \verb|umask|. Check its value using
 \begin{lstlisting}
 $ umask
 \end{lstlisting}
-And change its value temporarily in the opening shell by
+Its value can be changed temporarily using
 \begin{lstlisting}
 $ umask <new value>
 \end{lstlisting}
@@ -368,9 +366,9 @@ The value of \verb|umask|, after converting to binary, represents the bits in th
 
 The default \verb|umask| values for the root and the regular users in RHEL are \verb|002| and \verb|022| respectively. This is defined in \verb|/etc/bashrc|. A user can permanently change the default value of \verb|umask| by overwriting its value in \verb|.bashrc| as introduced in Section \ref{ch:sb:subsec:customizeshell}.
 
-\section{Location of Command and File}
+\section{Location of Commands and Files}
 
-The most frequently used 3 searching actions are as follows.
+The most commonly seen 3 searching use cases are as follows.
 \begin{itemize}
   \item Look for the location of a command using its name
   \item Look for the location of a file using its name (and other metadata such as size, permission, etc.)
@@ -379,7 +377,7 @@ The most frequently used 3 searching actions are as follows.
 
 Many approaches can be used to achieve the goals, some of which are introduced as follows.
 
-\subsection{Location of Command}
+\subsection{Location of Commands}
 
 Use \verb|type| to look for a command as follows.
 \begin{lstlisting}
@@ -396,7 +394,7 @@ $ type ls
 ls is aliased to `ls --color=auto'
 \end{lstlisting}
 
-\subsection{Location of File}
+\subsection{Location of Files}
 
 The package \verb|mlocate| can be installed to enable the \verb|locate| command, which quickly searches for files by path. As long as a file or directory’s full path contains the search term, it may appear in the results.
 \begin{lstlisting}
@@ -410,7 +408,7 @@ The mechanism of \verb|locate| works as follows. The system periodically runs \v
 
 Users may be confused by the commands \verb|locate| and \verb|mlocate|. In practice, they are nearly identical for basic usage. On many systems, \verb|locate| is provided as a wrapper or alias for \verb|mlocate|. In the scope of this discussion, no distinction is made between them.
 
-For security and privacy reasons, \verb|locate| only shows files that the invoking user has permission to access. For example, a regular user cannot use \verb|locate| to see files under \verb|/root| or in another user’s home directory.
+For security and privacy reasons, \verb|locate| only shows files that the invoking user has permission to access. For example, a regular user cannot use \verb|locate| to see files in \verb|/root| or another user’s home directory.
 
 A more widely adopted way of looking for a file by its variety of attributes is using \verb|find| as follows.
 \begin{lstlisting}

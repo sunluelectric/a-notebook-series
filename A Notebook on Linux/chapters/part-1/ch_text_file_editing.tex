@@ -247,10 +247,6 @@ To repeat an operation multiple times, prefix the command with a number indicati
 
 Delete, cut, copy and paste are mostly done in normal mode as follows.
 
-\vspace{0.1in}
-\noindent \textbf{Quick Delete by Character}
-\vspace{0.1in}
-
 Use \verb|x| to delete the character at the cursor, or \verb|X| to delete the character before the cursor. To delete multiple characters, one option is to press \verb|x| or \verb|X| repeatedly (or hold the key). Alternatively, Vim allows automatic repetition by prefixing a count. For example, \verb|20x| deletes 20 characters starting from the cursor. The same principle applies to other operators and motions. For example, \verb|10l| moves the cursor 10 characters to the right.
 
 In Vim, operator \verb|d| deletes text. It can be used to perform cut-and-paste as well, since the deleted content using \verb|d| is automatically stored in the clipboard. Operator \verb|d| requires a motion to define the range. For example, \verb|dl| deletes one character to the right (the character at the cursor), while \verb|dh| deletes one character to the left. Motion can be prefixed. For example, \verb|d20l| deletes 20 characters to the right, where ``20l'' serves as the motion.
