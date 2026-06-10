@@ -2,31 +2,31 @@
 %\chapterauthor{Second Author}{Second Author Affiliation}
 \chapter{Storage Management}
 
-Upon installation of the system, the OS shall scan the machine, look for hard drives, partition them, and mount the partitions to different locations in the OS such as \verb|/| (root directory), \verb|/home/|, swap space, etc.
+Upon installation of the system, the OS shall scan the machine, look for hard drives, partition them, and mount the partitions to different locations in the OS such as \verb|/| (root directory), \verb|/home/|, swap space, etc. It is often not necessary for a casual user to manage the partitions and mountings by themselves as there is the option to let Linux installation handle them automatically. That said, it is recommended that the administrator shall understand how the storage can be managed. 
 
-It is often not necessary for a casual user to manage the partitions and mountings by himself as there is the option to let Linux installation handle them automatically. However, when it comes to Linux servers where hardware is scaled up and down frequently, it is recommended that the administrator shall understand how the storage can be managed. Linux provides flexible tools to monitor and manage the storage of the machine, including manipulating partition table, format partition, and managing its mounting point.
+Linux provides flexible tools to monitor and manage the storage of the machine, including manipulating partition table, format partition, and managing its mounting point. Details are introduced in this chapter.
 
-\section{Partitions and Filesystems}
+\section{Partition and Filesystem}
 
-A \mync{partition} is a logical slice of the hard drive managed by the OS via partition table. A \mync{filesystem}, on the other hand, describes how OS formats data in the partition and where the partitions are mounted in the directory hierarchy. This is demonstrated by Fig. \ref{ch:dm:fig:partition}.
+A \mync{partition} is a logical slice of the hard drive. Linux manages partitions using the partition table. Usually each partition corresponds with a filesystem. A \mync{filesystem} describes the data formats of the partition, and how it is mounted in the directory hierarchy. This is demonstrated by Fig. \ref{ch:dm:fig:partition}. The partition focuses on the logical separation of the hard drive, while the filesystem focuses on how the operating system manages the data within that partition.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-2/figures/partition.png}
-	\caption{A demonstration of how a hard drive is used in the OS.} \label{ch:dm:fig:partition}
+	\includegraphics[width=0.8\textwidth]{chapters/part-2/figures/partition.png}
+	\caption{A demonstration of how a hard drive is partitioned and mounted to the directory hierarchy in the OS.} \label{ch:dm:fig:partition}
 \end{figure}
 
-Usually, each filesystem is associated with a partition. The partition focuses on the logical separation of the hard drive, while the filesystem focuses on how the operating system manages the data within that partition. Ideally there should be a clear correspondence between a partition and a filesystem. However, it is possible that 
+A filesystem must always have its corresponding partition. This is because a filesystem essentially describes how a partition is used by the OS, hence only meaningful with the partition. However, it is possible that 
 \begin{itemize}
-  \item A filesystem is sized smaller than its corresponding partition, in which case the remaining space in the partition is wasted.
-  \item A partition does not have its corresponding filesystem, in which case the space is wasted and cannot be used by the OS.
+  \item A partition does not have its corresponding filesystem.
+    \item A filesystem is sized smaller than its corresponding partition.
 \end{itemize}
-A filesystem must always have its corresponding partition. This is because a filesystem essentially describes how a partition is used by the OS, hence only meaningful with the partition.
+In both the above cases, some portion of the hard drive is unusable by the OS. This is because the OS can make use of the space in the hard drive only if it is partitioned and recognized by a filesystem.
 
 A demonstration of partitions versus filesystems is given in Fig. \ref{ch:dm:fig:partitionvsfilesystem}.
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-2/figures/partitionvsfilesystem.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-2/figures/partitionvsfilesystem.png}
 	\caption{A demonstration of how partitions and filesystems relate to each other.} \label{ch:dm:fig:partitionvsfilesystem}
 \end{figure}
 
@@ -42,9 +42,9 @@ tmpfs           5.0M  4.0K  5.0M   1% /run/lock
 /dev/sda2       512M  5.3M  507M   2% /boot/efi
 tmpfs           1.2G  120K  1.2G   1% /run/user/1000
 \end{lstlisting}
-from where it can be seen that the most of the storage of the system, in this case $916G$, is mounted on the root directory. Of this filesystem $818G$ is empty and available to use.
+In this example, it can be seen that the most of the storage of the system, in this case $916G$, is mounted on the root directory, and $818G$ of the space is currently empty and available to use.
 
-Use \verb|lsblk| to list information about block devices in the OS. Block devices refer to nonvolatile mass storage devices whose information can be accessed in any order, such as hard disks and CD-ROMs. An example is given below.
+Use \verb|lsblk| to list information about block devices in the OS. A \mync{block devices} is a data storage device that reads and writes data in fixed-size blocks, allowing random access and efficient file system operations. In the scope of this chapter, just take it as a commonly used storage device. Examples of block devices include hard drive and CD-ROM. An example of using \verb|lsblk| is given below.
 \begin{lstlisting}
 $ lsblk
 NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
@@ -69,7 +69,7 @@ sda      8:0    0 931.5G  0 disk
 |-sda3   8:3    0   931G  0 part /
 sr0     11:0    1  1024M  0 rom
 \end{lstlisting}
-which gives the size, the type and the mount point of all the storages.
+which gives the size, the type and the mount point of all the block devices storage. In the list, \verb|sda| is the hard drive.
 
 Use \verb|blkid| to print block device attributes. An example is given below.
 \begin{lstlisting}
@@ -77,20 +77,19 @@ $ blkid
 /dev/sda3: UUID="d0b15b7c-71f2-41f4-b67a-e7c69446feab" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="4b570507-6aa0-46c7-ac1b-06cb4c8bdb61"
 \end{lstlisting}
 
-\section{Disk Partition Table Manipulation}
+\section{Partition Table Manipulation}
 
 Due to the development of computer science and OS, manual disk partition is less necessary than before for a casual user. Nevertheless, Linux provides necessary tools for disk partition table manipulation and they are introduced in this section.
 
 \subsection{Disk Partition}
 
-Disk partitioning refers to the action of creating one or more regions on secondary storage (e.g., disk) so that they can be managed separately, as if they are different ``virtual disks''. An example of disk partitioning on a Windows PC would be to partition a $1TB$ hard drive into $512GB$ of \verb|C:\| drive and $512GB$ of \verb|D:\| drive. Partitioned regions are logically separated. The partitions locations and sizes are stored in the disk partition table.
+Disk partitioning refers to the action of segregating one physical disk into one or more logically separated ``virtual disks''. An example of disk partitioning on a Windows PC would be to partition a $1TB$ hard drive into $512GB$ of \verb|C:\| drive and $512GB$ of \verb|D:\| drive. The partitions locations and sizes are stored in the disk partition table.
 
-Some of the reasons for using disk partition include:
+Main reasons of using disk partition include:
 \begin{itemize}
-  \item Due to capability limitation, OS cannot handle a very large disk storage as a whole (this is less the case nowadays).
-  \item Different types of files, for example system data and user data, can be stored separately for easy management.
-  \item Different filesystems can be used on different partitions.
-  \item Different partitions can be configured differently with unique settings.
+  \item Due to capability limitations, OS cannot handle very large disk storage as a whole (this is less the case nowadays).
+  \item It is often preferred that different types of files, for example system data and user data, are stored logically separately.
+  \item Different partitions can be configured differently with different settings, such as using different filesystems and data formats.
   \item Sometimes partitioning can speed up hard disk accessing.
 \end{itemize}
 
@@ -105,7 +104,7 @@ Disk /dev/sda: 931.51 GiB, 1000204886016 bytes, 1953525168 sectors
 /dev/sda3  1054720 1953523711 1952468992  931G Linux filesystem
 \end{lstlisting}
 
-From the above result, it can be seen that the disk registered under \verb|/dev/| (this is where the devices are represented by default) has been partitioned into 3 partitions, and the user space that can be further modified is \verb|/dev/sda3| which is $931GB$.
+From the above result, it can be seen that the disk is registered under \verb|/dev| (this is where the devices are represented by default), and it has been partitioned into three partitions. The first two partitions \verb|/dev/sda1| and \verb|/dev/sda2| are reserved for machine booting. The third partition, \verb|/dev/sda3| which is $931GB$, is reserved for the Linux system.
 
 There are variety of tools that can be used for disk partitioning. A common way of doing that is to use
 \begin{lstlisting}
@@ -115,7 +114,7 @@ to enter the fdisk utility, and follow the wizard.
 
 Other tools such as \verb|cfdisk| and \verb|parted| can also be used similarly for disk partition.
 
-\section{Mount, Unmount and Format a Partition}
+\section{Mounting}
 
 The hard disk can be formatted by partition, from where a new filesystem can be created. To format a partition, double check using \verb|lsblk| to make sure that it is not mounted in the system. Use \verb|sudo umount <partition name>| to unmount a partition.
 

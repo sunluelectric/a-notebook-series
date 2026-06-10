@@ -1,29 +1,38 @@
 \chapter{Software Management} \label{ch:software-management}
 
-Linux as an OS monitors and maintains the software installed on the system. Different Linux distributions may use different tools to manage the software.
+Linux, just like any other OS, monitors and maintains the software installed on the system. Different Linux distributions may use different tools to manage software. Commonly seen software management tools are introduced in this chapter. 
 
-\section{Tasks and Approaches}
+Some software, such as databases, runs as services. Linux also manages services. Service management is not covered in this chapter, but will be introduced in Chapter \ref{ch:services}.
 
-When it comes to software management, an OS should support at least the following tasks.
+\section{Software Management Tasks}
+
+When it comes to software management, an OS should be able to perform at least the following tasks.
 \begin{itemize}
-	\item Install software
+	\item Installation
 		\begin{itemize}
-			\item Install software from the installation package
-			\item If possible, automatically find and download the installation package
-			\item If possible, automatically find, download and install all the dependencies
+			\item Install software using local installation package.
+			\item Find and install software from online repositories.
+			\item Find and install software dependencies from online repositories.
 		\end{itemize}
-	\item Query software
+	\item Querying
 		\begin{itemize}
-			\item Query the software already installed on the system
-			\item If possible, query software online
+			\item Query installed software.
+			\item Query install-able software and dependencies from online repositories.
 		\end{itemize}
-	\item Remove software
-	\item Update software
+	\item Updating
+		\begin{itemize}
+			\item Trace the version of software.
+			\item Trace available versions of software from online repositories.
+			\item Update software to specified version.
+		\end{itemize}
+	\item Removal: uninstall software and dependencies.
 \end{itemize}
 
-In Linux, software information (dependencies, version, installation instructions, etc.) is stored in special data structures known as packages. When installing software, the OS locates the packages and installs them according to the instructions that come with the packages. The OS also tracks the software it has installed, monitors their behavior, and performs updates or uninstalls as requested by the user. Different Linux distributions may use different package formats and package management tools. The most well-known ones include:
+In Linux, software information (dependencies, version, installation instructions, etc.) is stored in special data structures known as packages. When installing software, the OS locates the packages and installs them according to the instructions that come with the packages. The OS also tracks the software it has installed, monitors their behavior, and performs updates or uninstalls as requested by the user. 
+
+Different Linux distributions may use different package formats and package management tools. The most well-known ones include:
 \begin{itemize}
-	\item RPM
+	\item \myabb{Red Hat Package Manager}{RPM}
 	\item \myabb{Debian Package Manager}{DEB}
 \end{itemize}
 Note that RPM and DEB can refer to both the package formats and the package managing tools. There are proponents on both sides of RPM versus DEB, and both of them are very popular tools in different Linux distributions.
@@ -32,13 +41,15 @@ Linux kernel is also a software and needs to be monitored and updated from time 
 
 \section{RPM Package}
 
-RPM (\verb|.rpm|) is the preferred package format for Red-Hat-based distributions such as RHEL, Fedora, CentOS and Oracle Linux. It uses \verb|rpm| command to manage RPMs. In a later stage, other tools such as \verb|yum| and \verb|dnf| have been added to the library for better user experience and enhanced RPM facility. 
+RPM (\verb|.rpm|) is the preferred package format for Red-Hat-based distributions such as RHEL, Fedora, CentOS and Oracle Linux. 
+
+In early days \verb|rpm| command was directly used to manage RPM packages. Nowadays, tools such as \verb|yum| and \verb|dnf| have been developed for better user experience and more efficient package management. 
 
 \subsection{Brief Introduction}
 
-RPM contains rich information, including not only the payload of the software such as commands, configuration files, libraries and documentation, but also metadata such as the source of the package, dependencies, etc.
+RPM contains rich information, including not only the payload of the software such as commands, configuration files, libraries and documentation, but also metadata such as the source of the package and the dependencies.
 
-The name of an RPM should follow the protocol and by itself contains important information about the software. An example is given below. Use \verb|rpm -q| followed by the software name \verb|python3| to query the package as follows. If the package is installed, its full name should be returned.
+An RPM package should be named following the convention, where the software name, the version, the build, and other metadata should be reflected. An example is given below. Use \verb|rpm -q| followed by the software name \verb|python3| to query the package as follows. If the package is installed, its full name should be returned.
 \begin{lstlisting}
 $ rpm -q python3
 python3-3.9.18-3.el9_4.1.x86_64
@@ -75,7 +86,7 @@ can be retrieved.
 
 \subsection{Package Management Using \texttt{rpm}}
 
-An RPM package is required to install the software. An RPM package comes from the upstream software provider, who collects source codes, binary files, and other data, builds the software, and signs the package.
+Software can be installed with an RPM package. An RPM package comes from the upstream software provider, who collects source codes, binary files, and other data, builds the software, and signs the package.
 
 The command \verb|rpm| can be used to install the software from an RPM package. Note that installing software using \verb|rpm| requires the precise location of the RPM package and all dependencies to be installed in advance, which can be inconvenient. The \verb|rpm| command can also be used to validate, query, update, and remove software.
 
@@ -87,41 +98,45 @@ Due to the drawbacks of \verb|rpm| mentioned earlier, other tools have been deve
 
 YUM and DNF introduce the concept of repositories, allowing RPM packages to be part of a larger software ``package tree''. When installing Linux, a list of default repositories are added to the system. The repositories list depends on the version and license type of the OS. The user can modify the repositories list manually. More will be introduced later. YUM and DNF automatically find required packages and their dependencies from the repositories when installing software. In this sense, YUM and DNF can be taken as an extension of \verb|rpm| that come with additional features such as repository resolution and package retrieval. They run \verb|rpm| internally when installing packages.
 
-DNF is a further improvement of YUM with better dependency resolution and less memory usage. In many occasions, command \verb|yum| can be replaced by \verb|dnf| seamlessly. In some Linux distributions such as RHEL 9, \verb|yum| is used as an alias for \verb|dnf|. In the remaining part of the section, only DNF is discussed.
+DNF is a further improvement of YUM with better dependency resolution and less memory usage. In many occasions, command \verb|yum| can be replaced by \verb|dnf| seamlessly. In some Linux distributions such as RHEL 9, \verb|yum| is used as an alias for \verb|dnf|. In the remainder of the section, only DNF is discussed.
 
 The basic syntax of DNF is
 \begin{lstlisting}
 $ dnf <operation> <package>
 \end{lstlisting}
-where \verb|<operation>| include
-\begin{itemize}
-	\item \verb|install|: install a package
-	\item \verb|remove|: remove a package
-	\item \verb|search|: search the repositories for a package
-	\item \verb|autoremove|: remove dependency packages not relevant to currently installed programs
-	\item \verb|check-update|: check updates of packages from the repositories without downloading or installing the updates
-	\item \verb|downgrade|: revert to a previous version
-	\item \verb|info|: provide the basic information of a package
-	\item \verb|reinstall|: reinstall a package
-	\item \verb|upgrade|: upgrade packages
-	\item \verb|exclude|: exclude a package from transaction
-\end{itemize}
+where allowed \verb|<operation>| are summarized in Table \ref{tab:dnf-operations}.
+
+\begin{table}[!htb]
+	\centering \caption{Operations for DNF package manager.}\label{tab:dnf-operations}
+	\begin{tabularx}{\textwidth}{lX}
+		\hline
+		Operation & Description \\ \hline
+		\verb|info| & Provide the basic information of a package. \\
+		\verb|search| & Search the online repositories for a package. \\
+		\verb|install| & Install packages. \\ 
+		\verb|check-update| & Check updates of a package from online repositories without downloading or installing them. \\
+		\verb|update| & Update packages safely. \\
+		\verb|upgrade| & Update packages more aggressively than \verb|update|. \\ 
+		\verb|downgrade| & Revert to a previous version of a package. \\
+		\verb|reinstall| & Reinstall packages. \\
+		\verb|remove| & Remove packages. \\
+		\verb|autoremove| & Remove dependencies not relevant to currently installed applications. \\
+		\verb|exclude| & Exclude a package from installation or update, either temporarily or permanently. \\
+		\verb|list --installed| & List installed packages. \\
+		\verb|list --available| & List available packages. \\
+		\verb|list --upgrades| & List available upgrades for packages. \\
+		\verb|list --autoremove| & List dependencies not bounded to any installed application. \\
+		\verb|deplist| & Query dependencies of a package. \\
+		\verb|-q| & Query repository for a package. \\
+		\verb|history| & Check historical transactions. \\
+		\verb|clean all| & Clean cache. \\
+		\hline
+	\end{tabularx}
+\end{table}
 
 Each time when \verb|dnf| starts, it checks its configuration file which is located at \verb|/etc/dnf/dnf.conf|. Users can edit the configuration file to change the behavior of DNF, for example, to enable / disable GNU Privacy Guard (GPG) key check, the maximum number of different versions of the same software the system can keep, whether to delete dependencies when removing software, where to keep cache and log files, etc.
 
 DNF keeps a list of repositories at \verb|/etc/yum.repos.d| directory as its upstream software provider. The stored repositories are essentially text files named with suffix \verb|.repo|, inside which are the name of the repository, the URL, the GPG key, etc. To install software whose repository is not stored by default in this folder (this could happen when the software provider is a third-party and its software is not registered in the default repositories), users may need to add the repository and GPG key manually. By adding the repository configuration file and importing the GPG key, the user enables DNF to use the new repository to install and update software packages.
-
-Other commonly used commands include
-\begin{itemize}
-	\item \verb|dnf list --installed [<package>, ...]|: list installed packages
-	\item \verb|dnf list --available [<package>, ...]|: list available packages
-	\item \verb|dnf list --upgrades [<package>, ...]|: list upgrades available for the installed packages
-	\item \verb|dnf list --autoremove|: list dependencies not used by any software
-	\item \verb|dnf -q|: query repository for information; this is a powerful and rich command whose details are too many to be covered here
-	\item \verb|dnf deplist <package>|: query dependencies of a package
-	\item \verb|dnf history|: check historical transactions
-	\item \verb|dnf clean all|: clean all the files from cache
-\end{itemize}
 
 A full list of \verb|dnf| commands and their explanations can be found elsewhere at \cite{redhat2024dnf}.
 
@@ -155,7 +170,7 @@ Different Linux distributions, though essentially using the same OS kernel, may 
 
 Notice that RHEL kernel is a modified version of the upstream Linux kernel by Red Hat engineers. Therefore, it may differ from kernels used in other Linux distributions.
 
-Package \verb|kernel*| such as \verb|kernel-core| are the main package of Linux kernel. Just like other packages, \verb|dnf| can be used to query and update that package. It is also possible to install multiple kernels with different versions on the same physical machine, in which case there will be a boot entry for each kernel and the user can select which kernel to boot upon restarting the system.
+Package \verb|kernel*| such as \verb|kernel-core| are the main package of Linux kernel. Package manager \verb|dnf| can be used to query and update these packages. It is possible to install multiple kernels with different versions on the same physical machine, in which case there will be a boot entry for each kernel and the user can select which kernel to boot upon restarting the system.
 
 To query, install and update the kernel, use
 \begin{lstlisting}
@@ -165,9 +180,7 @@ $ sudo dnf update kernel
 \end{lstlisting}
 respectively.
 
-Kernel modules are scripts used to extend OS functionality. The user can develop and deploy their own modules to customize the OS.
-
-To list existing modules and to query information of these modules, with \verb|kmod| installed, use
+Kernel modules are scripts used to extend OS functionality. The user can develop and deploy their own modules to customize the OS. To list existing modules and to query information of these modules, with \verb|kmod| installed, use
 \begin{lstlisting}
 $ lsmod
 $ modinfo <module name>
@@ -186,7 +199,7 @@ For example,
 \begin{lstlisting}
 $ sysctl -a
 \end{lstlisting}
-displays all kernel parameters values.
+lists all kernel parameters values.
 
 
 

@@ -1,6 +1,6 @@
 \chapter{Git} \label{ch:git}
 
-Git is a distributed version control system for tracking changes during the software development, and it can be used on multiple platforms including Windows, Unix/Linux and macOS. This chapter introduces the basic use of Git on a local Linux machine and with a remote repository host server such as GitHub. 
+Git is a distributed version control system for tracking changes during the software development, and it can be across different platforms including Windows, Unix/Linux and macOS. This chapter introduces the basic use of Git on a local Linux machine and with a remote repository host server such as GitHub. 
 
 Git-based version control is widely used in association with \myabb{Continuous Integration and Continuous Deployment}{CI/CD}. CI/CD is an important concept in nowadays software development and deployment. GitHub Actions is GitHub's CI/CD solution and it is also briefly introduced.
 
@@ -10,18 +10,19 @@ Git-based version control is widely used in association with \myabb{Continuous I
 
 Git introduces \mync{Git repository}, which can be interpreted as the ``ecosystem'' Git uses to manage a project. This refers to the \verb|.git| file associated with each Git-managed project, using which Git traces the development of the project. 
 
-With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and they can synchronize with centralized remote servers. It introduces \mync{branch} to manage the concurrent development of different features of the project, where the main branch (also known as the master branch) is the stable and shared repository among everyone, and the feature branches are copies of the main branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the main branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}.
+With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and they can synchronize with centralized remote servers. It introduces \mync{branch} to manage the concurrent development of different features of the project, where the main branch (also known as the master branch) is the stable and shared repository among everyone, and the feature branches are copies of the main branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the main branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}. Notice that a feature branch can be based on both main and feature branches.
+
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=350pt]{chapters/part-3/figures/gitflow.png}
 	\caption{Git for software development management.} \label{ch:sma:fig:gitflow}
 \end{figure}
 
-It is possible that multiple branches work on relevant parts in a project and cause conflicts. When merging branches, the system must be tested and the conflicts must be resolved.
+It is possible that multiple branches work on the same parts in a project and cause conflicts. When merging branches, the system must be tested and the conflicts must be resolved.
 
 CLI is often used to manage a Git repository. Some commonly used commands are shown in Fig. \ref{ch:sma:fig:gitflow} with more to be introduced later. Notice that a graphical user interface is also available. However, in the scope of this notebook, command line is mostly used.
 
-\section{Basic Setup}
+\section{Global and Repository Configurations}
 
 Git and its relevant documents can be obtained from its official website \cite{git2025}. In many Linux distributions, Git is pre-installed. If Git is missing, follow the instructions on the official website to install it. The installation procedure may differ with different Linux distributions.
 
@@ -32,11 +33,11 @@ $ sudo dnf install git-all
 
 Upon successful installation, it is recommended to use \verb|git config| for the necessary basic configurations such as the username and user email. Without these configurations, Git cannot run normally.
 
-Notice that there are two types of configurations, namely the global configurations which apply to the machine and the user, and the repository configurations which apply to a particular Git repository. By default, the global level configurations are stored under \verb|~/.gitconfig| and the repository configurations \verb|./.git/config| of the repository, respectively. It is recommended to use Git CLI to setup the configurations, rather than modifying the files directly.
+Notice that there are two types of configurations, namely the global configurations which apply to the machine and the user, and the repository configurations which apply to a particular Git repository. By default, the global level configurations are stored under \verb|~/.gitconfig| and the repository configurations \verb|./.git/config| of the repository, respectively. It is recommended to use Git CLI to setup these configurations rather than modifying the two files directly.
 
-To add user name and email to the global configuration, use
+To add username and email to the global configuration, use
 \begin{lstlisting}
-$ git config --global user.name '<user name>'
+$ git config --global user.name '<username>'
 $ git config --global user.email '<user email>'
 \end{lstlisting}
 To retrieve the global configuration, use
@@ -51,7 +52,7 @@ For example,
 \begin{lstlisting}
 $ git config --global --unset user.name
 \end{lstlisting}
-removes the user name.
+removes the username.
 
 More details about \verb|git config| can be found at \cite{git2025reference}.
 
@@ -59,15 +60,15 @@ More details about \verb|git config| can be found at \cite{git2025reference}.
 
 Git CLI can manage both local and remote repositories, and can synchronize them bidirectionally. This section studies local repository management.
 
-\subsection{Initialization of a Repository}
+\subsection{Repository Initialization}
 
 Navigate to the project directory. Use the following command to create a new Git repository for the project.
 \begin{lstlisting}
 $ git init
 \end{lstlisting}
-When the above command is applied, Git creates \verb|.git| directory in the working directory. From this point onward, Git monitors everything that happens inside this directory and its sub-directories and tries to track any change to the files, unless otherwise configured specifically. Many Git commands such as \verb|git status| become available. More details are introduced in the remainder of the section.
+When the above command is used, Git creates \verb|.git| directory in the working directory. From this point onward, Git monitors everything that happens inside this directory and its sub-directories and tries to track any change to the files, unless otherwise configured specifically. Many Git commands such as \verb|git status| become available. More details are introduced in the remainder of the section.
 
-\subsection{Version Tracking}
+\subsection{Stage and Commit}
 
 For simplicity, assume that there is only one branch in the repository, namely the main branch. Notice that when there are multiple branches, the version-tracking works the same for each and every branch in a separate and independent manner. The mechanism behind version tracking is briefly introduced as follows.
 
@@ -116,7 +117,7 @@ Untracked files:
 \end{lstlisting}
 where \verb|ch.tex| is a modified (staged) item; \verb|ap.tex| and \verb|main.pdf| modified (unstaged) items, and \verb|figures/| an untracked item. Notice that unmodified files are not shown.
 
-It takes a two-step procedure to back up the project in the Git repository. In the first step, the user flags the changed items (either newly added, renamed, or modified) to be backed up in the next version. In the second step, the user actually backs up the items. The first and second steps are called ``stage'' and ``commit'' respectively. Notice that it is possible to run a single line of command to execute both steps, but logically it still takes two steps.
+It takes a two-step procedure to back up the project in the Git repository. In the first step, the user flags the changed items (either newly added, renamed, or modified) to be backed up in the next version. In the second step, the user actually backs up the items. The first and second steps are called \mync{stage} and \mync{commit} respectively. Notice that it is possible to run a single line of command to execute both steps, but logically it still takes two steps.
 
 Git tracks the name and content of the items that the user has staged in the ``staging area'' as shown in Fig. \ref{ch:sma:fig:gitbasics}. Think of staging items as taking a snapshot of the items. However, the snapshot at this stage is temporary and has not been backed up in the repository yet. The actual backup happens later when the staged items are committed. To stage an item, use
 \begin{lstlisting}
@@ -153,7 +154,9 @@ On branch master
 nothing to commit, working tree clean
 \end{lstlisting}
 
-To check the commit logs, i.e., all historical commits including their associated timestamps, authors, commit IDs and comment messages, use \verb|git log| as shown in the example below. Notice that the commit logs can be very long. Only a few commits are given for illustration purpose.
+\subsection{Reset and Revert}
+
+To check the commit logs, including all historical commits and their details, use \verb|git log| as shown in the example below. Notice that the commit logs can be very long. Only a few commits are given for illustration purpose.
 \begin{lstlisting}
 $ git log
 commit e3475e673d8c2a087de6b4423188c51e80af3e5d (HEAD -> master)
@@ -196,7 +199,7 @@ The options \verb|--hard|, \verb|--mixed| and \verb|--soft| work differently. Al
 
 Notice that \verb|git reset| may pose an issue if the commits to be erased have already spread to the upstreams. This is because the erased commits in the local repository by \verb|git reset| will be reverted back the next time the local repository synchronizes with its upstream, where the commits in the upstream will be considered more up to date, hence pulled to the local repository.
 
-In such cases, consider using \verb|git revert| instead. Syntax wise they work similarly. Instead of erase the history, \verb|git revert| creates a new commit whose content is copied and pasted from a past commit.
+In such cases, consider using \verb|git revert| instead. Syntax wise they work similarly. Instead of erase the history, \verb|git revert| creates a new commit whose content is copied and pasted from a past commit, hence not causing the timestamp collision.
 
 \subsection{Branch Management}
 
@@ -228,7 +231,7 @@ To switch to a different working branch, use \verb|git checkout| or \verb|git sw
 $ git checkout <branch name>
 $ git switch <branch name>
 \end{lstlisting}
-Notice that when there are uncommitted changes in the current branch, Git may forbid the user to switch to another branch (the rules are too complicated to be explained here). Therefore, it is recommended to commit the changes before switching to a different branch. When switching to another branch, the workspace will change accordingly to the target branch.
+Notice that when there are uncommitted changes in the current branch, Git may prevent the user from switching to another branch (the rules are too complicated to be explained here). Therefore, it is recommended to commit the changes before switching to a different branch. When switching to another branch, the workspace will change accordingly.
 
 To merge a branch back to the current branch, use
 \begin{lstlisting}
@@ -238,7 +241,7 @@ and fill in the comments accordingly. A use case of the command is to merge the 
 \begin{lstlisting}
 $ git merge <feature branch name>
 \end{lstlisting}
-By default, Git automatically deletes the merged branch. This behavior can be changed in the configuration. More about pull request are introduced in Section \ref{sec:pull_request}.
+Git may automatically delete the merged branch. This behavior can be changed in the configuration. More about pull request are introduced in Section \ref{sec:pull_request}.
 
 An alternative way of integrating two branches is \verb|git rebase|, which ``rewires'' the two branches into a linear single branch. Use \verb|git rebase| as follows.
 \begin{lstlisting}

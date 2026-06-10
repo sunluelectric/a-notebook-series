@@ -1,12 +1,14 @@
 \chapter{User Management} \label{ch:usermanagement}
 
-This chapter discusses user account management such as assigning roles and enabling access to resources.
+This chapter discusses user account management such as creating a user and assigning roles and enabling access to resources for them.
 
 \section{Root User Management}
 
-Managing and protecting the root user account is a key portion in Linux administration. It is worth mentioning that the root user is different from a sudoer, i.e., a user that can use \verb|sudo| command, although they both have elevated privileges when it comes to system administration. A more detailed explanation is given below.
+Managing and protecting the root user account is a big part in Linux administration. 
 
-The root user is created during the installation of the OS. Its username is by default ``root'', with a UID of 0, and a GID of 0. Its home directory is by default \verb|/root| instead of \verb|/home/<user name>|. The default prompt for the root user is often \verb|#| instead of \verb|$|, the latter of which is used by regular users. The root user has administrative privileges and can do almost everything without being denied or questioned by the system. 
+It is worth mentioning that the root user is different from a sudoer, i.e., a user that can use \verb|sudo| command, although they both have elevated privileges when it comes to system administration. A more detailed explanation is given below.
+
+The root user is created during the installation of the OS. Its username is by default ``root'', with a UID of 0, and a GID of 0. Its home directory is by default \verb|/root| instead of \verb|/home/<user name>|. The default prompt for the root user is often \verb|#| instead of \verb|$|, the latter of which is used by regular users including sudoers. The root user has administrative privileges and can do almost everything without being denied or questioned by the system. 
 
 As a widely appreciated safety practice, the password for the root user is usually disabled. Therefore, nobody can login to the system as the root user using username and password authentication. In the case when administrative tasks need to be performed by the root user account, a sudoer may be able to temporarily switch to the root user using \verb|sudo su|.
 
@@ -19,17 +21,17 @@ root:x:0:0:root:/root:/bin/bash
 \end{lstlisting}
 File \verb|/etc/passwd| contains basic user information of all user accounts including the root user. There are 7 columns in the file separated by \verb|:|. Detailed explanations to these columns are given in Table. \ref{tab:etcpasswd}.
 \begin{table}[!htb]
-  \centering \caption{The columns in \texttt{/etc/passwd}.}\label{tab:etcpasswd}
+  \centering \caption{The columns in \texttt{/etc/passwd}, using root user an an example.}\label{tab:etcpasswd}
   \begin{tabularx}{\textwidth}{llX}
     \hline
     Index & Name & Comments \\ \hline
-    1 & Username & \\ 
+    1 & Username & The username for the root user is \verb|root|. \\ 
     2 & Password & The \verb|x| signifies that the password stored in the file is encrypted. \\ 
-    3 & UID & \\
-    4 & GID & \\
+    3 & UID & The UID of the root user is 0. \\
+    4 & GID & The GID of the root user is 0. \\
     5 & GECOS & A comment field that stores additional information of the user, such as its full name, address, telephone, etc. \\
-    6 & Home Directory & \\
-    7 & Login Shell & \\
+    6 & Home Directory & The home directory of the root user is \verb|/root|. \\
+    7 & Login Shell & The default shell is located at \verb|/bin/bash|. \\
     \hline
   \end{tabularx}
 \end{table}
@@ -45,7 +47,7 @@ A sudoer refers to regular users who can temporarily elevate their privileges an
 \begin{lstlisting}
 $ sudo <privileged command>
 \end{lstlisting}
-There can be multiple sudoers in the system, each with a different set of allowed privileged commands. A sudoer may be able to switch to the root user temporarily using \verb|sudo su| and quit using \verb|exit|.
+There can be multiple sudoers in the system, each with a different set of allowed privileged commands. Depending on the configuration, a sudoer may be able to switch to the root user temporarily using \verb|sudo su| and quit using \verb|exit|.
 
 The privileges of sudoers come from the fact that they are included in the sudo group. Use \verb|groups| to check existing defined groups in the system, and \verb|groups <user name>| the groups a user is engaged. An example is given below.
 \begin{lstlisting}
@@ -89,7 +91,9 @@ This section discusses remote operations on Linux servers.
 
 \subsection{Remote Control}
 
-\mync{Secure Shell Protocol}[SSH] is a commonly used protocol to remote login to a Linux server. To do so, SSH remote login must be enabled on the server side as a prerequisite. Use
+\mync{Secure Shell Protocol}[SSH] is a commonly used protocol to remote login to a Linux server. To do so, SSH remote login must be enabled on the server side as a prerequisite. 
+
+Use
 \begin{lstlisting}
 ssh <user name>@<server ip / name>
 \end{lstlisting} 

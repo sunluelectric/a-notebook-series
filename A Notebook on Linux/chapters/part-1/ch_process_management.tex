@@ -2,14 +2,17 @@
 %\chapterauthor{Second Author}{Second Author Affiliation}
 \chapter{Process Management} \label{ch:pm}
 
-A process refers to an instance of a computer program that is running in the system. Managing processes is one of the essential tasks of an OS. In a Windows system, the user can use the task manager, a graphical tool, to check and manage all the running processes. In a Linux system, the user can manage processes in the prompt console using bash commands.
+Managing processes is one of the essential tasks of an OS. In a Linux system, the user can manage processes in the prompt console using bash commands. Details are introduced in this chapter.
 
-\section{General Introduction to Process}
+\section{General Introduction to Process and Thread}
 
-A \mync{process}, also known as \mync{task}, represents an instance of a program or an application that is being executed on the machine. The OS manages the applications and their corresponding required resources by managing the processes.
+Process and thread are two fundamental units that the OS can manage to influence the behavior of a running program. Details are introduced as follows.
+
 \subsection{Process}
 
-To improve the efficiency of the system, especially \myabb{Central Processing Unit}{CPU}, the OS allows multiple processes to share the computational capability and memory of the system, each thinking that it is exclusively using all machine resources, as shown in Fig. \ref{ch:pm:fig:processflow}.
+\mync{Process}, also known as \mync{task}, represents an instance of a program or an application that is running on the machine. The OS manages the applications and their corresponding resources by managing the processes.
+
+To improve the efficiency of the system, especially making better use of the \myabb{central processing unit}{CPU}, the OS allows multiple processes to share the computational capability and memory of the system. The intention is to prevent a program from ``locking'' the CPU while it is waiting for I/O (such as reading hard drive, communicating over the internet, waiting for human input from keyboard, printing to screen or printer), which would have otherwise waste the CPU capability. This is demonstrated by Fig. \ref{ch:pm:fig:processflow}.
 
 \begin{figure}[!htb]
 	\centering
@@ -17,7 +20,7 @@ To improve the efficiency of the system, especially \myabb{Central Processing Un
 	\caption{A demonstration of running multiple processes on a single-core CPU.} \label{ch:pm:fig:processflow}
 \end{figure}
 
-The status and context of a process are stored in its \mync{Process Control Block}[PCB]. The PCB is a special data structure used to describe the metadata and the dynamic of a process. The OS manages the PCBs and control the processes accordingly. Some of the attributes of a PCB are summarized in Table \ref{ch:pm:tab:pcbcontent}.
+The status and context of a process are stored in its \mync{process control block}[PCB]. The PCB is a special data structure used to describe the metadata and the dynamic of a process. The OS manages the PCBs and control the processes accordingly. Some of the attributes of a PCB are summarized in Table \ref{ch:pm:tab:pcbcontent}.
 
 \begin{table}[!htb]
 	\centering \caption{Some attributes of a PCB.}\label{ch:pm:tab:pcbcontent}
@@ -33,7 +36,7 @@ The status and context of a process are stored in its \mync{Process Control Bloc
 	\end{tabularx}
 \end{table}
 
-Fig.~\ref{ch:pm:fig:processstatetransfer} shows the possible states that a process might be at. Note the differences between ``blocked'' and ``suspended''. ``Block'' indicates that the process is waiting for other inputs to carry out the remaining part of the program, and ``suspended'' indicates that the process is put on hold for some reasons. When a process is offloaded from the CPU, its context is moved from the CPU registers to the PCB of the process.
+Fig.~\ref{ch:pm:fig:processstatetransfer} shows the possible states that a process might be at. Note the differences between ``blocked'' and ``suspended''. ``Block'' indicates that the process is waiting for others such as additional inputs or another process, while ``suspended'' indicates that the process is put on hold for some reasons. When a process is offloaded from the CPU, its context is moved from the CPU registers to the PCB of the process.
 
 \begin{figure}[!htb]
 	\centering
@@ -43,33 +46,33 @@ Fig.~\ref{ch:pm:fig:processstatetransfer} shows the possible states that a proce
 
 There are different types of processes. For example, based on the source of the processes, there are OS triggered processes and user triggered processes, the first of which usually have a higher priority. Based on the running environment, there are foreground processes and background processes. Based on the resources used, there are CPU processes and I/O processes.
 
-A process usually has a relatively isolated environment, and it does not share memory storage with other processes. Special inter-process communication mechanisms, which are often referred to as ``pipes'', are required for processes to talk to each other. Inter-process communication requires OS level controls.
+A process usually has a relatively isolated environment, and it does not share memory storage with other processes. Special communication mechanisms, which are often referred to as ``pipes'', are required for processes to talk to each other. Cross-process communication requires OS level controls.
 
 \subsection{Thread}
 
-A \mync{thread} is like a work dispatch inside a process. There can be multiple threads in a process, as shown in Fig \ref{ch:pm:fig:threadinprocess}. Each thread has its own CPU register values and stack, but they share the same program, memory and file storage addresses.
+A \mync{thread} is like a work dispatch inside a process. There can be multiple threads in a process, as shown in Fig \ref{ch:pm:fig:threadinprocess}. Each thread has its own CPU register values and stack, and hence is able to run on a CPU core separately. All threads in a process naturally share the same codes, memory and work space.
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=200pt]{chapters/part-1/figures/threadinprocess.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-1/figures/threadinprocess.png}
 	\caption{A demonstration of multiple threads in a process.} \label{ch:pm:fig:threadinprocess}
 \end{figure}
 
 Threads differ from processes in the following aspects:
 \begin{itemize}
   \item A thread is lighter than a process, occupying less resources to create.
-  \item Sharing memories and resources among threads in a process is easier than sharing among processes, because they naturally share address space.
+  \item Sharing memories and resources among threads in a process is easier than sharing across processes because they naturally share address space.
   \item It is easier to enable parallel computation for the threads in the process when it is running on a multi-core CPU.
 \end{itemize}
 
 Notice that for many OS, including Linux, the kernel can provide thread level services.
 
-\section{Process Management in Linux}
+\section{Process Management}
 
 Basic process management commands including monitoring and terminating a process are given. Switching a process between foreground and background is also introduced.
 
 \subsection{Monitor}
 
-Two commands, \verb|ps| and \verb|top|, are widely used in monitoring the running process in the OS. They can be used stand-alone, without additional arguments as follows.
+Two commands, \verb|ps| and \verb|top|, are widely used in monitoring the running process in the OS. They can be used stand-alone without additional arguments as follows.
 \begin{lstlisting}
 $ ps [options]
 \end{lstlisting}
