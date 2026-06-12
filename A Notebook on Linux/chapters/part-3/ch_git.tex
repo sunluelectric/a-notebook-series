@@ -233,6 +233,11 @@ $ git switch <branch name>
 \end{lstlisting}
 Notice that when there are uncommitted changes in the current branch, Git may prevent the user from switching to another branch (the rules are too complicated to be explained here). Therefore, it is recommended to commit the changes before switching to a different branch. When switching to another branch, the workspace will change accordingly.
 
+It is also possible to create and switch to a branch using one command as follows.
+\begin{lstlisting}
+$ git checkout -b <new branch name>
+\end{lstlisting}
+
 To merge a branch back to the current branch, use
 \begin{lstlisting}
 $ git merge <branch name>
@@ -294,15 +299,17 @@ One may argue whether it is a good idea to use \verb|git pull|. Although conveni
 With that being said, if the user simply wants to keep a well-maintained community project up to date, \verb|git pull| should work just alright.
 \end{shortbox}
 
-However, this does not guarantee that the user can perform a \verb|git push| command to push changes made in the local repository back to the remote source. For that, additional authentication is often required. More about \verb|git push| and remote repository authentication methods are introduced in later sections.
+However, this does not guarantee that the user can perform a \verb|git push| command to push changes made in the local repository back to the remote source. For most community projects, only the owner and the selected collaborators can push to the repository, and the user needs to prove that they are one of them. For that, additional authentication is often required. More about \verb|git push| and remote repository authentication methods are introduced in Section \ref{sec:gitpush}.
 
-\subsection{Push: from Local to Remote}
+To contribute to a community project not as the owner of it, following the instructions of the project and use pull request. More about pull request will be introduced in Section \ref{sec:pull_request}.
+
+\subsection{Push: from Local to Remote} \label{sec:gitpush}
 
 Consider a scenario where you have a well-developed local Git repository, and you have just created an empty remote repository on GitHub. The goal is to link the remote repository with the local repository so that changes can be synchronized.
 
 To establish a connection between the local and remote repositories, navigate to the local repository and run
 \begin{lstlisting}
-$ git remote add <remote-name> <remote-repository-URL>
+$ git remote add <remote name> <remote repository URL>
 \end{lstlisting}
 This command registers the remote repository's URL in the local Git configuration. A commonly used remote name is ``origin''.
 
@@ -310,18 +317,18 @@ Note that if the local repository was originally created by cloning an existing 
 
 The next step is to associate the current working branch with a branch in the remote repository. This ensures that git pull and git push operate on the correct branch by default. This can be done as follows.
 \begin{lstlisting}
-$ git branch --set-upstream-to=<remote-name>/<branch-name>
+$ git branch --set-upstream-to=<remote name>/<branch name>
 \end{lstlisting}
 Alternatively, the upstream branch can be set when pushing it for the first time using
 \begin{lstlisting}
-$ git push --set-upstream <remote-name> <branch-name>
+$ git push --set-upstream <remote name> <branch name>
 \end{lstlisting}
 
 Once the upstream is configured, the user can use 
 \begin{lstlisting}
 $ git push
 \end{lstlisting}
-to push the changes in the local remository to the remote upstream. If there is no remote branch with the same branch name as the local repository, a remote branch with that name will be created when the local branch is pushed.
+to push the changes in the local repository to the remote upstream. If there is no remote branch with the same branch name as the local repository, a remote branch with that name will be created when the local branch is pushed.
 
 \begin{shortbox}
 \Boxhead{The Names of Corresponding Local and Remote Branches}
@@ -329,11 +336,11 @@ to push the changes in the local remository to the remote upstream. If there is 
 A local branch and its corresponding remote branch usually have the same name by default, but this is not necessarily always the case. To set an upstream with a different name, use
 \begin{lstlisting}
 $ git branch --set-upstream-to=\
-<remote-name>/<remote-branch-name> <local-branch-name>
+<remote name>/<remote branch name> <local branch name>
 \end{lstlisting}
 or
 \begin{lstlisting}
-$ git push <remote-name> <local-branch-name>:<remote-branch-name>
+$ git push <remote name> <local branch name>:<remote branch name>
 \end{lstlisting}
 
 \end{shortbox}
@@ -345,19 +352,23 @@ When performing \texttt{git push} for the first time, authentication is required
     \item SSH key authentication.
 \end{itemize}
 
-\section{Pull Request} \label{sec:pull_request}
+\section{Collaborative Project Development}
 
 In a collaborative project, the main branch is managed very carefully because everything on that branch will affect the project in the production environment. There is often a group of senior developers maintaining the main branch. Any code to be added to the main branch must be reviewed by one or a few of them.
 
-When a feature branch wants the features developed on that branch to be merged to the main branch, it does not push the changes to the main branch directly. Instead, the owner of the feature branch needs to raise a ``pull request'' from the GitHub dashboard. As its name suggests, it requests the main branch to pull the updates from the feature branch. The main branch maintenance team will then view and check the feature branch, making sure that everything is correct before they approve the merging.
+As a potential contributor, the user cannot directly push to the repository or merge a feature to its main branch. Instead, consider the following approaches.
 
-If the pull request is approved, GitHub will perform the merge in the cloud. Neither the owner of the feature branch nor the maintenance team needs to run the merge manually.
+\subsection{Pull Request} \label{sec:pull_request}
 
-\section{Collaborative Development in Practice}
+Before the introduction of commonly adopted procedures in contributing to a community project, pull request is introduced as follows.
 
-This section introduces the common procedures an individual contributor follows to make improvements to a community project. We assume that an individual contributor has found a community project hosted on GitHub that interests him and believes he can update the code to improve it.
+In a jointly developed project, when a feature branch wants the features developed to be merged to the main branch, it does not push the changes to the main branch directly. Instead, the owner of the feature branch needs to raise a \mync{pull request}. As its name suggests, it requests the main branch to pull the updates from the feature branch. The main branch maintenance team will then view and check the feature branch, making sure that everything is correct before they approve the merging.
 
-The following is a general flow where an individual contributor helps with improving an open-source project.
+If the pull request is approved by the maintenance team of the main branch, GitHub will perform the merge in the cloud.
+
+\subsection{General Work Flow}
+
+Assume that an individual contributor has found a community project hosted on GitHub that interests them. They believe that they can improve it or develop something on top of it. The following is a general work flow of what he can do to submit an improvement.
 \begin{enumerate}
 	\item The contributor forks the project to his own GitHub account.
 	\item The contributor clones a copy of the project from his own GitHub account to his own machine.
@@ -369,11 +380,11 @@ The following is a general flow where an individual contributor helps with impro
 	\item The maintenance team either sends feedback to the contributor for further clarification, or pulls the changes from the developer's forked repository and merge the new feature branch with the existing branches.
 \end{enumerate}
 
-As a first step, the contributor forks the project into his own GitHub account. This creates a copy of the community project under the contributor’s account, giving him full control over the forked repository. He is free to make or test any modifications without affecting the original project.
+As a first step, the contributor forks the project into their own GitHub account. This creates a copy of the community project under the contributor’s account, giving them full control over the forked repository. The contributor is free to make or test any modifications without affecting the original project.
 
 Although a fork is treated as a separate repository in many ways, GitHub tracks the relationship between the fork and the original project. This allows the contributor to later request that his modifications be merged back into the original community repository. Using the fork approach also acknowledges the contributions of the original authors, making it a more respectful and transparent process compared to simply downloading the project and uploading it as a new repository under the contributor's account.
 
-After forking, the contributor can clone the project from his GitHub account to the local computer. He can then modify and test the code locally. Once the changes are made, he can upload the updated code to their forked repository using
+After forking, the contributor can clone the project from his GitHub account to their computer. They can then modify and test the code locally. Once the changes are made, they can upload the updated code to their forked repository using
 \begin{lstlisting}
 $ git push
 \end{lstlisting}
@@ -402,37 +413,31 @@ By following this procedure, the contributor ensures that his work remains align
 
 GitHub has been an amazing platform for managing software projects, especially open-source collaborative projects. In the early days when CI/CD was not enabled in GitHub, developers used third-party CI/CD tools such as Jenkins and Travis CI in conjunction with GitHub for fast and convenient integration and deployment. Lately, GitHub introduced \mync{GitHub Actions}, its own CI/CD solution, as a response to developers' requests.
 
-GitHub Actions is essentially a workflow automation service that allows the user to define a sequence of actions that can be triggered by timers or repository-related events. The workflow can be used for both CI/CD tasks such as code building, testing and deployment, and for managing the repository such as adding labels. Machine-readable instruction files are used to configure the workflow and they are included in the repository and managed together with the source code.
+GitHub Actions is essentially a workflow automation service that allows the user to define a sequence of actions that can be triggered by timers or repository-related events. The workflow can be used for both CI/CD tasks such as code building, testing and deployment, and managing the repository such as adding labels. Machine-readable instruction files are used to configure the workflow and they are included in the repository and managed together with the source code.
 
 This section gives a brief introduction to GitHub Actions. More details are given in \cite{git2025reference}.
 
-\subsection{Workflow Building Blocks}
+\subsection{Building Blocks}
 
-The basic building blocks of GitHub Actions include
-\begin{itemize}
-	\item Workflows
-	\item Jobs
-	\item Steps
-\end{itemize}
-A demonstrative plot is given in Fig. \ref{fig:actions_workflow}.
+The basic building blocks of GitHub Actions include ``workflow'', ``job'' and ``step''. A demonstrative plot is given in Fig. \ref{fig:actions_workflow}.
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=350pt]{chapters/ap/figures/action_framework.png}
+	\includegraphics[width=\textwidth]{chapters/ap/figures/action_framework.png}
 	\caption{A demonstration of GitHub Actions workflow.} \label{fig:actions_workflow}
 \end{figure}
 
-A workflow consists of jobs to be executed when a trigger happens. The jobs are executed in parallel by default (see ``job 1'' and ``job 3'' in Fig. \ref{fig:actions_workflow}), or in sequence when there are dependencies (see ``job 2'' and ``job 4'' in Fig. \ref{fig:actions_workflow}). Each job is executed in a dedicated VM or container known as a ``runner''. The running environment of a runner, such as OS, libraries, environment variables, etc., can be configured separately. In each job multiple steps can be defined. A step often corresponds with an action, such as executing a shell script. The steps in a job are executed in sequence in the configured order. Both steps and jobs can be triggered conditionally. There can be any number (at least 1) of steps in a job, any number (at least 1) of jobs in a workflow, and any number of workflows attached to a branch.
+A workflow consists of jobs to be executed when a trigger happens. The jobs are executed in parallel by default (see ``job 1'' and ``job 3'' in Fig. \ref{fig:actions_workflow}), or in sequence when there are dependencies (see ``job 1'' to ``job 2'', ``job 2'' and ``job 3'' to ``job 4'' in Fig. \ref{fig:actions_workflow}). Each job is executed in a dedicated VM or container known as a ``runner''. The running environment of a runner, such as OS, libraries, environment variables, etc., can be configured separately. In each job multiple steps can be defined. A step often corresponds with one operation, such as executing a shell script. The steps in a job are executed in sequence in the configured order. Both steps and jobs can be triggered conditionally. There can be any number (at least 1) of steps in a job, any number (at least 1) of jobs in a workflow, and any number of workflows attached to a branch.
 
-The user needs to formulate the pipelines to be executed automatically into GitHub Actions workflows.
+The user needs to design the workflows and triggers to be executed automatically with GitHub.
 
 \subsection{Supported Triggers}
 
-It is worth mentioning that GitHub Actions can be triggered not only by repository-related events. Commonly seen triggers include
+GitHub Actions workflow can be triggered by many different types of events. Commonly seen triggers include
 \begin{itemize}
-	\item Repository-related events, such as push, pull request (most commonly seen).
-	\item External events.
-	\item Schedulers or timers.
-	\item The user who triggers the workflow manually.
+	\item Repository-related events, such as git push and pull request
+	\item External events
+	\item Schedulers or timers
+	\item Manual trigger
 \end{itemize}
 
 GitHub Actions provides workflow templates of different task types. There are at least the following workflow types as of this writing. They can be used for but not limited to CI/CD.
