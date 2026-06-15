@@ -76,10 +76,6 @@ Consider the optimization with equality constraint as follows.
 \end{eqnarray}
 where $u\in\mathbb{R}^m$ and $f(u)\in\mathbb{R}^n$, and without losing generality we assume that $n<m$ (otherwise $u$ might be solvable from $f(u)=0$).
 
-\vspace{0.1in}
-\noindent \textbf{Intuitive Explanation}
-\vspace{0.1in}
-
 It is obvious that the solution to \eqref{eq:optimalrobustcs:equalityconsfunc} would not be necessarily at $L_u=0$. As a matter of fact, at any point of $u$ satisfying $f(u)=0$, it is not necessary that $L_u=0$. This is demonstrated by Fig. \ref{fig:optimalrobustcs:opt_equalityconstraint_contour},
 \begin{figure}[!htb]
 	\centering
@@ -113,7 +109,7 @@ Notice that $du$ is a differential of $u$ in the $m$-th order vector space and c
 	L_u^T + \lambda^Tf_u &=& 0 \label{eq:optimalrobustcs:equalitycritical4}
 \end{eqnarray}
 
-In \eqref{eq:optimalrobustcs:equalitycritical4}, $\lambda \in \mathbb{R}^n$ is known as the \mync{Lagrange multipliers}. Equation \eqref{eq:optimalrobustcs:equalitycritical4} contains $m$ equations, and it is a portion of \myabb{Karush–Kuhn–Tucker}{KKT} conditions which will be introduced in more details later.
+In \eqref{eq:optimalrobustcs:equalitycritical4}, $\lambda \in \mathbb{R}^n$ is known as the \mync{Lagrange multipliers}. Equation \eqref{eq:optimalrobustcs:equalitycritical4} contains $m$ equations, and it is a portion of \myabb{Karush–Kuhn–Tucker}{KKT} conditions which will be introduced in more details in Section \ref{sec:optimization-lagraigian-eq-ineq}.
 
 Equation \eqref{eq:optimalrobustcs:equalitycritical4} can also be interpreted graphically as shown in Fig. \ref{fig:optimalrobustcs:opt_equalityconstraint_graphical}. At the critical point denoted by the red dot, moving along $f(u)=0$ should not increase nor decrease $L(u)$. This suggests that $f(u)=0$ shall tangent the contour. Think of $f_u=\nabla f$ and $L_u=\nabla L$ as the gradient of $f(u)$ and $L(u)$ respectively. Since the plots are tangent, the gradient must be parallel, which would suggest something like \eqref{eq:optimalrobustcs:equalitycritical4}.
 \begin{figure}[!htb]
@@ -123,10 +119,6 @@ Equation \eqref{eq:optimalrobustcs:equalitycritical4} can also be interpreted gr
 \end{figure}
 
 Equation \eqref{eq:optimalrobustcs:equalitycritical4} together with \eqref{eq:optimalrobustcs:equalityconstraint} forms the necessary condition for the solution of the optimization problem.
-
-\vspace{0.1in}
-\noindent \textbf{Lagrangian Function}
-\vspace{0.1in}
 
 The necessary condition \eqref{eq:optimalrobustcs:equalityconstraint} and \eqref{eq:optimalrobustcs:equalitycritical4} can also be derived using \mync{Lagrangian function} as follows. Notice that Lagrangian function in some context may also be called \mync{Hamiltonian function}. They are very similar mathematically, and mostly differ in the context of usage.
 \begin{eqnarray}
@@ -182,7 +174,7 @@ which is positive definite as long as $Q$ and $R$ are positive definite. Indeed,
   &=& \dfrac{1}{2}c^T\lambda \nonumber
 \end{eqnarray}
 
-\subsection{Optimization with Equality and Inequality Constraints}
+\subsection{Optimization with Equality and Inequality Constraints} \label{sec:optimization-lagraigian-eq-ineq}
 
 Optimization with inequality constraints is not as widely seen in optimal control as optimization with equality constraint. Nevertheless, it is briefly introduced here. Consider the optimization problem with both equality and inequality constraints as follows.
 \begin{eqnarray}

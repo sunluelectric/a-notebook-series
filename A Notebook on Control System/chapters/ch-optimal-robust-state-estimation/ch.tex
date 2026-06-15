@@ -495,8 +495,10 @@ and its covariance error
 In KF, measurement update is given by \eqref{eq:kga}, \eqref{eq:kfmeasurementxkg} and \eqref{eq:kfmeasurementp3}. The corresponding UKF measurement update is given below. Firstly, consider the calculation of $P_{yy}(k)$ and $P_{xy}(k)$ given by \eqref{eq:kfpyy} and \eqref{eq:kfpxy}. Instead of analytical calculation, they are approximated using sigma points as follows.
 \begin{eqnarray}
 	\hat{y}(k) &=& \sum_{i=0}^{2L-1} w_i^m g_k\left(f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right), \mathcal{X}_i^v\right) \label{eq:ukfyhat} \\
-	P_{yy}(k) &=& \sum_{i=0}^{2L-1} w_i^c \left[g_k\left(f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right), \mathcal{X}_i^v\right) - \hat{y}(k)\right]\left[g_k\left(f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right), \mathcal{X}_i^v\right) - \hat{y}(k)\right]^T \label{eq:ukfpyy} \\
-	P_{xy}(k) &=& \sum_{i=0}^{2L-1} w_i^c \left[\mathcal{X}_i^x -\hat{x}^-(k)\right]\left[g_k\left(f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right), \mathcal{X}_i^v\right) - \hat{y}(k)\right]^T \label{eq:ukfpxy}
+	P_{yy}(k) &=& \sum_{i=0}^{2L-1} w_i^c \left[g_k\left(f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right), \mathcal{X}_i^v\right) - \hat{y}(k)\right] \times \ldots \nonumber \\
+	&& \left[g_k\left(f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right), \mathcal{X}_i^v\right) - \hat{y}(k)\right]^T \label{eq:ukfpyy} \\
+	P_{xy}(k) &=& \sum_{i=0}^{2L-1} w_i^c \left[\mathcal{X}_i^x -\hat{x}^-(k)\right] \times \ldots \nonumber \\
+	&& \left[g_k\left(f_{k-1}\left(\mathcal{X}_i^x, \mathcal{X}_i^w\right), \mathcal{X}_i^v\right) - \hat{y}(k)\right]^T \label{eq:ukfpxy}
 \end{eqnarray}
 Substituting \eqref{eq:ukfpyy} and \eqref{eq:ukfpxy} into \eqref{eq:kga} gives Kalman gain in UKF
 \begin{eqnarray}
@@ -513,19 +515,20 @@ where $\hat{y}(k)$ and $P_{yy}$ are from \eqref{eq:ukfyhat} and \eqref{eq:ukfpyy
 A flowchart for UKF is given below. Notice that $\hat{x}(0)$, $P(0)$ in the flowchart represent the initial guess of the state and the initial guess error covariance. They are the priori knowledge of the state without any measurement.
 
 \begin{tikzpicture}[node distance=0.6in]
+	
 	\node (start) [startstop] {Start};
 	\node (pro0) [process, below of=start] {Let $k=1$};
 	\node (pro1) [process, below of=pro0] {Update process and measurement models \eqref{eq:ukfprocess} and \eqref{eq:ukfmeasurement}};
 	\node (pro1b) [process, below of=pro1] {Retrieve $\hat{x}(k-1)$, $P(k-1)$};
 	\node (pro2) [process, below of=pro1b] {Augment state and covariance using \eqref{eq:ukfstateaugment} and \eqref{eq:ukfcovaugment}};
 	\node (pro3) [process, below of=pro2] {Calculate sigma points and weights using \eqref{eq:ukfsigmapoint1}, \eqref{eq:ukfsigmapoint2}, \eqref{eq:utwm0}, \eqref{eq:utwc0} and \eqref{eq:utwmc}};
-	\node (pro4) [process, below of=pro3] {Perform time update: calculate $\hat{x}^-(k)$ and $P^-(k)$ using \eqref{eq:ukftimex} and \eqref{eq:ukftimep}};
+	\node (pro4) [process, below of=pro3] {Calculate $\hat{x}^-(k)$ and $P^-(k)$ using \eqref{eq:ukftimex} and \eqref{eq:ukftimep}};
 	\node (in1) [io, below of=pro4] {Receive $y(k)$};
-	\node (pro5) [process, below of=in1] {Perform measurement update (a): calculate Kalman gain using \eqref{eq:ukfyhat}, \eqref{eq:ukfpyy}, \eqref{eq:ukfpxy} and \eqref{eq:ukfkg}};
-	\node (pro6) [process, below of=pro5] {Perform measurement update (b): calculate $\hat{x}(k)$ and $P(k)$ using \eqref{eq:ukfmeasurementx} and \eqref{eq:ukfmeasurementp}};
+	\node (pro5) [process, below of=in1] {Calculate Kalman gain using \eqref{eq:ukfyhat}, \eqref{eq:ukfpyy}, \eqref{eq:ukfpxy} and \eqref{eq:ukfkg}};
+	\node (pro6) [process, below of=pro5] {Calculate $\hat{x}(k)$ and $P(k)$ using \eqref{eq:ukfmeasurementx} and \eqref{eq:ukfmeasurementp}};
 	\node (out1) [io, below of=pro6] {Output $\hat{x}(k)$};
 	\node (dec1) [decision, below of=out1, yshift=0in] {End?};
-	\node (pro2b) [process, right of=dec1, xshift=2.5in] {Update timestamp $k \leftarrow k + 1$};
+	\node (pro2b) [process, right of=dec1, xshift=2.5in] {$k \leftarrow k + 1$};
 	\node (stop) [startstop, below of=dec1] {Stop};
 	
 	\draw [arrow] (start) -- (pro0);
