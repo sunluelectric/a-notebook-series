@@ -152,8 +152,8 @@ An example of creating a collection inside a database is given below.
 \end{lstlisting}
 Use \verb|show collections| to show the collections in the current database.
 
-\begin{shortbox}
-\Boxhead{Should I use a semicolon in the end of each MongoDB command?}
+\begin{mdframed}
+\noindent \textbf{Should I use a semicolon in the end of each MongoDB command?}
 
 You don't have to. It works both ways. However, if you are using JavaScript environment such as \textit{Node.js} and integrating MongoDB commands as part of the program, it is recommended to do so. An example is given below.
 
@@ -174,7 +174,7 @@ const newDb = client.db("myNewDatabase");
 the semicolon is highly recommended by JavaScript. Although in JavaScript semicolon has become optional due to \myabb{Automatic Semicolon Insertion}{ASI}, it is still widely recommended to use semicolon anyway.
 
 As a conclusion, semicolon is recommended mostly, just to follow the general JavaScript good practice. 
-\end{shortbox}
+\end{mdframed}
 
 Data can be inserted into a collection in the form of documents. It is possible to insert one or multiple documents at a time. To insert documents, first prepare the document in JSON-like format. For example, consider the following documents.
 \begin{lstlisting}

@@ -18,30 +18,30 @@ The similarities and differences of personal PCs, VMs, and container application
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=350pt]{chapters/part-3/figures/pcvmcontainerstructure.png}
+	\includegraphics[width=0.8\textwidth]{chapters/part-3/figures/pcvmcontainerstructure.png}
 	\caption{System architectures of PC, VM and container.} \label{ch:vac:fig:pcvmcontainersructure}
 \end{figure}
 
 As an analogy, think of running an APP as cooking a dish. The hardware corresponds with the physical resources in the kitchen such as the cooktop and gas. The OS corresponds with the cook. The OS requires drivers and libraries to run the APP correctly. The drivers and libraries correspond with the specific skills or cookers for the dish. Finally, the APP corresponds with the expected dish.
 
 In the most simple configuration, a dedicated machine is used to run an APP. This is like constructing a dedicated kitchen and hiring a dedicated cook for each dish. The cook is trained to master all necessary skills required for that specific dish. This is shown in Fig. \ref{ch:vac:fig:acookinakitchen}.
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=300pt]{chapters/part-3/figures/acookinakitchen.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-3/figures/acookinakitchen.png}
 	\caption{PC implementation: a cook in a kitchen.} \label{ch:vac:fig:acookinakitchen}
 \end{figure}
 
 In a VM implementation, a large and capable kitchen is setup in advance as shown in Fig. \ref{ch:vac:fig:manycooksinakitchen}. For each dish, a cook is hired. Each cook is trained with the skills necessary for his assigned dish. All cooks share the same kitchen. This implementation is more efficient than Fig. \ref{ch:vac:fig:acookinakitchen}, as there is no need to scale up the kitchen for a new dish. By sharing the resources among the cooks, the kitchen can be utilized more efficiently.
-\begin{figure}[htbp]
-	\centering \includegraphics[width=350pt]{chapters/part-3/figures/manycooksinakitchen.png}
+\begin{figure}[!htb]
+	\centering \includegraphics[width=0.8\textwidth]{chapters/part-3/figures/manycooksinakitchen.png}
 	\caption{VM implementation: many cooks in a kitchen, each with a different cookbook.} \label{ch:vac:fig:manycooksinakitchen}
 \end{figure}
 
 While Fig. \ref{ch:vac:fig:manycooksinakitchen} might be a popular practice in many restaurants, it is still too costly to hire a new cook for each dish. In a containerization implementation, a cook usually handles a category of dishes, as shown in Fig. \ref{ch:vac:fig:multitaskcook}. Of course, each dish will stay in its own fry-pan in an isolated way. For each dish, its recipe is provided that gives all information required to prepare the dish consistently. As long as the cook is good at multi-tasking and has the basic skill sets for general dishes, Fig. \ref{ch:vac:fig:multitaskcook} is usually a more efficient implementation than Figs. \ref{ch:vac:fig:acookinakitchen} and \ref{ch:vac:fig:manycooksinakitchen}.
 
-\begin{figure}[htbp]
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=350pt]{chapters/part-3/figures/multitaskcook.png}
+	\includegraphics[width=0.8\textwidth]{chapters/part-3/figures/multitaskcook.png}
 	\caption{Container implementation: one cook in a kitchen, handling multiple dishes, each has a cookbook and stays in its own pan.} \label{ch:vac:fig:multitaskcook}
 \end{figure}
 
