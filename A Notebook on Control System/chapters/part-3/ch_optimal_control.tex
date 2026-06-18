@@ -1,4 +1,4 @@
-\chapter{Optimal and Robust Control System} \label{ch:optimalrobustcs}
+\chapter{Optimal Control System} \label{ch:optimalrobustcs}
 
 In a typical optimal control problem, a cost function positively correlated with regulation error, control signal energy, etc., is defined. Such control that minimizes the cost function is calculated. In a typical robust control problem, stochastic disturbance is introduced into the model, and such control signal that minimizes the average or worst effect of the disturbance is calculated. More details are introduced in this chapter.
 
@@ -79,7 +79,7 @@ where $u\in\mathbb{R}^m$ and $f(u)\in\mathbb{R}^n$, and without losing generalit
 It is obvious that the solution to \eqref{eq:optimalrobustcs:equalityconsfunc} would not be necessarily at $L_u=0$. As a matter of fact, at any point of $u$ satisfying $f(u)=0$, it is not necessary that $L_u=0$. This is demonstrated by Fig. \ref{fig:optimalrobustcs:opt_equalityconstraint_contour},
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=300pt]{chapters/ch-optimal-robust-control-system/figures/opt_equalityconstraint_contour.eps}
+	\includegraphics[width=300pt]{chapters/part-3/figures/opt_equalityconstraint_contour.eps}
 	\caption{Static optimization with equality constraint demonstration.} \label{fig:optimalrobustcs:opt_equalityconstraint_contour}
 \end{figure}
 where $L(u)$ is given by the contour (assuming $u\in\mathbb{R}^2$ in this demonstration), and $f(u)=0$ the red solid line.
@@ -114,7 +114,7 @@ In \eqref{eq:optimalrobustcs:equalitycritical4}, $\lambda \in \mathbb{R}^n$ is k
 Equation \eqref{eq:optimalrobustcs:equalitycritical4} can also be interpreted graphically as shown in Fig. \ref{fig:optimalrobustcs:opt_equalityconstraint_graphical}. At the critical point denoted by the red dot, moving along $f(u)=0$ should not increase nor decrease $L(u)$. This suggests that $f(u)=0$ shall tangent the contour. Think of $f_u=\nabla f$ and $L_u=\nabla L$ as the gradient of $f(u)$ and $L(u)$ respectively. Since the plots are tangent, the gradient must be parallel, which would suggest something like \eqref{eq:optimalrobustcs:equalitycritical4}.
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=300pt]{chapters/ch-optimal-robust-control-system/figures/opt_equalityconstraint_graphical.png}
+	\includegraphics[width=300pt]{chapters/part-3/figures/opt_equalityconstraint_graphical.png}
 	\caption{Graphical explanation to \eqref{eq:optimalrobustcs:equalitycritical4}.} \label{fig:optimalrobustcs:opt_equalityconstraint_graphical}
 \end{figure}
 
@@ -427,33 +427,19 @@ With the obtained constant $S=S(\infty)$, Kalman gain in \eqref{eq:optimalrobust
 \end{eqnarray}
 which is time-invariant. This produces a suboptimal solution but with a constant Kalman gain that is easier for implementation.
 
-\section{LQR Properties}
+\section{Linear Quadratic Regulator Extensions}
+
+TBA
+
+\subsection{Safety Margin}
 
 The problem formulation and the solution of LQR have been introduced in earlier sections. The properties, extensions, practical implementations, etc., have not yet been covered. In this section and the few sections following, these more advanced topics are discussed.
 
 In this section, we will start with the discussion of LQR properties, such as its robustness.
 
-\section{LQR for Tracking Problem}
+\subsection{Tracking Problem}
 
 LQR by itself is a regulator that regulates the state vector $x$ to a constant value $r$, and at the same time balancing the control signal energy. LQR can also be used in tracking, in which case the reference signal is no longer a constant, but time-variant. Tracking is an important extension of LQR.
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Other LQR Extensions}
 
 
 

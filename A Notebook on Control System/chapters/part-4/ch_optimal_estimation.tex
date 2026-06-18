@@ -1,9 +1,8 @@
-\chapter{Optimal and Robust State Estimation} \label{ch:orse}
+\chapter{Optimal State Estimation} \label{ch:orse}
 
 Optimal and robust estimation methods are introduced in this chapter, many of which Kalman filter and its variations.
 
 \section{Weighted Least Squares Estimation}
-
 
 Consider the following system with only a linear measurement model
 \begin{eqnarray}
@@ -245,7 +244,7 @@ Though being efficient, KF has at least the following limitations.
 	\item For optimal performance, process and measurement noise $w(k)$, $v(k)$ in \eqref{eq:kfprocess} and \eqref{eq:kfmeasurementp} must follow Gaussian distribution with known scale parameters. 
 \end{enumerate}
 
-UKF was proposed to address item 1 in the above list. Notice that UKF still assumes Gaussian distributed process and measurement noise, and it is not robust to outliers. It does not look into item 2. More about this limitation is discussed in Section \ref{sec:limitation}.
+UKF was proposed to address item 1 in the above list. Notice that UKF still assumes Gaussian distributed process and measurement noise, and it is not robust to outliers.
 
 Consider non-linear system
 \begin{eqnarray}
