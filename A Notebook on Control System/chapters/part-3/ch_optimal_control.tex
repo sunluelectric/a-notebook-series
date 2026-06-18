@@ -1,34 +1,35 @@
 \chapter{Optimal Control System} \label{ch:optimalrobustcs}
 
-In a typical optimal control problem, a cost function positively correlated with regulation error, control signal energy, etc., is defined. Such control that minimizes the cost function is calculated. In a typical robust control problem, stochastic disturbance is introduced into the model, and such control signal that minimizes the average or worst effect of the disturbance is calculated. More details are introduced in this chapter.
+In a typical optimal control problem formulation, a cost function positively correlated with regulation error, control signal energy, etc., is defined. Such control that minimizes the cost function is calculated. The key to the optimal control is to formulate the problem appropriately and to find the correct mathematical tools to solve the problem. 
 
-The key to optimal and robust control is to solve the optimization problem using variety of mathematical tools.
+More details are introduced in this chapter.
 
 \section{Static Optimization} \label{sec:optimalrobustcs:static}
 
-Assume static model where the cost function $L(u)$ (or $L$ for simplicity) is a function of $u$ alone. The objective is to find the signal $u$ that minimizes $L$. Notice that $u\in\mathbb{R}^m$ is a vector and $L\in\mathbb{R}$ is a scalar.
+Assume static model where the cost function $L(u)$ (or $L$ for simplicity) is a function of $u$ and does not change over time. There may or may not be additional constraints on $u$. If there are constraints, the constraints do not change over time either. The objective is to find the signal $u$ that minimizes $L$. 
+
+Notice that $u\in\mathbb{R}^m$ is a vector containing $m$ independent variables, and $L\in\mathbb{R}$ is a scalar. It is assumed that $L$ is smooth, and it has derivatives of all orders on $u$.
 
 \subsection{Optimization without Constraint}
 
-Using Taylor series expansion, the increment of $L$ can be formulated as follows.
+Consider minimizing $L$ without additional constraints on $u$. Using Taylor series expansion, the increment of $L$ can be formulated as follows.
 \begin{eqnarray}
 	dL &=& L_u^Tdu + \dfrac{1}{2}du^TL_{uu}du + \ldots \nonumber
 \end{eqnarray}
 where
 \begin{eqnarray}
-	L_u &=& \dfrac{\partial L}{\partial u} \in \mathbb{R}^m \label{eq:lu} \\
-	L_{uu} &=& \dfrac{\partial^2 L}{\partial u^2} \in \mathbb{R}^{m\times m} \nonumber
+	L_u &=& \dfrac{d L}{d u} \in \mathbb{R}^m \label{eq:lu} \\
+	L_{uu} &=& \dfrac{d^2 L}{d u^2} \in \mathbb{R}^{m\times m} \nonumber
 \end{eqnarray}
-about a particular choice of $u$. A (local) minimum of $L$ is achieved under the following conditions
+about a particular choice of $u$. A local minimum of $L$ is achieved under the following necessary condition
 \begin{eqnarray}
-	L_u &=& 0 \nonumber \\
-	dL &\geq& 0 \label{eq:optimalrobustcs:dlispositive}
+	L_u &=& 0 \nonumber
 \end{eqnarray}
-which indicates that $u$ is a \mync{critical point} (also known as \mync{stationary point}) and $L$ increases in the neighbor of $u$. Equation \eqref{eq:optimalrobustcs:dlispositive} is equivalent to
+in which case $u$ is called a \mync{critical point}, also known as \mync{stationary point}. Furthermore, for $u$ to be a minimum, $dL$ should stay positive in the neighbor of $u$. A necessary condition for that could be that $L_{uu}$ is positive definite, i.e.,
 \begin{eqnarray}
 	L_{uu} &>& 0 \nonumber
 \end{eqnarray}
-a positive definite matrix.
+
 
 Consider the following example.
 \begin{shortbox}
@@ -70,21 +71,25 @@ Whether this critical point is a maximum, minimum, or other cases depends on $L_
 \subsection{Optimization with Equality Constraint}
 
 Consider the optimization with equality constraint as follows.
+\begin{subequations}\label{eq:optimization-equality-constraint}
 \begin{eqnarray}
 	\textup{minimize} && L(u) \label{eq:optimalrobustcs:equalityconsfunc} \\
 	\textup{s.t.} && f(u) = 0 \label{eq:optimalrobustcs:equalityconstraint}
 \end{eqnarray}
-where $u\in\mathbb{R}^m$ and $f(u)\in\mathbb{R}^n$, and without losing generality we assume that $n<m$ (otherwise $u$ might be solvable from $f(u)=0$).
+\end{subequations}
+where $u\in\mathbb{R}^m$ and $f(u)\in\mathbb{R}^n$ (or $f$ for simplicity), and without losing generality we assume that $n<m$ (otherwise $u$ might be solvable from $f=0$).
 
-It is obvious that the solution to \eqref{eq:optimalrobustcs:equalityconsfunc} would not be necessarily at $L_u=0$. As a matter of fact, at any point of $u$ satisfying $f(u)=0$, it is not necessary that $L_u=0$. This is demonstrated by Fig. \ref{fig:optimalrobustcs:opt_equalityconstraint_contour},
+It is obvious that the solution to \eqref{eq:optimalrobustcs:equalityconsfunc} would not be necessarily at $L_u=0$. As a matter of fact, at any point of $u$ satisfying $f=0$, it is not necessary that $L_u=0$. This is demonstrated by Fig. \ref{fig:optimalrobustcs:opt_equalityconstraint_contour},
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=300pt]{chapters/part-3/figures/opt_equalityconstraint_contour.eps}
+	\includegraphics[width=0.6\textwidth]{chapters/part-3/figures/opt_equalityconstraint_contour.eps}
 	\caption{Static optimization with equality constraint demonstration.} \label{fig:optimalrobustcs:opt_equalityconstraint_contour}
 \end{figure}
-where $L(u)$ is given by the contour (assuming $u\in\mathbb{R}^2$ in this demonstration), and $f(u)=0$ the red solid line.
+where $L$ is given by the contour (assuming $u\in\mathbb{R}^2$ in this demonstration plot), and $f=0$ the red solid line.
 
-A necessary condition of the critical point of \eqref{eq:optimalrobustcs:equalityconsfunc} subject to \eqref{eq:optimalrobustcs:equalityconstraint} can be interpreted as follows. Let $du$ be a differential of the control $u$ with $f(u) = 0$ from \eqref{eq:optimalrobustcs:equalityconstraint} already verified. This alone, of course, does not make $u$ a critical point. Let $L_u$ and $f_u$ be the derivative of $L$ and $f$ about $u$ respectively. We have seen that $L_u$ and $dL = L_udu$ are not necessarily zero in general. However, for specific $du$ where $df = f_ud_u = 0$, $dL = L_udu = 0$ should hold true. This is expressed by
+A necessary condition of the critical point of \eqref{eq:optimalrobustcs:equalityconsfunc} subject to \eqref{eq:optimalrobustcs:equalityconstraint} can be interpreted as follows. 
+
+Let $du$ be a differential about $u$ where $f = 0$. Let $L_u$ be given by \eqref{eq:lu} and $f_u = \frac{df}{du}$ the Jacobian matrix. While $dL = L_u^Tdu \neq 0$ in general, when $du$ moves along $f=0$, i.e., when $df = f_ud_u = 0$, $dL = L_u^Tdu = 0$ should hold true. This is expressed by
 \begin{subequations} \label{eq:equalitycritical}
 \begin{eqnarray}
 	&& L_u^Tdu = 0 \label{eq:optimalrobustcs:equalitycritical1} \\
@@ -98,7 +103,7 @@ where notice the following
 	\item Equation \eqref{eq:optimalrobustcs:equalitycritical2} contains $n$ equations, and \eqref{eq:optimalrobustcs:equalitycritical1} holds true only when all $n$ equations are satisfied.
 \end{itemize}
 
-A necessary condition for \eqref{eq:equalitycritical} can be given as follows. There must be such $\lambda \in \mathbb{R}^n$ with $n$ degrees of freedom that
+A necessary condition for \eqref{eq:equalitycritical} is given as follows. There must be such $\lambda \in \mathbb{R}^n$ with $n$ degrees of freedom that
 \begin{eqnarray}
 	L_u^Tdu + \lambda^T f_udu &=& 0 \label{eq:equalitycritical3}
 \end{eqnarray}
@@ -111,16 +116,17 @@ Notice that $du$ is a differential of $u$ in the $m$-th order vector space and c
 
 In \eqref{eq:optimalrobustcs:equalitycritical4}, $\lambda \in \mathbb{R}^n$ is known as the \mync{Lagrange multipliers}. Equation \eqref{eq:optimalrobustcs:equalitycritical4} contains $m$ equations, and it is a portion of \myabb{Karush–Kuhn–Tucker}{KKT} conditions which will be introduced in more details in Section \ref{sec:optimization-lagraigian-eq-ineq}.
 
-Equation \eqref{eq:optimalrobustcs:equalitycritical4} can also be interpreted graphically as shown in Fig. \ref{fig:optimalrobustcs:opt_equalityconstraint_graphical}. At the critical point denoted by the red dot, moving along $f(u)=0$ should not increase nor decrease $L(u)$. This suggests that $f(u)=0$ shall tangent the contour. Think of $f_u=\nabla f$ and $L_u=\nabla L$ as the gradient of $f(u)$ and $L(u)$ respectively. Since the plots are tangent, the gradient must be parallel, which would suggest something like \eqref{eq:optimalrobustcs:equalitycritical4}.
+Equation \eqref{eq:optimalrobustcs:equalitycritical4} can also be interpreted graphically. At the critical point denoted by the red dot, moving along $f=0$ should not increase or decrease $L$. This suggests that $f=0$ shall tangent the contour at the critical point as shown in Fig. \ref{fig:optimalrobustcs:opt_equalityconstraint_graphical}.
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=300pt]{chapters/part-3/figures/opt_equalityconstraint_graphical.png}
 	\caption{Graphical explanation to \eqref{eq:optimalrobustcs:equalitycritical4}.} \label{fig:optimalrobustcs:opt_equalityconstraint_graphical}
 \end{figure}
-
-Equation \eqref{eq:optimalrobustcs:equalitycritical4} together with \eqref{eq:optimalrobustcs:equalityconstraint} forms the necessary condition for the solution of the optimization problem.
+Think of $f_u=\nabla f$ and $L_u=\nabla L$ as the gradient of $f$ and $L$ respectively. Since the plots are tangent, the gradient must be parallel, which would suggest something like \eqref{eq:optimalrobustcs:equalitycritical4}.
 
 The necessary condition \eqref{eq:optimalrobustcs:equalityconstraint} and \eqref{eq:optimalrobustcs:equalitycritical4} can also be derived using \mync{Lagrangian function} as follows. Notice that Lagrangian function in some context may also be called \mync{Hamiltonian function}. They are very similar mathematically, and mostly differ in the context of usage.
+
+The Lagrangian function corresponding with problem \eqref{eq:optimization-equality-constraint} is given by
 \begin{eqnarray}
 	\mathcal{L}(u, \lambda) &=& L(u) + \lambda^Tf(u) \label{eq:optimalrobustcs:lagarangianequality}
 \end{eqnarray}
