@@ -1,20 +1,18 @@
 \chapter{Shell} \label{ch:sb}
 
-This chapter introduces Linux shell, Linux's default command line interface. Basic commands are covered.
-
-Linux shell will be used frequently in the remainder of this notebook.
+This chapter introduces Linux shell, the default command line interface of most Linux distributions. Linux shell will be used frequently in the remainder of this notebook.
 
 \section{Shell Basics}
 
-Linux's default \myabb{command line interface}{CLI}, known as the \mync{shell} or \mync{terminal}, is the most available, flexible and powerful tool for the users and programs to interact with the OS and perform actions. Technically speaking, shell is not compulsory for casual users when graphical desktop environment is available. Still, it is strongly recommended that the users shall understand basics about shell since it is more flexible and powerful than the graphical desktop and hence can become handy from time to time when configuring and troubleshooting the system and software applications. On machines where no graphical desktops are installed, the use of shell is critical.
+The default \myabb{command line interface}{CLI} of most Linux distributions, known as the \mync{shell} or \mync{terminal}, is the most available, flexible and powerful tool for the users and applications to interact with the OS. Technically speaking, shell is not compulsory for casual users when graphical desktop environment is available. Still, it is strongly recommended that the users shall learn the basics about shell since it is more flexible and powerful than the graphical desktop and hence can become handy from time to time when configuring and troubleshooting the system. On machines where no graphical desktops are installed, the use of shell is critical.
 
 Notice that different Linux distributions may have different default configurations or built-in tools for shell. That said, the majority shell commands introduced in this notebook can be used across commonly seen Linux distributions.
 
-\subsection{Types}
+\subsection{Shell Types}
 
-There are different types of shells for Linux. The most widely used shell across commonly seen Linux distributions is \mync{Bourne Again Shell}, also known as ``\mync{bash}''. It is derived from the ``Bourne Shell'' used in UNIX. Unless otherwise mentioned, the ``shell'' we refer to in the remainder of the notebook is bash. 
+Shell, from a broad view, refers to not a single specific CLI but a collection of many CLIs of different types. The most widely used shell across commonly seen Linux distributions is \mync{Bourne Again Shell}, also known as ``\mync{bash}''. It is derived from the Bourne shell used in UNIX. Unless otherwise mentioned, the ``shell'' we refer to in the remainder of the notebook is bash. 
 
-An example of a shell script that calculates Fibonacci series is given below. Notice that in practice shell is mainly used for interaction with the OS and not for data processing or numerical calculation. The example is only for demonstration.
+An example of a shell script that calculates Fibonacci series is given below. Notice that in practice shell is mainly used for interaction with the OS and not for data processing or numerical calculation. The example is only used as a demonstration.
 
 \begin{lstlisting}
 #!/bin/bash
@@ -53,7 +51,7 @@ Fibonacci sequence up to 10 terms:
 0 1 1 2 3 5 8 13 21 34
 \end{lstlisting}
 
-Some other shells such as ``C Shell'' and ``Korn Shell'' are also popular among certain users or certain Linux distributions. For example, C Shell supports C-like shell programming, which is sometimes more convenient than bash. In case where a Linux distribution does not come with a particular shell, the user can install it just like installing any other software.
+Some other shells such as C shell and Korn shell are also popular among certain users or certain Linux distributions. For example, C shell supports C-like shell programming, which is sometimes more convenient than bash. In case where a Linux distribution does not come with a particular shell, the user can install it just like installing any other software.
 
 \subsection{Prompt}
 
@@ -66,7 +64,7 @@ such as
 [sunlu@sunlu-dev-rhel sh]$
 \end{lstlisting}
 
-The above string is called a \mync{command prompt}, indicating the start of a user command. By default, for regular users the ending of the prompt is \verb|$|, while for the root user the ending is \verb|#|. The prompt can be customized by changing the environment variable \verb|PS1|. See Sections \ref{ch:sb:subsec:shellenvvar} and \ref{ch:sb:subsec:customizeshell} for details about environment variables and shell customization methods respectively. Commonly seen elements that can be added into a command prompt are summarized in Table \ref{ch:sb:tab:promptvariable}.
+The above string is called a \mync{command prompt}, indicating the start of a user command. By default, for regular users the ending of the prompt is \verb|$|, while for the root user the ending is \verb|#|. The prompt can be customized by changing the environment variable \verb|PS1|. See Sections \ref{ch:sb:subsec:shellenvvar} and \ref{ch:sb:subsec:customizeshell} for more about environment variables and shell customization methods respectively. Commonly seen elements that can be added into a command prompt are summarized in Table \ref{ch:sb:tab:promptvariable}.
 
 \begin{table}[!htb]
 	\centering \caption{Commonly seen elements in shell command prompt as in \texttt{PS1}.}\label{ch:sb:tab:promptvariable}
@@ -87,15 +85,7 @@ The above string is called a \mync{command prompt}, indicating the start of a us
 	\end{tabularx}
 \end{table}
 
-For the term \mync{root user} or root for short, we are referring to a special user with username and \myabb{User ID}{UID} ``root'' and 0 respectively. This UID gives the user the administration privilege over the machine, such as adding/removing users, changing ownership of files, etc. For security reasons, root user shall not be used on a daily basis. The root user's authentication is often deactivated by default. This can be done by setting its login password to invalid.
-
-Notice that the root user is different from a \mync{sudoer}, the latter of which is basically a regular user equipped with \mync{sudo privilege}. Different sudoer may have different sudo privilege setups. A sudoer may be able to temporarily switch to the root user using \verb|sudo su| if their sudo privilege setup is so configured. A demonstration is given below.
-\begin{lstlisting}
-<username>@<hostname>:~$ sudo su
-[sudo] password for <username>:
-root@<hostname>:/home/<username>#
-\end{lstlisting}
-More about sudo privilege are introduced in Chapter \ref{ch:usermanagement}.
+As suggested by Table \ref{ch:sb:tab:promptvariable}, there are two types of users, namely the root user and regular users. More about them will be introduced in Chapter \ref{ch:usermanagement}. As far as this chapter concerns, it is assumed that the user always logs into the system as a regular user.
 
 \subsection{Basic Commands}
 
@@ -103,9 +93,9 @@ A typical Linux shell command looks like the following
 \begin{lstlisting}
 $ <command> [<option>] [<input>]
 \end{lstlisting}
-where \verb|<command>| is either built-in or from an installed application, often as part of its CLI. Commonly seen commands are introduced in the remainder of this section. Commonly used applications and their associated shell commands will be introduced in later chapters.
+where \verb|<command>| is either built-in or from an installed application. Commonly used built-in commands are introduced in the remainder of this section. For third-party application commands, read the manual for the corresponding application for details.
 
-When login to an unfamiliar system, the first step is often to check the basic system information, such as hardware configuration, OS version, username, hostname, etc. The following commands display the basic information of the login user.
+When logging into a new system, the first step is often to check the basic system information, such as hardware configuration, OS version, username, hostname, etc. The following commands display the basic information of the login user.
 \begin{lstlisting}
 $ whoami
 <username>
@@ -122,7 +112,7 @@ $ hostname
 <hostname>
 \end{lstlisting}
 
-The following command \verb|lshw| lists down hardware information in detail. Notice that sudo privilege is recommended when using this command to give more detailed and accurate information of the system. Sometimes displayed information can be too detailed. Use \verb|-short| argument with the command to shorten the output.
+The following command \verb|lshw| lists down hardware information in detail. Notice that sudo privilege (more to be introduced in Chapter \ref{ch:usermanagement}) is recommended when using this command to give more detailed and accurate information of the system. Sometimes the displayed information can be too detailed. Use \verb|-short| argument with the command to shorten the output.
 \begin{lstlisting}
 $ sudo lshw
 <hostname>
@@ -166,7 +156,7 @@ for example
 \begin{lstlisting}
 $ alias pwd='pwd; ls -CF'
 \end{lstlisting}
-To permanently add alias to the shell, the alias needs to be added to \verb|~/.bashrc|, which is a piece of shell script that is automatically executed each time a new shell is started by the user. It is sometimes known as the \mync{user script}. User script can be used to customize bash shell environments. More about user script can be found in Section \ref{ch:sb:subsec:customizeshell}.
+To permanently add alias to the shell, the alias needs to be added to \verb|~/.bashrc|, which is a piece of shell script that is automatically executed each time a new shell is started by the user. More about this shell configuration file as well as other similar configuration files will be introduced in Section \ref{ch:sb:subsec:customizeshell}.
 
 Some commands are powerful yet difficult to use. Consider using the following two methods to check the user manual of a command.
 \begin{lstlisting}
@@ -174,7 +164,7 @@ $ man <command>
 $ <command> --help
 \end{lstlisting}
 
-Use \verb|#| to lead a single-line comment. For multi-line comment, use \verb|:' ... '|. Examples are given below.
+It is possible to add comments to shell scripts. Use \verb|#| to lead a single-line comment. For multi-line comment, use \verb|:' ... '|. Examples are given below.
 \begin{lstlisting}
 # this is a single-line comment
 :'
@@ -282,7 +272,7 @@ The error greater sign \verb|2>|, \verb|2>>| works similarly with \verb|>|, \ver
 
 \section{Shell Environment Variables}\label{ch:sb:subsec:shellenvvar}
 
-\mync{Shell Environmental Variables} are either system-defined or user-defined variables that the shell can access and keep track. Commonly used environmental variables are introduced below.
+\mync{Shell Environmental Variables} are either system-defined or user-defined variables that the shell can access and track. Commonly used environmental variables are introduced below.
 
 Variable \verb|PATH| traces the locations of external commands so that they can be executed anytime from any working directory. It is essentially a collection of directories initialized automatically when a shell is started. Check \verb|PATH| by
 \begin{lstlisting}
@@ -295,14 +285,15 @@ The default \verb|PATH| environment variable often contains the following direct
 \begin{itemize}
 \item \verb|/bin|, \verb|/usr/bin|: Commonly used Linux built-in commands for all users.
 \item \verb|/sbin|, \verb|/usr/sbin|: Commonly used Linux built-in commands for administrators.
-\item \verb|/home/<username>/bin|: Commands introduced by a particular user.
+\item \verb|/home/<username>/bin|: Commands used by a particular user, often added by the applications that user installed under their account.
 \end{itemize}
-To determine the location of a particular command, use \verb|type| if the command can be found in the \verb|PATH| environment. Alternatively, use \verb|locate|, \verb|mlocate| to search all the accessible files in the system to find a command. The syntax is demonstrated below.
+To determine the location of a particular command, use \verb|type| if the command can be found in the \verb|PATH| environment contained directories. Alternatively, use \verb|locate|, \verb|mlocate| to search all the accessible files in the system to find a command. The syntax is demonstrated below.
 \begin{lstlisting}
 $ type <command>
 <command location>
 \end{lstlisting}
-If an external command is not registered under \verb|PATH|, the command needs to be referred by not only its name but also its path in the system, so that shell can locate it. Notice that shell built-in commands (not Linux built-in commands, which are often considered as external commands to shell) such as \verb|alias| and \verb|pwd| can be executed anyway even if they are not covered by \verb|PATH|.
+
+If a command is not registered under \verb|PATH|, the command needs to be referred by not only its name but also its path in the system, so that shell can locate it. Notice that shell built-in commands (not Linux built-in commands) such as \verb|alias| and \verb|pwd| can be executed anyway even if they are not covered by \verb|PATH|.
 
 There are many useful environment variables just like \verb|PATH|. A summary is given in Table \ref{ch:sb:tab:shellenvironmentvars}. Command \verb|echo $<variable name>| can be used to check the values of these variables. Use command \verb|env| to check a list of environment variables in the shell.
 
@@ -344,25 +335,23 @@ To permanently change the value of an environmental variable, consider customizi
 Shell configuration files are loaded each time a new shell starts. User-defined permanent configurations (such as useful alias) can be put into these files so that the configurations can be implemented automatically. Some useful files are summarized in Table \ref{ch:sb:tab:shellconfig}.
 
 \begin{table}[!htb]
-	\centering \caption{Shell configuration files.}\label{ch:sb:tab:shellconfig}
+	\centering \caption{OS and shell configuration files.}\label{ch:sb:tab:shellconfig}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
 		File pathname & Description \\ \hline
 		\verb|/etc/profile| & The environment information for every user. It executes upon any user logs in. Root privilege is required to edit this file.  \\ 
 		\verb|/etc/bashrc| & Bash configuration for every user. It executes upon any user starts a shell. Root privilege is required to edit this file. \\ 
-		\verb|~/.bash_profile| & The environment information for current user. It executes upon the user logs in. \\ 
-		\verb|~/.bashrc| & Bash configuration for current user, also known as user script in some contexts. It executes upon the user starts a shell. \\ 
-		\verb|~/.bash_logout| & Bash log out configuration for current user. It executes upon the user logs out or exit the last bash shell. \\ \hline
+		\verb|~/.bash_profile| & The environment information for the current user. It executes upon the user logs in. \\ 
+		\verb|~/.bashrc| & Bash configuration for the current user. It executes upon the user starts a shell. \\ 
+		\verb|~/.bash_logout| & Bash logout configuration for current user. It executes upon the user logs out or exit the last bash shell. \\ \hline
 	\end{tabularx}
 \end{table}
 
-To customize the shell behavior for a user, the most common method is to edit their \verb|~/.bashrc| which is executed automatically each time the user starts a shell. The file is human-readable and self-explanatory.
+To customize the shell behavior for a user, the most common method is to edit their \verb|~/.bashrc| which is executed automatically each time the user starts a shell. The configuration file is also known as the \mync{user script} in some contexts. It is a human-readable and self-explanatory file.
 
-\section{Basic Shell Script}
+\section{Shell Script Basics}
 
-We have been discussing single-line shell commands for one-time usage so far. This section briefly introduces shell script programming. A shell script is a collection of reusable shell commands to serve a specific purpose. Shell script can be used both as a standalone commands pipeline and a function that takes into arguments, processes them, and generates results.
-
-In practice, shell scripts are mainly used for system configuration and software management. It is rarely used for data processing, as there are more handy tools such as C/C++ and Python.
+We have been discussing single-line shell commands for one-time usage so far. This section briefly introduces shell script programming. A shell script is a reusable collection of shell commands to serve a specific purpose, such as to install and configure a software. Notice that shell scripts are mainly used for system configuration and software management and not for data processing, as there are more handy tools such as C/C++ and Python.
 
 \subsection{Script Structure}
 
@@ -378,13 +367,15 @@ A typical shell script looks like the following
 
 <main body>
 \end{lstlisting}
-where \verb|#!/bin/bash| is known as the \mync{shebang}, which tells the shell what program to use to execute the script. With shebang, once the script is made executable, the user can execute the script with only the script name and not specifying the program. In this example, \verb|/bin/bash| is used as the interpreter of the script. 
+where \verb|#!<path to command>| is known as the \mync{shebang}, which tells the corresponding command or program to use to execute the script. With shebang, once the script is made executable, the user can execute the script with only the script name and not specifying the program. In this example, \verb|/bin/bash| is used as it is a bash shell script. 
 
-Item \verb|# <comment>| adds comment to the script. It is often a good practice to briefly introduce the script in the beginning. Items \verb|<VARIABLE>=<value>| assigns global variables used by the script and they should be listed before the main body of the script.
+Comments can be added to the shell script using \verb|# <comment>|. It is often a good practice to give a brief introduction to the script in the beginning. Global variables are assigned using \verb|<VARIABLE>=<value>| and they should be listed before the main body of the script.
 
 \subsection{Basic Syntax}
 
-Conditional statements in bash shell script include \verb|if| and \verb|case|, the syntax of which is given below.
+The basic syntax of conditional statement, loop and self-defined functions are introduced as follows.
+
+Conditional statements in bash shell script include \verb|if| and \verb|case|, with the syntax introduced below.
 
 \begin{lstlisting}
 if [<statement>]
@@ -397,6 +388,7 @@ else
   <body>
 fi
 \end{lstlisting} 
+where notice that the square bracket in \verb|[statement]| is part of the syntax, but not an indication that the content is optional.
 
 \begin{lstlisting}
 case <expression> in
@@ -415,7 +407,7 @@ case <expression> in
 esac
 \end{lstlisting}
 
-Notice that the syntax of \verb|case| in bash shell script looks different from the most other programming languages such as \verb|C| or \verb|Java|. For example, it uses single right bracket \verb|)| to separate the case pattern and body instead of \verb|{}| or \verb|:|, and \verb|;;| to terminate a body instead of \verb|break|. This is because the syntax evolved from the older Unix shell conventions.
+Notice that the syntax of \verb|case| in bash shell script looks different from most other programming languages such as \verb|C| or \verb|Java|. For example, it uses single right bracket \verb|)| to separate the case pattern and body instead of \verb|{}| or \verb|:|, and \verb|;;| to terminate a body instead of \verb|break|. This is because the syntax evolved from the older Unix shell conventions.
 
 Commonly used loops include \verb|while| and \verb|for|. The syntax is given below.
 
@@ -425,6 +417,7 @@ do
   <body>
 done
 \end{lstlisting}
+where the square bracket is part of the syntax.
 
 \begin{lstlisting}
 for <item> in <item 1> <item 2> <item 3> # general syntax
@@ -457,18 +450,34 @@ A user-defined function can be created as follows:
 }
 \end{lstlisting}
 
-The function is called by its name.
+Within the function body, \verb|$1|, \verb|$2|, and so on represent the input parameters. Note that \verb|$0| always refers to the script name. If the function needs to return data, use \verb|echo| or modify variables but not \verb|return|, as \verb|return| is reserved to exit status codes (0–255).
 
-Within the function body, \verb|$1|, \verb|$2|, and so on represent the input parameters. Note that \verb|$0| always refers to the script name. If the function needs to return data, use \verb|echo| or modify variables, because the \verb|return| command is limited to exit status codes (0–255).
-
-To call the function with arguments:
+The function is called by its name as follows.
 \begin{lstlisting}
 <function_name> <value for $1> <value for $2> ...
 \end{lstlisting}
 
+An example is given below. In this demonstrative example, function \verb|is_prime| checks whether the input is a prime number, and print it to the console if it is.
+\begin{lstlisting}
+is_prime(){ 
+	if [ $1 -lt 2 ]; then 
+	return 
+	fi 
+	ctr=0 
+	for((i=2;i<$1;i++)){ 
+		if [ $(( $1 % i )) -eq 0 ]; then 
+		ctr=$(( ctr +1 )) 
+		fi 
+	}
+	if [ $ctr -eq 0 ]; then 
+	printf "%d " "$1" 
+	fi 
+}
 
-
-
+is_prime 5 # print 5
+is_prime 10 # print nothing
+\end{lstlisting}
+In this self-defined function, an intermediate variable \verb|ctr| is defined that records the number of factors of the input number excluding $1$ and the number itself. If \verb|ctr| is zero, the input is a prime number.
 
 
 

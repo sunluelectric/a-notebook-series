@@ -6,9 +6,7 @@ This chapter discusses user account management such as creating a user and assig
 
 Managing and protecting the root user account is a big part in Linux administration. 
 
-It is worth mentioning that the root user is different from a sudoer, i.e., a user that can use \verb|sudo| command, although they both have elevated privileges when it comes to system administration. A more detailed explanation is given below.
-
-The root user is created during the installation of the OS. Its username is by default ``root'', with a UID of 0, and a GID of 0. Its home directory is by default \verb|/root| instead of \verb|/home/<user name>|. The default prompt for the root user is often \verb|#| instead of \verb|$|, the latter of which is used by regular users including sudoers. The root user has administrative privileges and can do almost everything without being denied or questioned by the system. 
+For the term \mync{root user} or sometimes \mync{root} for short, we are referring to a special user with username, \myabb{User ID}{UID} and \myabb{Group ID}{GID} ``root'' and ``0'' and ``0'' respectively. The root user is created during the installation of the OS. Its home directory is by default \verb|/root| instead of \verb|/home/<user name>|. The default prompt sign for the root user is often \verb|#| instead of \verb|$|, the latter of which is used by regular users including sudoers. The root user has administrative privileges and can do almost everything without being denied or questioned by the system. 
 
 As a widely appreciated safety practice, the password for the root user is usually disabled. Therefore, nobody can login to the system as the root user using username and password authentication. In the case when administrative tasks need to be performed by the root user account, a sudoer may be able to temporarily switch to the root user using \verb|sudo su|.
 
@@ -43,11 +41,17 @@ $ cat /etc/passwd | grep sunlu
 sunlu:x:1000:1000:Sun Lu,,,:/home/sunlu:/bin/bash
 \end{lstlisting}
 
-A sudoer refers to regular users who can temporarily elevate their privileges and execute administration commands using 
+A \mync{sudoer} refers to regular users who can temporarily elevate their privileges and execute administration commands using 
 \begin{lstlisting}
 $ sudo <privileged command>
 \end{lstlisting}
-There can be multiple sudoers in the system, each with a different set of allowed privileged commands. Depending on the configuration, a sudoer may be able to switch to the root user temporarily using \verb|sudo su| and quit using \verb|exit|.
+There can be multiple sudoers in the system, each with a different set of allowed privileged commands. Depending on the configuration, a sudoer may be able to switch to the root user temporarily using \verb|sudo su| as shown below 
+\begin{lstlisting}
+<username>@<hostname>:~$ sudo su
+[sudo] password for <username>:
+root@<hostname>:/home/<username>#
+\end{lstlisting}
+and quit using \verb|exit|.
 
 The privileges of sudoers come from the fact that they are included in the sudo group. Use \verb|groups| to check existing defined groups in the system, and \verb|groups <user name>| the groups a user is engaged. An example is given below.
 \begin{lstlisting}
