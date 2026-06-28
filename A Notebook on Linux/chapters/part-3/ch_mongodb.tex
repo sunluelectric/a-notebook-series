@@ -1,10 +1,10 @@
 \chapter{NoSQL Database Example: MongoDB}
 
-MongoDB is a source-available, cross-platform, general-purpose, document-oriented database program. Classified as a NoSQL database program, MongoDB uses BSON (an extension of JSON) documents with flexible schema to store data. This is not surprising, as MongoDB itself is powered by a JavaScript engine. MongoDB, together with other JavaScript-relevant software such as \textit{Express.js}, \textit{React.js}, \textit{Node.js}, etc., is often used to create database-powered web applications.
+MongoDB is a document-oriented database program. Classified as a NoSQL database program, MongoDB uses BSON (an extension of JSON) documents with flexible schema to store data. This is not surprising, as MongoDB itself is powered by a JavaScript engine. MongoDB, together with other JavaScript-relevant software such as \textit{Express.js}, \textit{React.js}, \textit{Node.js}, etc., is often used to create database-powered web applications.
 
 Data in MongoDB can be exported to or imported from files, such as BSON and JSON files. These files can be ported to other machines or consumed by other programs. MongoDB server also provides APIs for both local and remote access. 
 
-\section{A Brief Introduction}
+\section{Introduction}
 
 \mync{MongoDB} is a source-available, cross-platform, general-purpose, document-oriented NoSQL database program. It stores data in documents with flexible schema.
 
@@ -25,80 +25,68 @@ Examples of MongoDB-suitable applications include
 
 Notice that MongoDB as well as many other NoSQL databases are not suitable to handle financial transactions due to the consistency issue that many NoSQL databases suffer. But things might change as new technologies become handy.
 
-MongoDB is a document-oriented database program and it stores data in documents and collections instead of rows and tables. A \mync{MongoDB document} is the basic unit of the storage. A \mync{MongoDB collection} is a group of documents on the same/similar topic. Each document in the same collection can adopt its own schema, and it should be self-contained so that when querying the data the user does not need to join collections and map documents. Figure \ref{ch:database:mongotree} gives a demonstrative example of how MongoDB stores and organizes data.
+MongoDB is a document-oriented database program and it stores data in documents and collections instead of rows and tables. A \mync{MongoDB document} is the basic unit of the storage. A \mync{MongoDB collection} is a group of MongoDB documents on the same/similar topic. Each document in the same collection can adopt its own schema, and it should be self-contained so that when querying the data the user does not need to join collections and map documents. 
+
+Figure \ref{ch:database:mongotree} gives a demonstrative example of how MongoDB stores and organizes data. In this example, a collection ``USER'' is defined, and it contains two documents. Each document has several properties. Different document may share common properties such as ``name'' in this example. Each document can also have unique properties of its own such as ``age'', ``address'' and ``language''. Different properties may have different data types. For example, a property can be string, numeric, or a nested object, or an array of the above. When querying MongoDB, the DBMS is able to return selected properties of documents that meet specific criteria, and sort them in the required order.
+
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-3/figures/mongodb_tree.png}
+	\includegraphics[width=0.8\textwidth]{chapters/part-3/figures/mongodb_tree.png}
 	\caption{A demonstrative example of how MongoDB stores data as (nested) object.} \label{ch:database:mongotree}
 \end{figure}
 
-In the example demonstrated by Fig. \ref{ch:database:mongotree}, a collection ``USER'' is defined, and it contains two documents. Each document has several properties. Different document may share common properties such as ``name'' in this example. Each of them can also have unique properties of its own such as ``age'', ``address'' and ``language''. Different properties may have different data types. For example, a property can be string, numeric, or a nested object, or an array of the above. When querying MongoDB, the DBMS is able to return selected properties of documents that meet specific criteria, and sort them in the required order.
+The data is stored in the format of \mync{binary JSON}[BSON]. BSON is an extension of JSON that supports more data types. MongoDB uses BSON to store and process data due to its enhanced capability, and supports both BSON and JSON when comes to data importing and exporting.
 
-The data is stored in the format of \mync{binary JSON}[BSON]. BSON is an extension of JSON that supports more data types. MongoDB uses BSON to store and process data due to its enhanced capability, and uses JSON to display the data.
+\begin{mdframed}
+\noindent \textbf{JSON VS BSON}
+	
+JSON supports the following 6 data types: number, string, boolean, object, array, and null. JSON is text-based, which means that it is essentially a string. It is only a notation of data and does not concern with how the data is interpreted in the program. For example, ``0'' as a number in a JSON file does not imply whether it is an integer, a 32-bit float, or a 64-bit float.
+	
+BSON, on the other hand, is binary-based and hence contains more information. In BSON, more data types are supported, such as different floats, date, timestamp, binary string, regular expression and code block. This makes BSON more powerful and efficient than JSON. As a compromise, BSON is less intuitive and human-readable than JSON.
+	
+\end{mdframed}
 
-\begin{shortbox}
-	\Boxhead{JSON VS BSON}
-	
-	JSON supports the following 6 data types: number, string, boolean, object, array, and null. JSON is text-based, which means that it is essentially a string. It is only a notation of data and does not concern with how the data is interpreted in the program. For example, ``0'' as a number in a JSON file does not imply whether it is an integer, a 32-bit float, or a 64-bit float.
-	
-	BSON, on the other hand, is binary-based and hence contains more information. In BSON, more data types are supported, such as different floats, date, timestamp, binary string, regular expression, code, etc. For the same example, ``0'', in BSON different number types are compiled and stored differently. This makes BSON more powerful and efficient (but less intuitive) than JSON.
-	
-\end{shortbox}
-
-It is strongly recommended to make the data (document and collection) self-contained. The MongoDB architecture design should base on how the data is to be queried. Data that is accessed together should reside together. This concept is known as embedding. Embedding may add redundancy to the data storage and make documents bigger, but will make query simpler. Notice that when using embedding, make sure the size of the document is bounded and would not go towards infinity. MongoDB has a maximum $16$MB size limitation for each document.
+It is strongly recommended to make the data (document and collection) self-contained. The MongoDB architecture design should base on how the data is to be queried. Indeed, relevant information is often queried together and hence should reside together in the storage. This concept is known as \mync{embedding}. Despite making each collection and document slightly bigger, embedding makes the query simpler. Do note that when performing embedding, make sure that the size of the document is bounded. MongoDB has a maximum $16$MB size limitation for each document.
 
 MongoDB database, unlike relational DB, is by nature not designed for joining. However, MongoDB does support referencing documents and even performing joins (to some extent) through different mechanisms.
 
 \section{Installation}
 
-MongoDB, like many other DBMS, has both community and enterprise versions. MongoDB community server can be installed following the instructions in the official website
-\begin{lstlisting}
-https://www.mongodb.com/try/download/community
-\end{lstlisting}
-A MongoDB server can host a MongoDB cluster, inside which are many MongoDB databases. Each database can have its own configurations and policies.
+MongoDB has both community and enterprise versions. Under the scope of this notebook, the community version is concerned. MongoDB community server can be installed following the instructions on the official website at \cite{mongodb_community_server}. Different versions of MongoDB are available. Choose the correct MongoDB version depending on the CPU and the OS of the machine. MongoDB community server installation size is about $500$MB. A MongoDB server can host a MongoDB cluster, inside which are many MongoDB databases. Each database can have its own configurations and policies.
 
-To interact with MongoDB DBMS, the quickest way is to use MongoDB shell (also known as ``mongosh''). MongoDB shell and its explanation are available at
-\begin{lstlisting}
-https://www.mongodb.com/try/download/shell
-\end{lstlisting}
-Notice that when installing MongoDB server, it is possible that the server comes with MongoDB Compass, the GUI for MongoDB DBMS. The GUI can also be used to interact with the databases.
-
-Different versions of MongoDB are available. Choose the correct MongoDB version depending on the CPU and the OS of the machine. MongoDB community server installation size is about 500MB.
+To access MongoDB, it is recommended that MongoDB Shell, the \myabb{command line interface}{CLI} of MongoDB, be installed on the user machine. More about MongoDB Shell will be introduced in Section \ref{sec:mongosh}. It is also possible to use MongoDB Compass, the recommended \myabb{graphical user interface}{GUI} for MongoDB, to interact with MongoDB. MongoDB Compass can be used to connect to a MongoDB server and view and manipulate the databases on the server. It also comes with analytical tools and data visualization tools that help the user understand the insight of the data.
 
 MongoDB provides enterprise service, MongoDB Atlas, as part of its cloud solution where user can deploy clusters to host databases. With proper gateway setup, the user can connect to MongoDB Atlas clusters from his local server to retrieve data or to manipulate the databases. MongoDB Atlas is briefly introduced in later Section \ref{sec:mongodb-atlas}.
 
-\section{MongoDB Shell}
+\section{MongoDB Shell} \label{sec:mongosh}
 
-After installing both MongoDB server and MonghDB shell, use
-\begin{lstlisting}
-$ mongosh
-\end{lstlisting}
-in the command line to login to the DBMS. JavaScript-like commands are used to manipulate the database, such as creating databases and inserting data.
+To interact with MongoDB, the quickest way is to use MongoDB shell, which is introduced in this section. MongoDB shell, if not installed together with the MongoDB server, can be found at \cite{mongodb_shell_download}. 
 
-\subsection{Select Database}
-
-The object \verb|db| contains many methods using which the user can access and modify the basic configurations of the database. For example,
+After installing both MongoDB server and MongoDB shell, use \verb|mongosh| to enter the MongoDB shell console. JavaScript-like commands are used to manipulate the database, such as creating databases and inserting data. The object \verb|db| contains many methods using which the user can access and modify the basic configurations of the database. For example,
 \begin{lstlisting}
 > db.version()
 \end{lstlisting}
-gives the version of the database server. More commands can be found using \verb|db.help()|. Some commonly used commands are listed in Table \ref{ch:db:tab:mongodbbasics}.
+gives the version of the database server. Some commonly used commands are listed in Table \ref{ch:db:tab:mongodbbasics}.
 \begin{table}[!htb]
 	\centering \caption{MongoDB basic commands.}\label{ch:db:tab:mongodbbasics}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
 		Command & Description \\ \hline
-        \verb|db.help()| & Show a list of methods of \verb|db| object. \\ 
+		\verb|db.help()| & Show a list of methods of \verb|db| object. \\ 
 		\verb|db.version()| & Show database server version. \\ 
-        \verb|db.getUsers()| & Show users. \\ 
-        \verb|db.createUser(<content>)| & Create a user. The username, password, roles, etc., needs to be included in the \verb|<content>| area. \\ 
-        \verb|db.dropUser(<username>)| & Drop a user. \\ 
-        \verb|db.dropDatabase()| & Drop current database. \\ 
+		\verb|db.getUsers()| & Show users. \\ 
+		\verb|db.createUser(<content>)| & Create a user. The username, password, roles, etc., needs to be included in the \verb|<content>| area. \\ 
+		\verb|db.dropUser(<username>)| & Drop a user. \\ 
 		\verb|db.status()| & Show the basic status of the currently selected database, such as its name, number of collections, storage size, etc.  \\
-		 \hline
+		\hline
 	\end{tabularx}
 \end{table}
 
-To display the existing databases, use
+Commonly used database manipulation commands are introduced in the remainder of the section.
+
+\subsection{Database Selection}
+
+To display existing databases, use
 \begin{lstlisting}
 > show dbs
 \end{lstlisting}
@@ -108,14 +96,20 @@ On a clean installation, the above should return the 3 default databases, \verb|
 \end{lstlisting}
 Notice that there is no ``create database'' command in MongoDB. To create a database, switch to that database using the above command (even though it does not exist yet), and add some data. The database will be automatically created. This is again a feature closely related to JavaScript.
 
-\subsection{Create Collection and Document}
-
-A MongoDB database contains one or more collections. A collection is similar to a table in an RDB in the sense that it is the collection of data on the same / similar topic. However, unlike tables where schematics such as column names and data types are enforced upon creation of the table, a collection does not enforce fields and their data types. The syntax is given below.
+To drop a database, switch to the database and use 
 \begin{lstlisting}
-db.createCollection(<name>, <options>)
+> db.dropDatabase()
 \end{lstlisting}
 
-The \verb|<options>| field is optional and allows creating different types of collections, such as time-series collection which is optimized to store time-series sensor data. Probable \verb|<options>| configuration are summarized below.
+\subsection{Collection and Document Creation}
+
+A MongoDB database contains one or more collections. A collection is similar to a table in an RDB in the sense that it is the collection of data on the same / similar topic. However, unlike tables where schematics such as column names and data types are enforced upon creation of the table, a collection does not enforce fields and their data types. 
+
+To create a document, switch to the target database then use
+\begin{lstlisting}
+db.createCollection(<name>[,<options>])
+\end{lstlisting}
+where \verb|<options>| is an optional JSON-like string that allows creating different types of collections, such as time-series collection which is optimized to store time series sensor data. In the demonstrative example below, commonly seen fields in \verb|<options>| are shown.
 \begin{lstlisting}
 db.createCollection( <name>,
 {
@@ -150,30 +144,33 @@ An example of creating a collection inside a database is given below.
 > use testdb;
 > db.createCollection("users");
 \end{lstlisting}
-Use \verb|show collections| to show the collections in the current database.
+
+After creating a collection, use
+\begin{lstlisting}
+> show collections
+\end{lstlisting}
+to show the collections in the current database.
 
 \begin{mdframed}
-\noindent \textbf{Should I use a semicolon in the end of each MongoDB command?}
+\noindent \textbf{Should semicolon be used in the end of each MongoDB command?}
 
-You don't have to. It works both ways. However, if you are using JavaScript environment such as \textit{Node.js} and integrating MongoDB commands as part of the program, it is recommended to do so. An example is given below.
-
-For example, to select a database, in MongoDB shell
+No. It works both ways. For example, to select a database, in MongoDB shell both
 \begin{lstlisting}
 > use myNewDatabase
 \end{lstlisting}
-or
+and
 \begin{lstlisting}
 > use myNewDatabase;
 \end{lstlisting}
-would both work just fine. 
+would work just fine. 
 
-However, in \textit{Node.js},
+However, if JavaScript environment such as \textit{Node.js} is used and MongoDB commands are integrated as part of the program, it is recommended to use semicolon. For example, in \textit{Node.js} selecting a database would look like the following
 \begin{lstlisting}
 const newDb = client.db("myNewDatabase");
 \end{lstlisting}
-the semicolon is highly recommended by JavaScript. Although in JavaScript semicolon has become optional due to \myabb{Automatic Semicolon Insertion}{ASI}, it is still widely recommended to use semicolon anyway.
+in which case the semicolon is highly recommended. Although in JavaScript semicolon has become optional due to \myabb{Automatic Semicolon Insertion}{ASI}, it is still widely recommended to use semicolon anyway.
 
-As a conclusion, semicolon is recommended mostly, just to follow the general JavaScript good practice. 
+To conclude, semicolon is recommended just to follow the general JavaScript good practice. 
 \end{mdframed}
 
 Data can be inserted into a collection in the form of documents. It is possible to insert one or multiple documents at a time. To insert documents, first prepare the document in JSON-like format. For example, consider the following documents.
@@ -218,14 +215,15 @@ The above inserting document method creates a collection, if the collection has 
 
 MongoDB uses \verb|find()|, \verb|findOne()| to find documents, where the input is a filter document in the form of a JSON-like string. Details are given below.
 
-To obtain all the document under a collection, use
+To retrieve all the documents of a collection, use
 \begin{lstlisting}
 db.getCollection('<collection_name>').find({});
 \end{lstlisting}
 where an empty query simply matches all documents in the collection. Of course, when \verb|findOne()| is used, it will return only one document.
 
-\begin{shortbox}
-\Boxhead{Two Ways to Refer to a Collection}
+\begin{mdframed}
+\noindent \textbf{Dynamic Naming of a Collection}
+
 Notice that
 \begin{lstlisting}
 db.<collection_name>.<function>()
@@ -235,7 +233,7 @@ is equivalent with
 db.getCollection('<collection_name>').<function>();
 \end{lstlisting}
 The first implementation is more convenient while the second more flexible as it supports dynamic naming.
-\end{shortbox}
+\end{mdframed}
 
 Examples are given below to demonstrate the user of the query dictionary. Assume that there is a collection \verb|posts|, inside which are documents recording the posts by a blogger. Each post may have some comments. The number of comments are recorded in the field \verb|comments| of the documents. To find documents that has a certain field with certain values, use the following
 \begin{lstlisting}
@@ -281,7 +279,88 @@ which returns a document if and only if:
 	\item the array field \verb|results| contains at least one element that is greater or equal than $80$ and less than $85$.
 \end{itemize}
 
-\subsection{Update Document}
+It been introduced earlier how \verb|find()| \verb|findOne()| can be used to retrieve documents. More about query is introduced below, such as sorting and limiting the results, returning only selected fields, returning aggregated information, etc.
+
+It is worth mentioning that \verb|find()| returns a cursor, but not the documents themselves. One can iterate through the cursor to get all the documents matching the query. This is different from \verb|findOne()| which directly returns a document. When viewing the data in MongoDB Compass or Atlas, this does not pose an issue. One can simply take \verb|find()| as a function that returns multiple documents. However, in the programming interface, it is important to note the differences between a cursor and a document.
+
+The below are two demonstrative examples how a Python program should treat the returns from \verb|find()| and \verb|findOne()| differently. The same idea applies to other programming languages as well. More about MongoDB connectivity from Python is introduced in later sections. Here, the examples are only to demonstrate the differences between \verb|find()| and \verb|findOne()|.
+
+\begin{lstlisting}
+	from pymongo import MongoClient
+	
+	def find_users():
+	client = MongoClient('mongodb://localhost:27017/')
+	db = client.mydatabase
+	collection = db.users
+	
+	cursor = collection.find({ 'age': { '$gte': 18 } })
+	
+	# Iterate over the cursor
+	for doc in cursor:
+	print(doc)
+	
+	# Alternatively, convert to a list
+	results = list(cursor)
+	print(results)
+	
+	client.close()
+\end{lstlisting}
+
+\begin{lstlisting}
+	from pymongo import MongoClient
+	
+	def find_one_user():
+	client = MongoClient('mongodb://localhost:27017/')
+	db = client.mydatabase
+	collection = db.users
+	
+	# Find one document
+	user = collection.find_one({ 'name': "John Doe" })
+	print(user)
+	
+	client.close()
+\end{lstlisting}
+
+Since a cursor, instead of the documents themselves, is returned, we can perform further actions on the return such as sorting the result, etc.
+
+Use the following syntax to retrieve and sort the return.
+\begin{lstlisting}
+	cursor.sort({<field>:<value>})
+\end{lstlisting}
+which sorts the result according to \verb|<field>|. The value ``$1$'' or ``$-1$'' represents the sorting order, either ascending or descending, respectively.
+
+When it is unnecessary to return all the details of all the documents fulfilling the query criteria, it is possible to limit the field number of returned documents which is often helpful with improving the data processing efficiency.
+
+It is possible to limit the number of documents in the returns to improve the query efficiency. This is often used with the \verb|sort()| method. The syntax is as follows.
+\begin{lstlisting}
+	cursor.sort({<field>:<value>}).limit(<number>)
+\end{lstlisting}
+where \verb|<number>| specifies the number of returns.
+
+Notice that the full syntax of \verb|find| is
+\begin{lstlisting}
+	db.collection.find( <query>, <projection>, <options> )
+\end{lstlisting}
+The second argument, \verb|<projection>|, is used to indicate which fields of the documents should be returned. If left blank as by the default, all the fields of the documents will be returned. Notice that the same applies to \verb|findOne()| method.
+
+For example,
+\begin{lstlisting}
+	cursor = collection.find({'age': {'$gte': 18}}, {name:1, age: 1})
+\end{lstlisting}
+will return the names and ages of all the users whose age is greater than or equal to $18$. By using
+\begin{lstlisting}
+	{ <field1>: <value>, <field2>: <value> ... }
+\end{lstlisting}
+with \verb|<value>| be either $1$ or $0$, one can control which fields to be included or excluded respectively. The value $0$ is often used with the \verb|_id| field which is always returned unless specifically required not to. Notice that the \verb|<field>| in the syntax can also contain sub fields, in which case quotation marks \verb|"<field>.<subfield>"| must be used.
+
+With some more advanced setups, \verb|<projection>| can also be used to specify what elements in an array to return, and more. For details, check the user manual of \verb|db.collection.find()| function.
+
+Consider counting the number of documents fulfilling a particular filter document. Use
+\begin{lstlisting}
+	db.<collection>.countDocuments( <query>, <options> )
+\end{lstlisting}
+
+\subsection{Document Updating}
 
 Function \verb|updateOne()| is provided to update documents, where the input argument is a tuple containing filtering condition, update and options, following the syntax below.
 \begin{lstlisting}
@@ -321,100 +400,9 @@ It is possible to add \verb|{upsert:true}| as the option to \verb|replaceOne()| 
 
 To update documents that meet certain criteria all at once, use \verb|updateMany()| instead. Do note that \verb|updateMany()| is not an atomic operation. It is possible that, for unpredictable reasons, only some of the documents are updated and they will not be rolled back. Use it with caution!
 
-\subsection{Remove Document}
+\subsection{Document Removal}
 
 Use either \verb|deleteOne(<filter>)| or \verb|deleteMany(<filter>)| to remove documents, with the input the filter document.
-
-\subsection{Advanced Query}
-
-It been introduced earlier how \verb|find()| \verb|findOne()| can be used to retrieve documents. More about query is introduced below, such as sorting and limiting the results, returning only selected fields, returning aggregated information, etc.
-
-It is worth mentioning that \verb|find()| returns a cursor, but not the documents themselves. One can iterate through the cursor to get all the documents matching the query. This is different from \verb|findOne()| which directly returns a document. When viewing the data in MongoDB Compass or Atlas, this does not pose an issue. One can simply take \verb|find()| as a function that returns multiple documents. However, in the programming interface, it is important to note the differences between a cursor and a document.
-
-The below are two demonstrative examples how a Python program should treat the returns from \verb|find()| and \verb|findOne()| differently. The same idea applies to other programming languages as well. More about MongoDB connectivity from Python is introduced in later sections. Here, the examples are only to demonstrate the differences between \verb|find()| and \verb|findOne()|.
-
-\begin{lstlisting}
-from pymongo import MongoClient
-
-def find_users():
-client = MongoClient('mongodb://localhost:27017/')
-db = client.mydatabase
-collection = db.users
-
-cursor = collection.find({ 'age': { '$gte': 18 } })
-
-# Iterate over the cursor
-for doc in cursor:
-print(doc)
-
-# Alternatively, convert to a list
-results = list(cursor)
-print(results)
-
-client.close()
-\end{lstlisting}
-
-\begin{lstlisting}
-from pymongo import MongoClient
-
-def find_one_user():
-client = MongoClient('mongodb://localhost:27017/')
-db = client.mydatabase
-collection = db.users
-
-# Find one document
-user = collection.find_one({ 'name': "John Doe" })
-print(user)
-
-client.close()
-\end{lstlisting}
-
-Since a cursor, instead of the documents themselves, is returned, we can perform further actions on the return such as sorting the result, etc.
-
-Use the following syntax to retrieve and sort the return.
-\begin{lstlisting}
-	cursor.sort({<field>:<value>})
-\end{lstlisting}
-which sorts the result according to \verb|<field>|. The value ``$1$'' or ``$-1$'' represents the sorting order, either ascending or descending, respectively.
-
-When it is unnecessary to return all the details of all the documents fulfilling the query criteria, it is possible to limit the field number of returned documents which is often helpful with improving the data processing efficiency.
-
-It is possible to limit the number of documents in the returns to improve the query efficiency. This is often used with the \verb|sort()| method. The syntax is as follows.
-\begin{lstlisting}
-cursor.sort({<field>:<value>}).limit(<number>)
-\end{lstlisting}
-where \verb|<number>| specifies the number of returns.
-
-Notice that the full syntax of \verb|find| is
-\begin{lstlisting}
-db.collection.find( <query>, <projection>, <options> )
-\end{lstlisting}
-The second argument, \verb|<projection>|, is used to indicate which fields of the documents should be returned. If left blank as by the default, all the fields of the documents will be returned. Notice that the same applies to \verb|findOne()| method.
-
-For example,
-\begin{lstlisting}
-cursor = collection.find({'age': {'$gte': 18}}, {name:1, age: 1})
-\end{lstlisting}
-will return the names and ages of all the users whose age is greater than or equal to $18$. By using
-\begin{lstlisting}
-{ <field1>: <value>, <field2>: <value> ... }
-\end{lstlisting}
-with \verb|<value>| be either $1$ or $0$, one can control which fields to be included or excluded respectively. The value $0$ is often used with the \verb|_id| field which is always returned unless specifically required not to. Notice that the \verb|<field>| in the syntax can also contain sub fields, in which case quotation marks \verb|"<field>.<subfield>"| must be used.
-
-With some more advanced setups, \verb|<projection>| can also be used to specify what elements in an array to return, and more. For details, check the user manual of \verb|db.collection.find()| function.
-
-Consider counting the number of documents fulfilling a particular filter document. Use
-\begin{lstlisting}
-db.<collection>.countDocuments( <query>, <options> )
-\end{lstlisting}
-
-\section{MongoDB Compass}
-
-Should the user decides to use GUI instead of MongoDB Shell to interact with the MongoDB server, he may consider MongoDB Compass, the official GUI client for MongoDB.
-
-MongoDB Compass is the desktop GUI developed by MongoDB. As a MongoDB client, it can connect to a MongoDB server, either local, remote or MongoDB Atlas, using the connection string. It provides an intuitive user interface that can be used to view and edit the data on the server. 
-
-MongoDB Compass comes with analytical tools and data visualization tools that help the user understand the insight of the data as well as the database structure. It allows the user to define and compose aggregation pipelines that automatically abstract useful aggregated information from the data.
 
 \section{Sharding and Indexing}
 
@@ -432,13 +420,13 @@ When a filter such as \verb|find()|, \verb|findOne()|, or in an aggregation pipe
 
 When projection is used to limit the fields to be returned, and if it happens that all the returned fields are part of the index, MongoDB would not need to revisit the original documents. In this case, the query speed can be significantly faster.
 
-\begin{shortbox}
-\Boxhead{MongoDB's B-Tree}
+\begin{mdframed}
+\noindent \textbf{MongoDB's B-Tree}
 
 MongoDB primarily uses B-Tree data structures for its indexes. A B-Tree is a self-balancing tree data structure that maintains sorted data in a way that allows searches, sequential access, insertions, and deletions in logarithmic time. 
 
 The ``B'' in B-Tree stands for ``balanced'' and indicates that the tree is designed to keep the data balanced, ensuring that operations are efficient as the dataset grows. The B-Tree structure allows MongoDB to perform efficient query. Instead of scanning every document in a collection, MongoDB can use the B-Tree index to quickly navigate through a small subset of the data to find the documents that match the query criteria.
-\end{shortbox}
+\end{mdframed}
 
 However, index by itself is also an argument data structure and it consumes disk and memory space. Each time there is a write operation, the index needs to be updated. Therefore, a very complicated index schema slows down data insertion. It is critical to design appropriate index to optimize the overall performance of the database.
 

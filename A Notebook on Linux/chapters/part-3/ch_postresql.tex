@@ -14,22 +14,22 @@ However, with the populating use of microservices where the database efficiency 
 
 Some of the main features of PostgreSQL are summarized as follows.
 \begin{itemize}
-	\item Object-relational database.
+	\item Object-relational database allowing self-defined data structures.
 	\item Excellent adherence to SQL standard.
 	\item Excellent performance and scalability.
 	\item Multi-version concurrency control.
-	\item Modularized features, i.e., light-weight base installation and scalable addons.
+	\item Modularized and scalable features.
 	\item Disk-based database with no in-memory storage. As a compensation, it has robust caching mechanisms that speed up reading and writing.
 	\item Steep learning curve.
 \end{itemize}
 
 \section{Installation and Authentication}
 
-The installation of PostgreSQL depends on the OS. In the following, RHEL 9.4 is used as an example. Both installation and authentication to the database are introduced.
+The installation of PostgreSQL depends on the OS. In the remainder, RHEL 9.4 is assumed. Both installation and authentication to the database are introduced.
 
 \subsection{Installation}
 
-PostgreSQL supports multiple operating systems including Linux, macOS and Windows. The source code and very detailed documentations of PostgreSQL are available on its official websites. Due to the light weight of the base installation, PostgreSQL can be used conveniently in containers. The official docker image can be found on Docker Hub.
+PostgreSQL runs across many platforms such as Linux, macOS and Windows. Due to the light weight of the base installation, PostgreSQL can be used conveniently in containers.
 
 To install PostgreSQL directly on a host machine, simply follow the instructions on the official website. As far as this notebook concerns, consider installing PostgreSQL 16 on RHEL 9.4 running on \verb|x86_64| using
 \begin{lstlisting}
@@ -98,6 +98,8 @@ After logging in to the database, use \verb|\du| and \verb|\l| to check the user
 
 \subsection{Deployment of PostgreSQL in Container}
 
+Containerization is introduced in Chapter \ref{ch:vac}, should the reader need more information about it to go through the remainder of this section.
+
 To use PostgreSQL in containers, the user can either download and run official PostgreSQL image from Docker Hub, or build a custom Dockerfile that installs and configures PostgreSQL on top of a base image such as Alpine. 
 
 The following example shows how to launch PostgreSQL in a container using the Docker Hub image. In this example, a persistent volume is mounted to preserve user and database data, so that if the container is restarted, previously created users and databases are not lost. Environment variables such as the username and password are stored in an \verb|.env| file.
@@ -158,7 +160,7 @@ CMD ["/bin/sh", "/var/lib/postgresql/user-scripts/start.sh"]
 
 \section{Data Types}
 
-PostgreSQL supports a large range of data types, more than other databases such as MySQL and MariaDB. 
+PostgreSQL supports a large range of data types, more than many other well-known databases such as MySQL and MariaDB. 
 
 \subsection{PostgreSQL-Specific Data Types}
 
@@ -226,11 +228,13 @@ enum ('M', 'F');
 \end{lstlisting}
 which creates a new data type called \verb|sex_type|, and it can take enumerated value of either \verb|M| or \verb|F|.
 
-\section{PostgreSQL Stored Procedural and Functions}
+\section{PostgreSQL Stored Procedure and Functions}
 
-Many databases including Oracle SQL, Microsoft SQL Server, MySQL, MariaDB and PostgreSQL, support stored procedures and user defined functions. This feature has been there for a very long time, but it is often not introduced in a typical introductory course. Though useful, they may introduce performance and portability issues, hence need to be handled with caution. Besides, nowadays it is often regarded as a better practice to implement the logics in the application layer, not in DBMS. Nevertheless, they are briefly introduced as follows.
+A \mync{stored procedure} is a set of SQL statements that can be saved and reused multiple times. It enhances efficiency, reusability, and security in database management. 
 
-The following is an example to define a function using SQL.
+Many databases including PostgreSQL support stored procedure. The feature has been there for a very long time, but it is often not introduced in a typical introductory course. Though useful, it may introduce performance and portability issues, hence need to be handled with caution. Besides, nowadays it is often regarded as a better practice to implement the reusable query scripts in the application layer but not in the \myabb{database management system}{DBMS}. Nevertheless, they are briefly introduced below.
+
+The following is an example to define a function in PostgreSQL with SQL.
 \begin{lstlisting}
 CREATE OR REPLACE FUNCTION add_int(int, int)
 RETURNS int AS
@@ -259,11 +263,11 @@ $body$
 LANGUAGE SQL
 \end{lstlisting}
 
-Notice that so far we have been using SQL as the programming language for the functions, as indicated by \verb|LANGUAGE SQL|. Notice that PostgreSQL also supports other languages, such as PL/pgSQL, which is a procedural programming language supported by PostgreSQL. It closely resembles Oracle's PL/SQL language. ``PL'' in these terms represents ``Procedural Language''.
+In addition to SQL, PostgreSQL also supports other languages. An example is PL/pgSQL which is a procedural programming language supported by PostgreSQL. It closely resembles Oracle's PL/SQL language. ``PL'' in these terms represents ``Procedural Language''.
 
-The following is a list of languages supported by PostgreSQL.
+The following is a list of common languages supported by PostgreSQL.
 \begin{itemize}
-	\item Naive installation:
+	\item Built-in:
 	\begin{itemize}
 		\item PL/pgSQL
 		\item SQL
@@ -275,11 +279,10 @@ The following is a list of languages supported by PostgreSQL.
 		\item PL/Perl
 		\item PL/Java
 		\item PL/R
-		\item and more.
 	\end{itemize}
 \end{itemize}
 
-SQL is sufficient to carry out simple and straight forward tasks such as adding two numbers, as shown in the earlier example. However, when comes to handling conditional statements and loops, etc., procedural language is required. When the function is complex, it is sometimes impossible or inefficient to implement it using SQL, and PL/pgSQL and other procedural languages can solve this problem. An example is given below.
+SQL is able to carry out simple and straight forward tasks such as adding two numbers, as shown in the earlier example. However, when comes to handling conditional statements and loops, etc., procedural language is required. When the function is complex, it is sometimes impossible or inefficient to implement it using SQL, and PL/pgSQL and other procedural languages can tackle the issue. An example is given below.
 \begin{lstlisting}
 CREATE OR REPLACE FUNCTION increment_value(value INT, increment INT)
 RETURNS INT AS $$
@@ -296,31 +299,31 @@ END;
 $$ LANGUAGE plpgsql;
 \end{lstlisting}
 
-With the above been said, though convenient and powerful it might be in some use cases, it is often a good practice to keep complex logic in application layer, for logic consistency and database portability.
+Powerful as these procedural languages might be, as mentioned earlier, it is often a good practice to keep complex computations in the application layer.
 
-\section{Manipulation and Query}
+\section{Database Query and Manipulation}
 
-PostgreSQL adopts SQL for database manipulation and query. SQL has been introduced in earlier sections, hence it is not repeated here. Only selected unique features to PostgreSQL are introduced.
+PostgreSQL adopts SQL for database manipulation and query. SQL has been introduced in Section \ref{sec:sql} hence not repeated here. Only selected unique features to PostgreSQL are introduced.
 
-While PostgreSQL server is running, enter its console using \verb|psql| from the shell. One can tell PostgreSQL console by its prompt which looks something like
-\begin{lstlisting}
-postgres-#
-\end{lstlisting}
-or
-\begin{lstlisting}
-postgres->
-\end{lstlisting}
-with ``postgres'' the current selected database. It is also possible to specify user name, default database, and other configurations when connecting to PostgreSQL server. Instead of running \verb|psql| as admin, use
+Assume that PostgreSQL server has been started in the backend, and PostgreSQL CLI has been installed on the machine the user is operating on. To start PostgreSQL console, use command \verb|psql| with proper authentication as follows.
 \begin{lstlisting}
 $ psql -h <host> -p <port> -U <username> <default_database>
 \end{lstlisting}
+With the above command, the console should switch from bash to PostgreSQL. They can be distinguished from the prompt. The PostgreSQL prompt looks like the following.
+\begin{lstlisting}
+<database name>-#
+\end{lstlisting}
+or
+\begin{lstlisting}
+<database name>->
+\end{lstlisting}
 
-Once in PostgreSQL console, use \verb|help| to display the basic commands, including \verb|\copyright| that shows the distribution terms, \verb|\h| to check SQL commands, \verb|\?| to check psql commands, and \verb|\q| to quit PostgreSQL console, etc. Notice that both SQL and psql commands can be used in PostgreSQL console.
+Once in PostgreSQL console, use \verb|help| to display a list of basic commands, \verb|\h| to display SQL commands, \verb|\?| to display \verb|psql| relevant commands, and \verb|\q| to quit PostgreSQL console respectively. Notice that both SQL and \verb|psql| commands can be used in PostgreSQL console.
 
-Some widely used psql commands are summarized in Table \ref{ch:db:tab:psqlcommands}. Most, if not all, psql commands start with a back slash ``\verb|\|''.
+Some widely used \verb|psql| commands are summarized in Table \ref{ch:db:tab:psqlcommands}. Most \verb|psql| commands, if not all, start with a back slash ``\verb|\|''.
 
 \begin{table}[!htb]
-	\centering \caption{Widely used psql commands.}\label{ch:db:tab:psqlcommands}
+	\centering \caption{Widely used \texttt{psql} commands.}\label{ch:db:tab:psqlcommands}
 	\begin{tabularx}{\textwidth}{lX}
 		\hline
 		Command & Description \\ \hline
@@ -336,11 +339,9 @@ Some widely used psql commands are summarized in Table \ref{ch:db:tab:psqlcomman
 		\verb|\d <table>| & Describe a table. \\ 
 		\verb|\s| & Show command history. \\ 
 		\verb|\h| & Show help. \\ 
-		\verb|\?| & Show psql commands. \\ 
+		\verb|\?| & Show \texttt{psql} commands. \\ 
 		\verb|\!cls| & Clear screen. \\ 
 		\verb|\q| & Quit DBMS shell. \\
 		\hline
 	\end{tabularx}
 \end{table}
-
-SQL commands, such as creating a database, have been introduced earlier, hence is not repeated here. 
