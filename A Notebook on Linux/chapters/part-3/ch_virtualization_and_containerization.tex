@@ -91,7 +91,7 @@ Depending on the type of the hypervisor configuration, this entity can be either
 
 \subsection{Containerization Terminologies}
 
-Containerization is an alternative virtualization approach to VM that can also virtualize independent workspaces for applications. Comparing with VM, containers are often lighter, hence more efficient for massive microservices deployment. Depending on the context, the term ``container'' may refer to container runtime, container engine or container orchestration.
+Containerization is an alternative virtualization approach to VM that can also virtualize independent workspace for applications. Comparing with VM, containers are often lighter, hence more efficient for massive microservices deployment. Depending on the context, the term ``container'' may refer to container runtime, container engine or container orchestration.
 
 \mync{Container runtime} refers to the backend software that actually hosts the containers. Examples of widely used container runtimes are \verb|containerd|, \verb|runc| and \verb|cri-o|. 
 
@@ -171,7 +171,7 @@ and add
 <sudoer user name> ALL=(ALL) NOPASSWD: /usr/bin/podman
 \end{lstlisting}
 
-\subsection{Manipulation}
+\subsection{Manipulation} \label{sec:docker-manipulation}
 
 This section discusses basic container manipulations such as launching and stopping a container. As mentioned earlier, command \verb|docker| is used as an alias to \verb|podman|.
 
@@ -194,7 +194,7 @@ $ docker run -it --name test-alpine alpine
 where \verb|-i| stands for ``interactive'', which keeps the container's standard input (i.e., the console in this example) open so that the user can actively interact with the container. Option \verb|-t| allocates a pseudo-TTY to the container. TTY stands for ``TeleTYpewriter'', which enforces the I/O of the container to follow the typical terminal format and allows the user to interact with the container like a traditional terminal, hence making the interactive interface a bit more user-friendly. Flags \verb|-it| are often used when running a container in attached mode. Finally, \verb|--name| assigns a name to the container. Without an assigned name, docker will assign a random name to the container.
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=350pt]{chapters/part-3/figures/dockerrunexp.png}
+	\includegraphics[width=\textwidth]{chapters/part-3/figures/dockerrunexp.png}
 	\caption{An example of running alpine container, with interactive TTY and name \textit{test-alpine}.} \label{ch:vac:fig:dockerrunexp}
 \end{figure}
 
@@ -203,13 +203,13 @@ It can be seen from Fig. \ref{ch:vac:fig:dockerrunexp} that once the container i
 While keeping the container running, open another terminal and use \verb|docker container ls| to check the status of the container. More about container commands are collectively introduced later. The container \verb|test-alpine| shall appear in the list, as shown in Fig. \ref{ch:vac:fig:dockerrunexppart2}.
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-3/figures/dockerrunexppart2.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-3/figures/dockerrunexppart2.png}
 	\caption{List the running container \textit{test-alpine}.} \label{ch:vac:fig:dockerrunexppart2}
 \end{figure}
 After exiting from Fig. \ref{ch:vac:fig:dockerrunexp} (by using \verb|exit| in alpine), the container will transfer its status from ``running'' to ``exited'', as shown in Fig. \ref{ch:vac:fig:dockerrunexppart3}.
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-3/figures/dockerrunexppart3.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-3/figures/dockerrunexppart3.png}
 	\caption{List the exited container \textit{test-alpine}.} \label{ch:vac:fig:dockerrunexppart3}
 \end{figure}
 
@@ -218,11 +218,13 @@ Functional wise, \verb|docker run| executes two commands behind the screen, name
 $ docker start <container>
 \end{lstlisting}
 
-\begin{shortbox}
-\Boxhead{Differences between \texttt{docker run} and \texttt{docker start}}
+\begin{mdframed}
+\noindent \textbf{Differences between \texttt{docker run} and \texttt{docker start}}
 
-Do note the fundamental differences between \verb|docker run| and \verb|docker start|. Firstly, \verb|docker run| starts a container from an image and it always creates a new container, whereas \verb|docker start| starts an existing but exit container. Secondly, \verb|docker run| runs a container in attached mode by default unless \verb|-d| flag is used, while in contrast \verb|docker start| runs a container in detached (backend) mode by default unless \verb|-a| is used. 
-\end{shortbox}
+Do note the fundamental differences between \verb|docker run| and \verb|docker start|. 
+
+Firstly, \verb|docker run| starts a container from an image and it always creates a new container, whereas \verb|docker start| starts an existing but exit container. Secondly, \verb|docker run| runs a container in attached mode by default unless \verb|-d| flag is used, while in contrast \verb|docker start| runs a container in detached (backend) mode by default unless \verb|-a| is used. 
+\end{mdframed}
 
 An example of using \verb|docker run| with \verb|-d| flag to start a container in detached mode is given below.
 \begin{lstlisting}
@@ -267,7 +269,7 @@ To enable the TTY shell of a container running in the backend, use
 \begin{lstlisting}
 $ docker exec -it <container> <command>
 \end{lstlisting}
-If \verb|<command>| is replaced by the shell name used in the container, this would open the terminal of the container. Notice that the shell used by the application running inside the container may differ from the one used in the host machine. In the case of an alpine image based container, \verb|ash| is the default shell. For a \textit{ubuntu} image based container, \verb|bash| is often used. To exit from the TTY shell while keep the container running in the backend, use shortcut key \verb|Ctrl+p+q|. An alternative way to interact with containers running in the backend is to use
+If \verb|<command>| is the shell name used in the container, this would open the terminal of the container. In the case of \verb|alpine| image based container, \verb|ash| is the default shell. For \verb|ubuntu| image based container, \verb|bash| is often used. To exit from the TTY shell while keep the container running in the backend, use shortcut key \verb|Ctrl+p+q|. An alternative way to interact with containers running in the backend is to use
 \begin{lstlisting}
 $ docker attach <container>
 \end{lstlisting}
@@ -287,9 +289,9 @@ respectively. The difference between \verb|docker stop| and \verb|docker kill| c
 
 To remove an exited container, use
 \begin{lstlisting}
-$ docker (container) rm <container>
+$ docker rm <container>
 \end{lstlisting}
-where \verb|container| can be neglected. Alternatively, use
+Alternatively, use
 \begin{lstlisting}
 $ docker container prune
 \end{lstlisting}
@@ -374,7 +376,9 @@ where \verb|docker commit| command saves the container's file changes or setting
 \noindent \textbf{Publish Ports for a Container}
 \vspace{0.1in}
 
-By default, containers do not expose any ports to the outside world. A container can be accessed only from its host machine using APIs provided by docker, such as \verb|docker cp| to transfer files and \verb|docker exec| to execute commands, but not network protocols. The user can allow public access from the internet by publishing the ports of the container using
+By default, containers do not expose any ports to the outside world. A container can be accessed only from its host machine using APIs provided by docker, such as \verb|docker cp| to transfer files and \verb|docker exec| to execute commands, but not network protocols. 
+
+The user can allow public access from the internet by publishing the ports of the container using
 \begin{lstlisting}
 $ docker run -p <host machine port>:<container port> <image>
 \end{lstlisting}
@@ -384,14 +388,14 @@ More about containerized application connectivity to the internet, to the host m
 
 \subsection{Deployment Example}
 
-An example of setting up a web server in containers from scratch is given in this section. For simplicity, everything happens on a single physical server. Only one container is used and the load balancer and the shared services are not included in the example.
+An example of setting up a web server in containers from scratch is given in this section. The \verb|nginx| web server is used. For simplicity, everything happens on a single physical server. Only one container is used and the load balancer and the shared services are not included in the example.
 
-As a first step, create a container from the official \textit{nginx} image as follows. Notice that it is also possible to create a container from alpine, and install \textit{nginx} on alpine.
+As a first step, create a container from the official \verb|nginx| image as follows. Notice that it is also possible to create a container using \verb|alpine| image then install \verb|nginx| on the container.
 \begin{lstlisting}
 $ docker run -dt --name simple-web nginx
 \end{lstlisting}
 
-Next, create the configuration file for \textit{nginx}, and also the \textit{html} files to be used as the static web page. For convenience, the files are created and edited in the host machine, then copied to the container. The following \textit{default.conf} and \textit{index.html} have been created, respectively. The configuration file \textit{default.conf} is given below.
+Next, create the configuration file for \verb|nginx|, and also the HTML files to be used as the static web page. For convenience, the files are created and edited in the host machine, then copied to the container. The following \verb|default.conf| and \verb|index.html| have been created, respectively. The configuration file \verb|default.conf| is given below.
 \begin{lstlisting}
 server {
 	listen 80 default_server;
@@ -399,7 +403,7 @@ server {
 	root /var/www/html/;
 }
 \end{lstlisting}
-The \textit{html} file \textit{index.html} is given below.
+The HTML file \verb|index.html| is given below.
 \begin{lstlisting}
 <html>
 	<body>
@@ -407,7 +411,7 @@ The \textit{html} file \textit{index.html} is given below.
 	</body>
 </html>
 \end{lstlisting}
-Use \verb|docker copy| to copy the two files to the designed locations in the container as follows. Notice that for read-only configuration files, unlike what we are doing now, a good practice is to build them into the read-only image layers. Keep in mind that this serves only as an demonstrative example. More about images are given in later sections.
+Use \verb|docker copy| to copy the two files to the designed locations in the container as follows. Notice that for read-only configuration files, unlike what we are doing now, a good practice is to build them into the read-only image layers. More about docker images will be introduced in Section \ref{ch:vac:sec:di}. Keep in mind that this serves only as an demonstrative example.
 \begin{lstlisting}
 $ docker exec simple-web mkdir -p /var/www/html
 $ docker cp default.conf simple-web:/etc/nginx/conf.d/default.conf
@@ -419,7 +423,7 @@ $ docker cp default.conf simple-web:/etc/nginx/conf.d/
 $ docker cp index.html simple-web:/var/www/html/
 \end{lstlisting}
 
-Change the ownership of the \textit{html} file as follows, so that the current user \textit{nginx} is able to access that file.
+In the container, the default login user name is \verb|nginx|. Change the ownership of the HTML file as follows, so that the current user \verb|nginx| is able to access that file.
 \begin{lstlisting}
 $ docker exec simple-web chown -R nginx:nginx /var/www/html
 \end{lstlisting}
@@ -435,21 +439,23 @@ $ docker inspect simple-web | grep IPAddress
 \end{lstlisting}
 and open a browser to key in the obtained IP address. If everything is done correctly, the browser should try to access port 80 of the container, and the ``Hello World!'' web page shall show up.
 
-For easy sharing and populating of the container, commit the container into a new image using \verb|docker commit| as follows. The new image can be used to populate the web server, just like ``web01'' container given below.
+For easy sharing and populating of the container, commit the container into a new image using \verb|docker commit|. The new image can be used to populate the web server as follows.
 \begin{lstlisting}
 $ docker commit simple-web simple-web-image
 $ docker run -dt --name web01 -p 80:80 simple-web-image
 \end{lstlisting}
-where \verb|-p <host machine port>:<container port>| is used to map ports. Notice that different from the previous container ``\textit{simple-web}'', the new container ``\textit{web01}'' IP address port 80 is mapped with the port 80 of the host machine. Therefore, the web page hosted in ``\textit{web01}'' can be accessed not only by the host machine, but also by other machines in the same network with the host machine.
+where \verb|-p <host machine port>:<container port>| is used to map ports. Notice that different from the previous container, the new container \verb|web01| IP address port 80 is mapped with the port 80 of the host machine. Therefore, the web page hosted in \verb|web01| can be accessed not only by the host machine, but also by other machines in the same network with the host machine.
 
 \section{Volume and Bind Mount} \label{ch:vac:subsec:dockervolume}
 
-When a container is running, files inside it can be accessed or copied bidirectionally using the \verb|docker cp| command. However, all data created or modified during the container's life cycle resides in the container's writable layer. More about the concept of layers are introduced in later section. If the container is removed, all data stored in its writable layer is also lost.
+All data created or modified during the container's life cycle resides in the container's writable layer which will be introduced in detail in Section \ref{ch:vac:sec:di}. For now, just mind that if the container is removed, all data stored in its writable layer is also lost.
 
-To ensure data persistence, it is best practice to use Docker volumes or bind mounts. Both methods link storage on the host machine to the container, allowing data to persist even if the container is removed.
+As introduced earlier Section \ref{sec:docker-manipulation}, when a container is running, files inside it can be accessed or copied bidirectionally using the \verb|docker cp| command manually. Therefore, it is possible that before shutting down a container, the user manually exports the data from the container into the persistent storage in the host machine. However, this is not the good practice, as it is asynchronous, redundant and involves human intervention.
+
+To ensure data persistence, it is best practice to use docker volumes or bind mounts. Both methods link storage on the host machine to the container, allowing data to persist even if the container is removed.
 \begin{itemize}
-  \item Docker volumes are fully managed by Docker. The user does not directly interact with the storage on the host machine. There are two types of docker volumes, the anonymous volume and the named volume.
-  \item Bind mounts, on the other hand, allow the user to specify and manage the storage location on the host machine, providing direct control over the data.
+  \item \mync{Docker volume} is docker-managed storage. The user does not directly interact with the storage on the host machine. There are two types of docker volumes, the anonymous volume and the named volume.
+  \item \mync{Bind mount} is user-managed storage. It allows the user to specify and manage the storage location on the host machine, providing direct control over the data.
 \end{itemize}
 
 In addition to data persistence, named docker volumes and bind mount can also play as a hub to shared data among multiple containers, which facilitates data exchange and allows containers to work on the same dataset. 
@@ -462,16 +468,16 @@ To create a docker volume, use
 \begin{lstlisting}
 $ docker volume create <volume>
 \end{lstlisting}
-Notice that docker volume is fully managed by docker. The user cannot, and does not need to specify where the data should be stored in the host machine.
+Notice that docker volume is fully managed by docker. The user cannot, and does not need to specify where the data should be stored in the host machine. As far as the user concerns, it is somewhere on the host machine, and the data resides safely and does not tie to the life cycle of any particular container instance.
 
 To list down volumes and to inspect a volume, use
 \begin{lstlisting}
 $ docker volume ls
 $ docker volume inspect <volume>
 \end{lstlisting}
-respectively. Notice that when using \verb|docker volume inspect|, docker gives the mount point of the volume. However, the mount point is often a place in a virtual machine that docker creates, therefore, difficult to locate in the host machine. Like said earlier, the user should not access the data of a volume from the host machine directly.
+respectively. Notice that when using \verb|docker volume inspect|, docker gives the mount point of the volume. However, the mount point is often a place in a virtual machine that docker creates, hence not to be used to trace to the location on the host machine. Like said earlier, the user should not access the data of a volume from the host machine directly.
 
-Finally to remove specific an unused volume(s) or all unused volumes, use
+To remove specific an unused volume(s) or all unused volumes, use
 \begin{lstlisting}
 $ docker volume rm <volume>
 $ docker volume prune
@@ -488,8 +494,7 @@ Notice that if not specifying the volume name when using flag \verb|-v|, i.e.,
 \begin{lstlisting}
 $ docker run -v <container-path> <image>
 \end{lstlisting}
-an anonymous volume will be created and used. Further more, if \verb|--rm| is used, when the container is stopped, the container together with the anonymous volume will be removed. A use case of anonymous volume is given in the later section.
- Anonymous volumes can also be set up in the Dockerfile.
+an anonymous volume will be created and used. Further more, if \verb|--rm| is used, when the container is stopped, the container together with the anonymous volume will be removed. A use case of anonymous volume is given in the later section. Anonymous volumes can also be set up in the Dockerfile.
 
 \subsection{Bind Mount}
 
@@ -505,7 +510,7 @@ in which case docker will persist and synchronize the data on the paths inside a
 
 Bind mount is often used in development stage where the developer wants to map application source code or data on his host machine into the container directly. When the application is ready for shipping, the consolidated source code and data should be built into the image. You cannot expect the end user to have a separate copy of the source code and data on his machine, and to use bind mount each time he starts the application. 
 
-Following that spirit, a developer can create a ``utility container''. He can start a container in \verb|-it| mode, install everything he needs to develop an application in that container, and develop the application there. Using bind mount, all the code he writes will be mirrored to his host machine. With this approach, he does not need to install all the dependencies of the application in his host machine.
+Following that spirit, a developer can create a ``utility container''. They can start a container in \verb|-it| mode, install everything he needs to develop an application in that container, and develop the application there. Using bind mount, all the code they write will be mounted to his host machine bidirectionally. With this approach, he does not need to install all the dependencies of the application in his host machine.
 
 \subsection{Multiple Volumes}
 
@@ -519,21 +524,24 @@ Consider
 \begin{lstlisting}
 -v <volume or path 1>:/app -v /app/data
 \end{lstlisting} 
-which mount an anonymous volume to \verb|/app/data| to protect it from being overwritten by any content in \verb|<volume or path 1>|. This is a good use case of anonymous volume.
+which mount an anonymous volume to \verb|/app/data| to protect it from being accessed or overwritten by other entities that share \verb|<volume or path 1>| with the container. This is a good use case of anonymous volume.
 
 \section{Image} \label{ch:vac:sec:di}
 
-Images are used to create containers. A \mync{container image} performs like a blueprint that encapsulates all the necessary information needed to spawn a container. It includes initial configurations, requisite libraries, and other pertinent metadata. Docker images are highly portable and can be shared across various machines and platforms. This section delves deeper into the construction and functionality of docker images.
+\mync{Container image} performs like a blueprint that encapsulates all the necessary information needed to spawn a container. It includes initial configurations, requisite libraries, and other pertinent metadata. Docker images are highly portable and can be shared across various machines and platforms. Container instances are most often created from container images.
+
+This section delves deeper into the construction and functionality of container images. Notice that docker image is used interchangeably with container image in the remainder of this section. 
 
 \subsection{Dockerfile Programming}
 
 An image shall contain everything needed to create and initialize a container. This includes but not limited to:
 \begin{itemize}
-  \item Necessary steps to create a container
-  \item Files to support the application
-  \item Libraries, tools and dependencies
+	\item Libraries, tools and dependencies
+	\item Files, data, source codes, configurations for the application
+  	\item Steps to integrate and deploy the libraries, tools, dependencies, files, data, source code, configurations, etc.
+  	\item Startup commands
 \end{itemize}
-In addition, an image shall be designed and organized in such a way that it is portable, reusable and light, and can be used to easily populate large number of containers. For better inheritability, an image might be based on another existing image, which is called its parent image. An image with no parent, such as the official \textit{hello-world} image from docker bub, is called a base image.
+In addition, an image shall be designed and organized in such a way that it is portable, reusable and light, and can be used to easily populate large number of containers. For better inheritability, an image might be based on another existing image, in which case the image it bases on is known as the \mync{parent image}. An image with no parent is called a \mync{base image}.
 
 The most common and flexible way to create a docker image is to build from Dockerfile. The Dockerfile is a text document that serves as the blueprint for constructing a docker image. Generally speaking, a Dockerfile follows the following flow:
 \begin{enumerate}[(1)]
@@ -542,7 +550,7 @@ The most common and flexible way to create a docker image is to build from Docke
 	\begin{itemize}
 		\item Setup file system
 		\item Install dependencies and other programs
-		\item ...
+		\item Include files, data, source code and configurations
 	\end{itemize}
 	\item Specify startup command
 \end{enumerate}
@@ -556,14 +564,14 @@ A more detailed step-by-step guidance example is given later. The relationship b
 
 Since a docker image's primary role is to serve as a template for containers, many Dockerfile commands appear like a ``step-by-step'' recipe for container creation. Each instruction corresponds to an ``image layer''. An image is, in essence, an amalgamation of these layers. It is stored and distributed in this format. If images share layers (for instance, different versions of the same app), these shared layers are not saved or transferred redundantly, hence significantly reducing image sizes. More details can be found at \textit{https://docs.docker.com/storage/storagedriver/}.
 
-\begin{shortbox}
-\Boxhead{Docker Image Layers}
+\begin{mdframed}
+\noindent \textbf{Docker Image Layers}
 
 Docker containers employ a special file system known as the Union File System (UFS), which is well suited to the ``layer'' concept. UFS facilitates file sharing between the container and the host machine, along with combining read-only upper layers and writable lower layers, among other functions. 
 
 A demonstration to illustrate this concept is given in Fig. \ref{ch:vac:fig:dockerlayerdemo}.
 
-\end{shortbox}
+\end{mdframed}
 
 \begin{figure}[!htb]
 	\centering
@@ -1127,26 +1135,3 @@ On the local machine or the VM, multi-container applications can be launched eas
 However, ECS does not use docker compose file to start multi-container applications. One of the reasons for that is that docker compose assumes single physical machine deployment, hence supporting all the notions that the user can use to setup networks, volumes, etc. This is not the case of ECS which does not necessarily deploy everything on one host. This makes the docker compose file less relevant. Nevertheless, the docker compose file, if already exists, can be used as a blue print and the user can refer to the file when deploying containers using ECS.
 
 In ECS, if multiple containers are assigned to the same task, then they are guaranteed to run on the same machine and under the same network. In that case, the application can use \verb|localhost| to communicate with other containers, where \verb|localhost| can be taken as a docker container created for all the containers running on the task. (Recall that to enable container-to-container communication on a local machine, \verb|localhost| in the application code needs to be changed to either the IP address of the container, or the name of the container if they are in the same docker network.)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
