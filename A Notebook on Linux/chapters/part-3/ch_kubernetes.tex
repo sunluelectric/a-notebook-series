@@ -30,7 +30,7 @@ Nowadays, many cloud service providers also support Kubernetes-based container d
 Figure \ref{ch:vac:fig:kubernetescluster} demonstrates the key components Kubernetes has inside its cluster.
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-3/figures/k8sarchitecture.png}
+	\includegraphics[width=0.6\textwidth]{chapters/part-3/figures/k8sarchitecture.png}
 	\caption{Kubernetes cluster and its key components.} \label{ch:vac:fig:kubernetescluster}
 \end{figure}
 As shown in Fig. \ref{ch:vac:fig:kubernetescluster}, Kubernetes manages containers in a centralized ``master-worker'' manner, where the \mync{master node} (also known as \mync{control plane}) in yellow interacts with the user and schedules the Pods to be deployed for each work node. The \mync{work nodes} (also known as \textbf{nodes}, for short) in green, on the other hand, process the application data. The arrows in Fig. \ref{ch:vac:fig:kubernetescluster} represents the control flow. Notice that the application data flows differently and it does not pass through the master. There can be multiple master nodes (in replica mode) and worker nodes, though only one of each is shown in Fig. \ref{ch:vac:fig:kubernetescluster}.

@@ -1,8 +1,8 @@
 \chapter{Cloud Computing}
 
-\myabb{Amazon Web Service}{AWS}, Microsoft Azure, \myabb{Google Cloud Platform}{GCP}, etc., are examples of well-known platforms provided by different cloud service providers. Many cloud services are closely tied to Linux. In this appendix chapter, a general introduction to cloud services is given. 
+\myabb{Amazon Web Service}{AWS}, Microsoft Azure, \myabb{Google Cloud Platform}{GCP}, etc., are examples of cloud service providers. Many cloud services are closely tied to Linux. In this appendix chapter, a general introduction to cloud services is given. 
 
-\myabb{Amazon Web Service}{AWS} is one of the most popular cloud services platforms. AWS services are introduced as examples. Similar services are likely provided by other cloud service providers as well. Therefore, most things about AWS introduced in this appendix chapter should adopt to other cloud services platforms.
+\myabb{Amazon Web Service}{AWS} is one of the most popular cloud services platforms. AWS services are introduced as examples. Similar services are likely provided by other cloud service providers as well. Therefore, most things about AWS introduced in this appendix chapter should similarly apply to other cloud services platforms.
 
 \section{Introduction to Cloud Services}
 
@@ -12,10 +12,10 @@
 
 When developing applications on the cloud, the user and the cloud service provider share the responsibilities to provide and sustain the applications. There are at least the following different cloud services modes. 
 \begin{itemize}
-	\item \myabb{Infrastructure as a Service}{IaaS}
-	\item \myabb{Platform as a Service}{PaaS}
-	\item \myabb{Function as a Service}{FaaS}, also known as serverless.
-	\item \myabb{Software as a Service}{SaaS}
+	\item \mync{Infrastructure as a Service}[IaaS], where the cloud service provider provides the hardware infrastructure, and the user sets up runtime environment for the application and also deploys the source code.
+	\item \mync{Platform as a Service}[PaaS], where the cloud service provider provides the hardware and the runtime environment, and the user deploys application source code.
+	\item \mync{Function as a Service}[FaaS], also known as \mync{serverless}, where the cloud service provider provides the hardware and the engines to execute the user scripts, and the user provides the user scripts containing the algorithm or logic. The user also sets up the trigger for the user scripts. The cloud service provider tracks the trigger and execute the user scripts accordingly.
+	\item \mync{Software as a Service}[SaaS], where the cloud service provider provides the cloud-based application, and the user only manages the data but not the application program or algorithm.
 \end{itemize}
 The modes differ mainly on the way responsibilities are shared. Details are given in Table \ref{tab:cloudservicetier}.
 
@@ -24,8 +24,7 @@ The modes differ mainly on the way responsibilities are shared. Details are give
 	\caption{Different modes of cloud services and the corresponding responsibilities shared between the cloud service provider and the user.} \label{tab:cloudservicetier}
 	\begin{tabularx}{\textwidth}{cccccc}
 		\hline
-		\multirow{3}{*}{Model} & \multirow{3}{*}{Hardware} & App & APP & APP & \multirow{3}{*}{Examples} \\ 
-		& & Runtime & Source & Features & \\ 
+		\multirow{3}{*}{Model} & \multirow{2}{*}{Hardware} & Runtime & Source & Features & \multirow{2}{*}{Examples} \\ 
 		& & Env. & Code & Description & \\ \hline
 		IaaS & C & U & U & U & Virtual machine \\
 		PaaS & C & C & U & U & Cloud-based website \\
@@ -35,12 +34,12 @@ The modes differ mainly on the way responsibilities are shared. Details are give
 	\end{tabularx}
 	\begin{flushleft}
 		\footnotesize
-		C: prepared by cloud service provider; \\
-		U: prepared by user.
+		C: responsibility of the cloud service provider; \\
+		U: responsibility of the user.
 	\end{flushleft}
 \end{table}
 
-The most popular cloud services are \mync{public cloud services} provided by Amazon, Microsoft, Google, IBM, etc. Notice that public cloud services do not make up the entire cloud service market. Many enterprises also have \mync{private cloud services} on premises and their employees can connect to the cloud from the internal \myabb{Local Area Network}{LAN}. There are also \mync{hybrid cloud services} that integrate private and public clouds, allowing a user to use services provided by the public clouds while storing sensitive data in the private clouds.
+The most popular cloud services are \mync{public cloud services} provided by Amazon, Microsoft, Google, IBM, etc., where the services are deployed remotely on the service providers' servers. Notice that public cloud services do not make up the entire cloud service market. Many enterprises also have \mync{private cloud services} where the services are deployed on premises and the employees can connect to the cloud from the internal \myabb{Local Area Network}{LAN}. There are also \mync{hybrid cloud services} that integrate private and public clouds, allowing a user to use services provided by the public clouds while storing sensitive data in the private clouds.
 
 Main public cloud providers include \myabb{Amazon Web Service}{AWS}, Microsoft Azure, \myabb{Google Cloud Platform}{GCP}, and many more. While there are overlaps among the services they provide, each of them usually has some unique features as selling points, such as proprietary database management systems, etc. The impression is that \myabb{Amazon Web Service}{AWS} focuses more on \myabb{Infrastructure as a Service}{IaaS}, hence more flexible, while Azure focuses more on \myabb{Platform as a Service}{PaaS} and \myabb{Software as a Service}{SaaS}, hence more available and easier to use. The user should choose the cloud service provider based on the problem and there is not a globally best cloud service provider for all problems.
 
@@ -52,7 +51,7 @@ There are variety of cloud services. This section tries to categorize the most c
 	\begin{itemize}
 		\item Identity management and access control
 		\item Data encryption
-		\item Secret management
+		\item Secret management, such as tokens and keys
 		\item Cloud services monitoring
 	\end{itemize}
 	\item Computing
@@ -91,9 +90,9 @@ There are variety of cloud services. This section tries to categorize the most c
 
 In the remainder of this appendix chapter, \myabb{Amazon Web Service}{AWS} services are used as examples to demonstrate how the above services are implemented and how they can work together to deploy an application.
 
-\section{AWS Basics}
+\section{AWS Infrastructures}
 
-AWS defines the following concepts.
+AWS infrastructures are deployed in terms of the following.
 \begin{itemize}
 	\item \mync{AWS Region}
 	
@@ -117,25 +116,26 @@ AWS defines the following concepts.
 
 AWS introduces \mync{Identity and Access Management}[IAM] to manage user accounts and their privileges. 
 
-\subsection{IAM User and Role Management}
+\subsection{User and Role Management}
 
-When a user registers an account with AWS for the first time, they get the root account. The user can login to the system with the root account, and create other user accounts and assign roles for them. All services, either created by the root account or by the users emerged from the root account, bill from the root account. 
+When a user registers an account with AWS for the first time, they get the root account. The user can log into the system with the root account, and create other user accounts and assign roles for them. All services, either created by the root account or by the regular users emerged from the root account, bill from the root account. 
 
 Consider following the good practices below with root account.
 \begin{itemize}
 	\item Always enable \myabb{Multifactor Authentication}{MFA} for the root account.
-	\item Limit the use of root account to the minimum and follow the principle of least privilege. Create user accounts or groups of different roles for different tasks.
+	\item Limit the use of root account to the minimum.
+	\item Create user accounts or groups of different roles for different tasks, and while assigning roles follow the principle of least privilege.
 \end{itemize}
-It is recommended to enable MFA and other login protection mechanisms for all accounts, both root and regular ones.
+It is recommended to enable MFA and other login protection mechanisms for all accounts, both root and regular users.
 
 
 AWS introduces the concepts of user, role and policy. They are introduced below.
 \begin{itemize}
 	\item User and user group
 	
-	A user is a virtual representation of a person or an application that needs access to the cloud services. A person user can login to the system with their \mync{access key} from the console. A user or an application can login to the system with their \mync{secret access key} from \myabb{Command Line Interface}{CLI} or \myabb{Application Interface}{API}.
+	A user is a virtual representation of a person or an application that needs access to the cloud services. A person user can log into the system with their \mync{access key} to reach the AWS console (default dashboard). A user or an application can log into the system with their \mync{secret access key} from \myabb{Command Line Interface}{CLI} or \myabb{Application Interface}{API}.
 	
-	A user by itself does not come with any privilege or access to any AWS resource. It simply allows AWS to identify ``who is speaking''. They gain their privilege from the roles assigned to them. When a user is added to a group, they automatically inherit the roles of that group.
+	A user does not come with any privilege or access to any AWS resource by default. It simply allows AWS to identify ``who is speaking''. They gain their privilege from the roles assigned to them. When a user is added to a group, they automatically inherit the roles of that group.
 	
 	User account is often permanent, while its role assignment can be either permanent or temporary.
 	
@@ -147,7 +147,7 @@ AWS introduces the concepts of user, role and policy. They are introduced below.
 	
 	\item Policy
 	
-	A policy is a piece of JSON object (or similar) that represents the contents of roles as well as the rules about which users can assume them.
+	A policy is a piece of JSON object or similar that represents the contents of roles as well as the rules about which users can claim them.
 	
 	AWS provides readily-available policies for commonly seen roles. The user can also write their own roles. An example of a policy is given below.
 	\begin{lstlisting}
@@ -166,17 +166,17 @@ AWS introduces the concepts of user, role and policy. They are introduced below.
 	
 \end{itemize}
 
-\subsection{IAM Database Authentication}
+\subsection{Database Authentication}
 
 In addition to user management and their corresponding roles management, IAM also provides database authentication service. It can generate temporary access tokens, using which a user or a program can access the AWS-managed database without using a password.
 
-Notice that IAM database authentication has some limits. For example, it does not support all types of databases. Cloud activities done via IAM database authentication is sometimes not logged by monitoring services. It cannot be efficiently scaled up when there are many connections.
+Notice that IAM database authentication has some limits. For example, it does not support all databases on AWS. Cloud activities done via IAM database authentication is sometimes not logged by monitoring services. It cannot be efficiently scaled up when there are many connections.
 
 \section{AWS Storage}
 
 There are at least the following storage types in AWS.
 \begin{itemize}
-	\item Object storage: the storage of non-executable files, similar with OneDrive, Google Drive, iCloud Storage, etc.
+	\item Object storage: the storage of non-executable files, similar with OneDrive, Google Drive, etc.
 	\item Block storage: the storage attached to VMs, similar with ``C Drive'' on a personal computer.
 	\item Shared storage: the storage that can be mounted to multiple VMs, similar with \myabb{Network Attached Storage}{NAS} in an office.
 \end{itemize}
@@ -195,8 +195,8 @@ Notice that many AWS managed services also come with storage, for example, AWS m
 https://<bucket name>.s3.<region>.amazonaws.com/<file name>
 	\end{lstlisting}
 	where \verb|bucket name| is the name of S3 bucket of the file, and \verb|file name| the name of the file that may contain sub-directories known as prefix. Notice that bucket name must be globally unique.
-	\item Different storage tiers are available, each with features and cost. More to be introduced later.
-	\item Server-side data encryption can be enabled if the user chooses to do so.
+	\item Different storage tiers are available, each with different features and cost. More to be introduced later.
+	\item Server-side data encryption can be enabled.
 \end{itemize}
 
 \subsection{AWS S3 Object}
@@ -213,9 +213,9 @@ It is worth mentioning that versioning is disabled by default, and the user can 
 
 Versioning can be used for files back up. Some features of S3, such as cross-region back up, require versioning to be enabled as a prerequisite.
 
-As briefly mentioned earlier, S3 provides different storage tiers. Versioning can be integrated with life cycle rules, with which older versions of a file can me automatically moved into a low-cost storage tier. More about storage tiers are introduced later.
+As briefly mentioned earlier, S3 provides different storage tiers. Versioning can be integrated with life cycle rules, with which older versions of a file can me automatically moved into a low-cost storage tier. More about storage tiers are introduced in Section \ref{apsec:aws-s3-storage-tier}.
 
-\subsection{AWS S3 Storage Tiers}
+\subsection{AWS S3 Storage Tiers} \label{apsec:aws-s3-storage-tier}
 
 As of this writing, AWS S3 offers at least the following storage tiers as summarized in Table \ref{tab:s3tiers}.
 
@@ -224,7 +224,8 @@ As of this writing, AWS S3 offers at least the following storage tiers as summar
 	\caption{Different AWS S3 storage tiers and their costs as of this writing.} \label{tab:s3tiers}
 	\begin{tabularx}{\textwidth}{lcc}
 		\hline
-		Tier & Storage$^*$ (/GB) & IO$^{**}$ (/$1$K request)  \\ \hline
+		\multirow{2}{*}{Tier} & Storage$^*$ & IO$^{**}$   \\ 
+		& (/GB month) & (/$1$K request) \\ \hline
 		S3 Standard & 0.0230 & 0.0004 \\
 		S3 Standard Infrequent Access & 0.0125 & 0.0010  \\
 		S3 One Zone Infrequent Access & 0.0100 & 0.0010 \\
@@ -235,7 +236,7 @@ As of this writing, AWS S3 offers at least the following storage tiers as summar
 	\end{tabularx}
 	\begin{flushleft}
 		\footnotesize
-		$^*$ Notice that the in each storage tier, the average cost per TB may also be affected by the total storage size. The larger the total size, the cheaper per TB may cost. \\
+		$^*$ The average cost per TB may also be affected by the total storage size. The larger the total size, the cheaper per TB may cost. \\
 		$^{**}$ Write and read cost may differ. The table lists only the cost for read requests.
 	\end{flushleft}
 \end{table}
@@ -244,27 +245,27 @@ From Table \ref{tab:s3tiers}, it can be seen that different storage tiers are de
 
 \subsection{AWS S3 Storage Protection}
 
-Following protections can be enabled for AWS S3.
+The following protections can be enabled for AWS S3.
 \begin{itemize}
-	\item Data lock.
+	\item Data lock
 	
-	Data lock can be used to prevent data from being accidentally deleted or modified. AWS S3 uses S3 Object Lock that stores objects using write-once-read-many model. When it is effective, the data, once written, cannot be modified or removed. 
+	Data lock can be used to prevent data from being accidentally deleted or modified. AWS S3 uses S3 Object Lock that stores objects using write-once-read-many model. When S3 Object Lock is enabled, the data, once written, cannot be modified or removed. 
 	
-	S3 Object Lock can be applied on single object or on the entire bucket. S3 Object Lock can work in governance mode where only specified persons can change the object, or in compliance mode where nobody can change the object within the time frame.
+	S3 Object Lock can be applied on single object or on the entire bucket. S3 Object Lock can work in governance mode where only specified persons can change the object, or in compliance mode where nobody (not even the root user) can change the object within a certain period of time.
 	
-	\item Data encryption.
+	\item Data encryption
 	
 	Data encryption can be used to prevent data leakage.
 	
 	It is possible to enforce the use of HTTPS and SSL/TLS when transmitting data. Server-side encryption can be enabled or enforced, and there are several modes for that, including SSE-S3 (S3 built-in encryption), SSE-KMS (AWS key management based encryption) and SSE-C (customer key management based encryption).
 	
-	\item Data access control.
+	\item Data access control
 	
 	Data access control can be used to manage the services and networks that can access the stored items.
 	
 	S3 Access Point can be used to manage virtual networks that can access an S3 bucket. \myabb{Multifactor authentication}{MFA} can be used on S3 when performing deletion.
 	
-	\item Monitoring services.
+	\item Monitoring services
 	
 	Monitoring services can be used to monitor suspicious behaviors and notify the users of such behavior if any.
 	
@@ -275,20 +276,25 @@ Following protections can be enabled for AWS S3.
 
 In this context, ``performance'' refers to the maximum IO in a given period of time. There are multiple ways to improve S3 performance.
 \begin{itemize}
-	\item Read.
+	\item Read
 	\begin{itemize}
 		\item Use S3 Byte-Range Fetches for faster downloading.
 		\item Use S3 Replica and S3 Transfer Acceleration to create bucket backup within or cross region, which helps with reading performance.
 		\item Use prefix to improve performance when there are many files inside a bucket.
 	\end{itemize}
-	\item Write. Use multipart uploads for fast file uploading. Multipart upload is compulsory for files with size larger than $5$GB.
+	\item Write 
+	\begin{itemize}
+		\item Use multipart uploads for fast file uploading. Multipart upload is compulsory for files with size larger than $5$GB.
+	\end{itemize}
 \end{itemize}
 
 Notice that SSE-KMS based S3 encryption limits the performance. Consider using other encryption methods for frequent IO.
 
 \subsection{AWS Elastic Block Store}
 
-\mync{AWS Elastic Block Store}[AWS EBS] is the default block storage of AWS. It is often attached to a \myabb{virtual machine}{VM}. There are two types of EBS volumes, namely the \myabb{Solid-State Drive}{SSD} and the \myabb{hard Disk Drive}{HDD}. SSD is faster than HDD and it is recommended for general purposes. HDD can be used only if the VM requires large data storage space with less cost. For a VM, the OS and boot script must be saved in SSD.
+\mync{AWS Elastic Block Store}[AWS EBS] is the default block storage of AWS. AWS EBS is often attached to a \myabb{virtual machine}{VM} and used as its disk storage. 
+
+There are two types of EBS volumes, namely the \myabb{solid-state drive}{SSD} and the \myabb{hard disk drive}{HDD}. SSD is faster than HDD and it is recommended for general purposes. HDD can be used only if the VM requires large data storage space with less cost. For a VM, the OS and boot script must be saved in SSD.
 
 Commonly seen EBS are listed below.
 \begin{itemize}
@@ -313,21 +319,28 @@ EBS volumes can be scaled or changed types on the fly.
 
 \subsection{AWS EBS Snapshot}
 
-EBS Snapshots are point-in-time photographs of EBS volumes. EBS Snapshot is useful as a VM instance back up. It can be used to quickly launch and configure a new VM instance, and it can be shared among different AWS accounts. By default, EBS Snapshot data is encrypted.
+\mync{AWS EBS Snapshot} refers to the point-in-time snapshot of EBS volumes. By default, EBS Snapshot data is encrypted. EBS Snapshot is useful as a VM instance back up. It can also be used to mirror the deployment of an existing VM instance. EBS Snapshot can be shared among different AWS accounts. 
 
-\myabb{Amazon Machine Image}{AMI} is the AWS maintained re-usable image provided by AWS that contains information required to launch an VM instance. EBS Snapshot is one of the two commonly seen AMI types, and the other is Instance Store.
+\myabb{Amazon Machine Image}{AMI} is the AWS maintained re-usable image provided by AWS that contains information required to launch an VM instance. There are two types of AMI, and EBS Snapshot is one of them. 
 
-Unlike EBS Snapshot which is incremental by nature, Instance Store is simply a launching template that can be stored in AWS S3. Hence, EBS Snapshot and Instance Store differs in many ways. For example, consider a new instance started from EBS volume. When it is stopped, the user can save newly generated data back into the EBS Snapshot. In this way, the EBS Snapshot becomes incremental, and the user can continue its VM tasks in a later time. The same does not apply to VM instances launched from Instance Store. In other words, Instance Store is stationary and not incremental by nature.
+\begin{mdframed}
+\noindent \textbf{Two AMI Types}
 
-It is safe to reboot VM instances launched from both EBS Snapshot and Instance Store without loosing data. This is because VM launched from Instance Store, just like any other VM instance, is also assigned with a temporary block storage. When the VM is terminated, the block storage is gone. It is just that the data cannot be written back into the Instance Store.
+AMI has two types, the EBS Snapshot and the AWS EC2 Instance Store. The former is a snapshot of the hard drive of a VM. The later is a launching template of a VM. Both of them can be used to launch VM instances, and both of them can be stored and shared. That said, there are important differences. A brief comparison is given below.
+
+Consider two VM instances, one launched from an EBS snapshot, and the other launched from an Instance Store. Both VM instances can be rebooted safely without losing any new data added to the VM after launching. When the VM instances are shutdown, the former one has the choice of writing the new data back to the EBS Snapshot. In this way, the EBS Snapshot becomes incremental. The user can continue left work at a later time by launching a new VM instance using the new EBS Snapshot. 
+
+However, the same cannot be applied to Instance Store. An Instance Store cannot be generated from a VM instance. In other words,  Instance Store is stationary and not incremental by nature. When the second VM instance is stopped, should the data in the VM needs to be preserved, the data must be exported using other methods and cannot be written back to an Instance Store.
+
+\end{mdframed}
 
 \subsection{AWS Elastic File System}
 
-\myabb{AWS Elastic File System}{AWS EFS} refers to the shared storage that can be mounted by multiple VMs. The VMs can use EFS to share information. EFS provides read-after-write consistency. There are the following different types of EFS.
+\mync{AWS Elastic File System}[AWS EFS] refers to the shared storage that can be mounted by multiple VMs. The VMs can use EFS to share information. EFS provides read-after-write consistency. There are the following different types of EFS.
 \begin{itemize}
 	\item EFS (general purpose): distributed and highly resilient storage for Linux-based VM instances
 	\item Amazon FSx for Windows: centralized storage for Windows-based VM instances or Windows-based applications
-	\item Amazon FSx for Lustre: high-speed high-performance distributed storage for \myabb{High Performance Computing}{HPC}
+	\item Amazon FSx for Lustre: high-speed high-performance distributed storage for \myabb{high performance computing}{HPC}
 \end{itemize}
 
 \section{AWS Computing}
@@ -343,7 +356,7 @@ Both are introduced in this section.
 
 \myabb{AWS Elastic Cloud Computing}{AWS EC2} is AWS's cloud-based \myabb{Virtual Machine}{VM} service. It allows the user to deploy a cloud-based VM of their specified computation core, memory, OS, network adapter, etc. The user can easily scale up or down the resources with no or very little black out time, and pay only the running cost on-demand. 
 
-The user can launch and login to the EC2 instance and configure it and install software, very much like login to a personal computer. The VM can also be automatically launched and configured with automation scripts. For example, the user can specify bootstrap script (also known as user data) when launching an VM instance. The bootstrap script is automatically executed after the booting of the VM. It is often used to configure the initial status of the system and to install software.
+The user can launch and log into the EC2 instance and configure it and install software, very much like log into a personal computer. The VM can also be automatically launched and configured with automation scripts. For example, the user can specify bootstrap script (also known as user data) when launching an VM instance. The bootstrap script is automatically executed after the booting of the VM. It is often used to configure the initial status of the system and to install software.
 
 With properly assigned roles, the EC2 can access the Internet as well as other AWS managed resources such as databases to perform tasks or to host an application.
 
@@ -391,11 +404,11 @@ It is possible to attach multiple network adapters to a EC2 instance. However, t
 
 \subsection{EC2 Connectivity and Access Control}
 
-When an EC2 is launched, the user can login to the EC2 instance via several ways. One of the easiest and most commonly used way is introduced below.
+When an EC2 is launched, the user can log into the EC2 instance via several ways. One of the easiest and most commonly used way is introduced below.
 \begin{enumerate}
-  \item When launching an EC2 instance, the user should create (or use an existing) key pair and attach it to the EC2 instance. This involves downloading the private key to the user's local machine. Later, the user can remote login to the EC2 instance with the private key. Consider changing the permission of the private key using \texttt{chmod 400 <key name>.pem}.  When launching the EC2 instance, select allow SSH login. This will enable SSH login in the Security Group of the EC2 instance.
+  \item When launching an EC2 instance, the user should create (or use an existing) key pair and attach it to the EC2 instance. This involves downloading the private key to the user's local machine. Later, the user can remote log into the EC2 instance with the private key. Consider changing the permission of the private key using \texttt{chmod 400 <key name>.pem}.  When launching the EC2 instance, select allow SSH login. This will enable SSH login in the Security Group of the EC2 instance.
   \item Once the EC2 instance is launched, get its public IP address from AWS console.
-  \item SSH login to the EC2 instance using the IP address and the private key as follows:
+  \item SSH log into the EC2 instance using the IP address and the private key as follows:
   \begin{lstlisting}
 ssh ec2-user@<ip address> -i <key name>.pem
   \end{lstlisting}
@@ -406,7 +419,7 @@ ssh ec2-user@<ip address> -i <key name>.pem
 When an EC2 is launched, by default it is a independent \myabb{Virtual Machine}{VM} and has no access to other AWS services such as databases. For VMs that need to access AWS services, it is recommended that a role be created and attached to the EC2 instance. When a user logs into the system, they can temporarily assign their role to the EC2 instance as follows.
 
 \begin{enumerate}
-    \item Remote login to the system as introduced earlier. Note that at this point it is simply an individual VM and has no access to any AWS service. The EC2 instance does not identify the user. The private key \verb|.pem| file cannot be used to identify the user who login to the system.
+    \item Remote log into the system as introduced earlier. Note that at this point it is simply an individual VM and has no access to any AWS service. The EC2 instance does not identify the user. The private key \verb|.pem| file cannot be used to identify the user who log into the system.
     \item Run command \verb|aws configure| and follow the configuration wizard. At some point, it asks the user for the secret access key pair. Once the user is identified, the user's role is temporarily attached to the EC2 instance.
 \end{enumerate} 
 
