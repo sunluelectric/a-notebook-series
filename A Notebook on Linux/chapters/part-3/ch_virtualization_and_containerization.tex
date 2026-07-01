@@ -537,7 +537,7 @@ This section delves deeper into the construction and functionality of container 
 An image shall contain everything needed to create and initialize a container. This includes but not limited to:
 \begin{itemize}
 	\item Libraries, tools and dependencies
-	\item Files, data, source codes, configurations for the application
+	\item Files, data, source codes, configurations, etc., for the application
   	\item Steps to integrate and deploy the libraries, tools, dependencies, files, data, source code, configurations, etc.
   	\item Startup commands
 \end{itemize}
@@ -546,7 +546,7 @@ In addition, an image shall be designed and organized in such a way that it is p
 The most common and flexible way to create a docker image is to build from Dockerfile. The Dockerfile is a text document that serves as the blueprint for constructing a docker image. Generally speaking, a Dockerfile follows the following flow:
 \begin{enumerate}[(1)]
 	\item Specify base image
-	\item Add additional configurations
+	\item Add files, data, source codes, configurations, etc.
 	\begin{itemize}
 		\item Setup file system
 		\item Install dependencies and other programs
@@ -554,56 +554,52 @@ The most common and flexible way to create a docker image is to build from Docke
 	\end{itemize}
 	\item Specify startup command
 \end{enumerate}
-A more detailed step-by-step guidance example is given later. The relationship between Dockerfile, image and container is illustrated in Fig. \ref{ch:vac:fig:dockerfiletoimage}. Notably, the Dockerfile itself isn't included within the resulting image.
+A more detailed step-by-step guidance example is given later. The relationship between Dockerfile, image and container is illustrated in Fig. \ref{ch:vac:fig:dockerfiletoimage}. Notably, the Dockerfile itself is not included within the resulting image.
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=350pt]{chapters/part-3/figures/dockerfiletoimage.png}
+	\includegraphics[width=0.8\textwidth]{chapters/part-3/figures/dockerfiletoimage.png}
 	\caption{A demonstration of how Dockerfile, image and container link to each other.} \label{ch:vac:fig:dockerfiletoimage}
 \end{figure}
 
-Since a docker image's primary role is to serve as a template for containers, many Dockerfile commands appear like a ``step-by-step'' recipe for container creation. Each instruction corresponds to an ``image layer''. An image is, in essence, an amalgamation of these layers. It is stored and distributed in this format. If images share layers (for instance, different versions of the same app), these shared layers are not saved or transferred redundantly, hence significantly reducing image sizes. More details can be found at \textit{https://docs.docker.com/storage/storagedriver/}.
+Since a docker image's primary role is to serve as a template for containers, many Dockerfile commands appear like a ``step-by-step'' recipe for container creation. Each instruction corresponds to an ``image layer''. An image is, in essence, an amalgamation of these layers. It is stored and distributed in this format. If images share layers (for instance, different versions of the same app), these shared layers are not saved or transferred redundantly, hence significantly reducing image sizes.
 
-\begin{mdframed}
-\noindent \textbf{Docker Image Layers}
-
-Docker containers employ a special file system known as the Union File System (UFS), which is well suited to the ``layer'' concept. UFS facilitates file sharing between the container and the host machine, along with combining read-only upper layers and writable lower layers, among other functions. 
-
-A demonstration to illustrate this concept is given in Fig. \ref{ch:vac:fig:dockerlayerdemo}.
-
-\end{mdframed}
+Docker containers employ a special file system known as the Union File System (UFS), which is well suited to the ``layer'' concept. UFS facilitates file sharing between the container and the host machine, along with combining read-only upper layers and writable lower layers, among other functions. A demonstration to illustrate this concept is given in Fig. \ref{ch:vac:fig:dockerlayerdemo}.
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=350pt]{chapters/part-3/figures/dockerlayerdemo.png}
+	\includegraphics[width=\textwidth]{chapters/part-3/figures/dockerlayerdemo.png}
 	\caption{A demonstration of docker image layer structure.} \label{ch:vac:fig:dockerlayerdemo}
 \end{figure}
 
-Just as a quick example, the Dockerfile to build the official \textit{hello-world} image from docker hub looks like the following.
+Just as a quick example, the Dockerfile to build the official \verb|hello-world| image from docker hub looks like the following.
 \begin{lstlisting}
 FROM scratch
 COPY hello /
 CMD ["/hello"]
 \end{lstlisting}
-In the example above, \verb|FROM scratch| signifies that this image is a base image without a parent. The \verb|COPY hello /| instruction copies the \textit{hello} binary script from the image to the root directory of the container. Lastly, \verb|CMD ["/hello"]| runs the \textit{hello} binary script.
+In the example above, \verb|FROM scratch| signifies that this image is a base image without a parent. The \verb|COPY hello /| instruction copies the \verb|hello| binary script from the image to the root directory of the container. Lastly, \verb|CMD ["/hello"]| runs the \verb|hello| binary script.
 
-In general, a typical Dockerfile includes the following instructions to build an image. These instructions allow the image to know how to create a container, automatically construct the file system directory structure, install necessary packages, and run the app:
+In general, a typical Dockerfile includes the following instructions to build an image. These instructions allow the image to know how to create a container, automatically construct the file system directory structure, install necessary packages, and run the app.
 \begin{enumerate}[(1)]
-  \item Define parent image.
+  \item Define base image.
   \item Create filesystem directory.
   \item Set working directory.
-  \item Copy files.
-  \item Configure registry.
-  \item Install packages.
+  \item Install libraries, dependencies, tools and applications.
+  \begin{enumerate}[(a)]
+  	\item Add / Copy files.
+  	\item Add registry.
+  	\item Install libraries, dependencies, tools and applications.
+  \end{enumerate}
   \item Copy more files after package installation.
   \item Switch to the correct user.
   \item Expose port.
-  \item Run the application.
+  \item Start the application using user script.
 \end{enumerate}
 
 The commonly used keywords to be used in a Dockerfile to realize the above instructions, such as \verb|FROM|, \verb|RUN|, are explained in Table \ref{ch:vac:tab:keywordsdockerfile}. 
 
-It is worth highlighting the distinction between \verb|RUN| and \verb|CMD|. The \verb|RUN| command is executed during the building of the image, which creates a virtual representation of the environment to run the service. Therefore, \verb|RUN| is used to prepare the environment, for example, to install necessary libraries. On the other hand, command \verb|CMD| simply specifies the default command to run when the container starts. It is in built together with the image, but not considered as a read-only image layer. Indeed, the contents in \verb|CMD| can even be overwritten if the user wishes to do so when \verb|docker run| executes.
+It is worth highlighting the difference between \verb|RUN| and \verb|CMD|. The \verb|RUN| command is executed during the building of the image, which creates a virtual representation of the environment to run the service. Therefore, \verb|RUN| is used to prepare the environment, for example, to install necessary libraries. On the other hand, command \verb|CMD| simply specifies the default command to run when the container starts. It is built together with the image, but can be overwritten if the user wishes to do so when running \verb|docker run|. In this sense, though \verb|CMD| instruction is included in the image, it is not quite read-only.
 
 \begin{table}[!htb]
 	\centering \caption{Critical keywords used in a Dockerfile.}\label{ch:vac:tab:keywordsdockerfile}
@@ -628,9 +624,9 @@ Besides Table \ref{ch:vac:tab:keywordsdockerfile}, there are other Dockerfile ke
 ENV PORT=80
 EXPOSE $PORT # this is interpreted as EXPOSE 80
 \end{lstlisting}
-Notice that environmental variables are accessible by the application code. They can be overwritten during \verb|docker run|. This means that the user can potentially use environmental variable to dynamically change the behavior of the application in the container when using \verb|docker run|. There are several benefits of doing this, for example, to enhance security. For example, if there is a password that the user needs to key in during the start of the container, the developer may want to put it as environmental variable and let the user to fill in, instead of hardcode the password in Dockerfile.
+Notice that environmental variables are accessible by the application code. They can be overwritten during \verb|docker run|. This means that the user can potentially use environmental variable to dynamically change the behavior of the application in the container when using \verb|docker run|. There are several benefits of doing this, for example, to enhance security. For example, if there is a password that the user needs to key in during the start of the container, the developer may want to put it as environmental variable and let the user to fill in, instead of hard-code the password in Dockerfile.
 
-Another useful features of Dockerfile is the Dockerfile argument. It leaves a ``space'' in the Dockerfile that the developer can later fill in when he builds the image. An example is given below.
+Another useful features of Dockerfile is the Dockerfile argument. Dockerfile argument value can be left empty and later filled in when the image is been built. An example is given below.
 \begin{lstlisting}
 ARG DEFAULT_PORT[=80]
 ENV $DEFAULT_PORT
@@ -640,9 +636,9 @@ The default value \verb|[=80]| is optional. When building the image, use \verb|-
 
 Additionally, \verb|LABEL <key>="<value>"| assigns a tag to the image, which can be displayed when \verb|docker inspect <container>| is used.
 
-Dockerfile programming can be very flexible and complicated at the same time. The advanced materials goes beyond the scope of this notebook.
+Dockerfile programming can be very flexible and complicated. The advanced materials goes beyond the scope of this notebook.
 
-Examples of Dockerfiles are given below, one from \textit{docs.docker.com} and the other from Linux Academy. The docker image layer structure of the second example is given in Fig. \ref{ch:vac:fig:dockerlayerdemo} as a demonstration. Notice that in Fig. \ref{ch:vac:fig:dockerlayerdemo}, \verb|bootfs| refers to the ``boot file system'', including the bootloader and the Linux kernel. Upon creation of a container using \verb|docker run|, a container layer will be added to the image, as shown by the blue dashed box in Fig. \ref{ch:vac:fig:dockerlayerdemo}. In the container, all the changes made is saved into the container layer.
+Examples of Dockerfiles are given below, one from Docker official website and the other from Linux Academy. The docker image layer structure of the second example is given in Fig. \ref{ch:vac:fig:dockerlayerdemo} as a demonstration. Notice that in Fig. \ref{ch:vac:fig:dockerlayerdemo}, \verb|bootfs| refers to the ``boot file system'', including the bootloader and the Linux kernel. Upon creation of a container using \verb|docker run|, a container layer will be added to the image, as shown by the blue dashed box in Fig. \ref{ch:vac:fig:dockerlayerdemo}. In the container, all the changes made is saved into the container layer.
 
 To generate a new image to include the changes made in the container, use \verb|docker commit|, which essentially commits the container layer as the latest image layer in the new image, as shown by the green dashed box in Fig. \ref{ch:vac:fig:dockerlayerdemo}.
 
@@ -675,19 +671,15 @@ EXPOSE 8080
 CMD ["node", "index.js"]
 \end{lstlisting}
 
-\subsection{Build an Image}
+\subsection{Image Building} \label{sec:docker-image-building}
 
 With the Dockerfile ready, use \verb|docker build| to build an image. An example is given as follows.
 \begin{lstlisting}
-$ docker build <path/url> -t <image name>
+$ docker build <path/url> -t [<username>/]<image name>[:<tag>]
 \end{lstlisting}
-or
-\begin{lstlisting}
-$ docker build <path/url> -t <user name>/<image name>:<tag>
-\end{lstlisting}
-where \verb|<path/url>| is the path or URL to the directory where the Dockerfile locates (does not need to contain ``\verb|/Dockerfile|'' in its end), and \verb|-t| gives a tag, in this case an image name, to the image to build. For the convenience of sharing, it is recommended that all images to be pushed to a public registry (such as Docker Hub) shall be tagged with user name and version. Notice that the tag can be changed later after the image is built.
+where \verb|<path/url>| is the path or URL to the directory where the Dockerfile is located at. Notice that it is assumed that the Dockerfile is named \verb|Dockerfile| (with no suffix), and ``\verb|/Dockerfile|'' does not need to be included in \verb|<path/url>|. Terms \verb|<username>/| and \verb|:<tag>| are optional as part of the image name. For the convenience of sharing, it is recommended that all images to be pushed to a public registry (such as Docker Hub) shall be tagged with username and version. Notice that the tag can be changed later after the image is built.
 
-It is worth mentioning that \verb|docker build| builds the images by layers in the Dockerfile, and it will not re-build the same layer to which point no changes are made. This feature suggests that we should put the common and static layers in the early part of Dockerfile, and customized and user-defined layers in the late part, thus making the building (and also sharing, as will be introduced later) of the images more efficient.
+It is worth mentioning that \verb|docker build| builds an image by layers in the Dockerfile, and it will not re-build the same layer to which point no changes are made. This feature suggests that we should put the common and static layers in the early part of Dockerfile, and customized and user-defined layers in the late part, thus making the building (and also sharing, as will be introduced later) of the images more efficient.
 
 Use \verb|.dockerignore| to exclude any files that should not be built into the image. Such files may include caches, the Dockerfile itself, etc.
 
@@ -707,21 +699,20 @@ WORKDIR /app
 COPY --from=builder /app/dist /app/dist
 CMD ["node", "dist/index.js"]
 \end{lstlisting}
-
-The idea is like the following.
+The idea behind multi-stage image built is as follows.
 \begin{itemize}
   \item The earlier stages prepare files. The later stages use \verb|COPY --from| to copy the results of earlier stages to the current stage.
   \item Only the last stage is included in the final image.
 \end{itemize}
 
-A benefit of using multi-stage build is to reduce the image size. As introduced earlier, the intermediate results of the earlier stages will not be included in the final image unless they are \verb|COPY --from| by the last stage. For example, the user may want to compile his source code in an earlier stage, and only copy the compiled binary file into the last stage. In this way, the user avoids including the source code in the final stage which he needs to share with others.
+A benefit of using multi-stage build is to reduce the image size. As introduced earlier, the intermediate results of the earlier stages will not be included in the final image unless they are \verb|COPY --from| by the last stage. For example, the user may want to compile his source code in an earlier stage, and only copy the compiled binary files into the last stage. In this way, the user avoids including the source code in the final stage which he needs to share with others.
 
 The \verb|COPY --from| syntax is given below.
 \begin{lstlisting}
 COPY --from=<stage-name-or-index> <source-path> <destination-path>
 \end{lstlisting}
 
-\subsection{Docker Image Management}
+\subsection{Image Management}
 
 The most commonly used image operations can be categorized as follows.
 \begin{itemize}
@@ -731,11 +722,11 @@ The most commonly used image operations can be categorized as follows.
   \item Manage local images, such as listing down all images, deleting an image, etc.
 \end{itemize}
 
-The first two operations have been introduced in earlier sections. The third and last ones are introduced below. Use the following command to search for an image on the default remote repository server (Docker Hub).
+The first two operations have been introduced in earlier Sections \ref{sec:docker-image-building} and \ref{sec:docker-manipulation}. The third and last ones are introduced below. Use the following command to search for an image on the default remote repository server, which is often Docker Hub.
 \begin{lstlisting}
 $ docker search <image name>
 \end{lstlisting}
-Use the following command to download or update an image from the default remote repository server as follows. Notice that different from \verb|docker run|, this command will not start a container from the image.
+Use the following command to download or update an image from the default remote repository server. Notice that different from \verb|docker run|, this command will not start a container from the image after the download.
 \begin{lstlisting}
 $ docker pull <image name>
 \end{lstlisting}
@@ -756,8 +747,6 @@ Use the following command to inspect an image, and list down its metadata detail
 $ docker image inspect <image name>
 \end{lstlisting}
 
-\subsection{Docker Image Sharing with Docker Hub}
-
 There are two ways to share an image:
 \begin{itemize}
 	\item Share the Dockerfile and APP source code so that the receiver can build docker image from his end.
@@ -765,15 +754,15 @@ There are two ways to share an image:
 \end{itemize}
 It is often more convenient to share the built image instead of the Dockerfile and the source code. However, a docker image is stored and managed by layers and cannot be shared simply by file transfer. 
 
-Docker Hub is a commonly used server for storing and sharing docker images. It is also the default remote repository server of docker engine. However, do notice that Docker Hub is not the only remote docker image server. Some alternatives are Amazon Elastic Container Registry, Red hat Quay, Azure Container Registry, Google Container Registry, etc.
+Docker Hub is a commonly used server for storing and sharing docker images. It is also the default remote repository server of docker engine. However, do notice that Docker Hub is not the only remote docker image server. Some alternatives are Amazon Elastic Container Registry, Red hat Quay, Azure Container Registry, Google Container Registry, etc. In the remainder of this section, only Docker Hub is concerned.
 
-After registering an account on docker bub, use the following command to login to the Docker Hub from your local machine.
+After registering an account on Docker Hub, use the following command to login to the Docker Hub from a local machine.
 \begin{lstlisting}
 $ docker login --username=<user name>
 Passowrd:
 \end{lstlisting}
 
-Assume that there is an image in the local machine, and an empty repository on Docker Hub. In order to push the local image to the Docker Hub, the first step is to add the remote repository and the ``\textit{RepoTags}'' in the local image as follows.
+Assume that there is an image in the local machine, and an empty repository on Docker Hub. In order to push the local image to the Docker Hub, the first step is to add the remote repository and the the repository tag in the local image as follows.
 \begin{lstlisting}
 $ docker tag <image name> <user name>/<repository name>:<version>
 \end{lstlisting}
@@ -873,13 +862,13 @@ Notice that when using container network for cross container communication, ther
 
 \subsection{Docker Compose}
 
-As introduced earlier, docker engine can be used to build and share images as well as start, monitor, and stop containers. It can be difficult for a user to manage containers manually when a lot of them are deployed. Container orchestrators such as Portainer and Kubernetes are helpful with managing containers. Many of these tools are able to automatically adjust the number of containers and balance their loads.
+As introduced earlier, docker engine can be used to build and share images as well as start, monitor, and stop containers. It can be difficult for a user to manage containers manually when a lot of them are deployed. Container orchestrator such as Portainer and Kubernetes are helpful with managing containers. Many of these tools are able to automatically adjust the number of containers and balance their loads.
 
 Many applications nowadays are multi-service multi-container applications. This trend has made container orchestration very useful in practice.
 
 Consider building and launching a multi-container applications. Multiple \verb|docker build| and \verb|docker run| commands need to be executed in specific order, and each command coming with a long list of arguments. Doing this manually can be tedious and introduce a high chance of human error.
 
-A docker compose file is essentially a configuration file in YAML, usually named \verb|docker-compose.yml| (in later versions of docker compose, it can also be named \verb|compose.yml|). It plays as the user script or configuration file that automate the processes. Docker compose can process that configuration file, then build and launch containers accordingly. From that sense, docker compose can be seen as a container orchestration tool. 
+A docker compose file is essentially a configuration file in YAML, usually named \verb|docker-compose.yml| (in later versions of docker compose, it can also be named \verb|compose.yml|). It plays as the user script or configuration file that automate the processes. \mync{Docker compose} is the tool that can process the docker compose configuration file, then build and launch containers accordingly. From that sense, docker compose can be seen as a container orchestration tool. 
 
 This section gives a brief introduction to the preparation of a docker compose file. Examples of docker compose files can be found elsewhere online, such as \texttt{github.com/docker/awesome-compose}. 
 

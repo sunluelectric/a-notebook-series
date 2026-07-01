@@ -118,38 +118,37 @@ AWS introduces \mync{Identity and Access Management}[IAM] to manage user account
 
 \subsection{User and Role Management}
 
-When a user registers an account with AWS for the first time, they get the root account. The user can log into the system with the root account, and create other user accounts and assign roles for them. All services, either created by the root account or by the regular users emerged from the root account, bill from the root account. 
+When a user registers an account with AWS for the first time, they get the root account. The user can log into the system with the root account, and create other user accounts and assign roles or policies to them. All services, either created by the root account or by the regular users emerged from the root account, bill from the root account. 
 
 Consider following the good practices below with root account.
 \begin{itemize}
 	\item Always enable \myabb{Multifactor Authentication}{MFA} for the root account.
 	\item Limit the use of root account to the minimum.
-	\item Create user accounts or groups of different roles for different tasks, and while assigning roles follow the principle of least privilege.
+	\item Create user accounts or groups of different types for different tasks, and while assigning privileges follow the principle of least privilege.
 \end{itemize}
 It is recommended to enable MFA and other login protection mechanisms for all accounts, both root and regular users.
-
 
 AWS introduces the concepts of user, role and policy. They are introduced below.
 \begin{itemize}
 	\item User and user group
 	
-	A user is a virtual representation of a person or an application that needs access to the cloud services. A person user can log into the system with their \mync{access key} to reach the AWS console (default dashboard). A user or an application can log into the system with their \mync{secret access key} from \myabb{Command Line Interface}{CLI} or \myabb{Application Interface}{API}.
+	A user is a virtual representation of a person or an application that needs access to the cloud services. A person user can log into the system with their \mync{access key} to use the AWS console (default dashboard). A user or an application can log into the system with their \mync{secret access key} from \myabb{Command Line Interface}{CLI} or \myabb{Application Interface}{API}.
 	
-	A user does not come with any privilege or access to any AWS resource by default. It simply allows AWS to identify ``who is speaking''. They gain their privilege from the roles assigned to them. When a user is added to a group, they automatically inherit the roles of that group.
+	A user does not come with any privilege or access to any AWS resource by default. It simply allows AWS to identify ``who is speaking''. They gain their privilege from the roles and policies assigned to them. 
 	
-	User account is often permanent, while its role assignment can be either permanent or temporary.
+	When a user is added to a user group, they automatically inherit the privileges of that group. A user may belong to no group (not recommended), one group, or multiple groups.
 	
 	\item Role
 	
-	A role is a collection of privileges and accesses to specific AWS resources. Different from a user, a role is not about ``who is speaking'' but about ``what they can do''. A role can be assigned to a user, in which case the user gains the privilege and access to the AWS resources specified by the role.
+	A role is a collection of privileges and accesses to specific AWS resources for a specific task. Different from a user, a role is not about ``who is speaking'' but about ``what they can do''. The privileges of a role depend on the policy attached to the role. A role can be assigned to a user, in which case the user gains the privilege and access to the AWS resources specified by the role.
 	
-	The roles assigned to a user can be permanent or temporary. \myabb{AWS Security Token Service}{AWS STS} can be used to manage temporarily assigned roles.
+	The roles assigned to a user can be permanent or temporary. \myabb{AWS Security Token Service}{AWS STS} can be used to manage temporarily assigned roles. That said, roles are mainly used for temporarily elevating the privileges for a user for a specific task, or for cross-account privilege assignment.
 	
 	\item Policy
 	
-	A policy is a piece of JSON object or similar that represents the contents of roles as well as the rules about which users can claim them.
+	A policy is a piece of JSON object or similar that represents the contents of privileges as well as who can claim them. Commonly seen fields of a policy include ``principal'' that states who can possibly claim the privileges, ``action'' that stays what functions the policy approves, and ``resources'' that lists all relevant AWS resources.
 	
-	AWS provides readily-available policies for commonly seen roles. The user can also write their own roles. An example of a policy is given below.
+	AWS provides readily-available policies for commonly seen user types or tasks. The user can also write their own policies. An example of a policy is given below.
 	\begin{lstlisting}
 {
 	"Version": "2012-10-17",
@@ -162,7 +161,9 @@ AWS introduces the concepts of user, role and policy. They are introduced below.
 	]
 }
 	\end{lstlisting}
-	which allows a user to take all actions on all resources.
+	which allows a user to take all actions on all resources. This policy is often attached to the administrators.
+	
+	A policy can be attached to roles. It can also be attached directly to users or user groups.
 	
 \end{itemize}
 
