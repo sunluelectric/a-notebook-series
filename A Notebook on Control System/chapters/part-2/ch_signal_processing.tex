@@ -1,40 +1,38 @@
 \chapter{Digital Signal Processing}
 
-Digital signal processing is the basis of computer controlled system, and computer controlled system is an important use case of digital signal processing.
+Digital signal processing is the basis of computer controlled system, and the later is one of the most important use cases of the former.
 
 This chapter servers as a brief introduction to digital signal processing, including commonly seen discrete signal and digital system features, $z$-transform and frequency domain analysis of discrete signals and digital systems, signal sampling and reconstruction, discrete Fourier transform and digital filtering.
 
-\section{Motivation}
+\section{Digital Versus Analog Systems}
 
-It has become a common practice nowadays to use digital controllers over analog controllers as the preferable choice in most occasions. A commonly used block diagram of a digital processing system looks like Fig. \ref{fig:digital_system}. The digital and analog modules are given by the black and the red shapes respectively. The analog-to-digital converter (ADC) and the digital-to-analog converter (DAC) bridges the digital and analog worlds, and they are colored in orange.
-\begin{figure}
+It has become a common practice nowadays to use digital controllers over analog controllers as the preferable choice in most occasions. A commonly used block diagram of a digital processing system looks like Fig. \ref{fig:digital_system}. The digital and analog modules are given by the black and the red portions respectively. The \myabb{analog-to-digital converter}{ADC} and the \myabb{digital-to-analog converter}{DAC} bridges the digital and analog worlds, and they are colored in orange.
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=300pt]{chapters/part-2/figures/digital_system.jpg}
+	\includegraphics[width=0.8\textwidth]{chapters/part-2/figures/digital_system.jpg}
 	\caption{A block diagram of a digital system.} \label{fig:digital_system}
 \end{figure}
 
 A digital processing system has the following advantages over a conventional analog processing system.
 \begin{itemize}
-	\item More flexible. Digital processor is usually re-programmable, thus making it cheaper and faster to add and test new features or functions.
-	\item More controllable performance and accuracy. The performance and accuracy of a digital system is more controllable, deterministic and consistent than an analog system.
-	\item Easier shareable. The digitized signals and the control algorithm itself can be easily stored and shared. 
+	\item More flexible. Digital processor is usually re-programmable, thus making it cheaper and faster to scale than an analog system.
+	\item Easily reproducible. With standard hardware setup, reproducing a digital system can be as simple as copy-and-paste the code and it is much easier than re-building an analog system. 
+	\item Consistent performance. The precision, accuracy, responding time, etc., of a digital system is more deterministic and consistent than an analog system.
 \end{itemize}
 
-However, digital system is not always an superior alternative to the counterpart analog system. There are at least the following drawbacks.
-\begin{itemize}
-	\item More expensive when the function is simple and can be easily realized with an analog circuit. The ADCs, DACs and the digital processor can all introduce additional costs. It is possible that sometimes the function is so simple that it is not worth introducing a digital system.
-	\item Slower and has a strict bandwidth requirement. Digital system has been made faster and cheaper in the past years. Nevertheless, there are still tasks where the speed and the bandwidth of a digital system is too slow. In such cases, analog system or optical system might be a better solution.
-\end{itemize}
+However, digital system is not always an superior alternative to the counterpart analog system. Comparing with an analog system, a digital system may have the following drawbacks.
 
-\section{Basic Concepts about Digital Signals and Systems}
+Due to the use of ADC, DAC, \myabb{digital signature processor}{DSP}, etc., a digital system can introduce a ``capital cost''. For very simple functions that can be realized with a small-scale analog circuit, using digital system could be more expensive. ADC, DAC, DSP have fixed computation cycle and input-output bandwidth. Though the development trend suggests that these units are becoming faster and faster, there are still tasks where the speed and the bandwidth of a digital system is too slow. In such cases, analog system or optical system might be a better solution.
 
-Basic concepts and categories of digital signals and systems are introduced.
+\section{Basic Concepts}
 
-\subsection{Signals Channel and Dimension}
+Basic concepts and categories of digital signals and digital systems are introduced.
 
-Signals, both analog and digital, can be scalars of vectors, and it is often formulated as a (vector) function of some independent variables such as time. The length of the vector and the number of independent variables of a digital signal determine the number of channels and the dimensions of the signal.
+\subsection{Channel and Dimension}
 
-A signal with vector size $n$ and number of independent variables $m$ is known as a $n$-channel-$m$-dimensional signal. For example, consider a colored image
+Signals, both analog and digital, can be scalar or vector. A signal is often formulated as a function of time, location, etc. The number components in the signal and the number of independent variables formulating the signal are knows as the \mync{signal channel} and \mync{signal dimension} respectively. A signal with vector size $n$ and number of independent variables $m$ is known as a $n$-channel-$m$-dimensional signal. An example is given below.
+
+Consider a colored image
 \begin{eqnarray}
 	I(x,y) &=& \left[\begin{array}{c}
 		I_r(x,y) \\
@@ -42,40 +40,40 @@ A signal with vector size $n$ and number of independent variables $m$ is known a
 		I_b(x,y)
 	\end{array}\right] \nonumber
 \end{eqnarray}
-where $I_r$, $I_g$, $I_b$ and $(x,y)$ are the RGBs and the coordinate of the pixels respectively. This is a 3-channel-2-dimensional signal.
+where $I_r$, $I_g$, $I_b$ and $(x,y)$ are the RGBs and the coordinate of the pixels respectively. This is a $3$-channel-$2$-dimensional signal.
 
-Though multi-channel-multi-dimensional signals are very common, for the convenience of study, the chapter will mostly focus on single-channel-single-dimensional signals.
+Though multi-channel-multi-dimensional signals are very common, for the convenience of study, this chapter will mostly focus on $1$-channel-$1$-dimensional signals.
 
 \subsection{Continuous, Discrete and Digital Signals}
 
-If a signal is continuous in both the time scale (it is defined at any instant of time) and value scale (it has infinite digits of accuracy in its value) is no doubt a continuous signal. Many physical signals, such as the speed of a car, can be modeled by a continuous signal.
+Consider a signal formulated as a function of time. If the signal is continuous in both the time scale and value scale, it is known as a \mync{continuous signal}. Most signals in our daily life, such as the speed of a car, can be modeled by a continuous signal.
 
-Consider sampling a continuous signal by recording its values in countable and discrete timestamps. The signal becomes a discrete-time signal. It is defined only at the sampling timestamps. From value scale vise, it still has infinite digits of accuracy.
+Consider sampling a continuous signal by recording its values in countable and discrete timestamps. The time scale of the signal becomes discrete and countable. A signal of such type is known as a \mync{discrete-time signal}, or sometimes \mync{discrete signal} for short.
 
-Instead of sampling, consider quantizing the signal by mapping its values to a set of discrete values, i.e., usually values with finite digits. The signal becomes a discrete-valued signal. It is defined on a continuous time scale, but the values it can take at any time instant is limited by the digits.
+Consider mapping the value of a continuous signal to a set of discrete values, usually values with finite digits. The value scale of the signal becomes discrete countable. A signal of such type is known as a \mync{discrete-valued signal}.
 
-A signal that is both discrete-time and discrete-valued is also known as a digital signal. A demonstrative figure is given in Fig. \ref{fig:signal_types}. 
-\begin{figure}
+A signal that is both discrete-time and discrete-valued, i.e., has both discrete time and value scales, is also known as a \mync{digital signal}. 
+
+A figure to illustrate the relation of the above signals is given in Fig. \ref{fig:signal_types}. 
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=300pt]{chapters/part-2/figures/signal_types.jpg}
+	\includegraphics[width=0.8\textwidth]{chapters/part-2/figures/signal_types.jpg}
 	\caption{Continuous and discrete signals.} \label{fig:signal_types}
 \end{figure}
 
 \subsection{Deterministic and Random Signals}
 
-There is always random noise and stochastic disturbances in a physical system. From this point of view, no system or signal is deterministic. In practice, so long as the signal or system model is to describe the actual signal or system to reasonable accuracy, we would consider the signal or system to be deterministic.
-
-In contrast, if the signal cannot be described by the required reasonable accuracy, or if it simply too complicated to do so, the signal is considered a random signal.
+There is always random noise and stochastic disturbances in a physical system. From this point of view, no system or signal is deterministic. In practice, as long as the signal is precise and accurate enough for the usage, it is considered a deterministic signal. Otherwise if the signal is unknown or not accurate enough, it is considered a random signal.
 
 Deterministic signals and models are relatively easier to analyze. When it comes to random signals and stochastic systems, probability and statistics based analysis are usually adopted.
 
-\section{Commonly Seen Digital Signals and Features}
+\section{Important Signals and Features}
 
-Commonly seen elementary digital signals and their features are introduced. Notice that similar features can be defined for continuous signals as well such as periodic signal, energy and power of signal, etc., but they are not discussed in this section.
+Commonly seen elementary digital signals and their features are introduced. Notice that similar counterparts and features apply to continuous signals as well, but they are not discussed in this section.
 
-\subsection{Elementary signals}
+\subsection{Elementary Signals}
 
-The unit sample sequence is given by
+Let $n$ be the time index. The unit sample sequence is given by
 \begin{eqnarray}
 	\delta(n) &=& \left\{\begin{array}{cc}
 		1 & n = 0 \\
@@ -107,35 +105,35 @@ where notice that $a$ can be a complex value denoted by $a=re^{j\theta}$, in whi
 
 \subsection{Energy and Power of a Signal}
 
-The energy and power of a signal can be calculated by
+The \mync{energy of a signal} and the \mync{power of a signal} can be calculated by
 \begin{eqnarray}
 	E &=& \sum_{n=-\infty}^{\infty} |x(n)|^2 \nonumber \\
 	P &=& \lim_{N\rightarrow\infty} \dfrac{1}{2N+1}\sum_{n=-N}^{N}|x(n)|^2 \nonumber
 \end{eqnarray}
-respectively. The signals whose energy is finite is known as an energy signal. Likewise, the signals with finite power is known as a power signal. From the definition, we know that an energy signal must have a power of $0$. Examples are given in Fig. \ref{fig:energypowersignal}.
-\begin{figure}
+respectively. A signal with finite energy is known as an \mync{energy signal}. A signal with finite power is known as a \mync{power signal}. From the definition, we know that an energy signal must have a power of zero. Examples are given in Fig. \ref{fig:energypowersignal}.
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=300pt]{chapters/part-2/figures/energypowersignal.eps}
-	\caption{Example of energy and power signals.} \label{fig:energypowersignal}
+	\includegraphics[width=0.6\textwidth]{chapters/part-2/figures/energypowersignal.eps}
+	\caption{Example of energy and power signals, where the top plot shows an energy signal, the middle a power signal, and the bottom neither.} \label{fig:energypowersignal}
 \end{figure}
 
 \subsection{Periodic Signal}
 
-A signal $x(n)$ is periodic if
+A signal $x(n)$ is a \mync{periodic signal} if
 \begin{eqnarray}
 	x(n) &=& x(n + N), \textup{~for all~} n \nonumber
 \end{eqnarray}
-and the smallest $N>0$ is the period of the signal. Notice that a constant signal $x(n)=c$ is often taken as a periodic signal as well, but of non-definable fundamental period. In the remaining of our discussion, we shall consider the ``regular'' periodic signal with $N>0$ unless otherwise emphasized.
+and the smallest $N>0$ is the \mync{period} of the signal. Notice that a constant signal $x(n)=c$ is often taken as a periodic signal as well, but of non-definable period. In the remaining of our discussion, we shall consider the ``regular'' periodic signal with $N>0$ unless otherwise mentioned.
 
-It can be proved easily that a period signal has finite power so long as $|x(n)|$ is finite for any timestamp. The energy, on the other hand, is always infinite.
+It can be proved easily that a period signal has finite power as long as $x(n)$ is bounded. The energy, on the other hand, is infinite unless $x(n)=0$ is a zero signal.
 
 \subsection{Symmetric and Antisymmetric Signals}
 
-A signal $x(n)$ is symmetric (also known as even) if
+A signal $x(n)$ is a \mync{symmetric signal} (also known as \mync{even signal}) if
 \begin{eqnarray}
 	x(n) &=& x(-n) \nonumber
 \end{eqnarray}
-A signal $x(n)$ is asymmetric (also known as odd) if
+A signal $x(n)$ is an \mync{asymmetric signal} (also known as \mync{odd signal}) if
 \begin{eqnarray}
 	x(n) &=& -x(-n) \nonumber
 \end{eqnarray}
@@ -145,9 +143,9 @@ Given any signal $x(n)$, define
 	x_e(n) &=& \dfrac{1}{2}\left[x(n) + x(-n)\right] \nonumber \\
 	x_o(n) &=& \dfrac{1}{2}\left[x(n) - x(-n)\right] \nonumber
 \end{eqnarray}
-It can be easily verified that $x(n) = x_e(n) + x_o(n)$. Therefore, we can conclude that any signal can be decomposed into the symmetric and the antisymmetric portions.
+It can be easily verified that $x_e(n)$ and $x_o(n)$ are even and odd signals respectively, and $x(n) = x_e(n) + x_o(n)$. Therefore, we can conclude that any signal can be decomposed into the symmetric and the antisymmetric portions.
 
-\section{Commonly Seen Operations on a Signal}
+\subsection{Signal Transformation}
 
 For a general discrete signal $x(n)$, $x(-n)$ is a fold of the signal at $n=0$. We can easily prove that $x(-n+2k)$ is a fold of the signal at $n=k$.
 
@@ -184,14 +182,7 @@ For the convenience of analysis, it is quite common that zero initial state (als
 
 \subsection{Different Types of Digital Systems} 
 
-
-
-
-
-
-
 \section{Frequency Domain Analysis}
-
 
 \section{Sampling and Reconstruction of a Signal}
 

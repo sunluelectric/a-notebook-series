@@ -1,14 +1,14 @@
 \chapter{Model Predictive Control System} \label{ch:mpcs}
 
-Model predictive control system (MPC) belongs to the broader family of optimal control system. It defines a cost function and a bunch of constraints about the states and control signals. The objective is to find such control signal trajectory that fulfills the constraints while minimizing the cost. The optimization problem is solved recurrently at each timestamp where only the first control input from the optimal sequence is actually applied to the system. 
+Model predictive control system belongs to the broader family of optimal control system. It uses a model to forecast the system behavior, and computes such control sequence that optimizes the forecast while fulfilling all constraints. The optimization problem is solved recurrently at each timestamp, with only the first control from the optimal sequence actually applied.
 
-Comparing with other optimal controllers such as LQR, MPC is more flexible and robust, and has a better adaption to model dynamics and different kinds of constraints. This makes MPC extremely popular in industry. The drawback of MPC is that it is more computationally demanding than LQR and other commonly seen optimal controllers.
-
-The references of this chapter include \cite{rawlings2017model}.
+Due to its popularity, model predictive control system is introduced in this dedicated chapter but not in Chapter \ref{ch:optimalrobustcs}.
 
 \section{Introduction}
 
-The MPC uses dynamic models to forecast the system trajectory, and substitute the it into the cost function. It looks for the optimal control sequence that minimizes the cost function. The first signal in the sequence is taken as the best decision at the current moment, and it is implemented to the actuator.
+A \mync{model predictive control}[MPC] system uses a dynamic model to predict the behavior of the plant, and then find the control sequence that minimizes the cost function formulated from the forecast to produce the best decision, meanwhile fulfilling all the constraints applied to the state and control.
+
+MPC is often compared with \myabb{linear quadratic regulator}{LQR} which has been introduced in Chapter \ref{ch:optimalrobustcs}. Indeed, they are similar to some extent. For instance, they are both parametric model based optimization control. MPC is often regarded as a more robust and flexible solution than LQR, but with a higher computation burden. Their differences will be discussed in detail in the remainder of the chapter. 
 
 The following information is required to calculate the optimal control sequence:
 \begin{itemize}
@@ -69,13 +69,7 @@ in \eqref{eq:mpcconstraintux}, which essentially translates to
 
 Other constraints include limiting the state vector and/or the control signal to be discrete values such as integers. These types of constraints are not as commonly seen as the aforementioned ones.
 
-\subsection{Parameter Estimation and State Estimation}
-
-The most commonly used parameter estimation method is the least squares estimation. The most commonly used state estimation method is the Kalman filter. Both least squares estimator and Kalman filter are linear filters and they are designed optimal for Gaussian noise. Least squares estimator can be implemented in a recursive manner, in which case it becomes a special case of Kalman filter mathematically.
-
-It is possible to add ``forget factor'' to least squares estimator or Kalman filter. A window with fixed length is specified. When a new measurement set becomes available, the earliest measurement in the window will be removed, thus its impact on the state estimate eliminated. This leads to the moving horizon estimation (in contrast, the conventional Kalman filter implementation is also known as growing-memory estimation), which is less efficient but more robust to time-varying in the system.
-
-\subsection{Optimal Control}
+\subsection{Problem Formulation}
 
 The optimal control to the plant vary with the definition of the cost function and constraints. In this section, for simplicity, a linear quadratic regulator problem is used to demonstrate MPC. Notice that although LQR is often regarded as a stand alone optimal control problem, there is no harm to introduce LQR as a simplified MPC problem, just for demonstration purpose.
 
@@ -197,7 +191,7 @@ Since the control gain $K(k), k=N-1, N-2, ...$ converges to $K$, the first infin
   \Pi &=& Q + A^T\Pi A-A^T\Pi B(B^T\Pi B+R)^{-1}B^T\Pi A \nonumber
 \end{eqnarray}
 
-\subsection{Commonly Seen MPC Objectives}
+\subsection{Control Objectives}
 
 The most commonly seen MPC objectives are tracking, state regulation, and disturbance rejection. 
 \begin{itemize}
@@ -206,6 +200,21 @@ The most commonly seen MPC objectives are tracking, state regulation, and distur
   \item Disturbance rejection: the plant shall maintain its operating point under unknown stochastic noise and disturbances.
 \end{itemize}
 
+\section{State-Space Model Predictive Control}
+
+TBA
+
+\section{Input-Output Model Predictive Control}
+
+TBA
+
+\section{Robust Model Predictive Control}
+
+TBA
+
+\section{Distributed Model Predictive Control}
+
+TBA
 
 
 

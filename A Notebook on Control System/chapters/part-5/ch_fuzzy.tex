@@ -1,6 +1,10 @@
 \chapter{Fuzzy Control System} \label{ch:fcs}
 
-Fuzzy logics provide a way of quantitatively interpreting and calculating attributes or reasonings described by vague languages. In contrast to classical control methods where variables are numbered precisely and control laws described clearly by mathematical equations, a fuzzy controller uses objective terms such as ``good'', ``bad'', ``high'', ``low'', ``very'', ``a little'' to describe variables, and use rules ``if something then something'' to determine the control signals. This makes a fuzzy controller naturally good at realizing human knowledge base into practice.
+Fuzzy control system provides a way of describing system attributes using vague languages and determining control based on rules of an expert system. With recent advent in large language model, people have seen potentials on fuzzy control system.
+
+\section{Introduction}
+
+Fuzzy logic provide a way of quantitatively interpreting and calculating attributes or reasoning described by vague languages. In contrast to classical control methods where variables are numbered precisely and control laws described clearly by mathematical equations, a fuzzy controller uses objective terms such as ``good'', ``bad'', ``high'', ``low'', ``very'', ``a little'' to describe variables, and use rules ``if something then something'' to determine the control signals. This makes a fuzzy controller naturally good at realizing human knowledge base into practice.
 
 Different from ANN which is highly data driven and requires a lot of samples and computations to train a network, a fuzzy controller is an expert-based system that requires only the membership functions used for fuzzification of variables and a set of rules for inference. ANN may reveal the building bricks of a human brain, while fuzzy control system reflects how a human interprets the knowledge that he learns from past experience and uses in his daily life. This feature of a fuzzy control system is a bless and a curse at the same time. Fuzzy control system does not rely on training, thus is handy when there are few training samples. On the other hand, this also means that it cannot benefit from the accumulation of the samples and it is lack of evolving capability comparing with ANN and other evolutionary algorithms.
 
