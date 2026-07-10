@@ -1,3 +1,100 @@
 \chapter{Multivariable Control System}
 
-TBA
+The classical control framework introduced in Chapter \ref{ch:ccs} assumes a linear \myabb{single-input-single-output}{SISO} system. This chapter extends that framework to multivariable systems, i.e., systems with multiple inputs and multiple outputs. As in the SISO case, input-output models and transfer functions are used to describe system behavior. However, for multivariable systems these take the form of transfer function matrices, which serve as the basis for controller design within the classical approach.
+
+It is important to note that the modern control framework, introduced in the next Chapter \ref{ch:moderncs}, assumes \myabb{multi-input multi-output}{MIMO} systems by default. Modern control employs state-space models rather than transfer function matrices to represent both the plant and the controller. This modeling paradigm is generally more powerful, flexible, and intuitive, and it often leads to more straightforward implementations. Moreover, many advanced control methodologies such as optimal control, robust control and adaptive control are built directly upon the state-space formulation. The state-space model is also more effective in modeling non-linear systems or systems with non-zero initial states. For most practical MIMO applications, the methods presented in Chapter \ref{ch:moderncs} are preferred over those introduced here.
+
+Nevertheless, this chapter is included to provide historical context and to illustrate how multivariable control was originally developed within the classical framework.
+
+\section{Brief Review of SISO System}
+
+This section gives a brief review of important results from Chapter \ref{ch:ccs} which were derived from SISO systems. Only conclusions are given, and the proofs are neglected.
+
+\subsection{SISO Plant}
+
+Consider continuous time domain input-output model of a linear \myabb{single-input0single-output}{SISO} plant. A demonstrative example is given below.
+\begin{eqnarray}
+	\ddot{y} + a_1 \dot{y} + a_2 y &=& b_1 \dot{u} + b_2u \label{eq:demo-input-output}
+\end{eqnarray}
+where $y$ and $a$ are the output and the input respectively, and the dot over a variable refers to the differential of that variable over time. The transfer function corresponding with \eqref{eq:demo-input-output} can be easily derived by applying Laplace transform on both side of the equation to get
+\begin{eqnarray}
+	G(s) &=& \dfrac{Y(s)}{U(s)} \nonumber \\
+	&=& \dfrac{b_1s + b_2}{s^2 + a_1s + a_2} \label{eq:demo-tf}
+\end{eqnarray}
+
+In this example, both the nominator and the denominator of the transfer function \eqref{eq:demo-tf} are polynomials, and the degree of the denominator w.r.t. $s$ is higher than that of the nominator. Hence, $G(s)$ is rational and strictly proper. The roots of the nominator and the denominator are known as the zeros and poles of the transfer function. 
+
+\subsection{SISO Closed-Loop System}
+
+A SISO closed loop system may look like Fig. \ref{fig:ff-fd-siso}. Notice that the feedforward controller given in blue is optional. The feedforward controller is mainly used to mitigate the effect of known disturbance more effectively than the feedback controller, the later of which can also perform the task but would often introduce more latency. The disturbance can be constant or dynamic, and may affect the plant in several different ways, such as affecting its input, its output, or its intermediate values.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{chapters/part-1/figures/feedforward_feedback_siso.png}
+	\caption{A closed-loop system with feedforward and feedback controllers.} \label{fig:ff-fd-siso}
+\end{figure}
+
+In the following discussion, assume zero disturbance and ignore the feedforward controller. Let the transfer function of the feedback controller be given by $K(s)$. The open-loop transfer function is therefore given by
+\begin{eqnarray}
+	L(s) &=& G(s)K(s) \nonumber
+\end{eqnarray}
+whereas the closed-loop transfer function is given by
+\begin{eqnarray}
+	H(s) = \dfrac{Y(s)}{R(s)} = \dfrac{G(s)K(s)}{1+G(s)K(s)} = \dfrac{L(s)}{1+L(s)} \label{eq:demo-closed-loop-tf}
+\end{eqnarray}
+where $R(s)$ is the Laplace transform of the reference signal.
+
+\subsection{Stability}
+
+Given a transfer function, whether it describes the plant \eqref{eq:demo-tf} or the closed-loop system \eqref{eq:demo-closed-loop-tf}, its corresponding system is \myabb{bounded-input-bounded-output}{BIBO} stable if its poles have strictly negative real parts, and its output is bounded as long as its input is bounded in magnitude.
+
+However, for a BIBO stable closed-loop system, it may not be internally stable. It is possible that for a bounded reference signal $r(t)$, though the output $y(t)$ is bounded, the control signal $u(t)$ is unbounded. Such system will eventually crash in practice, the actuator will fail to supply infinitely large input to the plant. That could happen if there is unstable pole-zero cancellation between $G(s)$ and $K(s)$, and $K(s)$ has unstable poles but canceled out by the zeros of $G(s)$. In the remainder of this chapter, for the simplicity of the discussion, it is assumed that there is no unstable pole-zero cancellation, and the system is always internally stable as long as it is BIBO stable.
+
+The poles of the closed-loop system is given by the roots of $1+L(s)$. Therefore, the stability of the system can be revealed by the open-loop transfer function. See Nyquist theorem in Chapter \ref{ch:ccs} for the details. The phase margin and gain margin are often used to describe how ``far'' a stable system is to instability, and they are calculated by
+\begin{eqnarray}
+	\psi &=& \textup{arg}\left(L(j\omega_c)\right) + \pi \nonumber \\
+	\textup{s.t.} && |L(j\omega_c)| = 1 \nonumber
+\end{eqnarray}
+and
+\begin{eqnarray}
+	\mu &=& \dfrac{1}{|L(j\omega_d)|} \nonumber \\
+	\textup{s.t.} && \textup{arg}\left(L(j\omega_d)\right) = \pi \nonumber
+\end{eqnarray}
+respectively, where $\textup{arg}(\cdot)$ returns the principal angle value $(-\pi, \pi]$ of a complex number. The larger the margins, the ``safer'' the system.
+
+\section{Introduction to MIMO System}
+
+A \mync{multivariable system} refers to a \mync{multiple-input-multiple-output}[MIMO] system. Let $m$ and $l$ denote the input and output numbers respectively. The system is called a \mync{square system} if $m=l$.
+
+\subsection{Expression}
+
+The input-output model of a multivariable system can be described by the transfer function matrix $G(s)$ as follows
+\begin{eqnarray}
+	Y(s) &=& G(s)U(s) \nonumber
+\end{eqnarray}
+where $Y(s)$ and $U(s)$ are vectors with length $l$ and $m$ respectively, and $G(s)$ a $l\times m$ matrix. An element in $G(s)$, $g_{ij}(s)$, is the transfer function relating the $i$-th output to the $j$-th input.
+
+The transfer matrix $G(s)$ is said to be a rational transfer function matrix if each and every $g_{ij}(s)$ is rational, and it is (strictly) proper if each and every $g_{ij}(s)$ is (strictly) proper.
+
+For a system with rational and proper transfer function matrix, there is such a \mync{state-space realization} of the system
+\begin{eqnarray}
+	\dot{x} &=& Ax + Bu \nonumber \\
+	y &=& Cx + Du \nonumber
+\end{eqnarray}
+that
+\begin{eqnarray}
+	G(s) &=& C(sI-A)^{-1}B + D \nonumber
+\end{eqnarray}
+where $I$ is the identity matrix. Notice that the state-space realization is not unique if there is no other restrictions.
+
+\subsection{Model Calibration}
+
+Given a linear and zero-state multivariable system, system identification is often required to calibrate $G(s)$. A practical approach is to investigate the input-output relation per input and output combination by applying unit signal to a specific input while keeping other inputs zero.
+
+
+
+
+
+
+
+

@@ -1,8 +1,8 @@
 \chapter{Optimal Control System} \label{ch:optimalrobustcs}
 
-In a typical optimal control problem formulation, a cost function positively correlated with regulation error, control signal energy, etc., is defined. Such control that minimizes the cost function is calculated. The key to the optimal control is to formulate the problem appropriately and to find the correct mathematical tools to solve the problem. 
+In a typical optimal control problem formulation, a cost function is defined. The cost function is often made positively correlated with the regulation error and the control signal energy. Such control that minimizes the cost function is calculated. The key to the optimal control is to formulate the problem appropriately and to find the correct mathematical tools to solve the problem. 
 
-More details are introduced in this chapter.
+Optimization problem formulation and optimal control are introduced in this chapter.
 
 \section{Static Optimization} \label{sec:optimalrobustcs:static}
 
@@ -14,7 +14,7 @@ Notice that $u\in\mathbb{R}^m$ is a vector containing $m$ independent variables,
 
 Consider minimizing $L$ without additional constraints on $u$. Using Taylor series expansion, the increment of $L$ can be formulated as follows.
 \begin{eqnarray}
-	dL &=& L_u^Tdu + \dfrac{1}{2}du^TL_{uu}du + \ldots \nonumber
+	\Delta L &=& L_u^T\Delta u + \dfrac{1}{2}\Delta u^TL_{uu}\Delta u + \ldots \nonumber
 \end{eqnarray}
 where
 \begin{eqnarray}
@@ -25,7 +25,7 @@ about a particular choice of $u$. A local minimum of $L$ is achieved under the f
 \begin{eqnarray}
 	L_u &=& 0 \nonumber
 \end{eqnarray}
-in which case $u$ is called a \mync{critical point}, also known as \mync{stationary point}. Furthermore, for $u$ to be a minimum, $dL$ should stay positive in the neighbor of $u$. A necessary condition for that could be that $L_{uu}$ is positive definite, i.e.,
+in which case $u$ is called a \mync{critical point}, also known as \mync{stationary point}. Furthermore, for $u$ to be a minimum, $\Delta L$ should stay positive in the neighbor of $u$. A necessary condition for that could be that $L_{uu}$ is positive definite, i.e.,
 \begin{eqnarray}
 	L_{uu} &>& 0 \nonumber
 \end{eqnarray}
@@ -83,13 +83,13 @@ It is obvious that the solution to \eqref{eq:optimalrobustcs:equalityconsfunc} w
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.6\textwidth]{chapters/part-3/figures/opt_equalityconstraint_contour.eps}
-	\caption{Static optimization with equality constraint demonstration.} \label{fig:optimalrobustcs:opt_equalityconstraint_contour}
+	\caption{A demonstration of static optimization with equality constraint problem formulation.} \label{fig:optimalrobustcs:opt_equalityconstraint_contour}
 \end{figure}
 where $L$ is given by the contour (assuming $u\in\mathbb{R}^2$ in this demonstration plot), and $f=0$ the red solid line.
 
 A necessary condition of the critical point of \eqref{eq:optimalrobustcs:equalityconsfunc} subject to \eqref{eq:optimalrobustcs:equalityconstraint} can be interpreted as follows. 
 
-Let $du$ be a differential about $u$ where $f = 0$. Let $L_u$ be given by \eqref{eq:lu} and $f_u = \frac{df}{du}$ the Jacobian matrix. While $dL = L_u^Tdu \neq 0$ in general, when $du$ moves along $f=0$, i.e., when $df = f_ud_u = 0$, $dL = L_u^Tdu = 0$ should hold true. This is expressed by
+Let $du$ be a differential about $u$ where $f = 0$. Let $L_u$ be given by \eqref{eq:lu} and $f_u = \frac{df}{du}$ the Jacobin matrix. While $dL = L_u^Tdu \neq 0$ in general, when $du$ moves along $f=0$, i.e., when $df = f_ud_u = 0$, $dL = L_u^Tdu = 0$ should hold true. This is expressed by
 \begin{subequations} \label{eq:equalitycritical}
 \begin{eqnarray}
 	&& L_u^Tdu = 0 \label{eq:optimalrobustcs:equalitycritical1} \\
@@ -114,7 +114,7 @@ Notice that $du$ is a differential of $u$ in the $m$-th order vector space and c
 	L_u^T + \lambda^Tf_u &=& 0 \label{eq:optimalrobustcs:equalitycritical4}
 \end{eqnarray}
 
-In \eqref{eq:optimalrobustcs:equalitycritical4}, $\lambda \in \mathbb{R}^n$ is known as the \mync{Lagrange multipliers}. Equation \eqref{eq:optimalrobustcs:equalitycritical4} contains $m$ equations, and it is a portion of \myabb{Karush–Kuhn–Tucker}{KKT} conditions which will be introduced in more details in Section \ref{sec:optimization-lagraigian-eq-ineq}.
+In \eqref{eq:optimalrobustcs:equalitycritical4}, $\lambda \in \mathbb{R}^n$ is known as the \mync{Lagrange multipliers}. Equation \eqref{eq:optimalrobustcs:equalitycritical4} contains $m$ equations, and it is a portion of \myabb{Karush–Kuhn–Tucker}{KKT} conditions which will be introduced formally in Section \ref{sec:optimization-lagraigian-eq-ineq}.
 
 Equation \eqref{eq:optimalrobustcs:equalitycritical4} can also be interpreted graphically. At the critical point denoted by the red dot, moving along $f=0$ should not increase or decrease $L$. This suggests that $f=0$ shall tangent the contour at the critical point as shown in Fig. \ref{fig:optimalrobustcs:opt_equalityconstraint_graphical}.
 \begin{figure}[!htb]
@@ -124,7 +124,7 @@ Equation \eqref{eq:optimalrobustcs:equalitycritical4} can also be interpreted gr
 \end{figure}
 Think of $f_u=\nabla f$ and $L_u=\nabla L$ as the gradient of $f$ and $L$ respectively. Since the plots are tangent, the gradient must be parallel, which would suggest something like \eqref{eq:optimalrobustcs:equalitycritical4}.
 
-The necessary condition \eqref{eq:optimalrobustcs:equalityconstraint} and \eqref{eq:optimalrobustcs:equalitycritical4} can also be derived using \mync{Lagrangian function} as follows. Notice that Lagrangian function in some context may also be called \mync{Hamiltonian function}. They are very similar mathematically, and mostly differ in the context of usage.
+The necessary condition \eqref{eq:optimalrobustcs:equalityconstraint} and \eqref{eq:optimalrobustcs:equalitycritical4} can also be formulated using \mync{Lagrangian function} which is given below. Notice that Lagrangian function in some context may also be called \mync{Hamiltonian function}. They are very similar mathematically, and mostly differ in the context of usage.
 
 The Lagrangian function corresponding with problem \eqref{eq:optimization-equality-constraint} is given by
 \begin{eqnarray}
@@ -137,13 +137,13 @@ and \eqref{eq:optimalrobustcs:equalityconstraint}, \eqref{eq:optimalrobustcs:equ
 \end{eqnarray}
 respectively.
 
-Lagrangian function is a very useful tool in solving optimization problem with different types of constraints. It is difficult to solve the original optimization problem \eqref{eq:optimalrobustcs:equalityconsfunc} with equality constraint \eqref{eq:optimalrobustcs:equalityconstraint}. By introducing Lagrangian function \eqref{eq:optimalrobustcs:lagarangianequality} with $\lambda$ and $u$ the independent variable, the original problem is converted into an optimization problem without equality constraints, and is much easier to solve using \eqref{eq:lagarangianequality2} and \eqref{eq:lagarangianequality3}. The converted problem is known as the \mync{dual problem} of the original problem. 
+Lagrangian function is a very useful tool in solving optimization problem with different types of constraints. It is difficult to solve the original optimization problem \eqref{eq:optimalrobustcs:equalityconsfunc} with equality constraint \eqref{eq:optimalrobustcs:equalityconstraint}. By introducing Lagrangian function \eqref{eq:optimalrobustcs:lagarangianequality} with $\lambda$ and $u$ the independent variable, the original problem is converted into an optimization problem without equality constraint, whose solution is given by \eqref{eq:lagarangianequality2} and \eqref{eq:lagarangianequality3} which are much easier to solve. The converted problem is known as the \mync{dual problem} of the original problem. 
 
 Notice that Lagrangian function is only a necessary condition to the original question. The critical point of the Lagrangian function must be further verified. To verify that the critical point is indeed a local minimum, check the second-order derivative of $L(u)$ about the critical point $u$.
 
 Consider the following example.
 \begin{shortbox}
-\Boxhead{A Quadratic Surface Example with Linear Equality Constraint}
+\Boxhead{A Quadratic Surface with Linear Equality Constraint Example}
 
 Let
 \begin{eqnarray}
@@ -182,7 +182,7 @@ which is positive definite as long as $Q$ and $R$ are positive definite. Indeed,
 
 \subsection{Optimization with Equality and Inequality Constraints} \label{sec:optimization-lagraigian-eq-ineq}
 
-Optimization with inequality constraints is not as widely seen in optimal control as optimization with equality constraint. Nevertheless, it is briefly introduced here. Consider the optimization problem with both equality and inequality constraints as follows.
+Consider the optimization problem with both equality and inequality constraints as follows.
 \begin{eqnarray}
 	\textup{minimize} && L(u) \nonumber \\
 	\textup{s.t.} && f(u) = 0 \nonumber \\
@@ -212,7 +212,7 @@ Equations \eqref{eq:optimalrobustcs:kkt1} and \eqref{eq:optimalrobustcs:kkt2} ar
 
 \begin{itemize}
   \item From \eqref{eq:optimalrobustcs:kkt3}, anything relevant to inequality constraint never really contribute to the Lagrangian function value. Therefore, solving \eqref{eq:optimalrobustcs:kkt1} and \eqref{eq:optimalrobustcs:kkt2} still gives the necessary condition meeting the equality constraint.
-  \item Equation \eqref{eq:optimalrobustcs:kkt3} implies that one of $\beta_i$ and $g_i(u)$ must be zero. Equations \eqref{eq:optimalrobustcs:kkt3}, \eqref{eq:optimalrobustcs:kkt4} and \eqref{eq:optimalrobustcs:kkt5} together express the inequality constraint as follows.
+  \item Equation \eqref{eq:optimalrobustcs:kkt3} implies that one of $\beta_i$ and $g_i(u)$ must be zero. Equations \eqref{eq:optimalrobustcs:kkt3}, \eqref{eq:optimalrobustcs:kkt4} and \eqref{eq:optimalrobustcs:kkt5} together interpret the inequality constraint as follows.
   \begin{itemize}
     \item If the critical point lays on the $i$th inequality constraint boundary, i.e. $g_i(u)=0$, the value of $\beta_i$ does not matter. Without loosing generality, let $\beta_i>0$.
     \item If the critical point does not lay on the $i$th inequality constraint boundary, i.e. $g_i(u)<0$, $\beta_i=0$ is used so that \eqref{eq:optimalrobustcs:kkt3} is zero.
@@ -224,7 +224,9 @@ Equations \eqref{eq:optimalrobustcs:kkt1} to \eqref{eq:optimalrobustcs:kkt5} tog
 
 \section{Discrete Optimal Control Basics} \label{sec:optimalrobustcs:discrete}
 
-Optimal control system has a strong connection with the static optimization problem introduced in Section \ref{sec:optimalrobustcs:static}. From mathematics perspective, they are of the same type of problems. It is just that the system model becomes the constraint.
+Optimal control is strongly connected with the static optimization problem formulation introduced in Section \ref{sec:optimalrobustcs:static}. In a broad sense, optimal control can be taken as a use case of the static problem formulation, with the system model treated as a constraint.
+
+This section introduces the basics of optimal control on a discrete time system. The next Section \ref{sec:continuous-optimal-control-basics} introduces that of a continuous time system.
 
 \subsection{Problem Formulation}
 
@@ -350,7 +352,7 @@ The proof is ignored.
 
 This implies that so long as the original system is stabilizable, the suboptimal control $u=-K_\infty x(k)$ guarantees the asymptotic stability of the system.
 
-\section{Continuous Optimal Control Basics}
+\section{Continuous Optimal Control Basics} \label{sec:continuous-optimal-control-basics}
 
 The dynamics of a continuous time domain system is described using differential equations, and the solution can be obtained using Lagrangian function similar to previous sections. However, do notice that calculus of variations is used when solving the problem. Calculus of variations is briefly reviewed in the appendix. For more details of calculus of variations, check \textit{A Notebook on Calculus} by Lu Sun in the same series.
 
