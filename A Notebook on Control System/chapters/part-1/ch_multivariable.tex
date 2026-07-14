@@ -62,17 +62,17 @@ and
 \end{eqnarray}
 respectively, where $\textup{arg}(\cdot)$ returns the principal angle value $(-\pi, \pi]$ of a complex number. The larger the margins, the ``safer'' the system.
 
-\section{Introduction to MIMO System}
+\section{Multivariable System}
 
 A \mync{multivariable system} refers to a \mync{multiple-input-multiple-output}[MIMO] system. Let $m$ and $l$ denote the input and output numbers respectively. The system is called a \mync{square system} if $m=l$.
 
-\subsection{Expression}
+\subsection{Transfer Function Matrix}
 
 The input-output model of a multivariable system can be described by the transfer function matrix $G(s)$ as follows
 \begin{eqnarray}
 	Y(s) &=& G(s)U(s) \nonumber
 \end{eqnarray}
-where $Y(s)$ and $U(s)$ are vectors with length $l$ and $m$ respectively, and $G(s)$ a $l\times m$ matrix. An element in $G(s)$, $g_{ij}(s)$, is the transfer function relating the $i$-th output to the $j$-th input.
+where $Y(s)$ and $U(s)$ are vectors with length $l$ and $m$ respectively, and $G(s)$ an $l\times m$ matrix. The elements in $G(s)$ such as $g_{ij}(s)$ is the transfer function relating the $i$-th output to the $j$-th input.
 
 The transfer matrix $G(s)$ is said to be a rational transfer function matrix if each and every $g_{ij}(s)$ is rational, and it is (strictly) proper if each and every $g_{ij}(s)$ is (strictly) proper.
 
@@ -87,7 +87,7 @@ that
 \end{eqnarray}
 where $I$ is the identity matrix. Notice that the state-space realization is not unique if there is no other restrictions.
 
-\subsection{Model Calibration}
+\subsection{Calibration}
 
 Given a linear and zero-state multivariable system, system identification is often required to calibrate $G(s)$. A practical approach is to investigate the input-output relation per input and output combination by applying unit signal to a specific input while keeping other inputs zero.
 
