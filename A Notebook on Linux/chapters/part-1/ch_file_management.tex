@@ -16,7 +16,7 @@ Upon Linux installation, a \mync{filesystem hierarchy} is created. A user can cr
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-1/figures/linux_file_hierarchy.png}
+	\includegraphics[width=0.8\textwidth]{chapters/part-1/figures/linux_file_hierarchy.png}
 	\caption{An example of Linux file system hierarchy.} \label{ch:fm:fig:hierarchy}
 \end{figure}
 
@@ -26,7 +26,7 @@ As can be seen from Fig. \ref{ch:fm:fig:hierarchy}, the hierarchy contains quite
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=350pt]{chapters/part-1/figures/linux_directory_cate.png}
+	\includegraphics[width=\textwidth]{chapters/part-1/figures/linux_directory_cate.png}
 	\caption{A rough categorization of commonly used directories in Linux file hierarchy standard.} \label{ch:fm:fig:directorycate}
 \end{figure}
 
@@ -70,7 +70,7 @@ When a file is created, its file full path is used as the link. In addition to t
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=250pt]{chapters/part-1/figures/hardsoftlink.png}
+	\includegraphics[width=0.8\textwidth]{chapters/part-1/figures/hardsoftlink.png}
 	\caption{Original file name, hard link and soft link.} \label{fig:hardsoftlink}
 \end{figure} 
 
@@ -100,7 +100,7 @@ $ ln -s <existing link> <new soft link>
 \end{lstlisting}
 to create a soft link for a file.
 
-\section{Commonly Used File Exploring Commands} \label{ch:fm:sec:filemanagement}
+\section{Filesystem Management} \label{ch:fm:sec:filemanagement}
 
 Some of the most widely used file exploring and managing commands are summarized in Table \ref{ch:fm:tab:commonfilecommands}. 
 
@@ -125,7 +125,7 @@ In Table \ref{ch:fm:tab:commonfilecommands}, \verb|chmod| and \verb|chown| are a
   \end{tabularx}
 \end{table}
 
-\subsection{Query}
+\subsection{Listing}
 
 As given in Table \ref{ch:sb:tab:shellenvironmentvars}, \verb|$PWD| is the environmental variables to store the current working directory of the shell. Therefore, to print the current working directory in the console, use command 
 \begin{lstlisting}
@@ -282,21 +282,152 @@ It is possible, though, that items removed using \verb|rm| can be recovered by e
 $ shred --help
 \end{lstlisting}
 
-\subsection{Wildcard Characters}
+\begin{mdframed}
+\noindent \textbf{Use of Wildcard Characters in Filesystem Management}
 
 When performing actions such as listing, moving, copying, removing, wildcard characters can be used in the path. For example, \verb|ls a*| lists all items in the current directory that starts with letter ``a''. Commonly used meta-characters are summarized in Table \ref{ch:fm:tab:metacharacters}.
 
+\end{mdframed}
+
 \begin{table}[!htb]
-  \centering \caption{Commonly used wildcard characters.}\label{ch:fm:tab:metacharacters}
-  \begin{tabularx}{\textwidth}{lX}
-    \hline
-    Directory & Description \\ \hline
-    \verb|*| & Matches any number of characters. \\ 
-    \verb|?| & Matches any one character. \\ 
-    \verb|[...]| & Matches characters given in the square bracket, which can include a hyphen-separated range of characters. \\
-    \hline
-  \end{tabularx}
+	\centering \caption{Commonly used wildcard characters.}\label{ch:fm:tab:metacharacters}
+	\begin{tabularx}{\textwidth}{lX}
+		\hline
+		Directory & Description \\ \hline
+		\verb|*| & Matches any number of characters. \\ 
+		\verb|?| & Matches any one character. \\ 
+		\verb|[...]| & Matches characters given in the square bracket, which can include a hyphen-separated range of characters. \\
+		\hline
+	\end{tabularx}
 \end{table}
+
+\subsection{Query of Locations of Commands and Files}
+
+The most commonly seen 3 searching use cases are as follows.
+\begin{itemize}
+	\item Look for the location of a command using its name
+	\item Look for the location of a file using its name (and other metadata such as size, permission, etc.)
+	\item Look for the location of a file using a portion its content
+\end{itemize}
+
+Use \verb|type| to look for a command as follows.
+\begin{lstlisting}
+	$ type <command>
+\end{lstlisting}
+
+For example
+\begin{lstlisting}
+	$ type cd
+	cd is a shell builtin
+	$ type python
+	python is /usr/bin/python
+	$ type ls
+	ls is aliased to `ls --color=auto'
+\end{lstlisting}
+
+The package \verb|mlocate| can be installed to enable the \verb|locate| command, which quickly searches for files by path. As long as a file or directory’s full path contains the search term, it may appear in the results.
+\begin{lstlisting}
+	$ sudo dnf install mlocate
+	$ sudo updatedb
+	$ locate <file or path fragment>
+\end{lstlisting}
+Here, \verb|updatedb| must be run once after installing \verb|mlocate| to initialize the database.
+
+The mechanism of \verb|locate| works as follows. The system periodically runs \verb|updatedb| (usually once per day) to refresh an internal database containing file names and paths. The \verb|locate| command searches this database rather than the live filesystem, making it very fast. However, this means that newly created files may not be found until the database is updated. Furthermore, not all files are included by default; the configuration file \verb|/etc/updatedb.conf| determines which paths are scanned and which are excluded. The first run of \verb|updatedb| may take some time, since it must index the entire filesystem.
+
+Users may be confused by the commands \verb|locate| and \verb|mlocate|. In practice, they are nearly identical for basic usage. On many systems, \verb|locate| is provided as a wrapper or alias for \verb|mlocate|. In the scope of this discussion, no distinction is made between them.
+
+For security and privacy reasons, \verb|locate| only shows files that the invoking user has permission to access. For example, a regular user cannot use \verb|locate| to see files in \verb|/root| or another user’s home directory.
+
+A more widely adopted way of looking for a file by its variety of attributes is using \verb|find| as follows.
+\begin{lstlisting}
+	$ find [<options>] [<path>] <expression>
+\end{lstlisting}
+
+The \verb|<options>| argument can be used to configure how the symbolic links should be handled. With default option \verb|-P|, the symbolic links are treated as the links themselves but not the files they are linking to, whereas \verb|-L| does the opposite. Debugging modes and query optimization can also be enabled from \verb|<options>|. The \verb|<path>| argument specifies the directory from where the query is conducted. The \verb|<expression>| argument specifies the keyword and the query method.
+
+The following are examples of using \verb|find| in different scenarios. The examples are taken from RedHat at \cite{redhat2022find}.
+
+\vspace{0.1in}
+\noindent \textbf{Find Files by Name}
+\vspace{0.1in}
+
+Use \verb|-name| or \verb|-iname| to search files by their names as follows. Case sensitive
+\begin{lstlisting}
+	$ find / -name "*Foo*txt" 2>/dev/null
+	/home/seth/Documents/Foo.txt
+\end{lstlisting}
+Case insensitive
+\begin{lstlisting}
+	$ find / -iname "*Foo*txt" 2>/dev/null
+	/home/seth/Documents/Foo.txt
+	/home/seth/Documents/foo.txt
+	/home/seth/Documents/foobar.txt
+\end{lstlisting}
+
+Wildcards such as \verb|*| can be used. Commonly used wildcards are given in Table \ref{ch:fm:tab:metacharacters}.
+
+\vspace{0.1in}
+\noindent \textbf{Find Files by Content}
+\vspace{0.1in}
+
+Use \verb|-exec| followed by \verb|grep| to find files with specific contents.
+\begin{lstlisting}
+	$ find ~/Documents/ -name "*txt" -exec grep -Hi penguin {} \;
+	/home/seth/Documents/Foo.txt:I like penguins.
+	/home/seth/Documents/foo.txt:Penguins are fun.
+\end{lstlisting}
+where \verb|-exec| allows executing a command to the findings. Notice that \verb|grep| by itself can also be used to search files by contents.
+
+\vspace{0.1in}
+\noindent \textbf{Find Files by Type}
+\vspace{0.1in}
+
+Use \verb|-type| to filter files by their types. To find all files,
+\begin{lstlisting}
+	$ find ~ -type f
+	/home/seth/.bash_logout
+	/home/seth/.bash_profile
+	/home/seth/.bashrc
+	/home/seth/.emacs
+	/home/seth/.local/share/keyrings/login.keyring
+	/home/seth/.local/share/keyrings/user.keystore
+	/home/seth/.local/share/gnome-shell/gnome-overrides-migrated
+\end{lstlisting}
+Specifically, to find empty files,
+\begin{lstlisting}
+	$ find ~ -type f -empty
+	random.idea.txt
+\end{lstlisting}
+
+To find all subdirectories,
+\begin{lstlisting}
+	$ find ~/Public -type d
+	find ~/Public/ -type d
+	/home/seth/Public/
+	/home/seth/Public/example.com
+	/home/seth/Public/example.com/www
+	/home/seth/Public/example.com/www/img
+	/home/seth/Public/example.com/www/font
+	/home/seth/Public/example.com/www/style
+\end{lstlisting}
+
+Use \verb|-maxdepth| to set the searching depth as follows.
+\begin{lstlisting}
+	$ find ~/Public/ -maxdepth 1 -type d
+	/home/seth/Public/
+	/home/seth/Public/example.com
+\end{lstlisting}
+
+\vspace{0.1in}
+\noindent \textbf{Find Files by Timestamp}
+\vspace{0.1in}
+
+To find files whose latest modified time is at least 30 days ago (30 days ago or earlier), use
+\begin{lstlisting}
+	find /var/log -mtime +30
+\end{lstlisting}
+where \verb|-atime|, \verb|-ctime| and \verb|-mtime| search based on the number of days since each file was accessed, changed or had its metadata changed respectively. The alternatives \verb|-amin|, \verb|-cmin| and \verb|-mmin| work similarly in minutes. The \verb|+| indicates ``at least'' whereas \verb|-| indicates ``not more than''.
 
 \section{Access Control List} \label{ch:fm:sec:accesscontrollist}
 
@@ -320,7 +451,7 @@ Following the item type, the ACL of the item is given in the form of 9-bit permi
 
 Commands \verb|chown| and \verb|chmod| can be used to change the ownership and ACL of an item respectively. Details are given in the following subsections.
 
-\subsection{Change of Ownership} \label{sec:chown}
+\subsection{Ownership Management} \label{sec:chown}
 
 Administrative privileges are required to run the \verb|chown| command, which changes the ownership and group of a file or directory:
 \begin{lstlisting}
@@ -333,7 +464,7 @@ $ sudo chown root:root calculate_fib.sh
 \end{lstlisting}
 changes the ownership and group of the file \verb|calculate_fib.sh| from \verb|sunlu| to \verb|root|. Elevated privileges are required; otherwise, the request will be rejected.
 
-\subsection{Change of Permissions} \label{sec:chmod}
+\subsection{Permission Management} \label{sec:chmod}
 
 Both the owner and users with administrative privileges can change the permissions of a file or directory using \verb|chmod|:
 \begin{lstlisting}
@@ -351,7 +482,7 @@ Alternatively, a $3$-digit octal number can represent permissions. For example, 
 Hence, \verb|664| assigns permissions \verb|rw-rw-r--| to the file.
 
 
-\subsection{Change Default Permissions}
+\subsection{Default Permission Management}
 
 The default ACL for a newly created file or directory is defined by \verb|umask|. Check its value using
 \begin{lstlisting}
@@ -365,140 +496,6 @@ $ umask <new value>
 The value of \verb|umask|, after converting to binary, represents the bits in the 9-bit permission system that is disabled. For example, a \verb|umask| value of \verb|002| represents \verb|rwxrwxr-x| in the 9-bit permission system, because the binary form of \verb|002|, \verb|000000010|, blocks the $8$-th bit in the permission.
 
 The default \verb|umask| values for the root and the regular users in RHEL are \verb|002| and \verb|022| respectively. This is defined in \verb|/etc/bashrc|. A user can permanently change the default value of \verb|umask| by overwriting its value in \verb|.bashrc| as introduced in Section \ref{ch:sb:subsec:customizeshell}.
-
-\section{Location of Commands and Files}
-
-The most commonly seen 3 searching use cases are as follows.
-\begin{itemize}
-  \item Look for the location of a command using its name
-  \item Look for the location of a file using its name (and other metadata such as size, permission, etc.)
-  \item Look for the location of a file using a portion its content
-\end{itemize}
-
-Many approaches can be used to achieve the goals, some of which are introduced as follows.
-
-\subsection{Location of Commands}
-
-Use \verb|type| to look for a command as follows.
-\begin{lstlisting}
-$ type <command>
-\end{lstlisting}
-
-For example
-\begin{lstlisting}
-$ type cd
-cd is a shell builtin
-$ type python
-python is /usr/bin/python
-$ type ls
-ls is aliased to `ls --color=auto'
-\end{lstlisting}
-
-\subsection{Location of Files}
-
-The package \verb|mlocate| can be installed to enable the \verb|locate| command, which quickly searches for files by path. As long as a file or directory’s full path contains the search term, it may appear in the results.
-\begin{lstlisting}
-$ sudo dnf install mlocate
-$ sudo updatedb
-$ locate <file or path fragment>
-\end{lstlisting}
-Here, \verb|updatedb| must be run once after installing \verb|mlocate| to initialize the database.
-
-The mechanism of \verb|locate| works as follows. The system periodically runs \verb|updatedb| (usually once per day) to refresh an internal database containing file names and paths. The \verb|locate| command searches this database rather than the live filesystem, making it very fast. However, this means that newly created files may not be found until the database is updated. Furthermore, not all files are included by default; the configuration file \verb|/etc/updatedb.conf| determines which paths are scanned and which are excluded. The first run of \verb|updatedb| may take some time, since it must index the entire filesystem.
-
-Users may be confused by the commands \verb|locate| and \verb|mlocate|. In practice, they are nearly identical for basic usage. On many systems, \verb|locate| is provided as a wrapper or alias for \verb|mlocate|. In the scope of this discussion, no distinction is made between them.
-
-For security and privacy reasons, \verb|locate| only shows files that the invoking user has permission to access. For example, a regular user cannot use \verb|locate| to see files in \verb|/root| or another user’s home directory.
-
-A more widely adopted way of looking for a file by its variety of attributes is using \verb|find| as follows.
-\begin{lstlisting}
-$ find [<options>] [<path>] <expression>
-\end{lstlisting}
-
-The \verb|<options>| argument can be used to configure how the symbolic links should be handled. With default option \verb|-P|, the symbolic links are treated as the links themselves but not the files they are linking to, whereas \verb|-L| does the opposite. Debugging modes and query optimization can also be enabled from \verb|<options>|. The \verb|<path>| argument specifies the directory from where the query is conducted. The \verb|<expression>| argument specifies the keyword and the query method.
-
-The following are examples of using \verb|find| in different scenarios. The examples are taken from RedHat at \cite{redhat2022find}.
-
-\vspace{0.1in}
-\noindent \textbf{Find Files by Name}
-\vspace{0.1in}
-
-Use \verb|-name| or \verb|-iname| to search files by their names as follows. Case sensitive
-\begin{lstlisting}
-$ find / -name "*Foo*txt" 2>/dev/null
-/home/seth/Documents/Foo.txt
-\end{lstlisting}
-Case insensitive
-\begin{lstlisting}
-$ find / -iname "*Foo*txt" 2>/dev/null
-/home/seth/Documents/Foo.txt
-/home/seth/Documents/foo.txt
-/home/seth/Documents/foobar.txt
-\end{lstlisting}
-
-Wildcards such as \verb|*| can be used. Commonly used wildcards are given in Table \ref{ch:fm:tab:metacharacters}.
-
-\vspace{0.1in}
-\noindent \textbf{Find Files by Content}
-\vspace{0.1in}
-
-Use \verb|-exec| followed by \verb|grep| to find files with specific contents.
-\begin{lstlisting}
-$ find ~/Documents/ -name "*txt" -exec grep -Hi penguin {} \;
-/home/seth/Documents/Foo.txt:I like penguins.
-/home/seth/Documents/foo.txt:Penguins are fun.
-\end{lstlisting}
-where \verb|-exec| allows executing a command to the findings. Notice that \verb|grep| by itself can also be used to search files by contents.
-
-\vspace{0.1in}
-\noindent \textbf{Find Files by Type}
-\vspace{0.1in}
-
-Use \verb|-type| to filter files by their types. To find all files,
-\begin{lstlisting}
-$ find ~ -type f
-/home/seth/.bash_logout
-/home/seth/.bash_profile
-/home/seth/.bashrc
-/home/seth/.emacs
-/home/seth/.local/share/keyrings/login.keyring
-/home/seth/.local/share/keyrings/user.keystore
-/home/seth/.local/share/gnome-shell/gnome-overrides-migrated
-\end{lstlisting}
-Specifically, to find empty files,
-\begin{lstlisting}
-$ find ~ -type f -empty
-random.idea.txt
-\end{lstlisting}
-
-To find all subdirectories,
-\begin{lstlisting}
-$ find ~/Public -type d
-find ~/Public/ -type d
-/home/seth/Public/
-/home/seth/Public/example.com
-/home/seth/Public/example.com/www
-/home/seth/Public/example.com/www/img
-/home/seth/Public/example.com/www/font
-/home/seth/Public/example.com/www/style
-\end{lstlisting}
-
-Use \verb|-maxdepth| to set the searching depth as follows.
-\begin{lstlisting}
-$ find ~/Public/ -maxdepth 1 -type d
-/home/seth/Public/
-/home/seth/Public/example.com
-\end{lstlisting}
-
-\vspace{0.1in}
-\noindent \textbf{Find Files by Timestamp}
-\vspace{0.1in}
-
-To find files whose latest modified time is at least 30 days ago (30 days ago or earlier), use
-\begin{lstlisting}
- find /var/log -mtime +30
-\end{lstlisting}
-where \verb|-atime|, \verb|-ctime| and \verb|-mtime| search based on the number of days since each file was accessed, changed or had its metadata changed respectively. The alternatives \verb|-amin|, \verb|-cmin| and \verb|-mmin| work similarly in minutes. The \verb|+| indicates ``at least'' whereas \verb|-| indicates ``not more than''.
 
 \section{File Archive}
 

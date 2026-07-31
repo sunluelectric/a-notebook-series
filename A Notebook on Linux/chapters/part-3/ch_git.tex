@@ -1,8 +1,8 @@
 \chapter{Git} \label{ch:git}
 
-Git is a distributed version control system for tracking changes during the software development, and it can be across different platforms including Windows, Unix/Linux and macOS. This chapter introduces the basic use of Git on a local Linux machine and with a remote repository host server such as GitHub. 
+Git is a cross-platform distributed version control system for tracking changes during the software development. This chapter introduces the basic use of Git on a local Linux machine and with a remote repository host server such as GitHub. 
 
-Git-based version control is widely used in association with \myabb{Continuous Integration and Continuous Deployment}{CI/CD}. CI/CD is an important concept in nowadays software development and deployment. GitHub Actions is GitHub's CI/CD solution and it is also briefly introduced.
+Git-based version control is widely used in association with \myabb{continuous integration and continuous delivery}{CI/CD}. CI/CD is an important concept in nowadays software development and deployment. GitHub Actions is GitHub's CI/CD solution and it is also briefly introduced.
 
 \section{Introduction}
 
@@ -10,11 +10,11 @@ Git-based version control is widely used in association with \myabb{Continuous I
 
 Git introduces \mync{Git repository}, which can be interpreted as the ``ecosystem'' Git uses to manage a project. This refers to the \verb|.git| file associated with each Git-managed project, using which Git traces the development of the project. 
 
-With Git, all computers participating in the software development store a copy of the full-fledged Git repository locally with complete history, and they can synchronize with centralized remote servers. It introduces \mync{branch} to manage the concurrent development of different features of the project, where the main branch (also known as the master branch) is the stable and shared repository among everyone, and the feature branches are copies of the main branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the main branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}. Notice that a feature branch can be based on both main and feature branches.
+With Git, all computers participating in the software development can store a copy of the full-fledged Git repository locally with complete history, and they can synchronize with centralized remote servers. It introduces \mync{branch} to manage the concurrent development of different features of the project, where the main branch (also known as the master branch) is the stable and shared repository among everyone, and the feature branches are copies of the main branch where individual features can be developed. For a feature branch, once its developed feature is approved, it can be merged back to the main branch. A demonstration is given in Fig. \ref{ch:sma:fig:gitflow}. Notice that a feature branch can be based on both main and feature branches.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=350pt]{chapters/part-3/figures/gitflow.png}
+	\includegraphics[width=\textwidth]{chapters/part-3/figures/gitflow.png}
 	\caption{Git for software development management.} \label{ch:sma:fig:gitflow}
 \end{figure}
 
@@ -22,7 +22,9 @@ It is possible that multiple branches work on the same parts in a project and ca
 
 CLI is often used to manage a Git repository. Some commonly used commands are shown in Fig. \ref{ch:sma:fig:gitflow} with more to be introduced later. Notice that a graphical user interface is also available. However, in the scope of this notebook, command line is mostly used.
 
-\section{Global and Repository Configurations}
+As mentioned earlier, each user can choose to download all branches from the remote repository and keep them synchronized, in which case they can track all feature branches under development by all users. In a collaborative project, however, this is often not necessary. Alternatively, a user can also track only the main repository and a few feature repositories relevant to their development. More about branch synchronization will be introduced in Section \ref{ch:sma:sec:rrm}.
+
+\section{Installation and Configuration}
 
 Git and its relevant documents can be obtained from its official website \cite{git2025}. In many Linux distributions, Git is pre-installed. If Git is missing, follow the instructions on the official website to install it. The installation procedure may differ with different Linux distributions.
 
@@ -33,7 +35,7 @@ $ sudo dnf install git-all
 
 Upon successful installation, it is recommended to use \verb|git config| for the necessary basic configurations such as the username and user email. Without these configurations, Git cannot run normally.
 
-Notice that there are two types of configurations, namely the global configurations which apply to the machine and the user, and the repository configurations which apply to a particular Git repository. By default, the global level configurations are stored under \verb|~/.gitconfig| and the repository configurations \verb|./.git/config| of the repository, respectively. It is recommended to use Git CLI to setup these configurations rather than modifying the two files directly.
+Notice that there are two types of configurations, namely the global configurations which apply to the machine and the user, and the repository configurations which apply to a particular Git repository. By default, the global level configurations are stored under \verb|~/.gitconfig| and the repository configurations \verb|./.git/config| of the repository, respectively. It is recommended to use Git CLI to setup these configurations rather than modifying the files directly.
 
 To add username and email to the global configuration, use
 \begin{lstlisting}
@@ -80,7 +82,7 @@ Figure \ref{ch:sma:fig:gitbasics} gives a demonstration of how Git manages the p
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=350pt]{chapters/part-3/figures/gitbasics.png}
+	\includegraphics[width=\textwidth]{chapters/part-3/figures/gitbasics.png}
 	\caption{The project directory managed by Git.} \label{ch:sma:fig:gitbasics}
 \end{figure}
 
@@ -255,7 +257,7 @@ $ git rebase <branch name>
 A demonstrative Fig. \ref{ch:sma:fig:gitrebase} explains the differences between \verb|git merge| and \verb|git rebase|. It is clear from Fig. \ref{ch:sma:fig:gitrebase} that by using \verb|git rebase|, all feature commits are integrated into the master repositories to form a single repository tracking line, which differs largely from \verb|git merge|.
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=350pt]{chapters/part-3/figures/gitrebase.png}
+	\includegraphics[width=\textwidth]{chapters/part-3/figures/gitrebase.png}
 	\caption{Two approaches of integrating branches, \texttt{git merge} VS \texttt{git rebase}. In the \texttt{git rebase} example, two rebase commands are executed consecutively, the first on the feature branch and second the main branch.} \label{ch:sma:fig:gitrebase}
 \end{figure}
 
@@ -291,13 +293,13 @@ $ git pull
 \end{lstlisting}
 to pull the latest update.
 
-\begin{shortbox}
-\Boxhead{Should I use \texttt{git pull} or \texttt{git fetch}?}
+\begin{mdframed}
+\noindent \textbf{Should I use \texttt{git pull} or \texttt{git fetch}?}
 
 One may argue whether it is a good idea to use \verb|git pull|. Although convenient, \verb|git pull| is an integration of two commands, \verb|git fetch| and \verb|git merge| (or \verb|git rebase|) executed sequentially. It may be ``safer'' to manually run the two commands separately.
 
 With that being said, if the user simply wants to keep a well-maintained community project up to date, \verb|git pull| should work just alright.
-\end{shortbox}
+\end{mdframed}
 
 However, this does not guarantee that the user can perform a \verb|git push| command to push changes made in the local repository back to the remote source. For most community projects, only the owner and the selected collaborators can push to the repository, and the user needs to prove that they are one of them. For that, additional authentication is often required. More about \verb|git push| and remote repository authentication methods are introduced in Section \ref{sec:gitpush}.
 
@@ -330,8 +332,8 @@ $ git push
 \end{lstlisting}
 to push the changes in the local repository to the remote upstream. If there is no remote branch with the same branch name as the local repository, a remote branch with that name will be created when the local branch is pushed.
 
-\begin{shortbox}
-\Boxhead{The Names of Corresponding Local and Remote Branches}
+\begin{mdframed}
+\noindent \textbf{The Names of Corresponding Local and Remote Branches}
 
 A local branch and its corresponding remote branch usually have the same name by default, but this is not necessarily always the case. To set an upstream with a different name, use
 \begin{lstlisting}
@@ -343,7 +345,7 @@ or
 $ git push <remote name> <local branch name>:<remote branch name>
 \end{lstlisting}
 
-\end{shortbox}
+\end{mdframed}
 
 When performing \texttt{git push} for the first time, authentication is required. This allows GitHub or another hosting service to verify the identity of the user before accepting changes. Common authentication methods include
 \begin{itemize}
@@ -473,24 +475,24 @@ The YAML files should follow the syntax required by GitHub and be saved under \v
 An official demonstrative example of a GitHub workflow YAML file is given below \cite{git2025reference}. 
 
 \begin{lstlisting}
-	name: GitHub Actions Demo
-	run-name: ${{ github.actor }} is testing out GitHub Actions
-	on: [push]
-	jobs:
-	Explore-GitHub-Actions:
-	runs-on: ubuntu-latest
-	steps:
-	- run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
-	- run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-	- run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-	- name: Check out repository code
-	uses: actions/checkout@v4
-	- run: echo "The ${{ github.repository }} repository has been cloned to the runner."
-	- run: echo "The workflow is now ready to test your code on the runner."
-	- name: List files in the repository
-	run: |
-	ls ${{ github.workspace }}
-	- run: echo "This job's status is ${{ job.status }}."
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions
+on: [push]
+jobs:
+Explore-GitHub-Actions:
+runs-on: ubuntu-latest
+steps:
+- run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+- run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+- run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+- name: Check out repository code
+uses: actions/checkout@v4
+- run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+- run: echo "The workflow is now ready to test your code on the runner."
+- name: List files in the repository
+run: |
+ls ${{ github.workspace }}
+- run: echo "This job's status is ${{ job.status }}."
 \end{lstlisting}
 
 Save the above YAML file under \verb|.github/workflows/| and GitHub would recognize the workflow. Click ``Actions'' on GitHub dashboard to check the details of the workflow.
@@ -499,21 +501,21 @@ A brief introduction to YAML file syntax for GitHub Actions is given below.
 
 In the workflow of the demonstrative example only one job, namely ``Explore-GitHub-Actions'', is defined. In practice, multiple jobs can be defined in a workflow. An example from \cite{git2025reference} is given below where 3 jobs are defined.
 \begin{lstlisting}
-	jobs:
-	setup:
-	runs-on: ubuntu-latest
-	steps:
-	- run: ./setup_server.sh
-	build:
-	needs: setup
-	runs-on: ubuntu-latest
-	steps:
-	- run: ./build_server.sh
-	test:
-	needs: build
-	runs-on: ubuntu-latest
-	steps:
-	- run: ./test_server.sh
+jobs:
+setup:
+runs-on: ubuntu-latest
+steps:
+- run: ./setup_server.sh
+build:
+needs: setup
+runs-on: ubuntu-latest
+steps:
+- run: ./build_server.sh
+test:
+needs: build
+runs-on: ubuntu-latest
+steps:
+- run: ./test_server.sh
 \end{lstlisting}
 Jobs are by default independent and can run in parallel unless \verb|needs| field is used just like in the above example, where ``build'' depends on ``setup'', and ``test'' on ``build''.
 
@@ -537,19 +539,19 @@ Commonly seen configurations in a workflow YAML file are given in Table \ref{tab
 
 The \verb|jobs| field is a dictionary of jobs that run in parallel (unless \verb|needs| is used in the job description). Each entry in the dictionary corresponds with a job. The key of the entry is referred as \verb|<id>| of the job. A demonstrative example is given below.
 \begin{lstlisting}
-	jobs:
-	job1:
-	name: <something>
-	runs-on: <something>
-	steps:
-	- <something>
-	- <something>
-	job2:
-	name: <something>
-	runs-on: <something>
-	steps:
-	- <something>
-	- <something>
+jobs:
+job1:
+name: <something>
+runs-on: <something>
+steps:
+- <something>
+- <something>
+job2:
+name: <something>
+runs-on: <something>
+steps:
+- <something>
+- <something>
 \end{lstlisting}
 Commonly seen fields defined under \texttt{jobs.<id>} are summarized in Table \ref{tab:githubactions_jobs}.
 \begin{table}[!htb]

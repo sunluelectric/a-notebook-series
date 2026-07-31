@@ -8,7 +8,7 @@ The default \myabb{command line interface}{CLI} of most Linux distributions, kno
 
 Notice that different Linux distributions may have different default configurations or built-in tools for shell. That said, the majority shell commands introduced in this notebook can be used across commonly seen Linux distributions.
 
-\subsection{Shell Types}
+\subsection{Shell Type}
 
 Shell, from a broad view, refers to not a single specific CLI but a collection of many CLIs of different types. The most widely used shell across commonly seen Linux distributions is \mync{Bourne Again Shell}, also known as ``\mync{bash}''. It is derived from the Bourne shell used in UNIX. Unless otherwise mentioned, the ``shell'' we refer to in the remainder of the notebook is bash. 
 
@@ -18,12 +18,9 @@ An example of a shell script that calculates Fibonacci series is given below. No
 #!/bin/bash
 
 read -p "Enter the number of terms: " n
-
 a=0
 b=1
-
 echo "Fibonacci series up to $n terms:"
-
 for (( i=0; i<n; i++ ))
 do
     echo -n "$a "
@@ -31,7 +28,6 @@ do
     a=$b
     b=$fn
 done
-
 echo
 \end{lstlisting}
 
@@ -57,11 +53,11 @@ Some other shells such as C shell and Korn shell are also popular among certain 
 
 With a newly started shell, a string (usually containing username, hostname, current working directory, etc.) followed by either ``\verb|$|'' or ``\verb|#|'' should appear. Following the string, the user can key in shell commands. The string may appear differently on different Linux distributions. An example is given below.
 \begin{lstlisting}
-[<username>@<hostname> <working directory>]<prompt sign>
+<username>@<hostname>:<working directory><prompt sign>
 \end{lstlisting}
 such as
 \begin{lstlisting}
-[sunlu@sunlu-dev-rhel sh]$
+sunlu@sunlu-dev:~$
 \end{lstlisting}
 
 The above string is called a \mync{command prompt}, indicating the start of a user command. By default, for regular users the ending of the prompt is \verb|$|, while for the root user the ending is \verb|#|. The prompt can be customized by changing the environment variable \verb|PS1|. See Sections \ref{ch:sb:subsec:shellenvvar} and \ref{ch:sb:subsec:customizeshell} for more about environment variables and shell customization methods respectively. Commonly seen elements that can be added into a command prompt are summarized in Table \ref{ch:sb:tab:promptvariable}.
@@ -87,7 +83,7 @@ The above string is called a \mync{command prompt}, indicating the start of a us
 
 As suggested by Table \ref{ch:sb:tab:promptvariable}, there are two types of users, namely the root user and regular users. More about them will be introduced in Chapter \ref{ch:usermanagement}. As far as this chapter concerns, it is assumed that the user always logs into the system as a regular user.
 
-\subsection{Basic Commands}
+\subsection{Basic Command}
 
 A typical Linux shell command looks like the following
 \begin{lstlisting}
@@ -121,13 +117,13 @@ $ sudo lshw
     vendor: <something>
     ...
 \end{lstlisting}
-The list goes on and on to include detailed information about the hardware, including mother board, CPU, cache and memory, and much more.
+The returned information goes on and on to include detailed information about the hardware, including mother board, CPU, cache and memory, and much more.
 
 To retrieve OS information, consider using
 \begin{lstlisting}
 $ cat /etc/os-release
-NAME="Red Hat Enterprise Linux"
-VERSION="9.6 (Plow)"
+NAME="<os name>"
+VERSION="<os version>"
 ...
 \end{lstlisting}
 
@@ -270,9 +266,9 @@ The double greater sign \verb|>>| works similarly with \verb|>| except that \ver
 
 The error greater sign \verb|2>|, \verb|2>>| works similarly with \verb|>|, \verb|>>| except that instead of redirecting standard output messages, it redirects the error messages.
 
-\section{Shell Environment Variables}\label{ch:sb:subsec:shellenvvar}
+\section{Shell Environment Variable}\label{ch:sb:subsec:shellenvvar}
 
-\mync{Shell Environmental Variables} are either system-defined or user-defined variables that the shell can access and track. Commonly used environmental variables are introduced below.
+\mync{Shell environmental variables} are either system-defined or user-defined variables that the shell can access and track. Commonly used environmental variables are introduced below.
 
 Variable \verb|PATH| traces the locations of external commands so that they can be executed anytime from any working directory. It is essentially a collection of directories initialized automatically when a shell is started. Check \verb|PATH| by
 \begin{lstlisting}
@@ -349,7 +345,7 @@ Shell configuration files are loaded each time a new shell starts. User-defined 
 
 To customize the shell behavior for a user, the most common method is to edit their \verb|~/.bashrc| which is executed automatically each time the user starts a shell. The configuration file is also known as the \mync{user script} in some contexts. It is a human-readable and self-explanatory file.
 
-\section{Shell Script Basics}
+\section{Shell Script Programming}
 
 We have been discussing single-line shell commands for one-time usage so far. This section briefly introduces shell script programming. A shell script is a reusable collection of shell commands to serve a specific purpose, such as to install and configure a software. Notice that shell scripts are mainly used for system configuration and software management and not for data processing, as there are more handy tools such as C/C++ and Python.
 
@@ -367,13 +363,14 @@ A typical shell script looks like the following
 
 <main body>
 \end{lstlisting}
-where \verb|#!<path to command>| is known as the \mync{shebang}, which tells the corresponding command or program to use to execute the script. With shebang, once the script is made executable, the user can execute the script with only the script name and not specifying the program. In this example, \verb|/bin/bash| is used as it is a bash shell script. 
+where \verb|#!<path to command>|, in the above example \verb|#!/bin/bash|, is known as the \mync{shebang}, which tells the corresponding command or program to use to execute the script. With shebang, once the script is made executable, the user can execute the script with only the script name and not specifying the program. In this example, since it is a bash shell script, \verb|/bin/bash| is used to execute the script. 
 
 Comments can be added to the shell script using \verb|# <comment>|. It is often a good practice to give a brief introduction to the script in the beginning. Global variables are assigned using \verb|<VARIABLE>=<value>| and they should be listed before the main body of the script.
 
-\subsection{Basic Syntax}
 
-The basic syntax of conditional statement, loop and self-defined functions are introduced as follows.
+The basic syntax of conditional statement, loop and self-defined functions are introduced in the remainder of this section.
+
+\subsection{Conditional}
 
 Conditional statements in bash shell script include \verb|if| and \verb|case|, with the syntax introduced below.
 
@@ -409,6 +406,8 @@ esac
 
 Notice that the syntax of \verb|case| in bash shell script looks different from most other programming languages such as \verb|C| or \verb|Java|. For example, it uses single right bracket \verb|)| to separate the case pattern and body instead of \verb|{}| or \verb|:|, and \verb|;;| to terminate a body instead of \verb|break|. This is because the syntax evolved from the older Unix shell conventions.
 
+\subsection{Loop}
+
 Commonly used loops include \verb|while| and \verb|for|. The syntax is given below.
 
 \begin{lstlisting}
@@ -441,6 +440,8 @@ do
 done
 \end{lstlisting}
 loops over all the files in the current directory, with the regular expression used to filter the applicable files.
+
+\subsection{Self-Defined Function}
 
 A user-defined function can be created as follows:
 \begin{lstlisting}
@@ -478,12 +479,3 @@ is_prime 5 # print 5
 is_prime 10 # print nothing
 \end{lstlisting}
 In this self-defined function, an intermediate variable \verb|ctr| is defined that records the number of factors of the input number excluding $1$ and the number itself. If \verb|ctr| is zero, the input is a prime number.
-
-
-
-
-
-
-
-
-
