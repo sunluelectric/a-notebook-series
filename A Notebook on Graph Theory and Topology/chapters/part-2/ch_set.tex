@@ -1,0 +1,162 @@
+\chapter{Set Theory and Metric Space}
+
+Set theory and metric space are introduced in this chapter as the preliminaries to general topology. They are also the fundamentals to many other subjects such as abstract algebra, topological analysis and real analysis.
+
+\section{Metric Space}
+
+Metric space is introduced in this section.
+
+\subsection{Definition}
+
+A \mync{metric space} is a non-empty set $X$ with a distance function $d: X \times X \to \mathbb{R}_{\geq 0}$, where function $d$ satisfies the following properties.
+\begin{itemize}
+	\item Symmetric: $\forall x, y \in X$, $d(x,y)=d(y,x)$;
+	\item Positive definite: $\forall x, y \in X$, $d(x,y)\geq 0$, and $d(x,y)=0$ if and only if $x=y$;
+	\item Triangle inequality: $\forall x, y, z \in X$, $d(x,z)\geq d(x,y) + d(y, z)$.
+\end{itemize}
+
+\begin{mdframed}
+\noindent \textbf{Is metric space an algebraic system?}
+
+No, we do not consider metric space an algebraic system. 
+
+The distance function defined in a metric space is essentially a mapping but not an operator. The tools and properties we study on metric spaces and algebraic systems are also different.
+
+In that perspective, though both metric space and algebraic system define set and ``rules'' of some kind, they are different.
+
+\end{mdframed}
+
+Consider the following metric space $(X,d)$, where the distance function is defined by
+\begin{eqnarray}
+	d(x,y) &=& \left\{\begin{array}{cc}
+		0 & x=y \\
+		1 & \textup{otherwise}
+	\end{array}\right.
+\end{eqnarray}
+It can be easily proved that the above meets the criteria of metric space, hence $(X,d)$ a metric space. This is probably one of the simplest metric spaces and it demonstrates that metric space can be defined on any non-empty set.
+
+\subsection{Commonly Seen Metric Spaces}
+
+\mync{Euclidean distance} (also known as \mync{$l^2$-distance}) is a metric space defined on $\mathbb{R}^n$, with the distance function defined by
+\begin{eqnarray}
+	\norm{x-y}_2 &=& \left(\sum_n|x_i-y_i|^2\right)^{\frac{1}{2}} \label{eq:euclidean-distance}
+\end{eqnarray}
+Euclidean distance, which be frequently used in the remainder of this notebook, is one of the most popular metric spaces in subjects such as real analysis and topological analysis.
+
+Another example of metric space is the \mync{$l^\infty$-distance} on $\mathbb{R}^n$ which is defined by
+\begin{eqnarray}
+	\norm{x-y}_\infty &=& \max_{n}~|x_i - y_i| \label{eq:l-infinity-distance}
+\end{eqnarray}
+
+It can be easily verified that both Euclidean distance and $l^\infty$-distance on $\mathbb{R}^n$ satisfy the definition of metric space.
+
+Both Euclidean distance and $l^\infty$-distance can be derived from \mync{$p$-norm} which is defined on $\mathbb{R}^n$ as follows.
+\begin{eqnarray}
+	\norm{x}_p &=& \left(\sum_n x_i^p\right)^{\frac{1}{p}} \label{eq:p-norm}
+\end{eqnarray}
+
+Letting $p=2$ in \eqref{eq:p-norm} gives
+\begin{eqnarray}
+	\norm{x}_2 &=& \left(\sum_n x_i^2\right)^{\frac{1}{2}} \nonumber
+\end{eqnarray}
+which is known as the \mync{Euclidean norm}, and Euclidean distance in \eqref{eq:euclidean-distance} is the Euclidean norm of $x-y$.
+
+Letting $p\rightarrow \infty$ in \eqref{eq:p-norm} gives
+\begin{eqnarray}
+	\norm{x}_{\infty} &=& \max_n ~ |x_i| \nonumber
+\end{eqnarray}
+which is known as the \mync{infinity norm}, and $l^\infty$-distance in \eqref{eq:euclidean-distance} is the infinity norm of $x-y$.
+
+In this sense, $p$-norm can be taken as a kind of metric space.
+
+\subsection{Metric Space Use Cases}
+
+Metric space has many use cases and are used in many definitions of more abstract concepts. Some examples are given as follows.
+
+\vspace{0.1in}
+\noindent \textbf{Open Set}
+\vspace{0.1in}
+
+In the context of metric space, define \mync{ball of radius $r$ centered at $p$} as follows.
+\begin{eqnarray}
+	B_r(p) &=& \left\{x \in X | d(x,p) < r\right\} \nonumber
+\end{eqnarray}
+
+With that defined, open set can be defined as follows. A set $A \subseteq X$ is an \mync{open set} if $\forall a \in A$, $\exists \epsilon > 0$ such that $B_\epsilon{a} \subseteq A$.
+
+\vspace{0.1in}
+\noindent \textbf{Continuous Function}
+\vspace{0.1in}
+
+There are different ways to define a continuous function. The $\epsilon$-$\delta$ definition which uses metric space is given below. 
+
+Let $(X,d_x)$, $(Y,d_y)$ be two metric spaces defined on sets $X$ and $Y$ respectively, and let $f:X\to Y$ be a function mapping elements from $X$ to $Y$. Function $f$ is a \mync{continuous function} if $\forall \epsilon > 0$, $\exists \delta >0$ such that
+\begin{eqnarray}
+	d(x_a, x_b) < \delta &\Longrightarrow& d\left(f(x_a), f(x_b)\right) < \epsilon \nonumber 
+\end{eqnarray}
+
+In other words, the difference of the function values can be made arbitrarily small if the input independent variables are close.
+
+\vspace{0.1in}
+\noindent \textbf{Continuous Function Metric}
+\vspace{0.1in}
+
+Let $f,g \in C^0\left([a,b]\right)$ be two continuous functions on interval $[a,b]$, $f,g: [a,b] \to\mathbb{R}$. Let $X$ be a set containing such continuous functions, and define the distance function
+\begin{eqnarray}
+	d(f,g) &=& \sup_{x\in[a,b]} |f(x)-g(x)| \nonumber
+\end{eqnarray}
+where $f,g \in X$. It can be proved that $(X,d)$ is a metric space. This is demonstrated by Fig. \ref{fig:continuous-function-metric}, where the red and blue curve are two continuous functions and their distance on $[a,b]$ is given by the black solid segment.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.6\linewidth]{chapters/part-2/figures/continuous-function-metric.png}
+	\caption{A demonstrative example of a metric space defined on continuous functions.}
+	\label{fig:continuous-function-metric}
+\end{figure}
+
+The proof of $(X,d)$ to be a metric space can be done fairly easily using the definition, and it is neglected here. 
+
+The same idea applies to multivariable functions. It can also extend from continuous function $C^0$ to continuously differentiable functions $C^1$ (the function is differentiable and its differential is also continuous), in which case the distance function becomes
+\begin{eqnarray}
+	d(f,g) &=& \sup_{x\in[a,b]} |f(x)-g(x)| + \sup_{x\in[a,b]} |f\textprime(x)-g\textprime(x)| \nonumber
+\end{eqnarray}
+and to $n$-th order continuously differentiable function $C^n$, in which case the distance function becomes
+\begin{eqnarray}
+	d(f,g) &=& \sum_{i=0}^n \sup_{x\in[a,b]} |f^{(i)}(x)-g^{(i)}(x)| \label{eq:continuous-function-metric}
+\end{eqnarray}
+
+As for infinity-order continuously differentiable function $C^\infty$ which is also known as the \mync{smooth function}, \eqref{eq:continuous-function-metric} would not apply as it is for the distance might be unbounded and would cause issues. There are some walk around with that, for instance using
+\begin{eqnarray}
+	d(f,g) &=& \sum_{i=0}^\infty 2^{-i}\dfrac{\sup_{x\in[a,b]} |f^{(i)}(x)-g^{(i)}(x)|}{1+\sup_{x\in[a,b]} |f^{(i)}(x)-g^{(i)}(x)|} \nonumber
+\end{eqnarray}
+instead.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
