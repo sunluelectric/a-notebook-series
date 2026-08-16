@@ -69,13 +69,7 @@ which is known as the \mync{infinity norm}, and $l^\infty$-distance in \eqref{eq
 
 In this sense, $p$-norm can be taken as a kind of metric space.
 
-\subsection{Metric Space Use Cases}
-
 Metric space has many use cases and are used in many definitions of more abstract concepts. Some examples are given as follows.
-
-\vspace{0.1in}
-\noindent \textbf{Open Set}
-\vspace{0.1in}
 
 In the context of metric space, define \mync{ball of radius $r$ centered at $p$} as follows.
 \begin{eqnarray}
@@ -83,10 +77,6 @@ In the context of metric space, define \mync{ball of radius $r$ centered at $p$}
 \end{eqnarray}
 
 With that defined, open set can be defined as follows. A set $A \subseteq X$ is an \mync{open set} if $\forall a \in A$, $\exists \epsilon > 0$ such that $B_\epsilon{a} \subseteq A$.
-
-\vspace{0.1in}
-\noindent \textbf{Continuous Function}
-\vspace{0.1in}
 
 There are different ways to define a continuous function. The $\epsilon$-$\delta$ definition which uses metric space is given below. 
 
@@ -96,10 +86,6 @@ Let $(X,d_x)$, $(Y,d_y)$ be two metric spaces defined on sets $X$ and $Y$ respec
 \end{eqnarray}
 
 In other words, the difference of the function values can be made arbitrarily small if the input independent variables are close.
-
-\vspace{0.1in}
-\noindent \textbf{Continuous Function Metric}
-\vspace{0.1in}
 
 Let $f,g \in C^0\left([a,b]\right)$ be two continuous functions on interval $[a,b]$, $f,g: [a,b] \to\mathbb{R}$. Let $X$ be a set containing such continuous functions, and define the distance function
 \begin{eqnarray}
@@ -125,11 +111,10 @@ and to $n$-th order continuously differentiable function $C^n$, in which case th
 	d(f,g) &=& \sum_{i=0}^n \sup_{x\in[a,b]} |f^{(i)}(x)-g^{(i)}(x)| \label{eq:continuous-function-metric}
 \end{eqnarray}
 
-As for infinity-order continuously differentiable function $C^\infty$ which is also known as the \mync{smooth function}, \eqref{eq:continuous-function-metric} would not apply as it is for the distance might be unbounded and would cause issues. There are some walk around with that, for instance using
+As for infinity-order continuously differentiable function $C^\infty$ which is also known as the \mync{smooth function}, \eqref{eq:continuous-function-metric} might be unbounded. Practically, we shall either limit the use of the metric to only bounded-distance smooth functions, or make a walk around with modified distance functions such as
 \begin{eqnarray}
 	d(f,g) &=& \sum_{i=0}^\infty 2^{-i}\dfrac{\sup_{x\in[a,b]} |f^{(i)}(x)-g^{(i)}(x)|}{1+\sup_{x\in[a,b]} |f^{(i)}(x)-g^{(i)}(x)|} \nonumber
 \end{eqnarray}
-instead.
 
 
 
