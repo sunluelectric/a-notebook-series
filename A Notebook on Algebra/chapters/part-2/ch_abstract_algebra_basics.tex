@@ -1,10 +1,10 @@
 \chapter{Abstract Algebra Basics}
 
-Abstract algebra studies the principals and algorithms used in different algebraic systems. The basics of abstract algebra including the scope and commonly seen definitions and concepts are introduced in this chapter.
+Abstract algebra studies the principals and algorithms used in different algebraic systems. The basics of abstract algebra, including the scope and commonly seen definitions and concepts, are introduced in this chapter.
 
-\section{Scope}
+\section{Scope of Abstract Algebra}
 
-Linear algebra has been introduced in the earlier part of this notebook. Linear algebra as well as other classic algebraic algorithms solve practical problems using algebra theory, whereas abstract algebra studies these theories. While classic algebra performs calculations on numbers, vector and matrices, \mync{abstract algebra} studies the concepts, tools, derivations and logic we use in the calculation, and tries to explain why they work in the way they do. Abstract algebra also develops new concepts, tools and algorithms that we can use to solve more complicated algebraic problems.
+Linear algebra has been introduced in the earlier part of this notebook. Linear algebra as well as other classic algebraic algorithms solves specific problems using algebra theories, whereas abstract algebra studies these theories. While classic algebra performs calculations on numbers, vector and matrices, \mync{abstract algebra} studies the concepts, tools, derivations and logic we use in the calculation, and tries to explain why they work in the way they do. Abstract algebra also develops new concepts, tools and algorithms that we can use to solve more complicated algebraic problems.
 
 As an example, consider the following equation
 \begin{eqnarray}
@@ -12,7 +12,7 @@ As an example, consider the following equation
 \end{eqnarray}
 where $x$, $y$ are vectors and $A$ a matrix. Solving $x$ given particular $A$ and $y$ falls into the classic algebra domain. It is obvious that $x$ does not necessarily exist or being unique for different $y$ and $A$. Studying the general rules when $x$ exists and when it is unique for a set of $y$ and $A$ becomes an abstract algebra problem.
 
-One may have seen the following expressions in elementary schools
+As another example, consider the following expressions taught in elementary schools
 \begin{eqnarray}
 	a+b &=& b+a \nonumber \\
 	ab &=& ba \nonumber
@@ -23,13 +23,13 @@ Here is another great motivating example. One of the most famous applications of
 \begin{eqnarray}
   x^n + a_1x^{n-1} + a_2x^{n-2} + \ldots + a_n &=& 0 \label{eq:polynomial_equation}
 \end{eqnarray}
-where $n\geq 1$ is the order of the polynomial and $a_1, \ldots, a_n$ are any arbitrary values. The analytical solutions to \eqref{eq:polynomial_equation} for $n=1$ and $n=2$ are obvious. With some effort, the analytical solutions for $n=3$ and $n=4$ were found in the $16$-th century. Since then, people have been struggling to find the analytical solution to the polynomial with fifth and higher orders.
+where $n\geq 1$ is the order of the polynomial and $a_1, \ldots, a_n$ any arbitrary coefficients. The analytical solutions to \eqref{eq:polynomial_equation} for $n=1$ and $n=2$ are obvious. With some effort, the analytical solutions for $n=3$ and $n=4$ were found in the $16$th century. Since then, people have been struggling to find the analytical solution to the polynomial with fifth and higher orders.
 
 In the $18$th and $19$th century, Euler, Lagrange and Gaussian attended this problem. Their conclusion was that there is no analytical solution to polynomial equations of fifth order or higher, but they could not give a very solid proof to the statement. Nevertheless, the methods they used inspired a lot of people that would work on this problem.
 
 In the $19$th century, Abel was able to prove that there is no analytical solution to general polynomial equations of fifth degree or higher with arbitrary coefficients (see Abel–Ruffini theorem). Furthermore, he discussed a set of special cases with specific coefficient patterns that can have analytical solutions, and he came up with a sufficient condition for a fifth order polynomial equation to have the analytical solution. 
 
-The necessary and sufficient condition for a fifth or higher order polynomial to have an analytical solution is finally fully discovered by the genius Galois at a remarkably young age. Galois was able to create his theorem (known as the Galois theorem) and use it to find the ultimate answer to this problem that people have been studied for centuries. His theorem goes far beyond that. Galois theorem will find its usefulness in many areas to come, and eventually it becomes an important building block of abstract algebra. 
+The necessary and sufficient condition for a fifth or higher order polynomial to have an analytical solution is finally fully discovered by the genius Galois at the remarkably young age of 18. Galois was able to create his theorem (known as the Galois theorem) and use it to find the ultimate answer to this problem that people have been studied for centuries. His theorem goes far beyond that. Galois theorem will find its usefulness in many areas to come, and eventually it becomes an important building block of abstract algebra. 
 
 In the remaining of this part of the notebook, abstract algebra including the contribution from Abel, Galois and other mathematicians are introduced.
 
