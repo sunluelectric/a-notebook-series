@@ -10,26 +10,26 @@ Brief introductions to virtualization and containerization are given in this sec
 
 \subsection{Virtualization}
 
-In a conventional data center, multiple physical servers are deployed, and each server has a single associated application. Servers may share the same \myabb{local area network}{LAN} and \myabb{network-attached storage}{NAS} for data exchanging. A big issue of this implementation is the utilization efficiency of the servers and the unevenly distributed loads, as some of the servers may not be utilized efficiently while others may be overwhelmed. To deploy a new application, a new server must be purchased, which can take months of time. With more and more servers, the management and IT cost may grow exponentially.
+In a conventional data center, multiple physical servers are deployed, and each server has a single associated application. Servers may share the same \myabb{local area network}{LAN} and \myabb{network-attached storage}{NAS} for data exchanging. A big issue of this implementation is the utilization efficiency of the servers and the unevenly distributed loads, as some of the servers may not be utilized efficiently while others may be overwhelmed. To deploy a new application, a new server must be purchased, which can take months of time. With more and more servers, the asset and management cost may grow wild.
 
 To solve this problem, we need a systematical and automated way of integrating and distributing computational resources across multiple applications on the same server. Though working on the same machine, a user or an application would usually want a private working environment not interrupted by others. In other words, they would want to virtually work on an independent machine with his own CPU, RAM, I/O, OS, drivers and storage, despite that the actual hardware is shared. This can be achieved through \mync{virtualization}, which enables running multiple operating systems on a single physical server in an uninterrupted and logically separated manner. The virtually independent computer of such kind is often called a \mync{virtual machine}[VM].
 
 The virtual environment is emulated and managed by a special software running on the actual machine known as the \mync{virtual machine monitor}[VMM] or \mync{hypervisor}. The setup is often transparent to the applications as they perform the same way as if they were running on a dedicated physical machine.
 
-Depending on the items to be virtualized, virtualization can be divided into the following categories.
+Depending on the items to be virtualized, virtualization techniques can be categorized as follows.
 \begin{itemize}
-	\item Virtualization of equipment, mainly network resources and storage. This results in \myabb{virtual LAN}{VLAN}, \myabb{virtual private network}{VPN}, NAS and \myabb{storage area network}{SAN}.
-	\item Virtualization of operating systems. This results in the well-known VM and virtual desktop.
-	\item Virtualization of application running environments. An example is \myabb{Java virtual machine}{JVM} that allows Java to generate consistent results while running on different machines.
+	\item Virtualization of infrastructure and equipment, mainly network resources and storage. This results in \myabb{virtual LAN}{VLAN}, \myabb{virtual private network}{VPN}, NAS and \myabb{storage area network}{SAN}.
+	\item Virtualization of operating system. This results in the well-known VM and virtual desktop.
+	\item Virtualization of application running environment. An example is \myabb{Java virtual machine}{JVM} that allows Java to generate consistent results while running on different machines.
 \end{itemize}
+There are many virtualization architectures available and the user can choose the best architecture that suits their needs.
 
-There are different virtualization architectures. Commonly seen components shared by almost all architectures are given below.
+When people talks about virtualization, it is most likely that they are talking about VM. Commonly seen terminologies in VM are listed below.
 \begin{itemize}
 	\item Host OS. The OS that resides on the physical machine, on which virtualization tools run.
 	\item VMM. This is a software that runs on the host OS, managing all the guest OSes, providing them interface to the host OS and the hardware.
 	\item VM, the system that runs in an virtualized isolated environment.
 \end{itemize}
-Host OS, VMM and VM relationship is shown in Fig. \ref{ch:vac:fig:acookinakitchen}.
 
 Different virtualization techniques are used in different types of VMMs. They can be widely divided into the following categories.
 \begin{itemize}
@@ -45,18 +45,18 @@ For the virtualization of memory, VMM uses shadow page table to assign memory pa
 For the virtualization of I/O, the development trend is that I/O operations will be less and less rely on software and OS, and more and more on hardware. The VMM directly maps the I/O hardware interface to the VMs.
 
 \begin{mdframed}
-	\noindent \textbf{Hypervisor VS Host OS, Who is the Boss?}
+	\noindent \textbf{Who is the boss, host OS or hypervisor?}
 	
-	Both the hypervisor and the host OS can run in privilege mode (also known as ``Ring 0'' in x86 architecture). However, notice that at one time there can be only one boss, i.e., only one entity that runs in Ring 0.
+	Both the host OS and the hypervisor can run in privilege mode (also known as ``Ring 0'' in x86 architecture). However, notice that at one time there can be only one entity that runs in Ring 0.
 	
 	Depending on the type of the hypervisor configuration, this entity can be either the hypervisor or the host OS. In a type 1 hypervisor configuration, the hypervisor itself runs in Ring 0 and manages all hardware resources directly. In a type 2 hypervisor configuration, the host OS runs in Ring 0, and the hypervisor runs in a lower privileged ring.
 \end{mdframed}
 
 \subsection{Containerization}
 
-Deploying a new VM generally consumes a considerably large amount of time and resources because it virtualizes the infrastructure, on which the entire OS needs be installed. It is hardly possible to launch a VM for each microservice when there are many of them. In this case, a more efficient approach is to deploy a single VM and place each application in an isolated environment with its own customized drivers and configurations. The technology used to deploy and manage containers is known as \mync{containerization}. The isolated environment where an application instance runs is known as the \mync{container}. 
+Deploying a new VM generally consumes a considerably large amount of time and resources because the guest OS needs to be installed. It is hardly possible to launch a VM for each microservice when there are many of them. In this case, a more efficient approach is to deploy a single VM and place each application in an isolated environment with its own customized drivers and configurations. The technology used to deploy and manage containers is known as \mync{containerization}. The isolated environment where an application instance runs is known as the \mync{container}. 
 
-A container is similar to a VM in the sense that it provides certain degrees of isolation from others, but it is typically ``lighter'' than a VM because it does not need to virtualize or duplicate the whole OS as VMs do. This makes containers cheaper to launch and manage, hence more suitable for massive microservices deployment. A container contains all the configuration and requirement information of an application. Running a container on different platforms would consistently generate the same expected result. This has made the sharing and rapid deployment of containers remarkably easy and convenient. 
+A container is similar to a VM in the sense that it provides certain degrees of isolation from others, but it is typically ``lighter'' than a VM because it does not need to virtualize or duplicate the whole OS as VMs do. This makes containers cheaper to launch and manage, hence more suitable for massive microservices deployment. A container contains all the configuration and requirement information of an application. Running containers with the identical configuration on different platforms would consistently generate the same expected result. This has made the sharing and rapid deployment of containers remarkably easy and convenient. 
 
 Depending on the context, the term ``container'' may refer to container runtime, container engine or container orchestration.
 
@@ -66,7 +66,7 @@ It is often inconvenient for users to talk to container runtimes directly. \mync
 
 Finally, \mync{container orchestration} is the software that strategically deploy, monitor, restart, and terminate the containers on servers. It can scale up and down the number of containers based on the demanding, and balance the API calls each container receives. Container orchestration is very useful in production environment of large-scale services. One of the most widely used container orchestrations is kubernetes.
 
-Notice that though container runtime is always a must-have, container engine and container orchestration are not. In the old days, a container orchestration talks to a container runtime through a container engine. Nowadays, many container orchestrations directly communicate with container runtimes.
+Notice that though container runtime is always a must-have, container engine and container orchestration are not. A container orchestration used to talk to a container runtime through a container engine. Nowadays, many container orchestrations directly communicate with container runtimes.
 
 \subsection{Comparison}
 
