@@ -8,11 +8,11 @@ TBA
 
 \section{Metric Space}
 
-Metric space is introduced in this section.
+Metric space and relevant concepts are introduced in this section. Commonly used metric space and their use cases are briefly covered.
 
 \subsection{Definition}
 
-A \mync{metric space} is a non-empty set $X$ with a distance function $d: X \times X \to \mathbb{R}_{\geq 0}$, where function $d$ satisfies the following properties.
+A \mync{metric space} is a non-empty set $X$ with a distance function $d: X \times X \to \mathbb{R}$, where function $d$ satisfies the following properties:
 \begin{itemize}
 	\item Symmetric: $\forall x, y \in X$, $d(x,y)=d(y,x)$;
 	\item Positive definite: $\forall x, y \in X$, $d(x,y)\geq 0$, and $d(x,y)=0$ if and only if $x=y$;
@@ -22,9 +22,7 @@ A \mync{metric space} is a non-empty set $X$ with a distance function $d: X \tim
 \begin{mdframed}
 \noindent \textbf{Is metric space an algebraic system?}
 
-No, we do not consider metric space as an algebraic system. 
-
-The distance function defined in a metric space is essentially a mapping but not an operator. The tools and properties we study on metric spaces and algebraic systems are also different.
+No, we do not consider metric space an algebraic system. The distance function defined in a metric space is essentially a mapping but not an operator. The tools and properties we study on metric spaces and algebraic systems are also different.
 
 In that perspective, though both metric space and algebraic system define set and ``rules'' of some kind, they are different.
 
@@ -39,31 +37,51 @@ Consider the following metric space $(X,d)$, where the distance function is defi
 \end{eqnarray}
 It can be easily proved that the above meets the criteria of metric space, hence $(X,d)$ a metric space. This is probably one of the simplest metric spaces and it demonstrates that metric space can be defined on any non-empty set. But of course, this metric space is not very interesting, nor useful.
 
-In the next Sections \ref{sec:p-norm}, \ref{sec:open-set} and \ref{sec:continuous-function}, some important metric spaces defined on vector space are introduced, together with some important definitions introduced as extensions of these metric spaces.
+In the next Sections \ref{sec:open-set}, \ref{sec:p-norm} and \ref{sec:continuous-function}, commonly seen metric spaces and concepts defined using these metric spaces are introduced. These metric spaces and concepts are widely used in many mathematics subjects including algebra and topology. 
 
-\begin{mdframed}
-\noindent \textbf{What is vector space?}
+\subsection{Open Set} \label{sec:open-set}
 
-The definition of vector space is introduced first in linear algebra. A recap is given below. A \mync{vector space} refers to an algebraic system with a set of objects called vectors and with the following operators
+In the context of metric space, define \mync{ball of radius $r$ centered at $p$} as follows.
 \begin{eqnarray}
-	\oplus &:& V \times V \to V \nonumber \\
-	\odot &:& \mathbb{R} \times V \to V \nonumber
+	B_r(p) &=& \left\{x \in X | d(x,p) < r\right\} \nonumber
+\end{eqnarray}
+With that defined, open set can be defined as follows. A set $A \subseteq X$ is an \mync{open set} if $\forall a \in A$, $\exists \epsilon > 0$ such that $B_\epsilon(a) \subseteq A$.
+
+Open set is an important concept defined on top of metric space and it is widely used in the remainder of this notebook.
+
+\subsection{Vector and Relevant Metric Spaces} \label{sec:p-norm}
+
+The definition of vector space is formally introduced in linear algebra relevant notebooks. A brief is given here. A \mync{vector space} refers to an algebraic system defined on a set $V$ (the elements in $V$ are known as vectors) with the following operators
+\begin{eqnarray}
+	\oplus &:& V \times V \to V, \nonumber \\
+	\odot &:& \mathbb{R} \times V \to V, \nonumber
 \end{eqnarray}
 where $\oplus$ is the addition operator that combines two vectors to make a third vector inside the set, and $\odot$ the scalar multiplication operator that scale the vector by a scalar to get a new vector inside the set. Notice that a vector space is always closed under both addition and scalar multiplication.
 
-\end{mdframed}
-
-\subsection{$p$-Norm and $l^p$ Space} \label{sec:p-norm}
+Commonly seen vector spaces include $\mathbb{R}^n$ which is represented by $[x_1, \ldots, x_n]^T$. The $\oplus$ and $\odot$ operators are defined by
+\begin{eqnarray}
+  x + y &=& \left[\begin{array}{c}
+                    x_1 + y_1 \\
+                    \vdots \\
+                    x_n + y_n 
+                  \end{array}\right], \nonumber \\
+  cx &=& \left[\begin{array}{c}
+                 cx_1 \\
+                 \vdots \\
+                 cx_n 
+               \end{array}\right], \nonumber
+\end{eqnarray}
+respectively.
 
 \mync{Euclidean distance} (also known as \mync{$l^2$-distance}) is a metric space defined on $\mathbb{R}^n$, with the distance function defined by
 \begin{eqnarray}
 	\norm{x-y}_2 &=& \left(\sum_n|x_i-y_i|^2\right)^{\frac{1}{2}} \label{eq:euclidean-distance}
 \end{eqnarray}
-Euclidean distance is one of the most popular metric spaces in science and engineering, and it will be frequently used in the remainder of this notebook, 
+where $x,y\in\mathbb{R}^n$ with $i$ the element index of the vector. Euclidean distance is one of the most popular metric spaces in science and engineering, and it will be frequently used in the remainder of this notebook, 
 
 Another example of metric space is the \mync{$l^\infty$-distance} on $\mathbb{R}^n$ with the distance function defined by
 \begin{eqnarray}
-	\norm{x-y}_\infty &=& \max_{n}~|x_i - y_i| \label{eq:l-infinity-distance}
+	\norm{x-y}_\infty &=& \max_{n}~|x_i - y_i|. \label{eq:l-infinity-distance}
 \end{eqnarray}
 
 It can be easily verified that both Euclidean distance and $l^\infty$-distance on $\mathbb{R}^n$ satisfy the definition of metric space.
@@ -90,40 +108,29 @@ Likewise, $p$-norm with other values of $p$ can be used as distance functions an
 
 A handful property about $p$-norm is given below.
 \begin{eqnarray}
-	\norm{x}_{p_1} \leq \norm{x}_{p_2}, \textup{if}~p_1 \geq p_2 \nonumber 
+	\norm{x}_{p_1} \leq \norm{x}_{p_2}, \textup{if}~p_1 \geq p_2. \nonumber 
 \end{eqnarray}
 
 So far we have been discussing $x\in \mathbb{R}^n$ which has finite elements. Consider $\{x\}$ a sequence with infinite elements. In this case, the $p$-norm of an infinite sequence can be defined as follows
 \begin{eqnarray}
 	\norm{x}_p &=& \left(\sum_{i=1}^{\infty} |x_i|^p\right)^{\frac{1}{p}} \label{eq:p-norm-sequence}
 \end{eqnarray}
-which may or may not be bounded, based on which \mync{$l^p$ space} can be defined, which is the collection of infinite sequence whose corresponding \eqref{eq:p-norm-sequence} is bounded. For instance, $l^1$ space refers to the space of infinite sequences whose values are absolutely convergent, and $l^2$ space refers to the space of infinite sequences whose values are square-summable.
+which may be bounded or unbounded. Define \mync{$l^p$ space} which is the collection of infinite sequence whose corresponding \eqref{eq:p-norm-sequence} is bounded. For instance, $l^1$ space refers to the space of infinite sequences whose values are absolutely convergent, and $l^2$ space refers to the space of infinite sequences whose values are square-summable.
 
-\subsection{Open Set} \label{sec:open-set}
+\subsection{Continuous Function and Relevant Metric Spaces} \label{sec:continuous-function}
 
-In the context of metric space, define \mync{ball of radius $r$ centered at $p$} as follows.
+There are different ways to define a continuous function. In the essence, continuous function refers to a function where if the inputs are ``very close'', their corresponding outputs must also be very close, and can be made arbitrarily close. From that perspective, the $\epsilon$-$\delta$ definition which uses metric space can be used to define continuous function as follows. 
+
+Let $(X,d_x)$, $(Y,d_y)$ be two metric spaces defined on sets $X$ and $Y$ respectively, and let $f:X\to Y$ be a function mapping elements from $X$ to $Y$. Function $f$ is a \mync{continuous function} at $x_0$ if $\forall \epsilon > 0$, $\exists \delta >0$ such that
 \begin{eqnarray}
-	B_r(p) &=& \left\{x \in X | d(x,p) < r\right\} \nonumber
+	d(x, x_0) < \delta &\Longrightarrow& d\left(f(x), f(x_0)\right) < \epsilon \nonumber 
 \end{eqnarray}
 
-With that defined, open set can be defined as follows. A set $A \subseteq X$ is an \mync{open set} if $\forall a \in A$, $\exists \epsilon > 0$ such that $B_\epsilon{a} \subseteq A$.
-
-\subsection{Continuous Function and $L^p$ Space} \label{sec:continuous-function}
-
-There are different ways to define a continuous function. The $\epsilon$-$\delta$ definition which uses metric space is given below. 
-
-Let $(X,d_x)$, $(Y,d_y)$ be two metric spaces defined on sets $X$ and $Y$ respectively, and let $f:X\to Y$ be a function mapping elements from $X$ to $Y$. Function $f$ is a \mync{continuous function} if $\forall \epsilon > 0$, $\exists \delta >0$ such that
+Let $f,g \in C^0\left([a,b]\right)$ be two continuous functions on interval $[a,b]\subset \mathbb{R}$, and $f,g: [a,b] \to\mathbb{R}$. Define the distance function
 \begin{eqnarray}
-	d(x_a, x_b) < \delta &\Longrightarrow& d\left(f(x_a), f(x_b)\right) < \epsilon \nonumber 
+	d(f,g) &=& \sup_{x\in[a,b]} |f(x)-g(x)|. \nonumber
 \end{eqnarray}
-
-In other words, the difference of the function values can be made arbitrarily small if the input independent variables are close.
-
-Let $f,g \in C^0\left([a,b]\right)$ be two continuous functions on interval $[a,b]\subset \mathbb{R}$, $f,g: [a,b] \to\mathbb{R}$. Let $X$ be a set containing such continuous functions, and define the distance function
-\begin{eqnarray}
-	d(f,g) &=& \sup_{x\in[a,b]} |f(x)-g(x)| \nonumber
-\end{eqnarray}
-where $f,g \in X$. It can be proved that $(X,d)$ is a metric space. This is demonstrated by Fig. \ref{fig:continuous-function-metric}, where the red and blue curve are two continuous functions and their distance on $[a,b]$ is given by the black solid segment.
+It can be proved that $\left(C^0\left([a,b]\right),d\right)$ is a metric space. This is demonstrated by Fig. \ref{fig:continuous-function-metric}, where the red and blue curve are two continuous functions and their distance on $[a,b]$ is given by the black solid segment.
 
 \begin{figure}[!htb]
 	\centering
@@ -132,39 +139,46 @@ where $f,g \in X$. It can be proved that $(X,d)$ is a metric space. This is demo
 	\label{fig:continuous-function-metric}
 \end{figure}
 
-The proof of $(X,d)$ to be a metric space can be done fairly easily using the definition, and it is neglected here. 
+The proof of $\left(C^0\left([a,b]\right),d\right)$ to be a metric space can be done fairly easily using the definition, and it is neglected here. The same idea applies to multivariable functions. 
 
-The same idea applies to multivariable functions. It can also extend from continuous function $C^0$ to continuously differentiable functions $C^1$ (the function is differentiable and its differential is also continuous), in which case the distance function becomes
+A function is a \mync{continuously differentiable function} if it is differentiable in the given interval, and its differential is continuous in the interval. A continuously differentiable function is often denoted by $C^1[a,b]$. Define distance function 
 \begin{eqnarray}
 	d(f,g) &=& \sup_{x\in[a,b]} |f(x)-g(x)| + \sup_{x\in[a,b]} |f\textprime(x)-g\textprime(x)| \nonumber
 \end{eqnarray}
-and to $n$-th order continuously differentiable function $C^n$, in which case the distance function becomes
+and $\left(C^1[a,b],d\right)$ is a metric space.
+
+The idea extends to \mync{$n$-th order continuously differentiable function} which refers to a function that is at least $n$-th order differentiable in the interval with all these differentials continuous functions. An $n$-th order continuously differentiable function is often denoted by $C^n[a,b]$. Define distance function
 \begin{eqnarray}
 	d(f,g) &=& \sum_{i=0}^n \sup_{x\in[a,b]} |f^{(i)}(x)-g^{(i)}(x)| \label{eq:continuous-function-metric}
 \end{eqnarray}
+and $\left(C^n[a,b],d\right)$ is a metric space.
 
-As for infinity-order continuously differentiable function $C^\infty$ which is also known as the \mync{smooth function}, \eqref{eq:continuous-function-metric} might be unbounded. Practically, we shall either limit the use of the metric to only bounded-distance smooth functions, or make a walk around with modified distance functions such as
+An \mync{infinity-order continuously differentiable function}, also known as a \mync{smooth function}, is a function that has any order of differentiable, all of which continuous in the interval. It is often denoted by $C^\infty[a,b]$. Consider reusing \eqref{eq:continuous-function-metric} with $n\rightarrow\infty$ as the distance function on smooth functions to form a metric space. A practical issue is that \eqref{eq:continuous-function-metric} might be unbounded. We have to either limit the set of the metric space to only those smooth functions with finite \eqref{eq:continuous-function-metric}, or to use a different distance function such as 
 \begin{eqnarray}
-	d(f,g) &=& \sum_{i=0}^\infty 2^{-i}\dfrac{\sup_{x\in[a,b]} |f^{(i)}(x)-g^{(i)}(x)|}{1+\sup_{x\in[a,b]} |f^{(i)}(x)-g^{(i)}(x)|} \nonumber
+	d(f,g) &=& \sum_{i=0}^\infty 2^{-i}\dfrac{\sup_{x\in[a,b]} |f^{(i)}(x)-g^{(i)}(x)|}{1+\sup_{x\in[a,b]} |f^{(i)}(x)-g^{(i)}(x)|}. \nonumber
 \end{eqnarray}
 
-Consider another metric space defined on continuous functions. Let $f,g \in C^0\left([a,b]\right)$ be two continuous functions on interval $[a,b]\subset \mathbb{R}$. Define the distance function $I_1:f \times g \to \mathbb{R}_{\geq 0}$ as follows.
+Consider another metric space defined on continuous functions. 
+
+Let $f,g \in C^0\left([a,b]\right)$. Define the distance function $I_1:f \times g \to \mathbb{R}$ as follows.
 \begin{eqnarray}
-	I_1(f, g) &=& \int_{a}^{b} |f(x)-g(x)|dx \nonumber
+	I_1(f, g) &=& \int_{a}^{b} |f(x)-g(x)|dx. \nonumber
 \end{eqnarray}
 It can be proved that the above forms a metric space.
 
 The idea can be extended to the following series of distance functions, each corresponding with a metric space.
 \begin{eqnarray}
-	I_p(f, g) &=& \left(\int_{a}^{b} |f(x)-g(x)|^pdx\right)^{\frac{1}{p}} \label{eq:ipfg}
+	I_p(f, g) &=& \left(\int_{a}^{b} |f(x)-g(x)|^pdx\right)^{\frac{1}{p}}, \label{eq:ipfg}
 \end{eqnarray}
-where $p\geq 1$. Under the scope of this notebook, only positive integer $p$ is considered.
+where $p\geq 1$. Under the scope of this notebook, only integer $p$ is considered. It can be proved that each different choice of $p$ corresponds with a metric space.
 
 Inspired by \eqref{eq:ipfg}, define the \mync{$L^p$ norm} of a continuous function as follows
 \begin{eqnarray}
 	\norm{f}_p &=& \left(\int_{a}^{b}|f(x)|^pdx\right)^{\frac{1}{p}} \nonumber
 \end{eqnarray}
-Continuous functions with bounded $L^p$ norm form an \mync{$L^p$ space}.
+The $L^p$ norm of a continuous function may be bounded or unbounded. Continuous functions with bounded $L^p$ norm form the \mync{$L^p$ space}. 
+
+Notice that $L^p$ norm and $L^p$ space are defined on the set of continuous functions, whereas $l^p$ norm and $l^p$ space introduced in earlier Section \ref{sec:p-norm} are defined on the set of vectors and sequences, and hence they are different. That said, there are clear relations on the way their distance functions are defined.
 
 
 
