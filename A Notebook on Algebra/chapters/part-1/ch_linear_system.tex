@@ -6,7 +6,7 @@ This chapter studies the concepts and basic properties of linear equations and l
 
 This section aims to give a brief description of the kinds of problems studied in linear algebra. The reader should gain an initial idea of what linear algebra is and where its name comes from. Later, when abstract algebra is introduced in Part II of this book and the notion of an algebraic system is defined, the reader will develop a deeper understanding of the ideas presented in this chapter.
 
-The term ``algebra'' has a rich variety of meanings. In the context of elementary mathematics, it may be viewed as a way of studying quantities and their relationships using symbols rather than specific numerical values. By introducing symbols, the focus shifts from solving a particular problem to discovering general principles that apply to many problems at once.
+The term ``algebra'' has a rich variety of meanings. In the context of elementary mathematics, \mync{algebra} may be viewed as a way of studying quantities and their relationships using symbols rather than specific numerical values. By introducing symbols, the focus shifts from solving a particular problem to discovering general principles that apply to many problems at once.
 
 The following example illustrates this idea.
 
@@ -45,7 +45,7 @@ where $(2-1)$ is the length of the segment and $\pi(2+1)$ is the distance travel
 
 Looking back at the solution, it is now easy to prove that the method I used always produces the correct answer. 
 
-Let $R$ and $r$ denote the outer and inner radii of the annulus respectively. Using the first approach, we obtain 
+Let $R$ and $r$ denote the outer and inner radius of the annulus respectively. Using the first approach, we obtain 
 \begin{eqnarray} 
 	S &=& \pi R^2 - \pi r^2. \nonumber 
 	\end{eqnarray} 
@@ -63,55 +63,62 @@ More importantly, by replacing the specific numbers $2$ and $1$ with the symbols
 \end{eqnarray} 
 which explains why the two seemingly different methods lead to the same answer. 
 
-This illustrates one of the central ideas of algebra: rather than studying individual numerical examples, we use symbols to uncover general patterns and relationships that hold in a wide range of situations.
+This illustrates one of the central ideas of algebra. Rather than studying individual numerical examples, we use symbols to uncover general patterns and relationships that hold in a wide range of situations. By using the symbols, the problem becomes abstract to some extent, and in return we have a more generalized solution and understand more insights about the problem.
 
-With algebra introduced by the above example, the next question is, what is linear algebra. From the name, apparently linear algebra is a subset of algebra. It studies a particular portion of algebra that concerns with vector and linear transformation.
+Linear algebra is a subset of algebra. It studies a particular portion of algebra that concerns with vector and linear transformation.
 
-What is a vector? A vector is an element in a vector space, which is an algebraic system that defines a non-empty set of elements later we call vectors, and a binary operation called vector addition, and a binary function called scalar multiplication, which satisfy the $8$ vector axioms. This is more of an abstract algebra concept which will be discussed in detail in the second part of the notebook. 
+A vector is an element of a vector space. A vector space is an algebraic structure consisting of a non-empty set of objects, called vectors, together with two operations, vector addition and scalar multiplication. These operations satisfy a collection of axioms, commonly known as the vector space axioms. The abstract definition of a vector space belongs to the subject of abstract algebra and will be discussed in greater detail in Part II of this book.
 
-At this point, just think of a vector as a sequence with fixed length of real numbers, with the following two operations defined on it.
+For the moment, it is sufficient to think of a vector as an ordered list of real numbers of fixed length. Two operations can be performed on such vectors.
 
-Vector addition. The sum of two vector is obtained by adding corresponding entries. For example, consider $x = [x_1, \ldots, x_n]^T$, $y = [y_1, \ldots, y_n]^T$. The sum is given by
+Vector addition. The sum of two vectors is obtained by adding their corresponding components. Let $x = [x_1,\ldots,x_n]^T$, $y = [y_1,\ldots,y_n]^T$. Their sum is given by
 \begin{eqnarray}
-	x + y &=& \left[\begin{array}{c}
-		x_1 + y_1 \\
+	x+y
+	&=&
+	\left[
+	\begin{array}{c}
+		x_1+y_1 \\
 		\vdots \\
-		x_n + y_n 
-	\end{array}\right] \nonumber
+		x_n+y_n
+	\end{array}
+	\right].
+	\nonumber
 \end{eqnarray}
-Subtraction works similarly.
 
-Scalar multiplication. A vector multiplied by a scalar is obtained by multiplying each entry with the scalar. For example, consider $x = [x_1, \ldots, x_n]^T$ and $c$ a scalar. The scalar multiple is given by
+Vector subtraction is defined similarly by subtracting corresponding components.
+
+Scalar multiplication. Multiplying a vector by a scalar is done by multiplying each component by that scalar. Let $x = [x_1,\ldots,x_n]^T$ and let $c$ be a scalar. Then
 \begin{eqnarray}
-	cx &=& \left[\begin{array}{c}
+	cx
+	&=&
+	\left[
+	\begin{array}{c}
 		cx_1 \\
 		\vdots \\
-		cx_n 
-	\end{array}\right] \nonumber
+		cx_n
+	\end{array}
+	\right].
+	\nonumber
 \end{eqnarray}
 
-Just 
+At this stage, one may think of a vector space as a collection of vectors of the same dimension together with the operations of vector addition and scalar multiplication. This description captures the examples that will be studied in the first part of this book, although the formal definition introduced later is considerably more general.
 
+Readers with a computer science or engineering background may find it helpful to think of vectors as a generalization of scalar numbers. A scalar may be regarded as a vector of dimension $1$. From this perspective, vector addition and scalar multiplication naturally extend the familiar arithmetic operations on real numbers.
 
+A \mync{transformation} is a mapping that takes an input and produces an output according to a specified rule. A \mync{linear transformation} is a transformation $T: V\to W$ between two vector spaces that preserves vector addition and scalar multiplication which is known as the \mync{superposition principle of linear system}. In other words,
+\begin{eqnarray}
+	T(v_1+v_2)
+	&=&
+	T(v_1)+T(v_2),
+	\nonumber \\
+	T(cv)
+	&=&
+	cT(v),
+	\nonumber
+\end{eqnarray}
+for all $v,v_1,v_2\in V$ and all scalars $c$. Superposition principle of linear system implies that a linear transformation preserves the linear structure of a vector space.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+In a nutshell, \mync{linear algebra} is the branch of mathematics that studies vectors, vector spaces, and linear transformations. Its goal is to understand their properties, the relationships among them, and the ways in which they can be used to model and solve problems arising in mathematics, science, and engineering.
 
 \section{Linear System}
 
