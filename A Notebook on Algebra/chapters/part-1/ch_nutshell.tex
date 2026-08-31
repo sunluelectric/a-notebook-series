@@ -41,11 +41,9 @@ Using this idea, the area of the annulus is
 	S &=& (2-1)\times \left(\pi(2+1)\right) \nonumber \\
 	&=& 3\pi, \nonumber
 \end{eqnarray}
-where $(2-1)$ is the length of the segment and $\pi(2+1)$ is the distance traveled by its midpoint. Since $(2+1)$ is the diameter of the dashed circle, $\pi(2+1)$ is precisely its circumference. The result agrees with the direct calculation given earlier.
+where $(2-1)$ is the length of the segment and $\pi(2+1)$ is the distance traveled by its midpoint given by the dashed circle in Figure \ref{fig:area-of-annulus}. Since $(2+1)$ is the diameter of the dashed circle, $\pi(2+1)$ is precisely its circumference. The result agrees with the direct calculation given earlier.
 
-Looking back at the solution, it is now easy to prove that the method I used always produces the correct answer. 
-
-Let $R$ and $r$ denote the outer and inner radius of the annulus respectively. Using the first approach, we obtain 
+We want to know whether my method would always produce the correct answer for any annulus with a different pair of inner and outer radius. Looking back at the solution and with the more abstract and powerful tool of algebra, it can be done easily. Let $R$ and $r$ denote the outer and inner radius of the annulus respectively. Using the first approach, we obtain 
 \begin{eqnarray} 
 	S &=& \pi R^2 - \pi r^2. \nonumber 
 	\end{eqnarray} 
@@ -63,7 +61,7 @@ More importantly, by replacing the specific numbers $2$ and $1$ with the symbols
 \end{eqnarray} 
 which explains why the two seemingly different methods lead to the same answer. 
 
-This illustrates one of the central ideas of algebra. Rather than studying individual numerical examples, we use symbols to uncover general patterns and relationships that hold in a wide range of situations. By using the symbols, the problem becomes abstract to some extent, and in return we have a more generalized solution and understand more insights about the problem.
+This illustrates one of the central ideas of algebra. Rather than studying individual numerical examples, we use symbols to uncover general patterns and relationships that hold in a wide range of situations. By using the symbols, the problem becomes abstract to some extent, and in return we have a more generalized solution and more insightful understanding about the problem.
 
 \section{Linear Algebra}
 
@@ -109,11 +107,11 @@ At this stage, one may think of a vector space as a collection of vectors of the
 
 Readers with a computer science or engineering background may find it helpful to think of vectors as a generalization of scalar numbers. A scalar may be regarded as a vector of dimension $1$. From this perspective, vector addition and scalar multiplication naturally extend the familiar arithmetic operations on real numbers.
 
-Examples of vector spaces include $\mathbb{R}^n$, $\mathbb{Z}^n$, $\{[x_1,x_2]^T|x_1 = 2x_2\}$, etc. It can be easily proved that the above examples are all close with respect to vector addition and scalar multiplication.
+Notice that a vector space, like any algebraic structure, must be closed to the operations defined on them. In the case of vector space, this would mean that if $V$ is a vector space, $\forall x, y \in V$, $x + y \in V$, and $\forall x \in V$, $cx \in V$. Examples of vector spaces include $\mathbb{R}^n$ and $\{[x_1,x_2]^T|x_1 = 2x_2\}$, etc. It can be easily proved that the above examples are all close with respect to vector addition and scalar multiplication. On the other hand, $\mathbb{Z}^n$ is not a vector space because it may be closed to scalar multiplications with $c$ a fraction. Similarly, $\mathbb{R}^n_{+}$ is not a vector space either, as it is not closed to scalar multiplications with negative $c$.
 
 \subsection{Linear Transformation}
 
-A \mync{transformation} is a mapping that takes an input and produces an output according to a specified rule. A \mync{linear transformation} is a transformation $T: V\to W$ between two vector spaces that preserves vector addition and scalar multiplication which is known as the \mync{superposition principle of linear system}. In other words,
+A \mync{transformation} is a mapping that takes an input and produces an output according to a specified rule. A \mync{linear transformation} is a transformation $T: V\to W$ between two vector spaces that preserves vector addition and scalar multiplication which is known as the \mync{superposition principle of linear system}. That means for all  $v,v_1,v_2\in V$ and scalar $c$,
 \begin{eqnarray}
 	T(v_1+v_2)
 	&=&
@@ -121,17 +119,17 @@ A \mync{transformation} is a mapping that takes an input and produces an output 
 	\nonumber \\
 	T(cv)
 	&=&
-	cT(v),
+	cT(v).
 	\nonumber
 \end{eqnarray}
-for all $v,v_1,v_2\in V$ and all scalars $c$. Superposition principle of linear system implies that a linear transformation preserves the linear structure of a vector space.
+Superposition principle of linear system implies that a linear transformation preserves the linear structure of a vector space.
 
 An example of linear transformation is given below.
 
 \begin{shortbox}
 \Boxhead{Example of Linear Transformation}
 
-Let $x_1$, $x_2$ denote the number of chicken and rabbit in a cage respectively, and $y_1$, $y_2$ the number of heads and feet respectively. Clearly,
+Let $x_1$, $x_2$ denote the number of chicken and rabbit in a cage respectively, and $y_1$, $y_2$ the total number of heads and feet respectively. Note that a chicken has 1 head and 2 feet whereas a rabbit, 1 head and 4 feet. Clearly,
 \begin{subequations}\label{eq:nutshell-cage}
 \begin{eqnarray}
   y_1 &=& x_1 + x_2, \label{eq:nutshell-cage-1} \\
@@ -157,6 +155,15 @@ The proof of the system described by \eqref{eq:nutshell-cage} being a linear tra
 \end{eqnarray}
 or equivalently
 \begin{eqnarray}
+  \left(\left[\begin{array}{cc}
+  	x_1 & x_2
+  \end{array}\right]\left[\begin{array}{cc}
+  1 & 2 \\
+  1 & 4
+  \end{array}\right]\right)^T &=& \left[\begin{array}{c}
+  y_1 \\
+  y_2
+  \end{array}\right], \nonumber \\
   x_1 \left[\begin{array}{c}
               1 \\
               2 
@@ -173,6 +180,10 @@ or equivalently
 \subsection{Linear Algebra}
 
 In a nutshell, \mync{linear algebra} is the branch of mathematics that studies vectors, vector spaces and linear transformations. The goal of studying linear algebra is to understand the properties of the vector spaces and linear transformations of different kinds, and how they can be used to solve varieties of problems in science and engineering.
+
+For example, given system \eqref{eq:nutshell-cage} and a particular set of $y = [y_1, y_2]^T$, and we want to find such $x$ that produces $y$. This clearly falls into the scope of linear algebra. In the primary school, this is also known as ``solving a system of linear equations in $n$ unknowns'' where $n=2$. In linear algebra, we would like to not only solve $x$ but also understand deeper about the relation of $x$ and $y$ and the conditions whether there would be a solution.
+
+And of course, solving linear equation is nothing but one of the many use cases of linear algebra, some of which far more complicated and abstract.
 
 \section{Matrix} \label{sec:nutshell-matrix}
 
