@@ -295,7 +295,6 @@ The following syntax demonstrates the minimum implementation of a guardrail. It 
 from pydantic import BaseModel
 from openai_agents import Agent, Runner, input_guardrail, output_guardrail, GuardrailFunctionOutput
 
-
 class <guardrail return class>(BaseModel):
 	<is_triggered>: bool
 	<reason or content>: str
@@ -524,19 +523,19 @@ It is possible to assign a \mync{manager agent} to supervise the crew and ensure
 @crew
 def crew(self) -> Crew:
 """<description>"""
-  
-  manager = Agent(
+
+manager = Agent(
     config=self.agents_config['manager'],
     allow_delegation=True
-  )
-  
-  return Crew(
+)
+
+return Crew(
     agents=self.agents,
     tasks=self.tasks,
     process=Process.hierarchical,
     verbose=True,
     manager_agent=manager,
-  )
+)
 \end{lstlisting}
 
 Here, a manager is defined, assuming its role description is provided in the \verb|agents| configuration file. It is then assigned to the crew via \verb|manager_agent|. The process is changed from \verb|Process.sequential| to \verb|Process.hierarchical|, allowing the manager to supervise the crew above other agents. The manager can dynamically re-order, route, or request follow-ups across tasks and agents. In hierarchical mode, the pipeline is determined not by the sequence of task definitions but by the manager agent.
@@ -699,22 +698,15 @@ The user is able to setup maximum trail number and maximum waiting time for the 
 
 It is worth mentioning the differences between LangChain and LangGraph. They are two distinct products from the same company, LangChain. A brief explanation is given below.
 
-\mync{LangChain} is an open-source, composable framework that provides a standard interface for LLM models and APIs to databases and a variety of tools \cite{langchain2025}. Suppose that an agentic AI system with multiple components has been defined. If LangChain is used to connect and integrate these components, the user can switch underlying models (for example, from OpenAI to Anthropic) and tools (for example, from MySQL to PostgreSQL) with relatively little code change. This greatly enhances the portability and robustness of the agentic AI solution.
+\mync{LangChain} is a high-level framework for building LLM-powered applications and agents. It provides standardized abstractions for model access, prompt construction, tool integration, retrieval, middleware, and common agent patterns. Its main purpose is to reduce the amount of low-level integration code required when connecting an LLM with external tools and data sources.
 
-From that sense, LangChain is to some extend similar with MCP, but in the LangChain ecosystem. Nowadays, some agentic AI frameworks developed by other entities, such as AutoGen, also support connectivity with LangChain.
+\mync{LangGraph} is a lower-level orchestration framework and runtime for building stateful agent workflows. It represents an application as a graph of nodes, edges, and shared state, and supports conditional routing, cyclic execution, persistence, retries, and human-in-the-loop control. This makes it suitable for workflows in which execution may need to revisit earlier stages, such as plan--execute--evaluate--revise loops.
 
-\mync{LangGraph}, on the other hand, is an agentic AI framework, broadly comparable to the OpenAI Agents SDK and CrewAI. It focuses on coordinating AI agents and reliably handling complex tasks by representing applications as stateful graphs \cite{langchain2025langgraph}. It is sufficient to use only LangChain to build an LLM application with deterministic pipeline. LangGraph, on the other hand, can be taken as an abstraction layer built on top of LangChain that provides orchestration intelligence, enriching the system with agentic AI capability.
+LangChain and LangGraph therefore differ mainly in their level of abstraction and degree of orchestration control. LangChain provides convenient high-level abstractions for common agent behaviours, whereas LangGraph exposes more explicit control over workflow state, branching, and execution paths. LangGraph is lower-level but more expressive, and is particularly useful when the workflow itself forms an important part of the application logic.
 
-This section focuses on LangGraph, the agentic AI framework. Technologies offered by LangChain will also be introduced and used. After all, LangGraph uses LangChain under the hood.
+LangGraph gives the developer more direct control over how an agent executes. With LangGraph, the developer can explicitly define the graph topology, shared state, conditional transitions, cyclic paths, interruption points, checkpoints, and termination conditions. These mechanisms are not exposed with the same level of granularity by LangChain's higher-level agent abstractions, which manage much of the execution logic internally. Therefore, LangGraph is preferable when precise control over the agent's execution flow is required.
 
-Install LangGraph as a Python package as follows.
-\begin{lstlisting}
-uv add langgraph
-\end{lstlisting}
-or
-\begin{lstlisting}
-uv pip install -U langgraph
-\end{lstlisting}
+In practice, a comprehensive agentic AI system may contain both LangChain and LangGraph. LangChain can provide model interfaces, tool integrations, retrieval components, and high-level agent functionality, while LangGraph manages the overall workflow orchestration, including state transitions, conditional branches, iterative loops, and termination logic. Modern LangChain agents are themselves built on top of LangGraph, so the two frameworks are complementary rather than competing alternatives.
 
 LangGraph introduces the concepts of states, nodes and edges to visualize the workflow as a graph. A \mync{LangGraph state} represents a snapshot of the application. The state is immutable, meaning that each update of any kind creates a new state derived from the old one. In this way, LangGraph maintains a full history of the system status and supports time-travel debugging and replay. A \mync{LangGraph node} typically represents an atomic unit of computation, such as a function, tool, or an agent call. It receives the current state as input and produces a new state derived from it, with some data processed. Finally, a \mync{LangGraph edge} represents a directed route that connects nodes, thereby defining the pipeline of the data flow.
 
@@ -722,7 +714,7 @@ An example is given in Fig. \ref{fig:langgraph_simpledemo} to demonstrate the co
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=0.5\textwidth]{./chapters/part-4/figures/langgraph_simpledemo.png}
+	\includegraphics[width=0.4\textwidth]{./chapters/part-4/figures/langgraph_simpledemo.png}
 	\caption{A simple demonstration of LangGraph with one LLM and one tool.}
 	\label{fig:langgraph_simpledemo}
 \end{figure}
@@ -829,6 +821,8 @@ builder.add_node("first_node", update_state)
 
 In practice, a node may contain an LLM call. An example is shown below:
 \begin{lstlisting}
+from typing import Annotated
+from typing_extensions import TypedDict
 from langgraph.graph.message import add_messages
 
 class State(TypedDict):
