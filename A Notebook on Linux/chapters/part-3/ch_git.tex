@@ -156,7 +156,7 @@ On branch master
 nothing to commit, working tree clean
 \end{lstlisting}
 
-\subsection{Reset and Revert}
+\subsection{Log, Reset and Revert}
 
 To check the commit logs, including all historical commits and their details, use \verb|git log| as shown in the example below. Notice that the commit logs can be very long. Only a few commits are given for illustration purpose.
 \begin{lstlisting}
@@ -276,7 +276,7 @@ Git hosting servers provide platforms for the developers to share their Git repo
 
 An HTTPS URL is associated with each remote repository on GitHub, for example \textit{https://github.com/torvalds/linux.git} for Linux kernel. This URL can be used to download the remote repository to a local machine, or to link (synchronize) a local repository with that remote repository.
 
-\subsection{Clone and Pull: from Remote to Local}
+\subsection{Remote to Local: Clone and Pull}
 
 Consider the case where there is already a remote repository, either under the user's GitHub account or from the community. The user can clone the repository, i.e., make a local copy of the repository, as follows.
 
@@ -298,14 +298,14 @@ to pull the latest update.
 
 One may argue whether it is a good idea to use \verb|git pull|. Although convenient, \verb|git pull| is an integration of two commands, \verb|git fetch| and \verb|git merge| (or \verb|git rebase|) executed sequentially. It may be ``safer'' to manually run the two commands separately.
 
-With that being said, if the user simply wants to keep a well-maintained community project up to date, \verb|git pull| should work just alright.
+That said, if the user simply wants to keep a well-maintained community project up to date, \verb|git pull| should work just alright.
 \end{mdframed}
 
 However, this does not guarantee that the user can perform a \verb|git push| command to push changes made in the local repository back to the remote source. For most community projects, only the owner and the selected collaborators can push to the repository, and the user needs to prove that they are one of them. For that, additional authentication is often required. More about \verb|git push| and remote repository authentication methods are introduced in Section \ref{sec:gitpush}.
 
 To contribute to a community project not as the owner of it, following the instructions of the project and use pull request. More about pull request will be introduced in Section \ref{sec:pull_request}.
 
-\subsection{Push: from Local to Remote} \label{sec:gitpush}
+\subsection{Local to Remote: Push} \label{sec:gitpush}
 
 Consider a scenario where you have a well-developed local Git repository, and you have just created an empty remote repository on GitHub. The goal is to link the remote repository with the local repository so that changes can be synchronized.
 
@@ -364,9 +364,9 @@ As a potential contributor, the user cannot directly push to the repository or m
 
 Before the introduction of commonly adopted procedures in contributing to a community project, pull request is introduced as follows.
 
-In a jointly developed project, when a feature branch wants the features developed to be merged to the main branch, it does not push the changes to the main branch directly. Instead, the owner of the feature branch needs to raise a \mync{pull request}. As its name suggests, it requests the main branch to pull the updates from the feature branch. The main branch maintenance team will then view and check the feature branch, making sure that everything is correct before they approve the merging.
+In a jointly developed project, when a feature branch wants the features developed to be merged to the main branch, it does not perform a merge directly. Instead, the owner of the feature branch needs to raise a \mync{pull request}, which requests the main branch to pull the updates from the feature branch. The main branch maintenance team will then view and check the feature branch, making sure that everything is correct before they approve the merging.
 
-If the pull request is approved by the maintenance team of the main branch, GitHub will perform the merge in the cloud.
+If the pull request is approved by the maintenance team of the main branch, GitHub will perform the merge on the cloud.
 
 \subsection{General Work Flow}
 
@@ -382,7 +382,7 @@ Assume that an individual contributor has found a community project hosted on Gi
 	\item The maintenance team either sends feedback to the contributor for further clarification, or pulls the changes from the developer's forked repository and merge the new feature branch with the existing branches.
 \end{enumerate}
 
-As a first step, the contributor forks the project into their own GitHub account. This creates a copy of the community project under the contributor’s account, giving them full control over the forked repository. The contributor is free to make or test any modifications without affecting the original project.
+As a first step, the contributor performs \mync{fork} on the project, which creates a copy of the community project under the contributor’s account, giving them full control over the forked repository. The contributor is free to make or test any modifications without affecting the original project.
 
 Although a fork is treated as a separate repository in many ways, GitHub tracks the relationship between the fork and the original project. This allows the contributor to later request that his modifications be merged back into the original community repository. Using the fork approach also acknowledges the contributions of the original authors, making it a more respectful and transparent process compared to simply downloading the project and uploading it as a new repository under the contributor's account.
 
@@ -599,10 +599,10 @@ A specific action is defined under \texttt{jobs.<id>.steps[*]}. Notice that fiel
 
 From earlier examples, we have seen \verb|run| used in a step to execute a command. There is a limitation to the complexity of what a command can achieve. Therefore, action is introduced. In short, action is a user-defined application that performs a complex and frequently repeated task, and it is well appreciated in GitHub Actions. The basic syntax of calling an action in a step is given below.
 \begin{lstlisting}
-	steps:
-	- uses: <action id and version>
-	with:
-	<configurations>    
+steps:
+- uses: <action id and version>
+with:
+<configurations>    
 \end{lstlisting}
 where \verb|with| is usually an optional argument that states the configuration of the action. Its contents differ from action to action.
 
@@ -610,35 +610,35 @@ It is worth mentioning that since actions are essentially applications, they can
 
 An example of an action, \verb|checkout|, is given below. It downloads the source codes in the repository to the runner. The action used in the example is provided by GitHub officials.
 \begin{lstlisting}
-	name:
-	on:
-	jobs:
-	job1:
-	runs-on: ubuntu-latest
-	steps:
-	- name: get code
-	uses: actions/checkout@v4
-	with:
-	repository:
-	ref:
-	token:
-	ssh-key:
-	ssh-known-hosts:
-	ssh-strict:
-	ssh-user:
-	persist-credentials:
-	path:
-	clean:
-	filter:
-	sparse-checkout:
-	sparse-checkout-cone-mode:
-	fetch-depth:
-	fetch-tags:
-	show-progress:
-	lfs:
-	submodules:
-	set-safe-directory:
-	github-server-url:
+name:
+on:
+jobs:
+job1:
+runs-on: ubuntu-latest
+steps:
+- name: get code
+uses: actions/checkout@v4
+with:
+repository:
+ref:
+token:
+ssh-key:
+ssh-known-hosts:
+ssh-strict:
+ssh-user:
+persist-credentials:
+path:
+clean:
+filter:
+sparse-checkout:
+sparse-checkout-cone-mode:
+fetch-depth:
+fetch-tags:
+show-progress:
+lfs:
+submodules:
+set-safe-directory:
+github-server-url:
 \end{lstlisting}
 where \verb|uses| is used to indicate an action, and \verb|actions/checkout@v4| is the identifier and version of the action. The \verb|with| field (optional) is then used to configure the action if needed. The content of the configuration depends on the specific action in use. The details of the configurations about \verb|checkout@v4| can be found at \cite{git2025actions} and are not covered in this notebook. 
 
@@ -654,7 +654,7 @@ There are many more wonderful actions on the market, many of which can be used f
 
 The following syntax 
 \begin{lstlisting}
-	${{ <context>.<information> }}
+${{ <context>.<information> }}
 \end{lstlisting}
 can be used to access GitHub Actions contexts in the workflow configuration files. Examples have been given in earlier sections. \mync{GitHub Actions contexts} are collections of read-only information available to the workflow configuration. There are many contexts defined and they cover a large range of topics regarding the workflow, the job, the runner, the step, environment variables, secrets, and many more.
 
@@ -668,7 +668,7 @@ As a recap, in the earlier example the following information is retrieved.
 
 The information from contexts can be used in if-else statements to direct the workflow. Another common practice is to use an expression, such as
 \begin{lstlisting}
-	${{ toJSON(github) }}
+${{ toJSON(github) }}
 \end{lstlisting}
 to convert contexts into JSON strings, cache them in environment variables, and use them in the commands.
 

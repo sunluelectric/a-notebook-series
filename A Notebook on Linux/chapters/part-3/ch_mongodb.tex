@@ -52,7 +52,7 @@ MongoDB database, unlike relational DB, is by nature not designed for joining. H
 
 \section{Installation}
 
-MongoDB has both community and enterprise versions. Under the scope of this notebook, the community version is concerned. MongoDB community server can be installed following the instructions on the official website at \cite{mongodb_community_server}. Different versions of MongoDB are available. Choose the correct MongoDB version depending on the CPU and the OS of the machine. MongoDB community server installation size is about $500$MB. A MongoDB server can host a MongoDB cluster, inside which are many MongoDB databases. Each database can have its own configurations and policies.
+MongoDB has both community and enterprise versions. Under the scope of this notebook, the community version is concerned. MongoDB community server can be installed following the instructions on the official website in \cite{mongodb_community_server}. Different versions of MongoDB are available. Choose the correct MongoDB version depending on the CPU and the OS of the machine. MongoDB community server installation size is about $500$MB. A MongoDB server can host a MongoDB cluster, inside which are many MongoDB databases. Each database can have its own configurations and policies.
 
 To access MongoDB, it is recommended that MongoDB Shell, the \myabb{command line interface}{CLI} of MongoDB, be installed on the user machine. More about MongoDB Shell will be introduced in Section \ref{sec:mongosh}. It is also possible to use MongoDB Compass, the recommended \myabb{graphical user interface}{GUI} for MongoDB, to interact with MongoDB. MongoDB Compass can be used to connect to a MongoDB server and view and manipulate the databases on the server. It also comes with analytical tools and data visualization tools that help the user understand the insight of the data.
 
@@ -60,9 +60,9 @@ MongoDB provides enterprise service, MongoDB Atlas, as part of its cloud solutio
 
 \section{MongoDB Shell} \label{sec:mongosh}
 
-To interact with MongoDB, the quickest way is to use MongoDB shell, which is introduced in this section. MongoDB shell, if not installed together with the MongoDB server, can be found at \cite{mongodb_shell_download}. 
+To interact with MongoDB, the quickest way is to use MongoDB shell, which is introduced in this section. MongoDB shell, if not installed together with the MongoDB server, can be found in \cite{mongodb_shell_download}. 
 
-After installing both MongoDB server and MongoDB shell, use \verb|mongosh| to enter the MongoDB shell console. JavaScript-like commands are used to manipulate the database, such as creating databases and inserting data. The object \verb|db| contains many methods using which the user can access and modify the basic configurations of the database. For example,
+After installing both MongoDB server and MongoDB shell, use \verb|mongosh| to start the MongoDB shell console. JavaScript-like commands are used to manipulate the database, such as creating databases and inserting data. The object \verb|db| contains many methods using which the user can access and modify the basic configurations of the database. For example,
 \begin{lstlisting}
 > db.version()
 \end{lstlisting}
@@ -94,7 +94,7 @@ On a clean installation, the above should return the 3 default databases, \verb|
 \begin{lstlisting}
 > use <database_name>
 \end{lstlisting}
-Notice that there is no ``create database'' command in MongoDB. To create a database, switch to that database using the above command (even though it does not exist yet), and add some data. The database will be automatically created. This is again a feature closely related to JavaScript.
+Notice that there is no ``create database'' command in MongoDB. To create a database, switch to that database using the above command even though it does not exist yet, and add some data. The database will be automatically created. This is again a feature closely related to JavaScript.
 
 To drop a database, switch to the database and use 
 \begin{lstlisting}
@@ -286,46 +286,46 @@ It is worth mentioning that \verb|find()| returns a cursor, but not the document
 The below are two demonstrative examples how a Python program should treat the returns from \verb|find()| and \verb|findOne()| differently. The same idea applies to other programming languages as well. More about MongoDB connectivity from Python is introduced in later sections. Here, the examples are only to demonstrate the differences between \verb|find()| and \verb|findOne()|.
 
 \begin{lstlisting}
-	from pymongo import MongoClient
-	
-	def find_users():
-	client = MongoClient('mongodb://localhost:27017/')
-	db = client.mydatabase
-	collection = db.users
-	
-	cursor = collection.find({ 'age': { '$gte': 18 } })
-	
-	# Iterate over the cursor
-	for doc in cursor:
-	print(doc)
-	
-	# Alternatively, convert to a list
-	results = list(cursor)
-	print(results)
-	
-	client.close()
+from pymongo import MongoClient
+
+def find_users():
+client = MongoClient('mongodb://localhost:27017/')
+db = client.mydatabase
+collection = db.users
+
+cursor = collection.find({ 'age': { '$gte': 18 } })
+
+# Iterate over the cursor
+for doc in cursor:
+print(doc)
+
+# Alternatively, convert to a list
+results = list(cursor)
+print(results)
+
+client.close()
 \end{lstlisting}
 
 \begin{lstlisting}
-	from pymongo import MongoClient
-	
-	def find_one_user():
-	client = MongoClient('mongodb://localhost:27017/')
-	db = client.mydatabase
-	collection = db.users
-	
-	# Find one document
-	user = collection.find_one({ 'name': "John Doe" })
-	print(user)
-	
-	client.close()
+from pymongo import MongoClient
+
+def find_one_user():
+client = MongoClient('mongodb://localhost:27017/')
+db = client.mydatabase
+collection = db.users
+
+# Find one document
+user = collection.find_one({ 'name': "John Doe" })
+print(user)
+
+client.close()
 \end{lstlisting}
 
 Since a cursor, instead of the documents themselves, is returned, we can perform further actions on the return such as sorting the result, etc.
 
 Use the following syntax to retrieve and sort the return.
 \begin{lstlisting}
-	cursor.sort({<field>:<value>})
+cursor.sort({<field>:<value>})
 \end{lstlisting}
 which sorts the result according to \verb|<field>|. The value ``$1$'' or ``$-1$'' represents the sorting order, either ascending or descending, respectively.
 
@@ -333,23 +333,23 @@ When it is unnecessary to return all the details of all the documents fulfilling
 
 It is possible to limit the number of documents in the returns to improve the query efficiency. This is often used with the \verb|sort()| method. The syntax is as follows.
 \begin{lstlisting}
-	cursor.sort({<field>:<value>}).limit(<number>)
+cursor.sort({<field>:<value>}).limit(<number>)
 \end{lstlisting}
 where \verb|<number>| specifies the number of returns.
 
 Notice that the full syntax of \verb|find| is
 \begin{lstlisting}
-	db.collection.find( <query>, <projection>, <options> )
+db.collection.find( <query>, <projection>, <options> )
 \end{lstlisting}
 The second argument, \verb|<projection>|, is used to indicate which fields of the documents should be returned. If left blank as by the default, all the fields of the documents will be returned. Notice that the same applies to \verb|findOne()| method.
 
 For example,
 \begin{lstlisting}
-	cursor = collection.find({'age': {'$gte': 18}}, {name:1, age: 1})
+cursor = collection.find({'age': {'$gte': 18}}, {name:1, age: 1})
 \end{lstlisting}
 will return the names and ages of all the users whose age is greater than or equal to $18$. By using
 \begin{lstlisting}
-	{ <field1>: <value>, <field2>: <value> ... }
+{ <field1>: <value>, <field2>: <value> ... }
 \end{lstlisting}
 with \verb|<value>| be either $1$ or $0$, one can control which fields to be included or excluded respectively. The value $0$ is often used with the \verb|_id| field which is always returned unless specifically required not to. Notice that the \verb|<field>| in the syntax can also contain sub fields, in which case quotation marks \verb|"<field>.<subfield>"| must be used.
 
@@ -357,7 +357,7 @@ With some more advanced setups, \verb|<projection>| can also be used to specify 
 
 Consider counting the number of documents fulfilling a particular filter document. Use
 \begin{lstlisting}
-	db.<collection>.countDocuments( <query>, <options> )
+db.<collection>.countDocuments( <query>, <options> )
 \end{lstlisting}
 
 \subsection{Document Updating}
