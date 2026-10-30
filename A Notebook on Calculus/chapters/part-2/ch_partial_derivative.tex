@@ -8,8 +8,8 @@ In Section \ref{ch6sec:motivatingexp}, a motivating example is given to illustra
 
 Consider the following motivating example where $y=f(x_1, x_2)$ is a multivariable function with $2$ inputs.
 
-\begin{shortbox}
-\Boxhead{A Motivating Example}
+\begin{mdframed}
+\noindent \textbf{A Motivating Example}
 
 Consider
 \begin{eqnarray}
@@ -22,7 +22,7 @@ Q2: At $(x_1, x_2) = (1, 1)$, consider small vibrations $\Delta x_1$ and $\Delta
 
 Q3: Find such $x_1$ and $x_2$ that $y$ is minimized.
 
-\end{shortbox}
+\end{mdframed}
 
 Equation \eqref{ch6eq:motivatingexample} can be plot in 3-D as Fig. \ref{ch6fig_motivatingexp}.
 \begin{figure}
@@ -104,7 +104,7 @@ In the case of single input scalar function $f(x), x \in \mathbb{R}$, there is n
 
 In the case of multivariable function with multiple inputs, $f(x), x \in \mathbb{R}^{R\times 1}$, the definition partial derivative is given below.
 
-\begin{VF}
+\begin{mdframed}
 	\textbf{Definition of Partial Integral}:
 	\\
 	\\
@@ -114,7 +114,7 @@ In the case of multivariable function with multiple inputs, $f(x), x \in \mathbb
 	\end{eqnarray}
 	with $x_1,...,x_{i-1}, x_{i+1},..., x_n$ remaining constant, and only $x_i$ is allowed to vary.
 	
-\end{VF}
+\end{mdframed}
 
 Here is another example to help better understand partial derivative. Consider $z=f(x, y)$ a multivariable function of both inputs $x$, $y$ as follows
 \begin{eqnarray}
@@ -201,8 +201,8 @@ Section \ref{ch6subsec:gradientmotivatingexp} gives a motivating example of grad
 
 The following motivating example helps to illustrate the calculation and use case of gradient.
 
-\begin{shortbox}
-\Boxhead{A Motivating Example}
+\begin{mdframed}
+\noindent \textbf{A Motivating Example}
 
 Consider the following function $y=f(x)$ where $x = [x_1,x_2]^T$ is a vector and
 \begin{eqnarray}
@@ -212,7 +212,7 @@ where $x_1\in[-3,3]$ and $x_2\in[-2,2]$. The 3-D plot and the contour line of th
 
 Consider initial point $x^0 = [x_1^0, x_2^0]^T = [1,0]^T$. Let $x$ deviate a little bit from $x^0$ to get $x^1 = [x_1^1, x_2^1]^T = [x_1^0 + \Delta x_1^0, x_2^0 + \Delta x_2^0]^T$. The objective is to find such $\Delta x^0 = [\Delta x_1^0, \Delta x_2^0]^T$ to hopefully get $f(x^1)$ as large as possible.
 
-\end{shortbox}
+\end{mdframed}
 
 \begin{figure}
 	\centering
@@ -346,7 +346,7 @@ until $\left.\nabla f(x)\right|_{x=x^k} \approx 0$ or $f(x^{k+1})-f(x^k) \approx
 
 The gradient of $f(x)$ in \eqref{ch6eq:gradientdef} for the motivating example holds true for general multivariable functions, as long as $f(x)$ is differentiable. The formal definition of gradient is given as follows.
 
-\begin{VF}
+\begin{mdframed}
 	\textbf{Definition of Gradient}:
 	\\
 	\\
@@ -369,7 +369,7 @@ The gradient of $f(x)$ at point $x=p$ can be calculated by
 \end{eqnarray}
 which can be interpreted as the direction and rate of fastest increase of $f(x)$ at $x=p$.
 	
-\end{VF}
+\end{mdframed}
 
 In case where the direction and rate of fastest decrease of $f(x)$ is required, $-\nabla f(x)$ can be used. Note that $-\nabla f(x)$ is the direction and rate of fastest increase $-f(x)$.
 
@@ -379,7 +379,7 @@ Do note that local maximum/minimum may become an issue while using gradient-base
 
 Jacobian matrix is widely used in linear system analysis. For example, it can be used when linearizing a non-linear vector function. The use of Jacobian matrix differs from case to case, thus is not introduced in details here. Only the definition is given as follows.
 
-\begin{VF}
+\begin{mdframed}
 	\textbf{Definition of Jacobian Matrix}:
 	\\
 	\\
@@ -397,6 +397,6 @@ Jacobian matrix is widely used in linear system analysis. For example, it can be
                   \end{array}\right], \nonumber
 	\end{eqnarray}
 where $f_i(x)$ is the $i$th element among the $m$ elements in $f(x)$ and $\nabla^T f_i(x)$ is the transpose of $\nabla f_i(x)$.
-\end{VF}
+\end{mdframed}
 
 Sometimes the characteristics of $J$ reveals insights of function $f(x)$, and can be very helpful in evaluating system performance under particular situations.

@@ -199,12 +199,12 @@ One thing to notice is that in adaptive control scope, the plant is assumed to c
 
 Karl Friedrich Gauss defines LS estimation problem as follows.
 
-\begin{VF}
+\begin{mdframed}
 \textbf{LS estimation:}
 \\
 \\
 \noindent The parameters in the model should be chose such that the sum of the squares of the differences between the observed and the computed values, multiplied by numbers that measure the degree of precision, is a minimum.
-\end{VF}
+\end{mdframed}
 
 Notice that from the above definition, if all observations share the same degree of precision, the multipliers to all observations shall be the same, otherwise they should be different. Conventionally, the later case is referred as ``Weighted LS (WLS) estimation'' where each multiplier is called the ``weight'' associated with the observation. The more precise an observation, the higher its associated weight. On the other hand, the former case where all observations share the same precision is referred as LS estimation.
 

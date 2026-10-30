@@ -10,8 +10,8 @@ Apparently, the brachistochrone problem is an optimization problem where the obj
 
 The curve, or equivalently the analytical function $y=f(x)$ that describes the curve, contains infinite number of ``pixels''. From that sense, the problem can be taken as an optimization problem with infinite number of degrees. Therefore, the problem cannot be converted into a conventional optimization problem easily.
 
-\begin{shortbox}
-\Boxhead{Brachistochrone Problem}
+\begin{mdframed}
+\noindent \textbf{Brachistochrone Problem}
 
 Let A and B be two fixed points in the space that are not aligned either vertically or horizontally. Without loss of generality, let A be higher than B. Draw a curve that joins A and B. A particle is released from A and it slides along the curve traveling from A to B driven by gravity. 
 
@@ -21,7 +21,7 @@ A demonstration plot is given by Fig. \ref{ch12fig:brachistochrone_description}.
 
 The brachistochrone problem tries to find the curve that minimizes the time it takes for the particle to travel from A to B. The objective is to find the analytical solution $y=f(x)$ that describes such curve.
 
-\end{shortbox}
+\end{mdframed}
 
 \begin{figure}[!htb]
 	\centering
@@ -188,8 +188,8 @@ Euler's equation plays an important role in calculus of variation. It is the sol
 
 Consider the following varational problem.
 
-\begin{shortbox}
-\Boxhead{The Simplest Variational Problem}
+\begin{mdframed}
+\noindent \textbf{The Simplest Variational Problem}
 
 Let $F(x,y,y\textprime)$ be a function that has continuous $1$-st and $2$-nd order partial derivative w.r.t. all its arguments. Let $y$ be a continuously differentiable function of $x$ in $[a,b]$, with boundary conditions $y(a)=A$ and $y(b)=B$. Consider functional
 \begin{eqnarray}
@@ -197,7 +197,7 @@ Let $F(x,y,y\textprime)$ be a function that has continuous $1$-st and $2$-nd ord
 \end{eqnarray}
 The purpose is to find the function $y$ which is a weak extremum of $J[y]$.
 
-\end{shortbox}
+\end{mdframed}
 
 The differential of functional corresponds with \eqref{eq:euler_equation_functional} can be calculated as follows. First, consider the increment of $J[y]$ when $y$ changes to $y+h$, where $h$ is a small perturbation function that satisfies the boundary conditions $h(a)=0$ and $h(b)=0$. The increment is given by
 \begin{eqnarray}

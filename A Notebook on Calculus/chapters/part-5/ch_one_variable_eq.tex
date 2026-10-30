@@ -26,12 +26,12 @@ A scalar function can be solved numerically via the following methods, each with
 
 Bisection method, also known as the binary search method, is inspired by the \textit{intermediate value theorem}. So long as we can find an interval $\left[a, b\right]$ so that $f(a)f(b)<0$, we know that there must be such a solution $p\in\left[a, b\right]$ that $f(p)=0$. If we can narrow down the interval, we can approach the solution.
 
-\begin{shortbox}
-\Boxhead{Intermediate Value Theorem}
+\begin{mdframed}
+\noindent \textbf{Intermediate Value Theorem}
 
 Let $f(x)$ be a continuous function whose domain contains the interval $\left[a, b\right]$. Without loosing generality, let us assume that $f(a)<f(b)$. Then $\forall c \in \left[f(a), f(b)\right]$, $\exists x_0 \in \left[a, b\right]$, so that $f(x_0)=c$.
 
-\end{shortbox}
+\end{mdframed}
 
 The algorithm is summarized as follows. Let $f(x)$ be a continuous function on $\left[a, b\right]$, and $f(a)f(b)<0$. Do the following to find a solution $f(p)=0$ within $\left[a, b\right]$.
 

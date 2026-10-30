@@ -6,12 +6,12 @@ In this chapter, the integral for multiple input functions is introduced. Motiva
 
 \section{Motivating Examples} \label{ch7sec:motivatingexp}
 
-\begin{shortbox}
-\Boxhead{Motivating Example 1}
+\begin{mdframed}
+\noindent \textbf{Motivating Example 1}
 
 Consider calculating the volume of a cone using integral. The bottom radius and the height of the cone are $1$ and $3$ respectively.
 
-\end{shortbox}
+\end{mdframed}
 
 Figure \ref{ch7fig:motivatingexp1} gives a demonstration of the cone in the motivating example. Using similar ideas introduced in Chapter \ref{ch3}, we know that we can think of the cone as a combination of thin cylinders, whose radiuses depend on the vertical position ($z$-axis position) of the associated cylinder. For example, at $z=1.5$, the radius of the cylinder is $0.5$.
 
@@ -41,8 +41,8 @@ The above motivating example 1 implies the volume of an object might be formulat
 
 In many cases, the calculation of the intersection area can be less simple and intuitive than \eqref{ch7eq:motivatingsz}. An example is given by the following motivating example.
 
-\begin{shortbox}
-	\Boxhead{Motivating Example 2}
+\begin{mdframed}
+	\noindent \textbf{Motivating Example 2}
 	
 	Consider calculating the volume surrounded by the following surfaces:
 	\begin{eqnarray}
@@ -51,7 +51,7 @@ In many cases, the calculation of the intersection area can be less simple and i
 		0\leq &z& \leq f(x,y) = y\textup{cos}(x+y)+2\pi. \label{ch7eq:motivatingexp2f}
 	\end{eqnarray}
 	
-\end{shortbox}
+\end{mdframed}
 
 We will use the same method adopted from the motivating example 1 to solve motivating example 2. The volume to be calculated is plotted in Fig. \ref{ch7fig:motivatingexp2} (only the top surface). The $x$-axis direction is chosen for the integral in motivating example 2.
 
@@ -127,7 +127,7 @@ both shall give the same result as the sequence of integral over $x$ or $y$ is i
 
 The definition of double integral is given below. Higher order of integral can be achieved by expanding the double integral into a higher dimension hyperspace.
 
-\begin{VF}
+\begin{mdframed}
     \textbf{Definition of Double Integral}:
     \\
     \\
@@ -144,8 +144,8 @@ If $f(x,y)$ is continuous on the rectangle $R = \left\{(x,y)| a\leq x \leq b, c 
   &=& \lim_{m, n\rightarrow \infty}\sum_{i=1}^{m} \sum_{j=1}^{n} f(x_{ij},y_{ij})\Delta x \Delta y \label{ch7eq:doubleintegraldefxy}
 \end{eqnarray}
 
-\end{VF}
+\end{mdframed}
 
 Equation \eqref{ch7eq:doubleintegraldefxy} can be interpreted as follows. The rectangular is divided into $m\times n$ infinitesimal ``squares'', whose length and width given by $\Delta x$, $\Delta y$ respectively. An example is given in Fig. \ref{ch7fig:motivatingexp2p2} where the bottom of each red cube is such a square. The volume of such a cube is then approximated using $f(x_{ij},y_{ij})\Delta x \Delta y$, where $f(x_{ij},y_{ij})$ is an arbitrary sample of $f(x,y)$ within the associated square. With the populating of the number of cubes, the right side $f(x_{ij},y_{ij})\Delta x \Delta y$ may converge (to the volume between $z=f(x,y)$ and $z=0$ in the given rectangle $R$). If it indeed converges, then the converged value is denoted by the double integral $\iint_{R} f(x,y)dxdy$, where $dxdy$ represents the 2-dimensional infinitesimal square $\Delta x \Delta y$ when they both approach zero.
 
-Equation \eqref{ch7eq:doubleintegraldef} can be expanded to hyperspace for multiple integral with more than 2 variables. In practice, there is no limit to the maximum order of integral in an equation.
+Equation \eqref{ch7eq:doubleintegraldef} can be expanded to hyperspace for multiple integral with more than 2 variables. In practice, there is no limit to the maximum order of integral in an equation. 

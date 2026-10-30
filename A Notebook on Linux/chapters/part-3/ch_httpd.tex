@@ -80,13 +80,13 @@ Commonly used configurations are introduced in this section.
 
 \subsection{Virtual Host Configuration}
 
-\begin{shortbox}
-	\Boxhead{Default Host VS Virtual Host}
+\begin{mdframed}
+	\noindent \textbf{Default Host VS Virtual Host}
 	
 	By default, an HTTP server deploys one website and all the website contents such as HTML files, JavaScript files and CSS files shall be stored in \verb|/var/www/html/|. The idea of virtual host is to enable one HTTP server to deploying multiple websites, each stored in their associated subdirectory \verb|/var/www/html/<virtual host name>/|. The virtual host information such as the port number, document root, etc., needs to be configured in \verb|httpd.conf| the main configuration file.
 	
 	Even if deploying only one website, it is still rather a good practice to use a virtual host than to use the default host for consistency and ease of management.
-\end{shortbox}
+\end{mdframed}
 
 To deploy a virtual host, the main configuration file \verb|httpd.conf| shall be appended with the following content.
 \begin{lstlisting}
@@ -136,4 +136,4 @@ RHEL uses GSS-Proxy module to provide support for Apache HTTP server running on 
 
 
 
-\section{Other Web Servers}
+\section{Other Web Servers} 

@@ -435,8 +435,8 @@ Notice that a Deployment object can deploy only identical Pods from the same tem
 
 An alternative to \texttt{selector.matchLabels} is \texttt{selector.matchExpressions}, the later of which provides a more powerful and flexible way of mapping labels. More details of \texttt{selector.matchExpressions} is not introduced in this notebook, as \texttt{selector.matchLabels} should serve well in most scenarios.
 
-\begin{shortbox}
-\Boxhead{Labels in \texttt{selector} and \texttt{template}}
+\begin{mdframed}
+\noindent \textbf{Labels in \texttt{selector} and \texttt{template}}
 
 It may feel redundant that the same labels appear twice under both \texttt{selector.matchLabels} and \texttt{template.metadata.labels}. This sense of redundancy often stems from the assumption that a Deployment object should watch (and only watch) the Pods it creates.
 
@@ -444,7 +444,7 @@ In reality, multiple controllers can ``monitor'' the same Pods, potentially for 
 
 By splitting \texttt{selector.matchLabels} and \texttt{template.metadata.labels} instead of automatically inheriting one from the other, Kubernetes provides flexibility in how Pods and Deployment objects are architected. Additional labels can be added in the template to support other purposes—like monitoring, cost allocation or environment tagging without affecting the Deployment’s fundamental ownership of those Pods.
 
-\end{shortbox}
+\end{mdframed}
 
 When a new version of an image becomes available, we may want to update the containers accordingly. Re-apply the same configuration file would not help, as Kubernetes would reject apply request if no change is detected in the configuration file. It would not check whether the image is in its latest version. The following imperative command which has been introduced earlier can be used to update the image.
 \begin{lstlisting}

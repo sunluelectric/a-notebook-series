@@ -17,12 +17,12 @@ When a database is under attack, the worst scenario may go beyond data damage. E
 
 It is possible that the attacker hides and disguises the attacking command into SQL injection to open a back door or to retrieve unauthorized data such as confidential information.
 
-\begin{shortbox}
-\Boxhead{Secure DBMS and Secure OS}
+\begin{mdframed}
+\noindent \textbf{Secure DBMS and Secure OS}
 It is worth introducing the relationship between a security-enhanced OS and security-enhanced DBMS. In short, they make a better each other, forming a ``security chain'' together. A secure OS boosts the security of the database. A poor OS, on the other hand, harms the DBMS security level because data is essentially stored on hard drive which can be penetrated if the OS is down.
 
 There are two common ways of forming a security-enhanced DBMS from a normal DBMS. The first way is to upgrade the DBMS kernel codes for additional security features. This can be complicated and requires a high-level mathematics, databases and programming skills, but can provide a safe DBMS. Obviously, this applies to only open-source databases. The second way is to build a ``wrapper'' for the DBMS to interface with the users and API calls This usually requires less skill sets and can be applied to both open-source and proprietary databases, but can only provide mediocre security.
-\end{shortbox}
+\end{mdframed}
 
 \subsection{Database Security Risks Categories}
 

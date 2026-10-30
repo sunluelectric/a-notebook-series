@@ -14,8 +14,8 @@ We use $\{a_n\}$ to denote a \mync{sequence}. In $\{a_n\}$, the positive integer
 
 A motivating example is given below to illustrate the limit of an infinite sequence.
 
-\begin{shortbox}
-\Boxhead{A Motivating Example}
+\begin{mdframed}
+\noindent \textbf{A Motivating Example}
 
 Consider an infinite sequence $\{a_n\}$ whose elements are recursively calculated by
 \begin{eqnarray}
@@ -26,14 +26,14 @@ Consider an infinite sequence $\{a_n\}$ whose elements are recursively calculate
 Q1: Calculate the feasible domain of $n$ such that $a_n\geq 1.95$.
 
 Q2: Calculate the feasible domain of $n$ such that $a_n\geq 2$.
-\end{shortbox}
+\end{mdframed}
 
 The old school way of solving the questions is rather simple: use a table to list down different $n$ and its corresponding $a_n$. The value of $a_n$ can be manually calculated for small $n$, as shown in Table \ref{chi1table:smallan}. In theory, this table can be extended to any $n$ of choice. From Table \ref{chi1table:smallan}, for any $n\geq6$, $a_n \geq 1.95$.
 
 \begin{table}[ht]
-\tabletitle{Calculate $a_n$ for any arbitrary $n$ in the motivating example.} \label{chi1table:smallan}
+\caption{Calculate $a_n$ for any arbitrary $n$ in the motivating example.} \label{chi1table:smallan}
 \begin{tabular}{lll}
-\tch{$n$}    &\tch{$a_n - a_{n-1}=\left(\dfrac{1}{2}\right)^{n-1}$} &\tch{$a_n$} \\ \hline
+$n$ & $a_n - a_{n-1}=\left(\dfrac{1}{2}\right)^{n-1}$ & $a_n$ \\ \hline
 $1$ & --- & $1$ \\
 $2$ & $0.5$ & $1.5$ \\
 $3$ & $0.25$ & $1.75$ \\
@@ -48,9 +48,9 @@ $\vdots$ & $\vdots$ & $\vdots$ \\ \hline
 To find out the feasible range of $n$ such that $a_n \geq 2$, we can start by investigating a larger table, say Table \ref{chi1table:largean}. From Table \ref{chi1table:largean}, it can been seen that as $n$ grows larger and larger, the increment $a_n - a_{n-1} = \left(\dfrac{1}{2}\right)^{n-1}$ becomes smaller and smaller, and the increment is just hardly enough to top $a_n$ to $2$.
 
 \begin{table}[ht]
-\tabletitle{Calculate $a_n$ for any arbitrary $n$ in the motivating example, but longer table.} \label{chi1table:largean}
+\caption {Calculate $a_n$ for any arbitrary $n$ in the motivating example, but longer table.} \label{chi1table:largean}
 \begin{tabular}{lll}
-\tch{$n$}    &\tch{$a_n - a_{n-1}=\left(\dfrac{1}{2}\right)^{n-1}$} &\tch{$a_n$} \\ \hline
+$n$    & $a_n - a_{n-1}=\left(\dfrac{1}{2}\right)^{n-1}$ & $a_n$ \\ \hline
 $1$ & $1$ & $1$ \\
 $2$ & $0.5$ & $1.5$ \\
 $3$ & $0.25$ & $1.75$ \\
@@ -106,7 +106,7 @@ Sequence $\{a_n\}$ reveals an important but not intuitive fact: it is possible t
 
 Given an infinite sequence $\{a_n\}$, if $\{a_n\}$ is bounded and it gets close to a value $L$ ``as close as we like'' for large $n$, then $L$ is called the \mync{limit of the sequence}. The formal definition of the limit of a sequence is given below.
 
-\begin{VF}
+\begin{mdframed}
 \textbf{Definition of the limit of sequence}:
 \\
 \\
@@ -119,7 +119,7 @@ or
   a_n \rightarrow L  & \textup{as} & n \rightarrow \infty, \nonumber
 \end{eqnarray}
 and in this case we say ``sequence $\{a_n\}$ is convergent'' and ``sequence $\{a_n\}$ converges to $L$ (as $n$ approaches infinity)''.
-\end{VF}
+\end{mdframed}
 
 If an infinite sequence has a limit, it is known as a \mync{convergent sequence}. Otherwise, it is known as a \mync{divergent sequence}. The sequence $\{a_n\}$ in \eqref{eq:ch1:analyticalvresult} is an example of a convergent sequence that converges to $2$. We can easily prove this using the definition of the limit of a sequence as follows.
 
@@ -137,7 +137,8 @@ As long as $N$ is an integer satisfying $N > 1-\textup{log}_2\varepsilon$, for $
 If there is no such limit $L$ for an infinite sequence $\{a_n\}$, we say ``sequence $\{a_n\}$ is divergent'' or ``sequence $\{a_n\}$ diverges''.
 
 As a special case of divergent sequences, if $\{a_n\}$ becomes unbounded as $n$ approaches infinity, we say ``sequence $\{a_n\}$ diverges to infinity''. The definition is as follows.
-\begin{VF}
+\begin{mdframed}
+
 \textbf{Definition of sequence diverging to infinity}:
 \\
 \\
@@ -145,7 +146,7 @@ As a special case of divergent sequences, if $\{a_n\}$ becomes unbounded as $n$ 
 \begin{eqnarray}
   \lim_{n\rightarrow \infty}a_n &=& \infty. \nonumber
 \end{eqnarray}
-\end{VF}
+\end{mdframed}
 
 Sequence $\{s_n\}$ where $s_n=\sum_{i=1}^{n}a_n$ is used to denote the sum of the first $n$ elements in the infinite sequence $\{a_n\}$. Apparently, for infinite sequence $\{a_n\}$, $\{s_n\}$ is also an infinite sequence which may or may not converge depending on $\{a_n\}$. The limit of $\{s_n\}$ is denoted by
 \begin{eqnarray}
@@ -161,7 +162,7 @@ Generally speaking, there is no systematic way of proving the convergence or div
 \begin{table}[!htb]
 \caption{Convergence of commonly seen $\{a_n\}$ and $\{s_n\}$. Variable $c$, $r$ are constants.} \label{chi1table:sequencexample}
 \begin{tabular}{lllcc}\hline
-\tch{Category} & \tch{$a_n$} & \tch{$s_n$} & $\lim_{n\rightarrow\infty}a_n$ & $\lim_{n\rightarrow\infty}s_n$ \\ \hline
+Category & $a_n$ & $s_n$ & $\lim_{n\rightarrow\infty}a_n$ & $\lim_{n\rightarrow\infty}s_n$ \\ \hline
 Polynomial & $c$, $c\neq 0$ & $nc$ & c & $\infty$ \\
 & $n$ & $\dfrac{n(n+1)}{2}$ & $\infty$ & $\infty$ \\
 & $n^2$ & $\dfrac{n(n+1)(2n+1)}{6}$ & $\infty$ & $\infty$ \\
@@ -187,12 +188,12 @@ then $\{a_n\}$ and $\{b_n\}$ must behave the same in terms of convergence, meani
 It is intuitive and not difficult to prove that for $\{s_n\}$ to converge, i.e. $\lim_{n\rightarrow\infty}s_n = s$, it is necessary (but not sufficient) for its corresponding $\{a_n\}$ to converge to zero, i.e. $\lim_{n\rightarrow\infty}a_n = 0$. Do notice that it is possible to have a divergent $\{s_n\}$ even if $a_n$ converges to zero. An example is the harmonic series given in Table \ref{chi1table:sequencexample} where $a_n = n^{-1}$. 
 
 The famous \mync{monotone convergence theorem for sequence} given below can become handy when proving the convergence of a sequence.
-\begin{VF}
+\begin{mdframed}
 \textbf{Monotone Convergence Theorem for Sequence}:
 \\
 \\
 \noindent If a sequence $\{a_n\}$ is monotonically increasing or decreasing, and meantime it is bounded, i.e. $|a_n| < M$ for all $n$, then $\{a_n\}$ must be convergent
-\end{VF}
+\end{mdframed}
 The proof of this theorem is not included in this notebook.
 
 From the monotone convergence theorem, we know that for a sequence $\{a_n\}$, if $\sum_{i=1}^{\infty}|a_n|$ exists, then the infinite sum $\sum_{i=1}^{\infty}a_n$ must also exist. This can be illustrated simply by splitting $\{a_n\}$ into $\{a_n^+\}$ and $\{a_n^-\}$, where
@@ -218,8 +219,8 @@ A motivating example is given in Section \ref{ch1subsec:functionmotivatingexampl
 
 A motivating example is given below to illustrate the limit of a function.
 
-\begin{shortbox}
-\Boxhead{A Motivating Example}
+\begin{mdframed}
+\noindent \textbf{A Motivating Example}
 
 Consider function
 \begin{eqnarray}
@@ -235,7 +236,7 @@ Q2: Calculate $y$ at $x = 1$.
 
 Q3: Calculate $y$ when $x$ is in a small ``neighbourhood'' of $1$, but $x \neq 1$.
 
-\end{shortbox}
+\end{mdframed}
 
 For Q1, the plot of $y$ as a function of $x$ is given in Fig \ref{ch1fig:fxsimpleexample}. It is clear from the figure that the domain and range of the function are $x\in \mathbb{R}$ and $y\in \mathbb{R}, y > 0$ respectively. For Q2, substituting $x=1$ into \eqref{ch1eq:fxsimple} gives $y=1$, as it is also shown in Fig \ref{ch1fig:fxsimpleexample}.
 
@@ -261,7 +262,7 @@ The above features give a brief idea of limit of a function. In the example, $y$
 
 The formal definition of the \mync{limit of the function} is given below. Notice that there are a few different but equivalent ways to define the limit of a function. Here the ``$\varepsilon$-$\delta$ definition'' is introduced.
 
-\begin{VF}
+\begin{mdframed}
 \textbf{Definition of the limit of the function at $x\rightarrow a$}:
 \\
 \\
@@ -273,13 +274,13 @@ or
 \begin{eqnarray}
   f(x) \rightarrow L & \textup{as} & x \rightarrow a. \nonumber
 \end{eqnarray}
-\end{VF}
+\end{mdframed}
 
 Using the definition above, it can be proved easily that for the motivating example in Section \ref{ch1subsec:functionmotivatingexample}, the function $y=f(x)$ has a limit of $\lim_{x\rightarrow 1}f(x)=0$. Notice that $\lim_{x\rightarrow a}f(x)=L$ does not necessarily require $f(a)=L$. As a matter of fact, $f(x)$ does not even need to be defined at $x=a$, as long as it is defined at the neighbour of $x=a$.
 
 Similar to the definition of the limit of a function, the definition of \mync{one-sided limit of the function} is given below. The one-sided limit is similar but weaker than the definition of the limit of a function in the sense that it only concerns one side of the neighbour of $x=a$.
 
-\begin{VF}
+\begin{mdframed}
 \textbf{Definition of the one-sided limit of the function}:
 \\
 \\
@@ -301,7 +302,7 @@ or
 \begin{eqnarray}
   f(x) \rightarrow L^+ & \textup{as} & x \rightarrow a^+. \nonumber
 \end{eqnarray}
-\end{VF}
+\end{mdframed}
 
 It is clear from the definition that a function $f(x)$ has a limit of $L$ at $x=a$ if and only if it has both one-sided left limit $L^-$ and one-sided right limit $L^+$ at $x=a$ and $L^-=L^+=L$, i.e.
 \begin{eqnarray}
@@ -311,7 +312,7 @@ It is clear from the definition that a function $f(x)$ has a limit of $L$ at $x=
 Furthermore, if function $f(x)$ has a limit $L$ at $x=a$, and also $f(x)=L$, the function $f(x)$ is called a \mync{continuous function at $x=a$}. The example given in the motivating example in Section \ref{ch1subsec:functionmotivatingexample} is not continuous at $x=1$ as $\lim_{x\rightarrow 1}=0$ while $\left.f(x)\right|_{x=1}=1$, which can be seen from Fig. \ref{ch1fig:fxsimpleexample}. However, it is continuous everywhere else. For instance, at $x=0$, $\lim_{x\rightarrow 0}=1$ and $\left.f(x)\right|_{x=0}=1$.
 
 The definition of the limit of a function $f(x)$ when $x$ approaches infinity is given below. It is quite similar to the definition of the limit of an infinite sequence.
-\begin{VF}
+\begin{mdframed}
 \textbf{Definition of the limit of the function at $x\rightarrow \pm \infty$}:
 \\
 \\
@@ -333,7 +334,7 @@ or
 \begin{eqnarray}
   f(x) \rightarrow L & \textup{as} & x \rightarrow -\infty. \nonumber
 \end{eqnarray}
-\end{VF}
+\end{mdframed}
 
 In special cases where the function is unbounded, the limit of the function does not exist and we can use $\lim_{x\rightarrow a}f(x) =  \infty$ and $\lim_{x\rightarrow \pm \infty}f(x) = \infty$ to represent the cases.
 
@@ -348,7 +349,7 @@ Some examples are given below in Table \ref{chi1table:limitoffunction}. For the 
 \centering\caption{Limit of commonly seen elementary functions.} \label{chi1table:limitoffunction}
 \begin{tabular}{llll}
 \hline
-Category & \tch{$f(x)$} & \tch{$\lim_{x\rightarrow a}f(x)$} & \tch{$\lim_{x\rightarrow \infty}f(x)$} \\ \hline
+Category & $f(x)$ & $\lim_{x\rightarrow a}f(x)$ & $\lim_{x\rightarrow \infty}f(x)$ \\ \hline
 Polynomial & $p(x)$ & $p(a)$ & $\infty$ \\
 Root & $\sqrt{x}$ & $\sqrt{a}$ for $a>0$ & $\infty$ \\
 Rational & $\dfrac{q(x)}{p(x)}$ & depends & depends \\
@@ -404,7 +405,7 @@ The same is true for the cases $g(x)=f_1(x)f_2(x)$ and $g(x)=\dfrac{f_1(x)}{f_2(
 
 In the case of $g(x)=\dfrac{f_1(x)}{f_2(x)}$ and $\lim_{x \rightarrow a}f_2(x) = 0$, the discussion is more complicated. Sometimes, \textit{L\textprime H\^opital's rule} can become handy. 
 
-\begin{VF}
+\begin{mdframed}
 \textbf{L\textprime H\^opital's rule}:
 \\
 \\
@@ -423,7 +424,7 @@ then $\lim_{x\rightarrow a}g(x)$ can be calculated using \eqref{ch1eq:lhopital},
   \lim_{x\rightarrow a}g(x) = \lim_{x\rightarrow a} \dfrac{f_1^\prime(x)}{f_2^\prime(x)}. \label{ch1eq:lhopital}
 \end{eqnarray}
 where $f^\prime(x)$ is the derivative of $f(x)$.
-\end{VF}
+\end{mdframed}
 
 The derivative of a function $f(x)$ will be introduced in the next Chapter \ref{ch:derivative}. The proof of L\textprime H\^opital's rule requires solid calculus foundation and is out of the scope of this notebook.
 

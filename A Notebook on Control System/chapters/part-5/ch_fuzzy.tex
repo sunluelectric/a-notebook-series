@@ -185,8 +185,8 @@ MATLAB fuzzy logic toolbox provides tools to define membership functions and fuz
 
 Consider the example given below. Design and implement the system in MATLAB as follows.
 
-\begin{shortbox}
-\Boxhead{Vibration Detection from Measurement Signal}
+\begin{mdframed}
+\noindent \textbf{Vibration Detection from Measurement Signal}
 
 Oscillation has been detected from a continuously sampled signal. The oscillation might be caused by system process dynamics, system vibration, or measurement noise. The oscillation frequency and amplitude together help to reveal the cause of the oscillation, specifically the likelihood that the oscillation is caused by system vibration.
 
@@ -194,7 +194,7 @@ The input to the system is the oscillating measurement signal sampled at $1Hz$. 
 
 In the fuzzy controller, the two signals are fuzzifized to form fuzzy variables. The fuzzy variables are passed to the fuzzy inference system, where rules are defined to determine the likelihood that the oscillation is caused by vibration, which is also a fuzzy variable. Finally, the likelihood fuzzy variable is defuzzifized to obtain the vibration likelihood, which should be a variable in $[0,1]$.
 
-\end{shortbox}
+\end{mdframed}
 
 \vspace{0.1in}
 \noindent \textbf{Membership Functions for Input and Outputs}
