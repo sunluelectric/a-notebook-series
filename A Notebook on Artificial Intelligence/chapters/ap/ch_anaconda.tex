@@ -1,10 +1,10 @@
-\chapter{Brief Introduction to Python Package Manager}
+\chapter{Brief Introduction to Python Package Managers}
 
 As far as this notebook concerns, almost all the codes are in Python. There are many environment and package managers for Python. Two popular ones, Conda and uv, are introduced in this appendix chapter.
 
 \section{Conda}
 
-Developed and maintained by Anaconda Inc., \mync{Conda} (\verb|conda|) is a free and open-source program for package and environment management. When installing and updating packages with Conda, it automatically resolves the dependencies issue and applies the latest compatible versions of libraries.
+Developed and maintained by Anaconda Inc., \mync{Conda} (\verb|conda|) is a free and open-source program for package and environment management. When installing and updating packages with Conda, it automatically resolves the dependencies issues and applies the latest compatible versions of libraries.
 
 Details of Conda can be found in \cite{conda2025}. This section is merely a summary of commonly used configurations and commands. Majority of contents in this chapter come from \cite{conda2025cheatsheet}.
 
@@ -24,18 +24,18 @@ The channels are stored in \verb|.condarc| which is usually found in the user's 
 
 To list all channels, use
 \begin{lstlisting}
-conda config --show channels
+$ conda config --show channels
 \end{lstlisting}
 
 Commonly seen channels include \verb|defaults| and \verb|conda-forge|. Notice that \verb|defaults| is a collection of three Anaconda-defined channels. They contain proprietary packages developed by Anaconda and may require license if used in commercial environments.
 
 To add a channel, either use
 \begin{lstlisting}
-conda config --add channels <new channel>
+$ conda config --add channels <new channel>
 \end{lstlisting}
 to add a new channel to the top (highest priority) of the channel list, or
 \begin{lstlisting}
-conda config --append channels <new channel>
+$ conda config --append channels <new channel>
 \end{lstlisting}
 to append a new channel to the end (lowest priority) of the channel list.
 
