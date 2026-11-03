@@ -1,6 +1,8 @@
 \chapter{Decision Making}
 
-An AI agent should be capable of making decisions. Based on what it observes, believes and desires, the agent must determine the most beneficial action or sequence of actions to take. Different from a conventional optimal control problem where the plant and the cost function are assumed known, one of the biggest challenges for the AI agent is that it does not possess sufficient prior knowledge about the plant, and in many cases it needs to learn from successful and failed trails using both offline and online data, and gradually improve its performance.
+An AI agent should be capable of making decisions. Based on what it observes, believes and desires, the agent must determine the most beneficial action or sequence of actions to take. 
+
+Different from a conventional optimal control problem where the plant and the cost function are assumed known, one of the biggest challenges for the AI agent is that it does not possess sufficient prior knowledge about the plant, and in many cases it needs to learn from successful and failed trails using both offline and online data, and gradually improve its performance.
 
 This chapter studies decision making with AI. \myabb{Markov Decision Process}{MDP} is one of the most widely used decision-making frameworks. MDP and its varieties are discussed in detail.
 
@@ -526,7 +528,7 @@ where
 
 \subsection{POMDP Online Reinforcement Learning}
 
-\section{Continuous-State Markov Decision Process}
+\section{Continuous-State MDP}
 
 Up to this point, both the fully observable MDP and POMDP assume that the number of states is finite. In a more general and practical control problem, however, the number of state can be infinite, mostly because the state variables in the state space vector can take continuous values.
 

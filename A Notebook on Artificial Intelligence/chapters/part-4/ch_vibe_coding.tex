@@ -174,7 +174,7 @@ The project tree of a vibe coding environment may look like Fig. \ref{fig:claude
 
 As introduced earlier, \verb|CLAUDE.md| is compulsory while other files such as \verb|.claude\skills| are optional. They relate to user-defined tools, commands, plugins and advanced configurations to be introduced in the remainder of this section.
 
-\subsection{Tool and MCP}
+\subsection{Tool}
 
 The concept of tools was first introduced in Section \ref{sec:introduction_to_agentic_ai} as an important feature of agentic AI frameworks. A similar idea applies in the context of vibe coding, where tools help a vibe coding engine such as Claude Code gain additional abilities relevant to programming and project management.
 
@@ -253,7 +253,6 @@ Skills are portable and can be easily shared across machines on different platfo
 
 Skills are essentially documents and scripts that can be copy-and-paste to the repository. Nowadays, many skills registries allow the user to ``install'' skills, which is essentially a single line of command and the system will copy-and-paste relevant documents and perform the configurations.
 
-
 \subsection{Plugin}
 
 Plugins are essentially pre-defined collections of tools, skills, configurations, etc., all packed together. Claude Code provides variety of official plugins and they can be easily installed and executed.
@@ -323,6 +322,17 @@ in a Claude Code session. Once ralph-loop plugin is installed, use
 \end{lstlisting}
 to start the code agent in ralph-loop mode.
 
+\subsection{Debug Practice}
+
+Troubleshooting and debugging code with vibe coding agents can sometimes be irritating. For simple bugs, it is possible that the vibe coding agent can fix the bug on the fly. If the user notices a bug, it is possible that the user simply needs to copy-and-paste the error message to the chat and the vibe coding agent would fix it in a few iterations. The user needs to check the implementation of the fix to make sure that there is no over-engineering.
+
+For more complicated bugs, sometimes the vibe coding agent would try looking for solutions online, find something irrelevant, and jump to the conclusion that the fix had been found. To prevent that from happening, it is recommended that the user should challenge the fix, and let the agent document the process of the following.
+\begin{itemize}
+  \item Methods to reproduce the error or the bug consistently;
+  \item Root cause of the problem;
+  \item Fix of the problem;
+  \item Lessons learned, to be documented in \verb|CLAUDE.md|.
+\end{itemize}
 
 \section{Sub-Agent and Agent Team}
 
