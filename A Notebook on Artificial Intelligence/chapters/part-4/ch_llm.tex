@@ -453,3 +453,26 @@ The existing resources and solutions are briefly introduced in this section.
 
 TBA
 
+\section{LLM Development Trend}
+
+TBA
+
+\subsection{Quantization}
+
+Conventionally, each parameter in an LLM takes $32$-bit (FP32, each billion parameters consume roughly $4$ GB memory) or $16$-bit (FP16/BF16, each billion parameters consume roughly $2$ GB memory) in memory. The idea of \mync{LLM parameter quantization} refers to the use of fewer digits (such as $8$-bit or $4$-bit) for the each parameter of the LLM. As a result, an LLM may preserve the number of parameters, and at the same time consumes much less memory space in total.
+
+For two LLM models that consume similar memory size, one with more digits for each parameter but with fewer parameter, and the other uses quantization and preserves the number of parameters but sacrifices the precision of each parameter, it is likely that the latter would outperform the former significantly. In other words, parameter count beats precision. 
+
+But notice that $4$-bit per parameter is already an extreme. Usually it is impractical to use less bits than that. For small-memory models, the average bit number per parameter is often between $8$ and $4$.
+
+\subsection{Mixture of Experts}
+
+\mync{Mixture of Experts}[MoE] is essentially another way of scaling up LLM while reducing the running cost.
+
+The idea behind \myabb{Mixture of Experts}{MoE} is to instead of training one big powerful models, train multiple smaller models (known as experts), and let the ``router'' decide which models to trigger to respond to the user requests. While the total number of parameters to train remains large, the running cost is reduced as only a portion of the entire solution is invoked each time.
+
+To give some perspective on how MoE reduces running cost, consider DeepSeekMoE Chat 16B which has $16.4B$ total parameters. The activated parameters size is only $2.8B$ for each token, and it achieves similar or even better performance metrics than dance LLMs such as LLaMA2 SFT 7B and DeepSeek Chat 7B, which both have around $7B$ total and active parameters \cite{dai2024deepseekmoe}.
+
+The router is part of the LLM and can be considered as a special layer trained for its task. It should not be considered as a separate module.
+
+By reducing the number of activated parameters for each token, the running cost and the latency can be reduced. For \myabb{Mixture of Experts}{MoE} architect LLM to have the similar performance with a dense LLM, the total parameter size is often larger, and hence it may consume more memory space. For a dense LLM and a \myabb{Mixture of Experts}{MoE} architect LLM with similar total parameter size, dense LLM may outperform the other as all its parameters are used in inferencing while the other actives only a small portion of them. 

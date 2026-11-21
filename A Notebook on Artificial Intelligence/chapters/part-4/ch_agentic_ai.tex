@@ -1207,23 +1207,121 @@ To name one MCP marketplace as an example, \textit{mcp.so}.
 
 LLMOps practice is introduced in the section. LLMOps concerns with the systematic management of LLM models, the harness software and the evaluation of an LLM-based application.
 
+\subsection{Foundation Model}
+
+Only frontier models are discussed. There are at least two categories of models, namely the proprietary model where the weights are disclosed to the LLM service provider, and the non-proprietary model where the corresponding weights are publicly available.
+
+The non-proprietary model can be further divided into the open-source model and the open-weight model. The former releases not only the weights of the model, but also the training method (training code) and training dataset, while the latter releases only the weights.
+
+Examples are as follows, as of this writing.
+\begin{itemize}
+  \item Proprietary: GPT-4 and forward, Claude, Gemini
+  \item Non-proprietary:
+  \begin{itemize}
+    \item Open-source: OLMo
+    \item Open-weight: GPT-2, Llama family, DeepSeek
+  \end{itemize}
+\end{itemize}
+
+While proprietary frontier models are often considered the most powerful and convenient to use, companies and industries may sometimes choose to use open-weight models that host in their premises to handle sensitive data. In that case, the user needs to invest on hardware to host the models which can introduce additional cost.
+
+Artificial Analysis \cite{artificialAnalysis2026} provides useful analysis about the commonly seen metrics for frontier LLMs. As of this writing, Fig. \ref{fig:foundation_model_int_analysis} gives the intelligence index of the models.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=\textwidth]{./chapters/part-4/figures/foundation_model_int_analysis.png}
+	\caption{Intelligence index from Artificial Analysis as of November 2026.}
+	\label{fig:foundation_model_int_analysis}
+\end{figure}
+
 \subsection{Harness}
 
-An LLM foundation model is usually fragile and non-capable. To make it more robust and powerful, it is necessary to support it with surrounding features and materials such as context engineering, memory, \myabb{retrieved augmentation generation}{RAG} capability and tools, and often the materials need to be fed into the LLM iteratively in a loop through multiple calls. The software that manages the surroundings of the LLM is known as the \mync{LLM harness}. An LLM foundation model together with its harness form an AI agent.
+An LLM foundation model is usually fragile and non-capable. To make it more robust and powerful, it is necessary to support it with surrounding features and materials such as context engineering, memory, \myabb{retrieved augmentation generation}{RAG} capability and tools, and often the materials need to be fed into the LLM iteratively in a loop through multiple calls. 
+
+The software that manages the surroundings of the LLM is known as the \mync{LLM harness}. The construction and maintenance of the LLM harness is known as the \mync{harness engineering}, which is often considered the extension of prompt engineering and context engineering. An LLM foundation model together with its harness form an AI agent.
+
+Agentic AI system is essentially an application built around one or multiple LLM calls. In that sense, agentic AI frameworks, including \myabb{retrieval augmented generation}{RAG}, tool calls, pipeline with LLM determining the branches, multi-agent system, sub-agent system, etc.,  are all part of LLM harness architecture. In modern LLM harness development, the following features should be considered.
+\begin{itemize}
+  \item Prompt
+  \item Context
+  \begin{itemize}
+    \item Memory
+    \item Retrieval augmentation
+    \item Tool calls return
+  \end{itemize}
+  \item Workflow
+  \item State
+  \item Sub-agents
+  \item Permission management
+  \item Guardrail and online/offline evaluation
+  \item Harness self-improvement and recursive self-improvement
+\end{itemize}
+
+The user could build an agentic AI system with LLM harness from scratch, or on top of the agentic AI frameworks available on the market. Details have been already introduced in this chapter and more examples are given in later Section \ref{sec:agentic_ai_examples}.
+
+Nowadays, there are harness services provided either by cloud service providers such as Anthropic or by their parties such as LangChain. The user can pick up an off-the-shelf service which serves as an interface or a template to build an agentic AI system with LLM harness. Examples include Claude Agent SDK and LangChain Deep Agents. 
+
+These services are similar to the agentic AI frameworks such as OpenAI Agents SDK, CrewAI or LangGraph, but they are designed with simpler configuration, as illustrated in Fig.~\ref{fig:harness_service}.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./chapters/part-4/figures/harness_service.png}
+	\caption{Flexibility versus simplicity of different LLM harness approaches.}
+	\label{fig:harness_service}
+\end{figure}
+
+Take Claude Agent SDK as an example. Details of the service is given in \cite{anthropic2026agentSDK}. An example from it is given below.
+\begin{lstlisting}
+import asyncio
+from claude_agent_sdk import query, ClaudeAgentOptions, AssistantMessage, ResultMessage
 
 
+async def main():
+    # Agentic loop: streams messages as Claude works
+    async for message in query(
+        prompt="Review utils.py for bugs that would cause crashes. Fix any issues you find.",
+        options=ClaudeAgentOptions(
+            allowed_tools=["Read", "Edit", "Glob"],  # Auto-approve these tools
+            permission_mode="acceptEdits",  # Auto-approve file edits
+        ),
+    ):
+        # Print human-readable output
+        if isinstance(message, AssistantMessage):
+            for block in message.content:
+                if hasattr(block, "text"):
+                    print(block.text)  # Claude's reasoning
+                elif hasattr(block, "name"):
+                    print(f"Tool: {block.name}")  # Tool being called
+        elif isinstance(message, ResultMessage):
+            print(f"Done: {message.subtype}")  # Final result
+
+
+asyncio.run(main())
+\end{lstlisting}
+
+The idea is to configure the agentic AI system using \texttt{ClaudeAgentOptions} object which includes the tools, the file system, the permission, etc., and then use
+\begin{lstlisting}
+async for message in query(
+    prompt= <prompt>,
+    options = <option>,
+):
+    <print useful information>
+\end{lstlisting}
+to invoke the AI agent. Notice that Anthropic provides useful tools which the user can pick up and use, such as \verb|Read|, \verb|Write|, \verb|Edit|, \verb|Glob|, \verb|Grep|, \verb|Bash|, \verb|WebSearch|, \verb|WebFetch|, \verb|Agent|, and so on. Notice that LLM calls and some of the tools would induce running cost, and it will be charged from the user's Claude API key.
+
+Deep Agent from LangChain works similarly as Claude Agent SDK from Anthropic, with slight differences in the syntax. Deep Agent allows the user to use different foundation models, whereas Claude Agent SDK restricts the choice of models within Claude family, and it requires a Claude API key.
 
 \subsection{Evaluation}
 
 An LLM harness must be systematically verified and evaluated before it can be put into production, and hence LLM evaluation is important. Some portion of LLM harness and evaluation have been already covered in earlier sections, and this section focuses on the remainder.
 
-\section{Deployment}
+\subsection{Deployment}
 
 Amazon Bedrock, Amazon Bedrock AgentCore and Amazon SageMaker AI are used to demonstrate the deployment of an agentic AI application on the cloud. Notice that other cloud service providers such as Microsoft Azure provide similar services. The purpose of this section is to demonstrate the deployment where Amazon is used as an example. The user should choose the service providers according to their needs.
 
 
 
-\section{Examples}
+\section{Examples} \label{sec:agentic_ai_examples}
 
 Demonstrative projects are given as examples for a variety of agentic AI applications. 
 
