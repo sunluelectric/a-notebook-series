@@ -10,8 +10,8 @@ This section illustrates the concept of hypothesis and the purpose of hypothesis
 
 Two motivating examples are given below.
 
-\begin{shortbox}
-\Boxhead{Example: Verify the Probability of a Coin Tossing ``Head''}
+\begin{mdframed}
+\noindent \textbf{Example: Verify the Probability of a Coin Tossing ``Head''}
 
 Consider tossing a coin. The result follows Bernoulli distribution with the chance of head $p$ and tail $1-p$. It is fair to assume that $p=0.5$. Toss the coin multiple times. Consider the following events:
 \begin{enumerate}
@@ -22,20 +22,20 @@ Consider tossing a coin. The result follows Bernoulli distribution with the chan
 
 If the above events happen, how confident are we to insist that the coin tossing has a probability of head of $p=0.5$?
 
-\end{shortbox}
+\end{mdframed}
 
 If $p=0.5$ is indeed correct, the probabilities of the 3 events are $P=0.5$, $P=0.5^5=0.03125$ and $P=0.5^{10}= 0.0009765625$ respectively. These figures are consistent with our intuition: the first event can happen quite often, the second very rare, and third hardly ever happen in real life. On the other hand, if the third indeed happens, it is very likely that it is a specially designed coin and $p>0.5$.
 
 To verify whether $p=0.5$ or $p>0.5$, we can make an hypothesis $H_0:p=0.5$ as well as its alternative hypothesis $H_1:p \neq 0.5$ . The Bernoulli trail results then can be used to support or reject the hypothesis with quantified probability. Details are discussed in the remaining of this chapter. 
 
-\begin{shortbox}
-\Boxhead{Example: Interview People for Average Annual Income}
+\begin{mdframed}
+\noindent \textbf{Example: Interview People for Average Annual Income}
 
 Consider estimating the average monthly income of the population in a group. It is too costly to interview all the $100,000$ (a very large number) members to get the precise average income $\mu$. Therefore, only $1,000 = 100,000 \times 1\%$ of the population are randomly selected and interviewed. The sample mean $\bar{X} = 2900$ and variance $S^2=100^2$ are calculated from the interview results.
 
 The purpose is to use the above information to evaluate the probability that $\mu$ is at least $\mu_0=3000$. 
 
-\end{shortbox}
+\end{mdframed}
 
 In this example, the hypothesis is $H_0: \mu \geq \mu_0$. Its alternative hypothesis is $H_1: \mu<\mu_0$. The interview results obtained from the $m$ samples are used to support or reject the hypothesis.
 
