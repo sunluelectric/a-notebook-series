@@ -63,7 +63,7 @@ LLM agents in an agentic AI system do not rely solely on the internal knowledge 
 	\label{fig:agenticwf3}
 \end{figure}
 
-Recall RAG which focuses on database-integrated LLMs to expand knowledge boundaries and suppress hallucinations. A fully developed agentic AI can be taken as an extension of RAG. Other than databases, agentic AI systems often adopt memory modules which store historical inputs and outputs to maintain context and support long-term reasoning. This is also shown in Fig.~\ref{fig:agenticwf3}.
+Recall \myabb{retrieval-augmented generation}{RAG} which focuses on database-integrated LLMs to expand knowledge boundaries and suppress hallucinations. A fully developed agentic AI can be taken as an extension of RAG. Other than databases, agentic AI systems often adopt memory modules which store historical inputs and outputs to maintain context and support long-term reasoning. This is also shown in Fig.~\ref{fig:agenticwf3}.
 
 \section{Agentic AI Framework} \label{sec:agentic_ai_frameworks}
 
@@ -1203,6 +1203,40 @@ Think of MCP marketplaces APP stores for MCP servers. There are many popular MCP
 
 To name one MCP marketplace as an example, \textit{mcp.so}.
 
+\section{Retrieval-Augmented Generation}
+
+\mync{Retrieval-augmented generation}[RAG] is an AI technique that improves LLM responses by fetching relevant information from external data sources before generating an answer. It is essentially a way of enriching the context sent to an AI agent.
+
+In early sections, it has been discussed how an AI agent can request querying the Internet or an internal database for more information using tool calls, and then with the retrieved information answer the user questions in a grounded manner. From that sense, RAG has already been introduced as part of agentic AI tool calls. The reasons RAG is put into this dedicated section are mainly that there are many RAG related techniques worth telling, and RAG has been implemented so widely that it is often considered a must-have capability for any AI agent.
+
+In the old days when LLMs are less capable, the user may need a separate data retrieval module to perform the information query before an LLM call. The additional information, together with the user question, is fed into the LLM. This is demonstrated by Fig.~\ref{fig:conventional_rag}. This conventional way of performing RAG has at least the following limitations. The user needs to generate or design some mechanisms to generate the query, and the query cannot be performed multiple times with adjusted query messages in case the first one did not return the complete required context.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./chapters/part-4/figures/conventional_rag.png}
+	\caption{Demonstration of a conventional retrieval-augmented generation system.}
+	\label{fig:conventional_rag}
+\end{figure}
+
+Nowadays, it is more common that the LLM determines whether to perform a query and generates the query messages and perform the query. An LLM may perform multiple times of queries if needed. This is demonstrated by Fig.~\ref{fig:rag}.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./chapters/part-4/figures/rag.png}
+	\caption{Demonstration of an agentic retrieval-augmented generation system.}
+	\label{fig:rag}
+\end{figure}
+
+There are different types of RAGs depending on the data structure of the source. In LLM-based applications, the most commonly used data structure is the \mync{vector embedding} that represents a chunk of text in the form of high-dimensional vectors that represents the semantics of the chunk. The technique to find similar chunks of texts by the semantic meaning is known as \mync{semantic search}. The database that stores and manages the chunks and their corresponding vectors is known as the \mync{vector database}. This fits into Fig.~\ref{fig:rag} where the AI agent generates the query message and triggers a semantic search as a tool call. The semantic search engine is wrapped into a tool which will perform the search according to the query message and then return the most relevant chunks to the AI agent.
+
+In more comprehensive applications, the AI agent does not use tools to perform queries, but invoke sub-agents who then perform the research and look for information from variety of sources such as databases and the Internet. The advantages of using sub-agents include the following.
+\begin{itemize}
+  \item The context windows of the sub-agents and the main agent are isolated. Only relevant information, filtered and summarized, is returned to the main agent. Hence, the context window of the main agent is not polluted by noise.
+  \item Multiple sub-agents can run simultaneously and query from different sources. This enables deep research while saving time, compared with the main agent querying the sources in serial.
+\end{itemize}
+
+An AI system with AI agent determining how to use tools or sub-agents to perform RAG is known as an \mync{agentic RAG} system.
+
 \section{LLMOps and AI Architecture}
 
 LLMOps practice is introduced in the section. LLMOps concerns with the systematic management of LLM models, the harness software and the evaluation of an LLM-based application.
@@ -1313,13 +1347,123 @@ Deep Agent from LangChain works similarly as Claude Agent SDK from Anthropic, wi
 
 \subsection{Evaluation}
 
-An LLM harness must be systematically verified and evaluated before it can be put into production, and hence LLM evaluation is important. Some portion of LLM harness and evaluation have been already covered in earlier sections, and this section focuses on the remainder.
+An AI-based application can be probabilistic and must be systematically verified and evaluated before it can be put into production. LLM-based AI agent and agentic AI system are not exceptions. AI agent evaluation is an important building block of LLMOps. In earlier sections, AI agent evaluation has been covered here and there. This section serves as a summary and will give the remainder.
+
+\subsubsection*{Evaluation Methods}
+
+There are at least the following methods to evaluate the performance of an AI agent. The user should select the methods based on the nature of the metrics, the workload as well as the amount of resources such as manpower of the evaluation.
+\begin{itemize}
+  \item Direct measurement.
+  
+  The output of an AI system can be evaluated and its quality quantitatively verified using deterministic logic. 
+  
+  In this case, the user can use a deterministic script to retrieve the output of the AI system and perform the evaluation.
+  
+  \item \mync{LLM-as-a-Judge}, which refers to an evaluation method where an LLM grades or compares the outputs of the main AI agent against the predefined criteria.
+  
+  The output of an AI system contains human-language and can be somewhat subjective. 
+  
+  In this case, the user can setup a separated AI agent to evaluate the result of the main agent. The judging agent has isolated context, and it may have the same or different sources when making the judgement. The judgement AI can not only check the output of the main AI agent, but also cross check the materials the main AI agent used to make the decision. The judgement AI agent should score the different aspects of the outcome. 
+  
+  The judgement AI agent should be setup in such a way that its evaluation is close to what I human judge would have commented, given the same main AI agent output.
+  
+  \item Human evaluation.
+  
+  The output of an AI system contains human-language and can be somewhat subjective. The total workload is manageable by human reviewers.
+  
+  In this case, human review can be carried out.
+  
+\end{itemize}
+
+In practice, the evaluation can be a hybrid of the above, formulating a comprehensive portfolio. For example, the output of the AI agent may contain objective decisions as well as subjective comments in human languages. The objective decisions can be measured using direct measurement. A portion of the subjective decisions can be evaluated by human, who will setup the benchmark of LLM-as-a-Judge. The rest subjective decisions can be evaluated by LLM-as-a-Judge.
+
+The metrics that the business users care about should be measured and evaluated. In the designing phase of the application, such metrics should be determined.
+
+\subsubsection*{Commonly Seen Metrics}
+
+For an AI system output that is binary, consider using confusion matrix to measure the accuracy, precision, recall and specificity. A \mync{confusion matrix} is a table used to evaluate how well a binary model (such as a classification model) predicts categories compared to the actual ground truth. An illustrative plot is given by Fig.~\ref{fig:confusion_matrix}.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.6\textwidth]{./chapters/part-4/figures/confusion_matrix.png}
+	\caption{Confusion matrix.}
+	\label{fig:confusion_matrix}
+\end{figure}
+
+\mync{Accuracy} measures the overall share of correct predictions.
+\begin{eqnarray}
+  \textup{Accuracy} &=& \dfrac{\textup{TP}+\textup{TN}}{\textup{All}} \nonumber
+\end{eqnarray}
+
+\mync{Precision} measures the share of predicted positives that are actually positive.
+\begin{eqnarray}
+  \textup{Precision} &=& \dfrac{\textup{TP}}{\textup{TP}+\textup{FP}} \nonumber
+\end{eqnarray}
+
+\mync{Recall}, also known as \mync{sensitivity}, measures the share of actual positives that the model identifies correctly.
+\begin{eqnarray}
+  \textup{Recall} &=& \dfrac{\textup{TP}}{\textup{TP}+\textup{FN}} \nonumber
+\end{eqnarray}
+
+A good AI system should have high accuracy, high precision and high recall at the same time. However, notice that there can be a trade off between high precision and high recall. An aggressive AI that prefers marking a case as positive when the decision is hard to make may lean towards a low precision and a high recall, and wise versa.Different business use cases may have different tolerance on precision and recall. 
+
+For example, consider the alarm system in a critical mission, where positive would mean that there is a serious issue and an alarm should be raised. A high precision and low recall would mean that the AI system is too conservative when raising an alarm, and it misses many cases where an alarm should have been raised. This may be worse than a more aggressive system with a low precision and a high recall, where there are false alarms but the true issues are mostly captured.
+
+\mync{Specificity} is the reverse of recall, and it measures the share of actual negative that the model identifies correctly.
+\begin{eqnarray}
+  \textup{Specificity} &=& \dfrac{\textup{TN}}{\textup{TN}+\textup{FP}} \nonumber
+\end{eqnarray}
+
+\mync{F1 Score} is the harmonic mean of precision and recall.
+\begin{eqnarray}
+  \textup{F1} &=& 2\times \dfrac{\textup{Precision}\times\textup{Recall}}{\textup{Precision}+\textup{Recall}} \nonumber
+\end{eqnarray}
+
+A very aggressive system may identify almost all cases as positive, and hence get a very high recall simply because FN is too few. On the other hand, a very conservative system may identify almost all cases as negative, and hence get a very high precision simply because FP is too few. \mync{Cohen's kappa}, which is calculated below, can be used to spot that issue.
+\begin{eqnarray}
+  \kappa &=& \dfrac{2\times\left(\textup{TP}\times\textup{TN}-\textup{FN}\times\textup{FP}\right)}{\left(\textup{TP}+\textup{FP}\right)\times\left(\textup{FP}+\textup{TN}\right)+\left(\textup{TP}+\textup{FN}\right)\times\left(\textup{FN}+\textup{TN}\right)}
+  \nonumber
+\end{eqnarray}
+
+\subsubsection*{Evaluation Tools and Services}
+
+In most cases, the user does not need to build an evaluation harness from scratch. There are many tools or services available on-the-shelf to trace and evaluate the performance of an AI agent. Commonly seen features of these tools include the following.
+\begin{itemize}
+  \item Trace the context provided to the AI agent, such as prompt and dataset or databases the AI agent has access to.
+  \item Trace the actions of an AI agent, such as the tool calls it invokes, the responses it gives, and the decisions and claims it makes.
+  \item Carry out experiments to verify the performance of an AI agent.
+  \item Score the performance of an AI agent.
+\end{itemize}
+
+Sometimes the application may have the evaluation built-in and run in real-time together with the main AI agent. Both the AI agent decisions as well as the evaluation results are sent to the user. The evaluation results can be used as the explanation why such decisions are made, or to flag whether the decisions are well grounded. This is sometimes known as the \mync{explainable AI}[XAI], which refers to the mechanisms that help the human user understand how an AI model makes decisions pr predictions.
+
+An example of open-source LLM-based AI agent evaluation tools is Langfuse, which is introduced in the remainder of this section. To use Langfuse, register an account with Langfuse and generate a set of API keys, including a secret key, a public key, a server URL, and copy-and-paste them into the \verb|.env| file of the project.
+
+\subsubsection*{Evaluation of Agentic RAG}
+
+So far the discussion mainly focuses on the evaluation of the entire agentic AI application, and we are looking at the ultimate output of the entire system. Nowadays many agentic AI applications use agentic RAG. In that case, it is recommended that the performance of RAG be evaluated as well and in a separate manner with different metrics. The purpose is to evaluate whether the retrieved information contains the complete information that should fill in to the context.
+
+TBA
 
 \subsection{Deployment}
 
 Amazon Bedrock, Amazon Bedrock AgentCore and Amazon SageMaker AI are used to demonstrate the deployment of an agentic AI application on the cloud. Notice that other cloud service providers such as Microsoft Azure provide similar services. The purpose of this section is to demonstrate the deployment where Amazon is used as an example. The user should choose the service providers according to their needs.
 
 
+
+\subsection{Good Practice from Business Perspective}
+
+This section discusses good practice of designing, developing and delivering an agentic AI system. Many good practices have been covered in earlier sections from the technical perspective. This section focuses on those from business perspective, i.e., how to ensure that the result would satisfy the business users need.
+
+The following need to be discussed.
+
+Start with the problem (measurable business problem) and data, not an AI driven solution. Use non-AI solution as benchmark. Always define the metrics to measure the improvement.
+
+It is not wise to use AI agent wherever there is a human role, though AI is good at mimic human. Wisely distinguish what AI is good at and what other mechanism is good at. Start simple. Use evaluation to measure the accuracy, and do not satisfied with plausible content.
+
+Sometimes separate LLM agents are used to evaluate the performance of the main AI agent. That is a good reason of using sub agents. LLM as a judge is an example. It is also good that their context can be isolated.
+
+When there is a clear computational logic or deterministic pipeline, use deterministic code for the computation or the orchestration, not the LLM.
 
 \section{Examples} \label{sec:agentic_ai_examples}
 
